@@ -41,10 +41,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '127.0.0.1:3306';
+$db['default']['hostname'] = 'shoppinnet.com:3306';
 $db['default']['username'] = 'root';
-$db['default']['password'] = 'root';
-$db['default']['database'] = 'store_v2';
+$db['default']['password'] = 'vanessa73';
+$db['default']['database'] = 'store_v2_developer';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

@@ -74,15 +74,8 @@ class Form extends CI_model {
 	// Create table
 	$output .= "<table class='table form box'>\n";
 
-	// Get max field length from db
-	//$col_info = mysql_query("SELECT * FROM " . $this->encrypt->decode($target) . )
-	//$this->encrypt->encode("DeleteInsert_module_offer_option_join");
-
 	// Create fields (select,input,password,checkbox,hidden,textarea etc.)
 	$i = 0;
-	$this->load->model("service/country_service");
-	$this->load->model("service/user_group_service");
-	
 	foreach($this->field as $fieldinfo) {
 
 		// Create field

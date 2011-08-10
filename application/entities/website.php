@@ -38,7 +38,7 @@ class Website {
      * @ManyToOne(targetEntity="Organisation")
      * @JoinColumn(name="organisation_id", referencedColumnName="id")
      */
-    private $organisation;
+    private $organisation = 0;
     
     /**
     * @Column(type="string")
@@ -144,7 +144,7 @@ class Website {
     }
 
     public function set_organisation($organisation) {
-	$this->template = $organisation;
+	$this->organisation = $organisation;
     }
 
 
