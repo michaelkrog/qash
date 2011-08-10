@@ -11,7 +11,8 @@ class User_model extends CI_Model {
     function get_list() {
 
 	$website = $this->website_service->get();
-	$data = $this->user_service->get_list($website->get_id());
+        $org = $website->get_organisation();
+	$data = $this->user_service->get_list($org->get_id());
 
 	$this->load->library('grid');
 

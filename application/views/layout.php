@@ -72,7 +72,8 @@
 		<div id="page_top">
 
 		    <div id="page_logo">
-			<?if ($website_logo != "")
+			<?
+                        if ($website_logo != "")
 				echo("<img src=\"$website_logo\">");
 			else
 				echo("<div>".$website_name."</div>");

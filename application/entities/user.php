@@ -13,9 +13,9 @@ class User {
     private $id = 0;
 
     /**
-    * @ManyToOne(targetEntity="Website", inversedBy="users")
+    * @ManyToOne(targetEntity="Organisation", inversedBy="users")
     */
-    private $website = 0;
+    private $organisation = 0;
 
     /**
     * @ManyToOne(targetEntity="User_group", inversedBy="users")
@@ -116,12 +116,12 @@ class User {
 	$this->id = $id;
     }
 
-    public function get_website() {
-	return $this->website;
+    public function get_organisation() {
+	return $this->organisation;
     }
 
-    public function set_website($website) {
-	$this->website = $website;
+    public function set_organisation($organisation) {
+	$this->organisation = $organisation;
     }
 
     public function get_user_group() {

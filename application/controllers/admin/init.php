@@ -27,13 +27,13 @@ class Init extends CI_Controller {
 	function test()
 	{
 	    $website = $this->website_service->get_website();
-
+            $org = $website->get_organisation();
 
 	    $user = new entities\User;
 
 	    $user->set_company('John Doe Company');
 	    $user->set_name('John Doe');
-	    $user->set_website($website);
+	    $user->set_organisation($org);
 	    
 	    $this->doctrine->em->persist($user);
 	    $this->doctrine->em->flush();
@@ -45,7 +45,7 @@ class Init extends CI_Controller {
 	    //echo(link_main("tester"));
 
 	    //$website = $this->Website->get_website(1);
-	    echo($website->get_name());
+	    echo($org->get_name());
 
 	}
 
