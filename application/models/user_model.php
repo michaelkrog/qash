@@ -11,8 +11,16 @@ class User_model extends CI_Model {
     function get_list() {
 
 	$website = $this->website_service->get();
+        if(!$website) {
+            throw new Exception("Unable to retrieve website when listing users");
+        }
+
         $org = $website->get_organisation();
-	$data = $this->user_service->get_list($org->get_id());
+	if(!$website) {
+            throw new Exception("Unable to retrieve organisation when editing user");
+        }
+        
+        $data = $this->user_service->get_list($org->get_id());
 
 	$this->load->library('grid');
 
@@ -54,6 +62,10 @@ class User_model extends CI_Model {
 	$this->load->model("service/country_service");
 
 	$website = $this->website_service->get();
+        if(!$website) {
+            throw new Exception("Unable to retrieve website when editing user");
+        }
+
 	$data = $this->user_service->get($id);
 	
 	$this->load->library('form');
@@ -74,6 +86,7 @@ class User_model extends CI_Model {
 	$this->form->set_field(array(lang("telephone"), "", "telephone", "text"));
 	$this->form->set_field(array(lang("website"), "", "website_url", "text"));
 	$this->form->set_field(array(lang("newsletter"), "", "newsletter", "checkbox"));
+
 	$this->form->set_field(array(lang("user_group"), "", "user_group", "select", $this->user_group_service->get_list($website->get_id()) ));
 
 	$this->form->set_data($data);

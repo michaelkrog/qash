@@ -35,7 +35,7 @@ class Website {
     private $pages = array();
 
     /**
-     * @OneToOne(targetEntity="Organisation")
+     * @ManyToOne(targetEntity="Organisation")
      * @JoinColumn(name="organisation_id", referencedColumnName="id")
      */
     private $organisation;

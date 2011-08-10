@@ -46,6 +46,9 @@ class View extends CI_Controller {
 	function orgtest($id) {
 	    $this->load->model("service/Organisation_service");
 	    $org = $this->Organisation_service->get($id);
+            if(is_null($org)) {
+                show_404();
+            }
 	    echo("Org:" . $org->get_name());
 	}
 

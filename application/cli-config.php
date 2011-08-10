@@ -34,7 +34,7 @@ $config->setMetadataDriverImpl($driver);
     $connectionOptions = array(
         'driver' => 'pdo_mysql',
         'user' =>     'root',//$db['default']['username'],
-        'password' => 'vanessa73', //$db['default']['password'],
+        'password' => 'root', //$db['default']['password'],
         'host' =>     '127.0.0.1',//$db['default']['hostname'],
         'dbname' =>   'store_v2' //$db['default']['database']
     );

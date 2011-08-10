@@ -43,7 +43,7 @@ $active_record = TRUE;
 
 $db['default']['hostname'] = '127.0.0.1:3306';
 $db['default']['username'] = 'root';
-$db['default']['password'] = 'vanessa73';
+$db['default']['password'] = 'root';
 $db['default']['database'] = 'store_v2';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
