@@ -7,6 +7,7 @@ class User_service extends abstract_service {
 
     function get($id = 0) {
 
+	// If no user, create one and return it.
 	if ($id == 0) {
 	    $this->load->model("service/Website_service");
             //$this->load->model("service/Organisation_service");

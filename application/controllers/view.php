@@ -42,6 +42,19 @@ class View extends CI_Controller {
 	    $this->load->view("module", $data);
 	}
 
+
+	function orgtest($id) {
+	    $this->load->model("service/Organisation_service");
+	    $org = $this->Organisation_service->get($id);
+	    echo("Org:" . $org->get_name());
+	}
+
+
+
+	 
+	// Below here is old and before doctrine arrived
+
+
 	function category($language,$id) {
 	    $website = $this->Service_layer->get_website();
 	    $layout = $this->Layout_model->get_layout($website);

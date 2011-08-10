@@ -1,6 +1,6 @@
 <?php
 
-class Organsiation_service extends Abstract_service {
+class Organisation_service extends Abstract_service {
 
 
     function get($id = 0) {
