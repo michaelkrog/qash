@@ -42,8 +42,16 @@ class Layout_model extends CI_Model {
     // Prepare layout data. Require website object.
      function get_layout($website) {
 
-	// Load template
+         if(!$website) {
+             throw new Exception("Website was not specified.");
+         }
+         
+        // Load template
 	$template = $this->Template_service->get($website->get_template());
+
+        if(!$template) {
+             throw new Exception("Template not found for website. [websiteid=" . $website->get_id() . "]");
+         }
 
 	// Load modules
 	$modules = $this->Module_service->get_list($template->get_id()); // $this->Website_model->get_layout_modules()->result_array();
