@@ -15,6 +15,7 @@ class User_service extends abstract_service {
 	    $this->load->model("service/Website_service");
 
             $website = $this->Website_service->get(0);
+	    // Get default user group setting for this website
 	    $user_group = $this->doctrine->em->createQuery("SELECT u FROM entities\User_group u WHERE u.is_default = 1 AND u.website = " . $website->get_id())->getResult();
 
 	    $obj = new entities\User;

@@ -129,7 +129,7 @@ class Grid {
 			$value = $this->$field[1]($value);
 		    }
 		    
-		    $output .= "<td class='object_" . $this->object . "_" . $field[0] . "'>" . $value. "</td>";
+		    $output .= "<td class='object_" . $this->object . "_" . $row_id . "_" . $field[0] . "'>" . $value. "</td>";
 
 		    $cnt_cell++;
 		}

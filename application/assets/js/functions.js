@@ -107,6 +107,7 @@ function ajax(posturl,postdata,result_element,VisualActions) {
 	var action_confirm = false;
 	var action_hide_dialog = false;
 	var action_hide_elements = false;
+	var action_update = false;
 
 
 	if(VisualActions) {
@@ -163,30 +164,7 @@ function ajax(posturl,postdata,result_element,VisualActions) {
                     cache: false,
                     success: function(msg) {
 
-			
-
-			//alert(postdata);
-
-			// Update inner html of elements throughout page, with posted form data
-			//postdata_object = $.serializeObject(postdata);
-			//object_array = postdata_array[0].split("=");
-
-
-			//for (var i=1;i<=postdata_array.length-1;i++) {
-			/*for (var element in postdata_object) {
-			    alert(element);
-			    if (postdata_array[i]) {
-				//alert(postdata_array[i]);
-				element_array = postdata_array[i].split("=");
-				$(".object_" + object_array[1] + "_" + element_array[0]).html(element_array[1]);
-				//alert(".object_" + object_array[1] + "_" + element_array[0]);
-			    }
-			}*/
-				
-			
-
-
-                            if(msg.indexOf("A PHP Error was encountered") > -1) {
+			    if(msg.indexOf("A PHP Error was encountered") > -1) {
                                     show_message("Error: " + window.language["server_failed"] + "<br /><br />" + msg,"show");
                             }
                             else {
@@ -203,7 +181,7 @@ function ajax(posturl,postdata,result_element,VisualActions) {
 					show_message("","hide");
 				    }
 
-                                    if (action_reload == true) {
+				    if (action_reload == true) {
                                         ajax(window.page_posturl,window.page_postdata,"section_mid","")
 				    }
 
@@ -218,6 +196,15 @@ function ajax(posturl,postdata,result_element,VisualActions) {
 
 				    if (action_hide_dialog == true) {
 					hide_dialog();
+				    }
+
+				    if (action_update == true) {
+					// Update inner html of elements throughout page, with posted form data
+					postdata_array = postdata.split("&");
+					for (var i=2;i<postdata_array.length;i++) {
+					    element_array = postdata_array[i].split("=");
+					    $(".object_" + $("#form input[name=object]").val() + "_" + $("#form input[name=id]").val() + "_" + element_array[0]).html( $("#form input[name=" + element_array[0] + "]").val() );
+					}
 				    }
 
 

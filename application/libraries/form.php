@@ -187,7 +187,7 @@ class Form extends CI_model {
 	}
 
 	// Create submit button
-	$output .= "<tr><td></td><td class='submitbutton'><span style='border: 1px solid #aaaaaa;' class='header' id='button_form' onclick=\"ajax('$this->action', $('#form').serialize(),'','alert,hide_dialog');\">Gem</span></td></tr>";
+	$output .= "<tr><td></td><td class='submitbutton'><span style='border: 1px solid #aaaaaa;' class='header' id='button_form' onclick=\"ajax('$this->action', $('#form').serialize(),'','alert,hide_dialog,update');\">Gem</span></td></tr>";
 
 	// Finish table creation
 	$output .= "</table>";
