@@ -15,10 +15,12 @@ class User_service extends abstract_service {
 	    $this->load->model("service/Website_service");
 
             $website = $this->Website_service->get(0);
+	    $user_group = $this->doctrine->em->createQuery("SELECT u FROM entities\User_group u WHERE u.is_default = 1 AND u.website = " . $website->get_id())->getResult();
+
 	    $obj = new entities\User;
 	    $obj->set_created(time());
 	    $obj->set_organisation($website->get_organisation());
-	    $obj->set_user_group($this->User_group_service->get(1)); // Customer as default
+	    $obj->set_user_group($user_group[0]);
 	    $obj->set_country($this->Country_service->get(1)); // Danish as default
 	}
 	else {
