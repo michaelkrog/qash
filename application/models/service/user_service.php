@@ -17,10 +17,7 @@ class User_service extends abstract_service {
             $website = $this->Website_service->get(0);
 	    $obj = new entities\User;
 	    $obj->set_created(time());
-
-	    // Don't know about which default organisation, so just set to 1 to prevent errors for now
-	    $obj->set_organisation($this->Organisation_service->get(1));
-
+	    $obj->set_organisation($website->get_organisation());
 	    $obj->set_user_group($this->User_group_service->get(1)); // Customer as default
 	    $obj->set_country($this->Country_service->get(1)); // Danish as default
 	}
