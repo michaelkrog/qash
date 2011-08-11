@@ -68,7 +68,7 @@ class View extends CI_Controller {
 	    $this->load->view("layout", $layout);
 	}
 
-	function product($language,$id) {
+	function product($language,$id) {    
 	    $website = $this->Service_layer->get_website();
 	    $layout = $this->Layout_model->get_layout($website);
 
