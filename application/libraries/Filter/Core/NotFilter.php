@@ -1,10 +1,7 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 namespace Filter\Core;
+require_once str_replace('//','/',dirname(__FILE__).'/') . 'AbstractFilterComponent.php';
+
 /**
  * Description of NotFilter
  *
@@ -13,7 +10,7 @@ namespace Filter\Core;
 class NotFilter implements Filter {
     private $filter;
 
-    function __constructor(Filter $element) {
+    function __construct($element) {
         $this->filter = $element;
     }
     

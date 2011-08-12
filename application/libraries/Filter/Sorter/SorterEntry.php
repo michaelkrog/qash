@@ -14,7 +14,7 @@ class SorterEntry {
      * @param propertyId The id for sorting.
      * @param direction The direction of sorting.
      */
-    function __constructor($propertyId, $direction) {
+    function __construct($propertyId, $direction) {
         /*if(propertyId == null) {
             throw new IllegalArgumentException("propertyid cannot be null.");
         }

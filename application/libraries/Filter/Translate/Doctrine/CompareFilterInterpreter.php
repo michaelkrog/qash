@@ -1,8 +1,6 @@
 <?php
-
 namespace Filter\Translate\Doctrine;
-
-
+require_once str_replace('//','/',dirname(__FILE__).'/') . 'AbstractInterpreter.php';
 
 /**
  * Description of CompareFilterInterpreter
@@ -15,8 +13,8 @@ class CompareFilterInterpreter extends AbstractInterpreter {
         return ($filter instanceof \Filter\Core\CompareFilter);
     }
     
-    public function interpret(WhereClause $clause, CompareFilter $filter) {
-        $paramName = getParamName();
+    public function interpret($clause, $filter) {
+        $paramName = $this->getParamName();
         $operator = null;
 
         switch ($filter->get_compare_type()) {

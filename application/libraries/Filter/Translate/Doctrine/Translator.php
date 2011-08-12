@@ -1,10 +1,10 @@
 <?php
+namespace Filter\Translate\Doctrine;
+require_once str_replace('//','/',dirname(__FILE__).'/') . 'WhereClause.php';
+require_once str_replace('//','/',dirname(__FILE__).'/') . 'CompareFilterInterpreter.php';
+require_once str_replace('//','/',dirname(__FILE__).'/') . 'IsNullFilterInterpreter.php';
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
+use Filter\Translate\Doctrine\WhereClause;
 /**
  * Description of Translator
  *
@@ -12,31 +12,21 @@
  */
 class Translator {
 
-    private static $singleton;
     private $interpreters = array();
 
-    public static function get_singleton() {
-        if (is_null($singleton)) {
-            $singleton = new Translator();
-        }
-    }
-
-    private function __constructor() {
-        //array_push($interpreters, );
+    public function __construct() {
+        array_push($this->interpreters, new CompareFilterInterpreter());
+        array_push($this->interpreters, new IsNullFilterInterpreter());
     }
 
     public function register_interpreter(Interpreter $interpreter) {
-        //interpreterMap.put(clazz, interpreter);
+        array_push($interpreters, $interpreter);
     }
 
-    public function translate(EntityManager $em, String $entityClass, Filter $filter, Sorter $sorter, Limit $limit) {
-        return translate(entityManager, null, entityClass, filter, sorter, limit);
-    }
-
-    public function translate(EntityManager $em, $fields, String $entityClass, Filter $filter, Sorter $sorter, Limit $limit) {
-
+    public function translate($em, $entityClass, $filter,  $sorter,  $limit, $fields = null) {
+                
         $whereClause = new WhereClause();
-        $clauseAppended = buildWhereClause($whereClause, $filter);
+        $clauseAppended = $this->buildWhereClause($whereClause, $filter);
 
         $ql = "select ";
         if (is_null($fields == null) || count($fields) == 0) {
@@ -62,7 +52,7 @@ class Translator {
             $ql = $ql . $whereClause->get_statement();
         }
 
-        if (!is_null($sorter) && count($sorter->get_sorter_entries) <> 0) {
+        if (!is_null($sorter) && count($sorter->get_sorter_entries()) <> 0) {
             $firstOrderClause = true;
             foreach ($sorter->get_sorter_entries() as $entry) {
                 if ($firstOrderClause) {
@@ -81,6 +71,7 @@ class Translator {
             }
         }
 
+        echo "Query: " . $ql;
         $q = $em->createQuery($ql);
 
         foreach (array_keys($whereClause->get_parameters()) as $key) {
@@ -89,21 +80,23 @@ class Translator {
         }
 
         if (!is_null($limit)) {
-            $q->set_first_result($limit->get_offset());
-            $q->set_max_results($limit->get_count());
+            $q->setFirstResult($limit->get_offset());
+            $q->setMaxResults($limit->get_count());
         }
 
         return $q;
     }
 
-    private function buildWhereClause(WhereClause $clause, Filter $filter) {
+    private function buildWhereClause($clause, $filter) {
 
+        
         if (is_null($filter)) {
+            echo "filter was null\n";
             return false;
         }
 
         //First try an interpreter
-        foreach ($interpreters as $interpreter) {
+        foreach ($this->interpreters as $interpreter) {
             if ($interpreter->canInterpret($filter)) {
                 return $interpreter->interpret($clause, $filter);
             }
@@ -112,6 +105,7 @@ class Translator {
 
         //..else try our special handlers for filtercontainers.
         if ($filter instanceof AndFilter) {
+            echo "filter was and\n";
             $clause->appendStatement("(");
 
             $hasAddedFilter = false;
@@ -157,7 +151,7 @@ class Translator {
         }
 
         if ($filter instanceof NotFilter) {
-
+            
             //Special care of IsNull filter becauseof the special "IS [NOT] NULL" syntax
             if ($filter->get_filter_element() instanceof IsNullFilter) {
                 $propId = $filter->get_property_id();
@@ -176,6 +170,7 @@ class Translator {
             }
         }
 
+            
         return false;
     }
 

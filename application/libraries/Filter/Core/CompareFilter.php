@@ -1,5 +1,7 @@
 <?php
 namespace Filter\Core;
+require_once str_replace('//','/',dirname(__FILE__).'/') . 'AbstractFilterComponent.php';
+
 
 /**
  * Description of CompareFilter
@@ -11,18 +13,18 @@ class CompareFilter extends AbstractFilterComponent {
     private $compareType;
     private $value;
 
-    function __constructor(String $propertyId, $value, $compareType) {
+    function __construct($propertyId, $value, $compareType) {
         parent::__construct($propertyId);
         $this->value = $value;
         $this->compareType = $compareType;
     }
 
     public function get_value() {
-        return $value;
+        return $this->value;
     }
 
     public function get_compare_type() {
-        return $compareType;
+        return $this->compareType;
     }
 
     

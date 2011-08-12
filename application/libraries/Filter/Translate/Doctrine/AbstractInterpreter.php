@@ -1,6 +1,7 @@
 <?php
-
 namespace Filter\Translate\Doctrine;
+
+require_once str_replace('//','/',dirname(__FILE__).'/') . 'Interpreter.php';
 
 use Filter\Translate\Doctrine\Interpreter;
 
@@ -9,18 +10,21 @@ use Filter\Translate\Doctrine\Interpreter;
  *
  * @author michael
  */
-class AbstractInterpreter implements Interpreter {
+abstract class AbstractInterpreter implements Interpreter {
     
     private static $IDCOUNTER=0;
 
     protected function getParamId() {
-        $IDCOUNTER++;
-        return $IDCOUNTER;
+        $this->IDCOUNTER++;
+        return $this->IDCOUNTER;
     }
 
     protected function getParamName() {
-        return "param_" + getParamId();
+        return "param_" + $this->getParamId();
     }
+    
+    //abstract function canInterpret($filter);
+    //abstract function interpret($clause, $filter);
 }
 
 ?>

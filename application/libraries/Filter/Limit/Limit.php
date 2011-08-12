@@ -9,15 +9,6 @@ class Limit {
     private $offset;
     private $count;
 
-    /**
-     * Creates a Limit instance. Defaults offset to 0.
-     */
-    function __construct($count) {
-        $this->offset = 0;
-        $this->count = $count;
-        
-        this(0, $count);
-    }
 
     /**
      * Creates a Limit instance.
@@ -32,7 +23,7 @@ class Limit {
      * @return The offset.
      */
     public function get_offset() {
-        return $offset;
+        return $this->offset;
     }
 
     /**
@@ -40,7 +31,7 @@ class Limit {
      * @return The count.
      */
     public function get_count() {
-        return $count;
+        return $this->count;
     }
 
 }

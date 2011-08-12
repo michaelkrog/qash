@@ -1,11 +1,14 @@
 <?php
 namespace Filter\Core;
+require_once str_replace('//','/',dirname(__FILE__).'/') . '../FilterContainer.php';
+
+use Filter\FilterContainer;
 /**
  * Description of AbstractFilterContainer
  *
  * @author michael
  */
-class AbstractFilterContainer {
+class AbstractFilterContainer implements FilterContainer {
     private $filters;
 
     function __constructor() {
