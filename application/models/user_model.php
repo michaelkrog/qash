@@ -33,7 +33,7 @@ class User_model extends CI_Model {
 	$this->grid->set_header(lang("city"));
 	$this->grid->set_header(lang("telephone"));
 	//$this->grid->set_header(lang("email"));
-	//$this->grid->set_header(lang("newsletter"));
+	$this->grid->set_header(lang("newsletter"));
 
 	$this->grid->set_field(array("company"));
 	$this->grid->set_field(array("name"));
@@ -42,7 +42,7 @@ class User_model extends CI_Model {
 	$this->grid->set_field(array("city"));
 	$this->grid->set_field(array("telephone"));
 	//$this->grid->set_field(array("email"));
-	//$this->grid->set_field(array("newsletter","yesno"));
+	$this->grid->set_field(array("newsletter","yesno"));
 	
 	$this->grid->set_action(array(lang("edit"), link_action_dialog("/index.php/admin/user/edit/")));
 	$this->grid->set_action(array(lang("delete"), link_action_delete("/index.php/admin/user/delete/")));
