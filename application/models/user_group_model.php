@@ -23,7 +23,7 @@ class User_group_model extends CI_Model {
 	$this->grid->set_header(lang("default"));
 
 	$this->grid->set_field(array("name"));
-	$this->grid->set_field(array("is_default"),"yesno");
+	$this->grid->set_field(array("is_default","yesno"));
 
 	$this->grid->set_action(array(lang("delete"), link_action_delete("/index.php/admin/user_group/delete/")));
 	$this->grid->set_action(array(lang("edit"), link_action_dialog("/index.php/admin/user_group/edit/")));

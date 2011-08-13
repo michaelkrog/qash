@@ -54,6 +54,12 @@ class Module {
     * @Column(type="string", length=3000)
     * @var string
     */
+    private $css = "";
+
+    /**
+    * @Column(type="string", length=3000)
+    * @var string
+    */
     private $js = "";
 
     /**
@@ -118,6 +124,14 @@ class Module {
 
     public function set_body($body) {
 	$this->body = $body;
+    }
+
+    public function get_css() {
+	return $this->css;
+    }
+
+    public function set_css($css) {
+	$this->css = $css;
     }
 
     public function get_js() {

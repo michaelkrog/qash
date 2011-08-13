@@ -39,7 +39,9 @@ class Grid {
 	$this->data = $data;
     }
 
-    public function yesno($value) {
+
+    //* Custom field output funtions *//
+    private function yesno($value) {
 	if ($value == 1) {
 	    $value = lang("yes");
 	}
@@ -62,8 +64,10 @@ class Grid {
 	}
 	$output .= "</ul></div></div>";
 
-	// Create grid
+
+	// Create outer grid
 	$output .= "<table class='grid'>\n";
+
 
 	// Create header
 	if($this->header) {
@@ -83,23 +87,10 @@ class Grid {
 		$output .= "</td></tr>\n";
 	}
 
-	// Create subheader
-	//if ($this->link)
-	//    $output .= "<tr class='subheader'>\n<td class='links' colspan='" . $cnt_cell . "'>" . $output_links_row . "</td>\n</tr>\n";
 
-	//$output .= "<tr class='subheader'><td colspan='7'><span>Slet</span><span>Rediger</span><span>Send email</span><span>Send password</span></td></tr>";
-
-	// Create grid
-	//$output .= "<div class='box_wrapper'><table id='" . $id . "' class='box'>";
+	// Create inner grid
 	$output .= "<tbody class='tbody box4' id='" . $this->id . "'>\n";
-	//$output .= "<tr class='box_wrapper'><td colspan='" . $test . "'>tester</td></tr>";
 
-
-	// Prepare links
-	//$output_links = "";
-	//for ($i=0;$i < count($this->link); $i++) {
-	//    $output_links .= " - <a class='link_small' href=\"" . $this->link[$i][1] . "\" target='" . $this->link[$i][2] . "'>" . $this->link[$i][0] . "</a>\n";
-	//}
 
 	// Insert rows
 	$cnt_highlight = 1;
@@ -124,7 +115,7 @@ class Grid {
 		    $getter = "get_".$field[0];
 		    $value = $object->$getter();
 
-		    // Add any choosen format to a field
+		    // Customize field output using one of the functions above
 		    if (count($field) == 2) {
 			$value = $this->$field[1]($value);
 		    }
@@ -133,22 +124,11 @@ class Grid {
 
 		    $cnt_cell++;
 		}
-		 
-		// Replace field {tags} in output
-		//die($object->get_id());
-		//$variables = get_object_vars($this->data);
-		//die("variables:<br>".var_dump($variables));
-		//foreach($object as $property=>$value) {
-		//    echo($property."<br>");
-		    //$output = mb_ereg_replace("{" . $property . "}",$value,$output);
-		//}
 
 		$output = mb_ereg_replace("{id}",$object->get_id(),$output);
 
 		$cnt_cell++;
 
-		// Finish links string by removing first instance of "-"
-		//$output_links_row = substr($output_links_row,3,mb_strlen($output_links_row));
 
 		// Insert sort function
 		$sort = "";
@@ -165,11 +145,6 @@ class Grid {
 
 		// End row
 		$output .= "</tr>\n";
-
-		// Insert links block if present
-		//if ($this->link)
-		//    $output .= "<tr class='" . $row_id . " row" . $class_highlight . "'>\n<td class='links' colspan='" . $cnt_cell . "'>" . $output_links_row . "</td>\n</tr>\n";
-
 		$cnt_highlight++;
 
 	}
