@@ -42,7 +42,7 @@ class Object_model extends CI_Model {
 	}
 
 	// Persist object data
-	$this->$service_layer->persist($data);
+	$this->$service_layer->update($data);
     }
 
 }

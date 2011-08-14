@@ -14,6 +14,10 @@ class Organisation {
     private $id = 0;
     //...
     /**
+     * @OneToMany(targetEntity="Website", mappedBy="organisation")
+     */
+    private $websites = array();
+    /**
      * @OneToMany(targetEntity="User", mappedBy="organisation")
      */
     private $users = array();

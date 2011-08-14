@@ -35,17 +35,10 @@ class Website {
     private $pages = array();
 
     /**
-     * @ManyToOne(targetEntity="Organisation")
-     * @JoinColumn(name="organisation_id", referencedColumnName="id")
-     */
+    * @ManyToOne(targetEntity="Organisation", inversedBy="website")
+    */
     private $organisation = 0;
     
-    /**
-    * @Column(type="string")
-    * @var string
-    */
-    private $hash = "";
-
     /**
     * @Column(type="string")
     * @var string
@@ -56,7 +49,7 @@ class Website {
     * @Column(type="string")
     * @var string
     */
-    public $name = "";
+    private $name = "";
 
     /**
     * @Column(type="integer")
@@ -105,14 +98,6 @@ class Website {
 
     public function set_pages($pages) {
 	$this->pages = $pages;
-    }
-
-    public function get_hash() {
-	return $this->hash;
-    }
-
-    public function set_hash($hash) {
-	$this->hash = $hash;
     }
 
     public function get_created() {

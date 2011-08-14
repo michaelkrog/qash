@@ -11,7 +11,6 @@ $lang["send_email"]		    = "Send email";
 $lang["send_password"]		    = "Send password";
 $lang["name"]			    = "Navn";
 $lang["description"]		    = "Beskrivelse";
-$lang["basic_settings"]		    = "Grundlæggende indstillinger";
 $lang["default"]		    = "Standard";
 
 
@@ -21,15 +20,14 @@ $lang["server_failed"]		    = "Serveren svarede ikke. Prøv igen om lidt.";
 
 // Settings
 $lang["settings"]		    = "Indstillinger";
+$lang["edit_settings"]		    = "Rediger indstillinger";
+$lang["organisation_settings"]	    = "Organisations indstillinger";
+$lang["website_settings"]	    = "Website indstillinger";
 
 
 // Payment methods
 $lang["payment_methods"]	    = "Betalings muligheder";
 $lang["create_payment_method"]	    = "Opret ny betalings mulighed";
-
-
-// Settings
-$lang["edit_settings"]		    = "Rediger indstillinger";
 
 
 // Users

@@ -31,7 +31,8 @@ class Website_service extends AbstractCrud {
         // Lookup domain and get the corresponding website
         $result = $this->doctrine->em->createQuery("SELECT w FROM entities\Website w JOIN w.domains d WHERE d.name = '" . $domain . "' ")->getResult();
         if(count($result)==0) {
-            throw new Exception("No website found.");
+	    die("No website found.");
+            //throw new Exception("No website found.");
         }
         return $result[0];
     }

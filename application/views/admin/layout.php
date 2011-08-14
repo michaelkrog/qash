@@ -60,7 +60,8 @@
 					    <h2 class="current"><?=lang('settings');?></h2>
 					    <div class="pane" style="display:block;">
 						<ul>
-						    <li><a href="javascript:ajax('/index.php/admin/website/edit','','dialog','');"><?=lang('basic_settings');?></a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/organisation/edit','','dialog','');"><?=lang('organisation_settings');?></a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/website/edit','','dialog','');"><?=lang('website_settings');?></a></li>
 						    <br />
 						    <li><a href="javascript:ajax('/index.php/admin/payment_method/listing','','section_mid','');"><?=lang('payment_methods');?></a></li>
 						    <li><a href="javascript:ajax('/index.php/admin/payment_method/listing','','section_mid','');"><?=lang('create_payment_method');?></a></li>
