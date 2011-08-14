@@ -20,7 +20,7 @@ abstract class AbstractInterpreter implements Interpreter {
     }
 
     protected function getParamName() {
-        return "param_" + $this->getParamId();
+        return "param_" . $this->getParamId();
     }
     
     //abstract function canInterpret($filter);

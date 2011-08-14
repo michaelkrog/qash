@@ -1,4 +1,6 @@
 <?php
+require_once str_replace('//','/',dirname(__FILE__).'/') . '../../libraries/Filter/Core/CompareFilter.php';
+require_once str_replace('//','/',dirname(__FILE__).'/') . '../../libraries/Filter/Core/CompareType.php';
 
 /*
   |--------------------------------------------------------------------------
@@ -22,19 +24,51 @@ class Rest extends CI_Controller {
 
         if ("GET" === $method) {
             if (is_null($id)) {
+                //check filter
+                $filter = isset($_GET['filter']) ? $_GET['filter'] : null;
+                $count = isset($_GET['count']) ? $_GET['count'] : null;
+                $offset = isset($_GET['offset']) ? $_GET['offset'] : null;
+                $orderBy = isset($_GET['orderBy']) ? $_GET['orderBy'] : null;
+                
+                $limit = null;
+                
+                if(!is_null($filter)) {
+                    $filter = new Filter\Core\CompareFilter("name", $filter, \Filter\Core\CompareType::Equals);
+                }
+                
+                if(!is_null($orderBy)) {
+                    $orderBy = new \Filter\Sorter\Sorter($orderBy);
+                }
+                
+                if(!is_null($offset) || !is_null($count)) {
+                    $offset = 0;
+                    if(!is_null($offset)) {
+                        $offset = int($offset);
+                    }
+                    
+                    $count = 10000;
+                    if(!is_null($count)) {
+                        $count = int($count);
+                    }
+                    
+                    $limit = new Filter\Limit\Limit($offset, $count);
+                }
+
                 //List organisations
-                $ids = $this->Organisation_service->listIds();
+                $ids = $this->Organisation_service->listIds($filter, $orderBy, $limit);
 
                 echo(json_encode($ids));
             } else {
                 //Get specific organisation
-                echo(json_encode($this->Organisation_service->read($id)));
+                echo($this->Organisation_service->read($id)->encodeJSON());
             }
         }
 
         if ("POST" === $method) {
             if(!is_null($id)) {
-                throw new InvalidArgumentException("Cannot post to a specific id. POST will create a new instance.");
+                header('HTTP/1.0 405');
+                echo("Cannot post to a specific id. POST will create a new instance.");
+                return;
             }
 
             echo(json_encode($this->Organisation_service->create()));
@@ -42,10 +76,15 @@ class Rest extends CI_Controller {
 
         if ("PUT" === $method) {
             if(is_null($id)) {
-                throw new InvalidArgumentException("Can only put to a specific id. PUT will update existing instance.");
+                header('HTTP/1.0 405');
+                echo("Can only put to a specific id. PUT will update existing instance.");
+                return;
             }
 
             // decode to instance object somehow
+            $entity = $this->Organisation_service->read($id);
+            $json = file_get_contents("php://input");
+            $entity->decodeJSON($json);
             $this->Organisation_service->update($entity);
         }
 

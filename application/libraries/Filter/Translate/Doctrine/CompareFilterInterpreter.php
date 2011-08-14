@@ -35,7 +35,7 @@ class CompareFilterInterpreter extends AbstractInterpreter {
                 break;
         }
 
-        $ql = "e." . $filter->get_property_id() . $operator . ":" . $paramName;
+        $ql = "e." . $filter->get_property_id() . " " . $operator . " :" . $paramName;
         $clause->append_statement($ql);
         $clause->append_parameter($paramName, $filter->get_value());
         return true;

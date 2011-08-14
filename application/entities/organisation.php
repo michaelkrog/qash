@@ -1,5 +1,4 @@
 <?php
-
 namespace entities;
 
 /**
@@ -54,7 +53,7 @@ class Organisation {
      * @Column(type="string")
      * @var string
      */
-    public $address = "";
+    private $address = "";
     /**
      * @Column(type="string")
      * @var string
@@ -235,6 +234,20 @@ class Organisation {
 
     public function __toString() {
         return json_encode($this->toArray());
+    }
+
+    public function encodeJSON() {
+        foreach ($this as $key => $value) {
+            $json->$key = $value;
+        }
+        return json_encode($json);
+    }
+
+    public function decodeJSON($json_str) {
+        $json = json_decode($json_str, 1);
+        foreach ($json as $key => $value) {
+            $this->$key = $value;
+        }
     }
 
 }
