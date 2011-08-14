@@ -68,7 +68,7 @@ class Init extends CI_Controller {
 
 	function jslanguage()
 	{
-	    $jslang["server_failed"] = "Failed! (To be translated)"; // lang("admin_server_failed");
+	    $jslang["server_failed"] = lang("server_failed");
 
 	    echo(json_encode($jslang));
 	}

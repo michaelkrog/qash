@@ -18,7 +18,7 @@ class Object_model extends CI_Model {
 
 	// Load object data, as defined in the posted data
 	$this->load->model('service/' . $service_layer);
-	$data = $this->$service_layer->get($id);
+	$data = $this->$service_layer->read($id);
 
 	// Loop posted array, and update corresponding object data with the posted values
 	foreach($_POST as $property=>$value) {

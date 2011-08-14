@@ -8,14 +8,14 @@ class Website_model extends CI_Model {
     }
 
 
-     function get_edit($id) {
+     function get_edit() {
 
 	$data = $this->website_service->get();
 
 	$this->load->library('form');
 
 	$this->form->set_object("website");
-	$this->form->set_id($id);
+	$this->form->set_id($data->get_id());
 	$this->form->set_header(lang("edit_settings"));
 
 	$this->form->set_field(array(lang("name"), "", "name", "text"));

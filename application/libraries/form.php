@@ -195,19 +195,6 @@ class Form extends CI_model {
 	// Finish form creation
 	$output .= "</form>";
 
-	// Finish javascript by adding click handler
-	$postdata = "";
-	//$postdata = "jQuery('#button_form').click(function() {" . $postdata . "\n ajax('" . site_url($mode) . "',postdata,'','" . $actions . "');});\n";
-	//$postdata = "jQuery('#button_form').click(function() {" . $postdata . " \n alert('test');});\n";
-
-	// Add javascript to the output
-	$output .= "<script language='javascript'>" . $postdata . "</script>";
-	//echo htmlentities($postdata);
-	//echo(htmlentities($output));
-
-
-	$output .= "<div class='content'>";
-
 	return $output;
     }
 

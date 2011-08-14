@@ -8,7 +8,7 @@ class Organisation_model extends CI_Model {
     }
 
 
-     function get_edit($id) {
+     function get_edit() {
 
 	$this->load->model('service/organisation_service');
 
@@ -18,7 +18,7 @@ class Organisation_model extends CI_Model {
 	$this->load->library('form');
 
 	$this->form->set_object("organisation");
-	$this->form->set_id($id);
+	$this->form->set_id($data->get_id());
 	$this->form->set_header(lang("edit_settings"));
 
 	$this->form->set_field(array(lang("name"), "", "name", "text"));

@@ -164,8 +164,8 @@ function ajax(posturl,postdata,result_element,VisualActions) {
                     cache: false,
                     success: function(msg) {
 
-			    if(msg.indexOf("A PHP Error was encountered") > -1) {
-                                    show_message("Error: " + window.language["server_failed"] + "<br /><br />" + msg,"show");
+			    if(msg.indexOf("A PHP Error was encountered") > -1 || msg.indexOf("Fatal error:") > -1) {
+                                    show_message(window.language["server_failed"] + "<br /><br />" + msg,"show");
                             }
                             else {
 				    if (!result_element == "") {
