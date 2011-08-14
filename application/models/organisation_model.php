@@ -13,10 +13,7 @@ class Organisation_model extends CI_Model {
 	$this->load->model('service/organisation_service');
 
 	$website = $this->website_service->get();
-
-	// !!! Can't get organisation integer value from website entity
-	die($website->get_organisation());
-	$data = $this->organisation_service->read($website->get_organisation());
+	$data = $website->get_organisation();
 
 	$this->load->library('form');
 
