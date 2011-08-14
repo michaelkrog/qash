@@ -1,5 +1,4 @@
 <?php
-
 require_once str_replace('//','/',dirname(__FILE__).'/') . 'AbstractCrud.php';
 
 use entities\Organisation;
