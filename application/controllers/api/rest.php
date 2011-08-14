@@ -31,6 +31,31 @@ class Rest extends CI_Controller {
                 echo(json_encode($this->Organisation_service->read($id)));
             }
         }
+
+        if ("POST" === $method) {
+            if(!is_null($id)) {
+                throw new InvalidArgumentException("Cannot post to a specific id. POST will create a new instance.");
+            }
+
+            echo(json_encode($this->Organisation_service->create()));
+        }
+
+        if ("PUT" === $method) {
+            if(is_null($id)) {
+                throw new InvalidArgumentException("Can only put to a specific id. PUT will update existing instance.");
+            }
+
+            // decode to instance object somehow
+            $this->Organisation_service->update($entity);
+        }
+
+        if ("DELETE" === $method) {
+            if(is_null($id)) {
+                throw new InvalidArgumentException("Can only delete a specific id.");
+            }
+
+            $this->Organisation_service->delete($id);
+        }
     }
 
 }
