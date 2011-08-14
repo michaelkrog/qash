@@ -28,12 +28,7 @@ interface Crud {
      */
     public function delete($id);
     
-    public function listIds();
-    public function listIds(Filter $filter);
-    public function listIds(Limit $limit);
-    public function listIds(Sorter $sorter);
-    public function listIds(Filter $filter, Sorter $sorter);
-    public function listIds(Filter $filter, Sorter $sorter, Limit $limit);
+    public function listIds($filter, $sorter, $limit);
     
     
 }

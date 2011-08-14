@@ -71,7 +71,7 @@ class Translator {
             }
         }
 
-        echo "Query: " . $ql;
+        //echo "Query: " . $ql;
         $q = $em->createQuery($ql);
 
         foreach (array_keys($whereClause->get_parameters()) as $key) {
@@ -91,7 +91,7 @@ class Translator {
 
         
         if (is_null($filter)) {
-            echo "filter was null\n";
+            //echo "filter was null\n";
             return false;
         }
 
