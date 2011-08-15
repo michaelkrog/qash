@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+  <persistence-unit name="QashServiceNew" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>dk.apaq.qash.share.model.Shop</class>
+    <class>dk.apaq.qash.share.model.Account</class>
+    <class>dk.apaq.qash.share.model.Item</class>
+    <class>dk.apaq.qash.share.model.Tax</class>
+    <class>dk.apaq.qash.share.model.Order</class>
+    <class>dk.apaq.qash.share.model.OrderLine</class>
+    <class>dk.apaq.qash.share.model.OrderLineTax</class>
+    <class>dk.apaq.qash.share.model.Sequence</class>
+    <class>dk.apaq.qash.share.model.Payment</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="hibernate.connection.username" value="root"/>
+      <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+      <property name="hibernate.connection.password" value=""/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.connection.url" value="jdbc:mysql://localhost/qashdb"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect"/>
+      <!--property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.timeout" value="300"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+            <property name="hibernate.c3p0.idle_test_period" value="100"/-->
+      <property name="hibernate.connection.provider_class" value="com.jolbox.bonecp.provider.BoneCPConnectionProvider"/>
+      <property name="bonecp.idleMaxAge" value="240"/>
+      <property name="bonecp.idleConnectionTestPeriod" value="60"/>
+      <property name="bonecp.partitionCount" value="3"/>
+      <property name="bonecp.acquireIncrement" value="10"/>
+      <property name="bonecp.maxConnectionsPerPartition" value="60"/>
+      <property name="bonecp.minConnectionsPerPartition" value="20"/>
+      <property name="bonecp.statementsCacheSize" value="50"/>
+      <property name="bonecp.releaseHelperThreads" value="3"/>
+      <!-- Hibernate Search -->
+      <property name="hibernate.search.default.directory_provider" value="org.hibernate.search.store.FSDirectoryProvider"/>
+      <property name="hibernate.search.default.indexBase" value="c:/tmp/qashindex"/>
+    </properties>
+  </persistence-unit>
+</persistence>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
+
+
+
+    <http auto-config='true'>
+        <intercept-url pattern="/**/create_account.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/**/login.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/**/account.jsp" access="ROLE_USER" />
+        <intercept-url pattern="/**/dashboard.jsp" access="ROLE_USER" />
+        <intercept-url pattern="/**/register/**" access="ROLE_USER" />
+        <intercept-url pattern="/**/admin/**" access="ROLE_ADMIN" />
+
+        <form-login login-page="/login.jsp" />
+        <logout logout-url="/logout" logout-success-url="/" />
+
+        <custom-filter position="OPENID_FILTER" ref="rpxFilter" />
+    </http>
+
+    <beans:bean id="rpxFilter" class="dk.apaq.spring.rpx.RpxAuthenticationFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+        <beans:property name="rpxApiKey" value="042b7f697063d653e6f1a4f533a57c74a625d200"/>
+    </beans:bean>
+
+    <beans:bean id="customAuthenticationProvider" class="dk.apaq.qash.security.QashAuthenticationProvider">
+        <beans:property name="userDetailsManager">
+            <beans:ref bean="qashUserDetailsManager"/>
+        </beans:property>
+    </beans:bean>
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider ref="customAuthenticationProvider" user-service-ref='qashUserDetailsManager'/>
+    </authentication-manager>
+
+    <beans:bean id="qashUserDetailsManager" class="dk.apaq.qash.security.QashUserDetailsManager">
+        <beans:constructor-arg>
+            <beans:ref bean="service"/>
+        </beans:constructor-arg>
+    </beans:bean>
+
+
+</beans:beans>

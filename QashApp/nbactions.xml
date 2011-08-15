@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Rebuild gwt</actionName>
+            <displayName>Rebuild gwt</displayName>
+            <goals>
+                <goal>gwt:clean</goal>
+                <goal>gwt:compile</goal>
+            </goals>
+        </action>
+    </actions>

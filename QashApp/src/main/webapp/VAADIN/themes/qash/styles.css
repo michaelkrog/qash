@@ -1,0 +1,346 @@
+@import "../reindeermods/styles.css";
+@import "../../../css/layout.css";
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
+/** QASH VAADIN STYLE **/
+.v-label-bold {
+    font-weight:bold;
+}
+
+.v-settingsdialog-top .v-horizontallayout-margin {
+    padding: 3px 8px
+
+}
+
+.v-settingsdialog-top {
+    border-bottom: 1px solid #9a9a9a
+}
+
+.v-categorygridpanel {
+    background: #EDEDED;
+}
+
+.v-categorygridpanel .CategoryGridRow {
+    background: #ededed;
+}
+
+.v-categorygridpanel .CategoryGridRow-odd {
+    background: #e6e6e6;
+}
+
+.v-categorygridpanel-icon .v-verticallayout-margin {
+    padding:2px 6px;
+}
+
+.v-categorygridpanel .v-panel .v-panel-caption,
+.v-categorygridpanel .v-panel .v-panel-content{
+    border:none;
+    padding: 4px;
+}
+
+.v-categorygridpanel .v-panel .v-panel-content > div {
+    background: transparent;
+}
+
+.v-categorygridpanel-icon .v-label {
+    line-height:15px;
+    text-align: center;
+}
+
+.v-printersettingpanel-settings-wrapper {
+    background:#E3E3E3;;
+    border: 1px solid #afafaf;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius:5px;
+}
+
+.v-app input.v-textfield-barcode,
+.v-window input.v-textfield-barcode,
+.v-app textarea.v-textarea-barcode,
+.v-window textarea.v-textarea-barcode {
+    padding: 3px 3px 4px 20px;
+    background: url(img/barcode.png) no-repeat 3px 3px;
+}
+
+/* header layout in the ordereditor */
+.v-ordereditor-orderheader-top {
+    border-top: 1px solid white;
+    border-bottom: 1px solid #c2c3c4;
+    background:#f6f6f6;
+}
+
+/* bold menu item */
+.v-menubar-menuitem-bold {
+    font-weight: bold;
+}
+
+/* aligns icon correctly */
+.v-menubar .v-icon {
+    vertical-align:top;
+}
+
+/* Enhances the size of fields in orderlist an ordereditor to better suit touchscreens */
+.v-ordereditor .v-table-cell-content,
+.v-orderlist .v-table-cell-content{
+    font-size:18px;
+    height:36px;
+    vertical-align: middle;
+
+}
+
+.v-ordereditor .v-table-cell-content input{
+    font-size:18px;
+}
+
+/* Makes the tabwrapper have same design as standard tabs */
+.v-panel-caption-tabwrapper span {
+    line-height: 24px;
+}
+
+.v-panel-tabwrapper .v-panel-caption-tabwrapper {
+    background: transparent repeat-x;
+    background-image: url(../reindeer/common/img/vertical-sprites.png);
+    -background-image: url(../reindeer/common/img/vertical-sprites-ie6.png);
+    background-position: left -1278px;
+    color: #222;
+    text-shadow: white 0 1px 0;
+
+
+    height:24px;
+    font-size: 13px;
+
+    font-weight: normal;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 4px;
+    text-align:left;
+    vertical-align: middle;
+    /* border-bottom: 1px solid #3A3C3F;*/
+}
+
+.v-nativebutton-tab .v-nativebutton-caption {
+    font-size: 14px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.v-nativebutton-tab {
+    border:none;
+    border-bottom: 1px solid #CFCFCF;
+
+    text-align:left;
+    font-size: 14px;
+    font-family: arial;
+    cursor: default;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    vertical-align: top;
+    background:white;
+    width: 100%;
+    height:48px;
+}
+
+.v-nativebutton-tab-selected {
+    background: #E9E9F9;
+}
+
+.v-button.v-button-CategoryGrid,
+.v-button.v-button-CategoryGrid:focus,
+.v-button.v-button-CategoryGrid:active,
+.v-button-CategoryGrid.v-pressed,
+.v-disabled.v-button.v-button-CategoryGrid,
+.v-button.v-button-CategoryGrid .v-button-wrap,
+.v-button.v-button-CategoryGrid:focus .v-button-wrap,
+.v-button.v-button-CategoryGrid:active .v-button-wrap,
+.v-button-CategoryGrid.v-pressed .v-button-wrap,
+.v-disabled.v-button.v-button-CategoryGrid .v-button-wrap,
+.v-button.v-button-IconButton,
+.v-button.v-button-IconButton:focus,
+.v-button.v-button-IconButton:active,
+.v-button-IconButton.v-pressed,
+.v-disabled.v-button.v-button-IconButton,
+.v-button.v-button-IconButton .v-button-wrap,
+.v-button.v-button-IconButton:focus .v-button-wrap,
+.v-button.v-button-IconButton:active .v-button-wrap,
+.v-button-IconButton.v-pressed .v-button-wrap,
+.v-disabled.v-button.v-button-IconButton .v-button-wrap{
+    background: transparent;
+    height: auto;
+    padding: 0;
+    cursor: pointer;
+    line-height: inherit;
+}
+
+.v-button.v-button-CategoryGrid,
+.v-button.v-button-IconButton{
+    width:80px;
+    height:80px;
+}
+
+.v-button.v-button-CategoryGrid img,
+.v-button.v-button-IconButton img{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.v-button.v-button-CategoryGrid .v-button-caption,
+.v-button.v-button-IconButton .v-button-caption{
+    white-space: normal;
+    line-height: 12px;
+}
+
+.text-align-right {
+    text-align:right;
+}
+
+.v-app input.v-textfield-large,
+.v-window input.v-textfield-large,
+.v-app textarea.v-textarea-large,
+.v-window textarea.v-textarea-large {
+    font-size: 16px;
+    line-height: normal;
+    height: auto;
+    padding: 2px;
+}
+
+.v-app input.v-textfield-xlarge,
+.v-window input.v-textfield-xlarge,
+.v-app textarea.v-textarea-xlarge,
+.v-window textarea.v-textarea-xlarge {
+    font-size: 24px;
+    line-height: normal;
+    height: auto;
+    padding: 2px;
+    background:white;
+}
+
+.v-app textarea.v-textarea-big {
+    font-size: 16px;
+}
+
+/* Basic style for all cells. */
+.v-table-bigcontent .v-table-cell-content {
+    text-align: center;
+    vertical-align: middle;
+    font-size:18px;
+    height: 32px;
+}
+
+.v-horizontallayout-gray {
+    border: none;
+    height: 32px;
+    background: transparent repeat-x;
+    background-image: url(../reindeer/tabsheet/img/framed/tab-bg.png); /** sprite-ref: verticals; sprite-alignment: repeat */
+    padding: 0;
+    color: #222;
+    text-shadow: #fff 0 1px 0;
+}
+
+.padding-bottom-small {
+    padding-bottom:3px;
+}
+
+.padding-top-small {
+    padding-top:3px;
+}
+
+.padding-left-small {
+    padding-left:3px;
+}
+
+.padding-right-small {
+    padding-right:3px;
+}
+
+.invisible .v-panel-content {
+    border:0px;
+    overflow:visible;
+}
+
+.invisible .v-panel-captionwrap {
+    display:none;
+}
+
+.v-switchbuttongroup .v-switchbutton {
+    line-height:34px;
+    height:34px;
+}
+
+
+.v-switchbuttongroup .v-switchbutton .v-button-wrap .v-button-caption {
+    font-size:20px;
+    line-height:24px;
+}
+
+.v-switchbuttongroup .v-switchbutton {
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-left-width: 0;
+    zoom: 1;
+}
+
+.v-switchbuttongroup .v-switchbutton .v-button-wrap {
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    zoom: 1;
+}
+
+.v-switchbuttongroup .v-button.v-switchbutton,
+.v-switchbuttongroup .v-button.v-switchbutton:focus,
+.v-switchbuttongroup .v-button.v-switchbutton:active{
+    background: #EFEFEF;
+    border: 1px solid #AFAFAF;
+}
+
+.v-switchbuttongroup .v-button.v-switchbutton.v-button-down {
+    background: #bfbfbf;
+    border: 1px solid #bfbfbf;
+}
+
+.v-switchbuttongroup .v-button.v-switchbutton .v-button-wrap,
+.v-switchbuttongroup .v-button.v-switchbutton:focus .v-button-wrap,
+.v-switchbuttongroup .v-button.v-switchbutton:active .v-button-wrap{
+    background: none;
+}
+
+.v-switchbuttongroup .v-switchbutton .v-pressed,
+.v-switchbuttongroup .v-switchbutton:focus .v-pressed{
+    background: none;
+}
+
+.v-switchbuttongroup .first {
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-left-width: 1px;
+}
+
+.v-switchbuttongroup .first .v-button-wrap {
+    -webkit-border-top-left-radius: 2px;
+    -webkit-border-bottom-left-radius: 2px;
+    -moz-border-radius-topleft: 2px;
+    -moz-border-radius-bottomleft: 2px;
+}
+
+.v-switchbuttongroup .last {
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-bottomright: 3px;
+}
+
+.v-switchbuttongroup .last .v-button-wrap {
+    -webkit-border-top-right-radius: 2px;
+    -webkit-border-bottom-right-radius: 2px;
+    -moz-border-radius-topright: 2px;
+    -moz-border-radius-bottomright: 2px;
+}

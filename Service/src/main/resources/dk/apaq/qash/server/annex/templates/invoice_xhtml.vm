@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Invoice</title>
+        <style>
+            @page { size: size: ${pageWidth}mm ${pixelHeight}mm }
+
+
+            .left{
+                text-align: left;
+            }
+
+            .right{
+                text-align: right;
+            }
+
+            .header table,
+            .details table,
+            .ordercontent table{
+                width:100%;
+               border-spacing: 0px;
+
+            }
+
+
+
+            .details table{
+                margin-top: 60px;
+                margin-bottom: 30px;
+
+            }
+
+            .ordercontent table{
+                 -fs-table-paginate: paginate;
+}
+
+            
+
+            .ordercontent th,
+            .ordercontent td
+            {
+                padding-top: 4px;
+                padding-bottom: 4px;
+                padding-right:4px;
+            }
+
+            th{
+                color:#4f4f4f;
+                text-transform: uppercase;
+}
+
+            .header table td{
+                padding:0px;
+
+            }
+
+            .logo{
+                font-size:24px;
+                font-family:helvetica;
+                color:#6f6f6f;
+                line-height:60px;
+            }
+
+            body{
+                font-size:10px;
+                font-family: helvetica;
+                width:${pixelWidth}px;
+            }
+
+            .title{
+                font-size:20px;
+            }
+
+            .details .title{
+                vertical-align: top;
+            }
+
+            .noborders{
+               border:0px;
+            }
+
+            .orderlinetableline{
+                border-bottom:1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="header">
+            <table>
+                 <tr>
+                    <td></td>
+                    <td class="logo right">$tool.html($shop.getName())</td>
+                </tr>
+                <tr>
+                    <td><!--$customername--></td>
+                    <td class="right">#if($shop.getCvr())$tool.html($resource.getString("vatno")): $tool.html($shop.getCvr())#end</td>
+                </tr>
+                <tr>
+                    <td><!--$customeraddress--></td>
+                    <td class="right">#if($shop.getRoad())$tool.html($shop.getRoad())#end</td>
+                </tr>
+                <tr>
+                    <td><!--$custoemraddress2--></td>
+                    <td class="right">#if($shop.getZipCode())$tool.html($shop.getZipCode())#end #if($shop.getCity())$tool.html($shop.getCity())#end</td>
+                </tr>
+                <tr>
+                    <td><!--$customerzip $customercity--></td>
+                    <td class="right"></td>
+                </tr>
+
+                #if($shop.getPhoneNo())
+                <tr>
+                    <td></td>
+                    <td class="right">$tool.html($resource.getString("phone")): $tool.html($shop.getPhoneNo())</td>
+                </tr>
+                #end
+
+                #if($shop.getBankAccount())
+                <tr>
+                    <td></td>
+                    <td class="right">$tool.html($resource.getString("bank")): $tool.html($shop.getBankAccount())</td>
+                </tr>
+                #end
+
+                #if($shop.getEmail())
+                <tr>
+                    <td></td>
+                    <td class="right">$tool.html($resource.getString("email")): $tool.html($shop.getEmail())</td>
+                </tr>
+                #end
+
+                #if($shop.getWeb())
+                <tr>
+                    <td></td>
+                    <td class="right">$tool.html($resource.getString("web")): $tool.html($shop.getWeb())</td>
+                </tr>
+                #end
+
+            </table>
+        </div>
+
+        <div class="details">
+            <table>
+                 <tr>
+                     <td class="title" rowspan="4">$tool.html($resource.getString("invoice"))</td>
+                    <td class="right">$tool.html($resource.getString("invoice_number")): $order.getInvoiceNumber()</td>
+                </tr>
+                 <tr>
+                    <td class="right">$tool.html($resource.getString("order_number")): $order.getNumber()</td>
+                </tr>
+                <tr>
+                    <td class="right">$tool.html($resource.getString("invoice_date")): #if($order.getDateInvoiced())$tool.html($df.format($order.getDateInvoiced()))#end</td>
+                </tr>
+                <tr>
+                    <td class="right">$tool.html($resource.getString("due_date")): #if($order.getDateTimelyPayment())$tool.html($df.format($order.getDateTimelyPayment()))#end</td>
+                </tr>
+
+
+            </table>
+        </div>
+
+        <div class="ordercontent">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="left orderlinetableline">$tool.html($resource.getString("text"))</th>
+                        <th class="right orderlinetableline">$tool.html($resource.getString("quantity"))</th>
+                        <th class="left orderlinetableline">$tool.html($resource.getString("unit"))</th>
+                        <th class="right orderlinetableline">$tool.html($resource.getString("discount"))</th>
+                        <th class="right orderlinetableline">$tool.html($resource.getString("price"))</th>
+                        <th class="right orderlinetableline">$tool.html($resource.getString("amount"))</th>
+
+                    </tr>
+                </thead>
+                #foreach($orderline in $orderlines)
+                <tr>
+                        <td class="orderlinetableline">$tool.html($orderline.title)</td>
+                        <td class="right orderlinetableline">$nf.format($orderline.quantity)</td>
+                        <td class="left orderlinetableline">$tool.html($resource.getString("pcs"))</td>
+                        <td class="right orderlinetableline">$pf.format($orderline.getDiscountPercentage())</td>
+                        <td class="right orderlinetableline">$cf.format($orderline.getPrice())</td>
+                        <td class="right orderlinetableline">$cf.format($orderline.getTotal())</td>
+
+                    </tr>
+        #end
+ 
+
+                <tr>
+                        <td colspan="4" class="noborders"></td>
+                        <td class="left orderlinetableline">$tool.html($resource.getString("net")):</td>
+                        <td class="right orderlinetableline">$cf.format($order.getTotal())</td>
+                    </tr>
+                    #foreach($tax in $order.taxList)
+
+                                <tr>
+                        <td colspan="4" class="noborders"></td>
+                        <td class="left orderlinetableline">$tool.html($tax.name):</td>
+                        <td class="right orderlinetableline">$cf.format($order.getTotalTax($tax))</td>
+                    </tr>
+                    #end
+
+                    #set( $totalIncTax = $order.getTotal() + $order.getTotalTax())
+                    <tr>
+                        <td colspan="4" class="noborders"></td>
+                        <td class="left orderlinetableline">$tool.html($resource.getString("total")):</td>
+                        <td class="right orderlinetableline">$cf.format($totalIncTax)</td>
+                    </tr>
+            </table>
+        </div>
+    </body>
+</html>
