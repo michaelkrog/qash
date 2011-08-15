@@ -10,7 +10,7 @@ class Website_service extends AbstractCrud {
     }
 
     public function create() {
-        $entity = new entities\Website();
+        $entity = new Website();
         $entity = $this->update($entity);
         return $entity->get_id();
     }
