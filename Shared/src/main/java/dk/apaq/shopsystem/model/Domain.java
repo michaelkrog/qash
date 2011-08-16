@@ -1,16 +1,16 @@
 package dk.apaq.shopsystem.model;
 
 import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- *
- * @author michaelzachariassenkrog
+ * Specifies a web domain for a website.
  */
 @Entity
 @Table(name="DomainModel")
-public class Domain extends AbstractOrganisationEntity implements Serializable {
+public class Domain extends AbstractEntity implements Serializable {
 
     private String name;;
 

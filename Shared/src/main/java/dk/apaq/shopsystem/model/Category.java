@@ -1,16 +1,14 @@
 package dk.apaq.shopsystem.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
- * @author michaelzachariassenkrog
+ * Specifies a category for a product.
  */
 @Entity
-public class Category extends AbstractOrganisationEntity{
+public class Category extends AbstractContentEntity implements Serializable{
 
     private String name;
 

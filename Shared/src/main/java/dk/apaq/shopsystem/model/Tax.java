@@ -3,7 +3,6 @@ package dk.apaq.shopsystem.model;
 import dk.apaq.crud.HasId;
 import java.io.Serializable;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 
 /**
  * A tax that is imposed sales.
@@ -11,12 +10,10 @@ import javax.persistence.ManyToOne;
  *
  */
 @Entity
-public class Tax extends AbstractOrganisationEntity implements Serializable, HasId<String> {
+public class Tax extends AbstractContentEntity implements Serializable {
 
     private String name;
-
     private double rate;
-
     private boolean defaultEnabled = false;
 
     public Tax() {
@@ -27,7 +24,6 @@ public class Tax extends AbstractOrganisationEntity implements Serializable, Has
         this.rate = rate;
     }
 
-    
     /**
      * Wether this is intended to be enabled by default. Most countries have a default tax which
      * are mostly used. This or these should be enabled by default.
@@ -40,7 +36,6 @@ public class Tax extends AbstractOrganisationEntity implements Serializable, Has
     public void setDefaultEnabled(boolean defaultEnabled) {
         this.defaultEnabled = defaultEnabled;
     }
-
 
     /**
      * The percentage that applies to this tax. fx. 25.0 for 25%
@@ -68,7 +63,7 @@ public class Tax extends AbstractOrganisationEntity implements Serializable, Has
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Tax)) {
+        if (obj == null || !( obj instanceof Tax )) {
             return false;
         }
 

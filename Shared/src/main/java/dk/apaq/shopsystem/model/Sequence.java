@@ -3,14 +3,15 @@ package dk.apaq.shopsystem.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "SequenceModel")
 public class Sequence {
 
     @Id
     private String id;
-
-    @Column(name="sequencenumber")
+    @Column(name = "sequencenumber")
     private long sequence;
 
     public String getId() {

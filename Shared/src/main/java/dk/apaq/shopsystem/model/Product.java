@@ -1,48 +1,33 @@
 package dk.apaq.shopsystem.model;
 
-import dk.apaq.crud.HasId;
-import dk.apaq.shopsystem.util.ShopFieldBridge;
 import java.io.Serializable;
 
-import dk.apaq.shopsystem.util.TaxTool;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.FieldBridge;
-import org.hibernate.search.annotations.Fields;
-import org.hibernate.search.annotations.Index;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.Store;
+
+import dk.apaq.crud.HasId;
+import dk.apaq.shopsystem.util.TaxTool;
 
 /**
- * An item.
+ * Specifies a product.
  */
 @Entity
-public class Product extends AbstractOrganisationEntity implements Serializable, Cloneable, HasId<String> {
+public class Product extends AbstractContentEntity implements Serializable {
 
     private String name;
-    
     private String itemNo;
-
     private String barcode;
-    
-    private double price=0;
-
-    private double discountprice=0;
-
-    private double quantityInStock=0;
-
+    private double price = 0;
+    private double discountprice = 0;
+    private double quantityInStock = 0;
     private boolean stockProduct = false;
-
     @ManyToOne
     private Category category;
-
     @ManyToOne
     private Tax tax = null;
 
-   
-    public Product() { }
+    public Product() {
+    }
 
     public Category getCategory() {
         return category;
@@ -108,8 +93,8 @@ public class Product extends AbstractOrganisationEntity implements Serializable,
      * getPriceWithTax.
      */
     public void setPriceWithTax(double price) {
-        if(tax!=null) {
-            price = ((price / (tax.getRate() + 100.0)) * 100.0);
+        if (tax != null) {
+            price = ( ( price / ( tax.getRate() + 100.0 ) ) * 100.0 );
         }
 
         setPrice(price);
@@ -150,6 +135,4 @@ public class Product extends AbstractOrganisationEntity implements Serializable,
     public String getType() {
         return "Item";
     }
-
-
 }

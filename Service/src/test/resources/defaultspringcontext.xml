@@ -25,12 +25,8 @@
        http://www.springframework.org/schema/lang/spring-lang-2.0.xsd"
         >
 
-    <bean id="shopCrud" class="dk.apaq.qash.server.service.crud.ShopCrudImpl"/>
+    <bean id="contentCrud" class="dk.apaq.shopsystem.service.crud.ContentCrud"/>
     <bean id="accountCrud" class="dk.apaq.qash.server.service.crud.AccountCrudImpl"/>
-    <bean id="itemCrud" class="dk.apaq.qash.server.service.crud.ItemCrudImpl" scope="prototype"/>
-    <bean id="taxCrud" class="dk.apaq.qash.server.service.crud.TaxCrudImpl" scope="prototype"/>
-    <bean id="paymentCrud" class="dk.apaq.qash.server.service.crud.PaymentCrudImpl" scope="prototype"/>
-    <bean id="orderCrud" class="dk.apaq.qash.server.service.crud.OrderCrudImpl" scope="prototype"/>
     <bean id="inventoryManager" class="dk.apaq.qash.server.service.crud.ItemCrudInventoryManager" scope="prototype"/>
 
     <bean id="service" class="dk.apaq.qash.server.service.ServiceImpl"/>

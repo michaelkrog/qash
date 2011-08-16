@@ -1,14 +1,14 @@
 package dk.apaq.shopsystem.model;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 /**
  *
- * @author michaelzachariassenkrog
  */
 @Entity
-public class Page extends AbstractOrganisationEntity {
+public class Page extends AbstractEntity implements Serializable {
 
     private String name;
     private String title;

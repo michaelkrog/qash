@@ -1,10 +1,13 @@
 package dk.apaq.shopsystem.model;
 
+import java.io.Serializable;
+import javax.persistence.Entity;
+
 /**
- *
- * @author michaelzachariassenkrog
+ * Defines a Template for a Website.
  */
-public class Template extends AbstractOrganisationEntity {
+@Entity
+public class Template extends AbstractContentEntity implements Serializable {
 
     private String name;
     private String styles;

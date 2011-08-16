@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.model;
 
+import dk.apaq.crud.HasId;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-public class AbstractEntity {
+public class AbstractEntity implements HasId<String> {
 
     @Id
     @GeneratedValue(generator="system-uuid")

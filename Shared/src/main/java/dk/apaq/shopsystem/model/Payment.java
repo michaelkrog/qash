@@ -1,25 +1,18 @@
 package dk.apaq.shopsystem.model;
 
-import dk.apaq.crud.HasId;
-import java.util.Date;
-import javax.persistence.Column;
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import org.hibernate.annotations.GenericGenerator;
+
+import dk.apaq.crud.HasId;
 
 /**
  *
  * @author michaelzachariassenkrog
  */
 @Entity
-public class Payment extends AbstractOrganisationEntity implements HasId<String>{
+public class Payment extends AbstractContentEntity implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;

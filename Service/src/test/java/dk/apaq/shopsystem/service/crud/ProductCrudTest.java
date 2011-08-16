@@ -6,16 +6,16 @@ import dk.apaq.filter.core.LikeFilter;
 import dk.apaq.filter.sort.SortDirection;
 import dk.apaq.filter.sort.Sorter;
 import dk.apaq.filter.sort.SorterEntry;
+import dk.apaq.shopsystem.model.Organisation;
+import dk.apaq.shopsystem.model.Product;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import dk.apaq.shopsystem.service.Service;
+import java.util.List;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import dk.apaq.shopsystem.model.Product;
-import dk.apaq.shopsystem.model.Store;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -23,16 +23,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.junit.Assert.*;
-
 /**
  *
  * @author michaelzachariassenkrog
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/defaultspringcontext.xml"})
-public class ItemCrudTest extends AbstractJUnit4SpringContextTests   {
+public class ProductCrudTest extends AbstractJUnit4SpringContextTests   {
 
-    public ItemCrudTest() {
+    public ProductCrudTest() {
     }
 
     @BeforeClass
@@ -57,13 +56,13 @@ public class ItemCrudTest extends AbstractJUnit4SpringContextTests   {
     private Service service;
 
     
-    /*
+    
     @Test
     public void testRead() {
         System.out.println("read");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Complete<String, Product> crud = service.getItemCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        Crud.Complete<String, Product> crud = service.getProductCrud(org);
         Product result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -85,9 +84,9 @@ public class ItemCrudTest extends AbstractJUnit4SpringContextTests   {
     @Test
     public void testCreate() {
         System.out.println("create");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Complete<String, Product> crud = service.getItemCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        Crud.Complete<String, Product> crud = service.getProductCrud(org);
         Product item = crud.read(crud.create());
 
         assertNotNull(item);
@@ -96,9 +95,9 @@ public class ItemCrudTest extends AbstractJUnit4SpringContextTests   {
     @Test
     public void testUpdate() {
         System.out.println("update");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Complete<String, Product> crud = service.getItemCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        Crud.Complete<String, Product> crud = service.getProductCrud(org);
         Product result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -119,9 +118,9 @@ public class ItemCrudTest extends AbstractJUnit4SpringContextTests   {
     @Test
     public void testDelete() {
         System.out.println("delete");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Complete<String, Product> crud = service.getItemCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        Crud.Complete<String, Product> crud = service.getProductCrud(org);
         Product result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -141,9 +140,9 @@ public class ItemCrudTest extends AbstractJUnit4SpringContextTests   {
     @Test
     public void testListIds() {
         System.out.println("listIds");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Editable<String, Product> crud = service.getItemCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        Crud.Editable<String, Product> crud = service.getProductCrud(org);
 
         for(int i=0;i<10;i++)
             crud.create();
@@ -152,12 +151,13 @@ public class ItemCrudTest extends AbstractJUnit4SpringContextTests   {
         assertTrue(idlist.size() >= 10);
     }
 
+    /*
         @Test
     public void testListIdsFilter() {
         System.out.println("listIds");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Complete<String, Product> crud = service.getItemCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        Crud.Complete<String, Product> crud = service.getProductCrud(org);
         Product item = crud.read(crud.create());
         item.setName("Bob & Anne");
         item.setBarcode("1001");
@@ -179,14 +179,14 @@ public class ItemCrudTest extends AbstractJUnit4SpringContextTests   {
         assertFalse(idlist3.isEmpty());
         assertFalse(idlist4.isEmpty());
 
-    }
+    }*/
 
     @Test
     public void testListIdsSorted() {
         System.out.println("listIds");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Complete<String, Product> crud = service.getItemCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        Crud.Complete<String, Product> crud = service.getProductCrud(org);
 
         Product item = crud.read(crud.create());
         item.setName("Bob");
@@ -206,8 +206,7 @@ public class ItemCrudTest extends AbstractJUnit4SpringContextTests   {
         item3.setItemNo("10012");
         crud.update(item3);
 
-        SorterEntry se = new SorterEntry("name", SortDirection.Ascending);
-        Sorter sorter = new Sorter(se);
+        Sorter sorter = new Sorter("name", SortDirection.Ascending);
 
         List<String> idlist1 = crud.listIds(null, sorter);
 
@@ -221,12 +220,12 @@ public class ItemCrudTest extends AbstractJUnit4SpringContextTests   {
 
     @Test
     public void testSecurity() {
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop1 = shopcrud.read(shopcrud.create());
-        Store shop2 = shopcrud.read(shopcrud.create());
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org1 = orgcrud.read(orgcrud.create());
+        Organisation org2 = orgcrud.read(orgcrud.create());
 
-        Crud.Editable<String, Product> itemCrud1 = service.getItemCrud(shop1);
-        Crud.Editable<String, Product> itemCrud2 = service.getItemCrud(shop2);
+        Crud.Editable<String, Product> itemCrud1 = service.getProductCrud(org1);
+        Crud.Editable<String, Product> itemCrud2 = service.getProductCrud(org2);
 
         Product item1 = itemCrud1.read(itemCrud1.create());
         Product item2 = itemCrud2.read(itemCrud2.create());
@@ -247,6 +246,6 @@ public class ItemCrudTest extends AbstractJUnit4SpringContextTests   {
         } catch(SecurityException ex) { }
 
     }
-*/
+
 
 }

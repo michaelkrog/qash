@@ -4,25 +4,27 @@ import java.io.Serializable;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
+
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.Table;
+
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Defines a System User. A System User does not belong to any organisation, but belongs
+ * to the system and can be used by any organisation in the system.
+ * 
+ * Example:
+ * - System Administrators should be able to gain access to any organisation in the system.
+ * - Super Users might maintain several Organisations.
+ * - Simple users just access their own organisation.
+ * 
  * @author michael
  */
 @Entity
-public class Account extends AbstractEntity implements Principal, dk.apaq.crud.HasId<String>, Serializable {
+public class SystemUser extends AbstractEntity implements Principal, dk.apaq.crud.HasId<String>, Serializable {
 
     private String displayname;
 

@@ -1,48 +1,26 @@
 package dk.apaq.shopsystem.model;
 
-import dk.apaq.crud.HasId;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
+
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.Temporal;
-import org.hibernate.annotations.GenericGenerator;
+
+import dk.apaq.crud.HasId;
 
 /**
- * A shop that sells stuff.
- * @author michael
+ * Defines a physical store.
  *
  */
 @Entity
-public class Store extends AbstractOrganisationEntity implements Serializable, HasId<String> {
+public class Store extends AbstractContentEntity implements Serializable {
 
-    
     private String name;
-
     private String road;
-    
     private String zipCode;
-    
     private String city;
-
     private String phoneNo;
-    
     private String faxNo;
-
     private String email;
-    
     private String countryCode = "US";
-
 
     public String getCountryCode() {
         return countryCode;

@@ -1,24 +1,22 @@
 package dk.apaq.shopsystem.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import org.hibernate.annotations.Cascade;
 
 /**
- *
- * @author michaelzachariassenkrog
+ * Specifies an organisation
  */
-public class Organisation extends AbstractEntity {
+@Entity
+public class Organisation extends AbstractEntity implements Serializable {
 
-    private List<Account> users = new ArrayList<Account>();
+    @OneToMany
+    private List<SystemUser> users = new ArrayList<SystemUser>();
 
-    private List<Product> products = new ArrayList<Product>();
-
-    /**
-     * @OneToMany(targetEntity="Category", mappedBy="organisation")
-     */
-    private List<Category> categories = new ArrayList<Category>();
-
-    public String name;
+    private String name;
 
     private String company_reg;
 
@@ -38,7 +36,7 @@ public class Organisation extends AbstractEntity {
 
     private long initialInvoiceNumber=1;
 
-    private int paymentPeriodInDays=8;
+    private int defaultPaymentPeriodInDays=8;
 
     private String currency = "USD";
 
@@ -74,12 +72,12 @@ public class Organisation extends AbstractEntity {
         this.initialOrdernumber = initialOrdernumber;
     }
 
-    public int getPaymentPeriodInDays() {
-        return paymentPeriodInDays;
+    public int getDefaultPaymentPeriodInDays() {
+        return defaultPaymentPeriodInDays;
     }
 
-    public void setPaymentPeriodInDays(int paymentPeriodInDays) {
-        this.paymentPeriodInDays = paymentPeriodInDays;
+    public void setDefaultPaymentPeriodInDays(int paymentPeriodInDays) {
+        this.defaultPaymentPeriodInDays = paymentPeriodInDays;
     }
 
     public String getAddress() {
@@ -88,14 +86,6 @@ public class Organisation extends AbstractEntity {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
     }
 
     public String getCity() {
@@ -130,14 +120,6 @@ public class Organisation extends AbstractEntity {
         this.name = name;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
     public String getTelephone() {
         return telephone;
     }
@@ -146,13 +128,11 @@ public class Organisation extends AbstractEntity {
         this.telephone = telephone;
     }
 
-
-
-    public List<Account> getUsers() {
+    public List<SystemUser> getUsers() {
         return users;
     }
 
-    public void setUsers(List<Account> users) {
+    public void setUsers(List<SystemUser> users) {
         this.users = users;
     }
 
@@ -164,5 +144,6 @@ public class Organisation extends AbstractEntity {
         this.zip = zip;
     }
 
+    
 
 }

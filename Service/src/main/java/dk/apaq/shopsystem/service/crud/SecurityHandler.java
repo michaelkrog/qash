@@ -3,7 +3,8 @@ package dk.apaq.shopsystem.service.crud;
 import dk.apaq.crud.CrudEvent.WithEntity;
 import dk.apaq.crud.CrudEvent.WithId;
 import dk.apaq.crud.core.BaseCrudListener;
-import dk.apaq.shopsystem.model.Account;
+import dk.apaq.shopsystem.model.AbstractContentEntity;
+import dk.apaq.shopsystem.model.SystemUser;
 import dk.apaq.shopsystem.model.Product;
 import dk.apaq.shopsystem.model.Order;
 import dk.apaq.shopsystem.model.Organisation;
@@ -52,8 +53,8 @@ public final class SecurityHandler {
         return false;
     }
 
-    private static boolean isInUserList(Authentication auth, List<Account> users) {
-        for(Account user : users) {
+    private static boolean isInUserList(Authentication auth, List<SystemUser> users) {
+        for(SystemUser user : users) {
             if(auth.getName().equals(user.getName())) {
                 return true;
             }
@@ -61,45 +62,43 @@ public final class SecurityHandler {
         return false;
     }
 
-    public static class ShopSecurity extends BaseCrudListener<String, Store> {
+    public static class OrganisationSecurity extends BaseCrudListener<String, Organisation> {
 
         
         @Override
-        public void onEntityRead(WithEntity<String, Store> event) {
-            Store shop = event.getEntity();
-            Organisation organisation = shop.getOrganisation();
-            if(shop!=null) {
+        public void onEntityRead(WithEntity<String, Organisation> event) {
+            Organisation organisation = event.getEntity();
+            if(organisation!=null) {
                 Authentication auth = getAuthentication();
                 if (!isAdministrator(auth) && !isInUserList(auth, organisation.getUsers())) {
-                    throw new SecurityException("User is not authorized to retrieve shop.");
+                    throw new SecurityException("User is not authorized to retrieve organisation.");
                 }
             }
         }
 
         @Override
-        public void onBeforeEntityUpdate(WithEntity<String, Store> event) {
+        public void onBeforeEntityUpdate(WithEntity<String, Organisation> event) {
             handleEdit(event.getCrud().read(event.getEntity().getId()));
         }
 
         @Override
-        public void onBeforeEntityDelete(WithId<String, Store> event) {
+        public void onBeforeEntityDelete(WithId<String, Organisation> event) {
             handleEdit(event.getCrud().read(event.getEntityId()));
         }
 
-        private void handleEdit(Store shop) {
-            if(shop==null) {
+        private void handleEdit(Organisation organisation) {
+            if(organisation==null) {
                 return;
             }
-            Organisation organisation = shop.getOrganisation();
             Authentication auth = getAuthentication();
             if (!isAdministrator(auth)
                     && !isInUserList(auth, organisation.getUsers())) {
-                throw new SecurityException("User is not administrator, not the creator and is not in shops userlist. Cannot edit store.");
+                throw new SecurityException("User is not administrator, not the creator and is not in organisations userlist. Cannot edit organisation.");
             }
         }
     }
 
-    public static class AccountSecurity extends BaseCrudListener<String, Account> {
+    public static class AccountSecurity extends BaseCrudListener<String, SystemUser> {
 
         /*
         @Override
@@ -113,16 +112,16 @@ public final class SecurityHandler {
         }*/
 
         @Override
-        public void onBeforeEntityUpdate(WithEntity<String, Account> event) {
+        public void onBeforeEntityUpdate(WithEntity<String, SystemUser> event) {
             handleEdit(event.getCrud().read(event.getEntity().getId()));
         }
 
         @Override
-        public void onBeforeEntityDelete(WithId<String, Account> event) {
+        public void onBeforeEntityDelete(WithId<String, SystemUser> event) {
             handleEdit(event.getCrud().read(event.getEntityId()));
         }
 
-        private void handleEdit(Account account) {
+        private void handleEdit(SystemUser account) {
             if(account == null) {
                 return;
             }
@@ -134,151 +133,37 @@ public final class SecurityHandler {
         }
     }
 
-    public static class ProductSecurity extends BaseCrudListener<String, Product> {
-
-        private final Organisation organsiation;
-
-        public ProductSecurity(Organisation organisation) {
-            if(organisation == null) {
-                throw new NullPointerException("Shop must not be null.");
-            }
-            this.organsiation = organisation;
-        }
-        
-        @Override
-        public void onEntityRead(WithEntity<String, Product> event) {
-            Product item = event.getEntity();
-            if(!organsiation.getId().equals(item.getOrganisation().getId())) {
-                throw new SecurityException("Not allowed to read products from other Shops.");
-            }
-        }
-
-        @Override
-        public void onBeforeEntityUpdate(WithEntity<String, Product> event) {
-            handleEdit(event.getCrud().read(event.getEntity().getId()));
-        }
-
-        @Override
-        public void onBeforeEntityDelete(WithId<String, Product> event) {
-            handleEdit(event.getCrud().read(event.getEntityId()));
-        }
-
-        private void handleEdit(Product item) {
-            if(item==null) {
-                return;
-            }
-            if(!organsiation.getId().equals(item.getOrganisation().getId())) {
-                throw new SecurityException("Now allowed to edit products from other Shops.");
-            }
-        }
-    }
-
-    public static class OrderSecurity extends BaseCrudListener<String, Order> {
+    public static class ContentSecurity<T extends AbstractContentEntity> extends BaseCrudListener<String, T> {
 
         private final Organisation organisation;
 
-        public OrderSecurity(Organisation organisation) {
+        public ContentSecurity(Organisation organisation) {
             if(organisation == null) {
-                throw new NullPointerException("Shop must not be null.");
+                throw new NullPointerException("Organisation must not be null.");
             }
             this.organisation = organisation;
         }
 
         @Override
-        public void onEntityRead(WithEntity<String, Order> event) {
-            Order order = event.getEntity();
-            if(!organisation.getId().equals(order.getOrganisation().getId())) {
-                throw new SecurityException("Not allowed to read orders from other Shops.");
-            }
-        }
-
-        @Override
-        public void onBeforeEntityUpdate(WithEntity<String, Order> event) {
-            handleEdit(event.getCrud().read(event.getEntity().getId()));
-        }
-
-        @Override
-        public void onBeforeEntityDelete(WithId<String, Order> event) {
-            handleEdit(event.getCrud().read(event.getEntityId()));
-        }
-
-        private void handleEdit(Order order) {
-            if(order==null) {
-                return;
-            }
-            if(!organisation.getId().equals(order.getOrganisation().getId())) {
-                throw new SecurityException("Now allowed to edit orders from other Shops.");
-            }
-        }
-    }
-
-    public static class TaxSecurity extends BaseCrudListener<String, Tax> {
-
-        private final Organisation organisation;
-
-        public TaxSecurity(Organisation organisation) {
-            if(organisation == null) {
-                throw new NullPointerException("Shop must not be null.");
-            }
-            this.organisation = organisation;
-        }
-
-        @Override
-        public void onEntityRead(WithEntity<String, Tax> event) {
-            Tax tax = event.getEntity();
-            if(!organisation.getId().equals(tax.getOrganisation().getId())) {
+        public void onEntityRead(WithEntity<String, T> event) {
+            T entity = event.getEntity();
+            if(!organisation.getId().equals(entity.getOrganisation().getId())) {
                 throw new SecurityException("Now allowed to read taxes from other Shops.");
             }
         }
 
         @Override
-        public void onBeforeEntityUpdate(WithEntity<String, Tax> event) {
+        public void onBeforeEntityUpdate(WithEntity<String, T> event) {
             handleEdit(event.getCrud().read(event.getEntity().getId()));
         }
 
         @Override
-        public void onBeforeEntityDelete(WithId<String, Tax> event) {
+        public void onBeforeEntityDelete(WithId<String, T> event) {
             handleEdit(event.getCrud().read(event.getEntityId()));
         }
 
-        private void handleEdit(Tax tax) {
-            if(!organisation.getId().equals(tax.getOrganisation().getId())) {
-                throw new SecurityException("Now allowed to edit taxes from other Shops.");
-            }
-        }
-    }
-
-    public static class PaymentSecurity extends BaseCrudListener<String, Payment> {
-
-        private final Organisation organisation;
-
-        public PaymentSecurity(Organisation organisation) {
-            if(organisation == null) {
-                throw new NullPointerException("Shop must not be null.");
-            }
-            this.organisation = organisation;
-        }
-
-        @Override
-        public void onEntityRead(WithEntity<String, Payment> event) {
-            Payment payment = event.getEntity();
-            if(!organisation.getId().equals(payment.getOrganisation().getId())) {
-                throw new SecurityException("Now allowed to read taxes from other Shops.");
-            }
-        }
-
-        @Override
-        public void onBeforeEntityUpdate(WithEntity<String, Payment> event) {
-            handleEdit(event.getCrud().read(event.getEntity().getId()));
-        }
-
-        @Override
-        public void onBeforeEntityDelete(WithId<String, Payment> event) {
-            handleEdit(event.getCrud().read(event.getEntityId()));
-        }
-
-        private void handleEdit(Payment payment) {
-            if(!organisation.getId().equals(payment.getOrganisation().getId())) {
+        private void handleEdit(T entity) {
+            if(!organisation.getId().equals(entity.getOrganisation().getId())) {
                 throw new SecurityException("Now allowed to edit taxes from other Shops.");
             }
         }

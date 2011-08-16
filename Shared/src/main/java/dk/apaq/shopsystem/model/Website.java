@@ -3,32 +3,26 @@ package dk.apaq.shopsystem.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 /**
- *
- * @author michaelzachariassenkrog
+ * Defines a Website.
  */
 @Entity
-public class Website extends AbstractOrganisationEntity implements Serializable {
+public class Website extends AbstractContentEntity implements Serializable {
 
     @OneToMany
     private List<Domain> domains = new ArrayList<Domain>();
-
     @OneToMany
     private List<Template> templates = new ArrayList();
-
     @OneToMany
     private List<Module> modules = new ArrayList<Module>();
-
     @OneToMany
     private List<Page> pages = new ArrayList<Page>();
-
     private String name;
-
     private String tracking_code;
-
     private String tracking_code_invoice;
 
     public List<Domain> getDomains() {
@@ -86,7 +80,4 @@ public class Website extends AbstractOrganisationEntity implements Serializable 
     public void setTracking_code_invoice(String tracking_code_invoice) {
         this.tracking_code_invoice = tracking_code_invoice;
     }
-
-
-
 }

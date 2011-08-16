@@ -1,21 +1,16 @@
 package dk.apaq.shopsystem.model;
 
 import java.io.Serializable;
+
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
- * A line on an order. This is not the same as an item. A line may or may not reference the item being sold.
- * If no Item is referenced then the orderline is not a sale of something in stock og even a physical item.
- * @author michael
+ * A line in an order. This is not the same as an item. A line may or may not reference the item being sold.
+ * If no Item is referenced then the orderline is not a sale of something in stock or may not even be a 
+ * physical item.
  *
  */
 @Entity

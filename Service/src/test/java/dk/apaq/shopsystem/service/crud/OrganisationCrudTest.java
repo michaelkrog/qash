@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.Crud;
+import dk.apaq.shopsystem.model.Organisation;
 import dk.apaq.shopsystem.service.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -24,9 +25,9 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/defaultspringcontext.xml"})
-public class ShopCrudTest extends AbstractJUnit4SpringContextTests  {
+public class OrganisationCrudTest extends AbstractJUnit4SpringContextTests  {
 
-    public ShopCrudTest() {
+    public OrganisationCrudTest() {
     }
 
     @BeforeClass
@@ -49,12 +50,12 @@ public class ShopCrudTest extends AbstractJUnit4SpringContextTests  {
     @Autowired
     private Service service;
 
-   /*
+   
     @Test
     public void testCreate() {
         System.out.println("create");
-        Crud.Editable<String, Store> crud = service.getShopCrud();
-        Store result = crud.read(crud.create());
+        OrganisationCrud crud = service.getOrganisationCrud();
+        Organisation result = crud.read(crud.create());
 
         assertNotNull(result);
         assertNotNull(result.getId());
@@ -66,8 +67,8 @@ public class ShopCrudTest extends AbstractJUnit4SpringContextTests  {
     @Test
     public void testUpdate() {
         System.out.println("update");
-        Crud.Editable<String, Store> crud = service.getShopCrud();
-        Store result = crud.read(crud.create());
+        OrganisationCrud crud = service.getOrganisationCrud();
+        Organisation result = crud.read(crud.create());
 
         assertNotNull(result);
         assertNotNull(result.getId());
@@ -75,11 +76,11 @@ public class ShopCrudTest extends AbstractJUnit4SpringContextTests  {
         String id = result.getId();
 
         result.setName("Apaq");
-        result.getUsers().add("Michael");
+        //result.getUsers().add("Michael");
         
-        service.getShopCrud().update(result);
+        service.getOrganisationCrud().update(result);
 
-        result = service.getShopCrud().read(id);
+        result = service.getOrganisationCrud().read(id);
 
         assertEquals("Apaq", result.getName());
         assertEquals("Michael", result.getUsers().get(0));
@@ -92,20 +93,20 @@ public class ShopCrudTest extends AbstractJUnit4SpringContextTests  {
     @Test
     public void testDelete() {
         System.out.println("delete");
-        Crud.Editable<String, Store> crud = service.getShopCrud();
-        Store result = crud.read(crud.create());
+        OrganisationCrud crud = service.getOrganisationCrud();
+        Organisation result = crud.read(crud.create());
 
         assertNotNull(result);
         assertNotNull(result.getId());
 
         String id = result.getId();
 
-        result = service.getShopCrud().read(id);
+        result = service.getOrganisationCrud().read(id);
         assertNotNull(result);
 
-        service.getShopCrud().delete(id);
+        service.getOrganisationCrud().delete(id);
 
-        result = service.getShopCrud().read(id);
+        result = service.getOrganisationCrud().read(id);
         assertNull(result);
 
 
@@ -114,20 +115,20 @@ public class ShopCrudTest extends AbstractJUnit4SpringContextTests  {
     @Test
     public void testRead() {
         System.out.println("read");
-        Crud.Editable<String, Store> crud = service.getShopCrud();
-        Store result = crud.read(crud.create());
+        OrganisationCrud crud = service.getOrganisationCrud();
+        Organisation result = crud.read(crud.create());
 
         assertNotNull(result);
         assertNotNull(result.getId());
 
         String id = result.getId();
 
-        result = service.getShopCrud().read(id);
+        result = service.getOrganisationCrud().read(id);
         assertNotNull(result);
 
-        service.getShopCrud().delete(id);
+        service.getOrganisationCrud().delete(id);
 
-        result = service.getShopCrud().read(id);
+        result = service.getOrganisationCrud().read(id);
         assertNull(result);
     }
 
@@ -136,36 +137,36 @@ public class ShopCrudTest extends AbstractJUnit4SpringContextTests  {
         System.out.println("listIds");
         
         for(int i=0;i<10;i++)
-            service.getShopCrud().create();
+            service.getOrganisationCrud().create();
 
-        List<String> idlist = service.getShopCrud().listIds();
+        List<String> idlist = service.getOrganisationCrud().listIds();
         assertTrue(idlist.size() >= 10 );
     }
 
     @Test
     public void testSecurity() {
-        Crud.Editable<String, Store> crud = service.getShopCrud();
-        Store shop = crud.read(crud.create());
-        String id = shop.getId();
+        OrganisationCrud crud = service.getOrganisationCrud();
+        Organisation org = crud.read(crud.create());
+        String id = org.getId();
 
         //Allowed
-        service.getShopCrud().read(id);
+        service.getOrganisationCrud().read(id);
 
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("Jane", "Doe"));
 
         try {
             //Not allowed
-            service.getShopCrud().read(id);
+            service.getOrganisationCrud().read(id);
             fail("Should not be allowed");
         } catch(SecurityException ex) {}
 
         try {
             //Not allowed
-            service.getShopCrud().update(shop);
+            service.getOrganisationCrud().update(org);
             fail("Should not be allowed");
         } catch(SecurityException ex) {}
     }
-    * */
+    
     
 
 }

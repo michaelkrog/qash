@@ -177,11 +177,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>dk.apaq.crud</groupId>
-            <artifactId>crud-core</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>3.0.5.RELEASE</version>
@@ -199,14 +194,19 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>dk.apaq.filter</groupId>
-            <artifactId>filter-jpa</artifactId>
-            <version>1.0.6-SNAPSHOT</version>
+            <groupId>dk.apaq.crud</groupId>
+            <artifactId>crud-core</artifactId>
+            <version>${dk.apaq.crud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.apaq.crud</groupId>
+            <artifactId>crud-jpa</artifactId>
+            <version>${dk.apaq.crud.version}</version>
         </dependency>
         <dependency>
             <groupId>dk.apaq.filter</groupId>
-            <artifactId>filter-lucene</artifactId>
-            <version>1.0.6-SNAPSHOT</version>
+            <artifactId>filter-jpa</artifactId>
+            <version>${dk.apaq.filter.version}</version>
         </dependency>
     </dependencies>
      

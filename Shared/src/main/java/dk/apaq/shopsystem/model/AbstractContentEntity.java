@@ -10,7 +10,7 @@ import javax.persistence.InheritanceType;
  */
 @Entity
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-public class AbstractOrganisationEntity extends AbstractEntity {
+public class AbstractContentEntity extends AbstractEntity {
 
     private Organisation organisation;
 

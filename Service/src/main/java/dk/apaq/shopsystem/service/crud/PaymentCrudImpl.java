@@ -11,6 +11,7 @@ import dk.apaq.shopsystem.model.PaymentType;
 import dk.apaq.shopsystem.model.Store;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,26 +20,20 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author michaelzachariassenkrog
  */
-public class PaymentCrudImpl extends AbstractContentCrud<String, Payment> implements Crud.Complete<String, Payment> {
+public class PaymentCrudImpl extends ContentCrud<Payment> {
 
     private static final Logger LOG = LoggerFactory.getLogger(PaymentCrudImpl.class);
     private final Crud.Editable<String, Order> orderCrud;
+    private EntityManager em;
 
-    public PaymentCrudImpl(Organisation organisation, Crud.Editable<String, Order> orderCrud) {
-        super(organisation, Payment.class);
-
+    public PaymentCrudImpl(EntityManager em, Organisation organisation, Crud.Editable<String, Order> orderCrud) {
+        super(em, organisation, new GenericContentCrudAssist<Payment>(organisation, Payment.class));
+        this.em = em;
+        
         if(orderCrud == null) {
             throw new NullPointerException("orderCrud was null.");
         }
         this.orderCrud = orderCrud;
-    }
-
-
-    @Override
-    protected Payment createInstance() {
-        Payment p = new Payment();
-        p.setOrganisation(organisation);
-        return p;
     }
 
     @Override

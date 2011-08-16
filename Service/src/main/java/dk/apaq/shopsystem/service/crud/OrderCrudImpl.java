@@ -1,40 +1,63 @@
 package dk.apaq.shopsystem.service.crud;
 
+import java.util.Date;
+
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.service.ServiceException;
 import dk.apaq.shopsystem.model.Order;
 import dk.apaq.shopsystem.model.OrderLine;
 import dk.apaq.shopsystem.model.OrderStatus;
 import dk.apaq.shopsystem.model.Organisation;
-import dk.apaq.shopsystem.model.Payment;
 import dk.apaq.shopsystem.model.Sequence;
-import dk.apaq.shopsystem.model.Store;
-import java.util.Date;
+
+import javax.persistence.EntityManager;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author michaelzachariassenkrog
  */
-public class OrderCrudImpl extends AbstractContentCrud<String, Order> implements Crud.Complete<String, Order> {
+public class OrderCrudImpl extends ContentCrud<Order> {
 
     private final long DAYINMILLIS = 86400000L;
     private final InventoryManager inventoryManager;
+    private final EntityManager em;
 
-    public OrderCrudImpl(Organisation organisation, InventoryManager inventoryManager) {
-        super(organisation, Order.class);
-        this.inventoryManager = inventoryManager;
+    private static class OrderCrudAssist implements EntityManagerCrudAssist<String, Order> {
+
+        private final EntityManager em;
+        private final Organisation organisation;
+
+        public OrderCrudAssist(EntityManager em, Organisation organisation) {
+            this.em = em;
+            this.organisation = organisation;
+        }
+        
+        @Override
+        public Class<Order> getEntityClass() {
+            return Order.class;
+        }
+
+        @Override
+        public Order createInstance() {
+            Order order = new Order();
+            order.setOrganisation(organisation);
+            order.setNumber(getNextSequence(em, organisation.getId() + "_OrderSequence", organisation.getInitialOrdernumber()));
+            order.setCurrency(organisation.getCurrency());
+            return order;
+        }
+
+        @Override
+        public String getIdForEntity(Order entity) {
+            return entity.getId();
+        }
+        
     }
-
-    @Override
-    protected Order createInstance() {
-        Order order = new Order();
-        order.setOrganisation(organisation);
-        order.setStatus(OrderStatus.Processing);
-        order.setNumber(getNextSequence(organisation.getId() + "_OrderSequence", organisation.getInitialOrdernumber()));
-        order.setCurrency(organisation.getCurrency());
-        order.setDateCreated(new Date());
-        return order;
+    
+    public OrderCrudImpl(EntityManager em, Organisation organisation, InventoryManager inventoryManager) {
+        super(em, organisation, new OrderCrudAssist(em, organisation));
+        this.em = em;
+        this.inventoryManager = inventoryManager;
     }
 
     @Override
@@ -76,10 +99,12 @@ public class OrderCrudImpl extends AbstractContentCrud<String, Order> implements
             }
         }
 
-            long invoicenumber =
-                    getNextSequence(organisation.getId() + "_InvoiceSequence", organisation.getInitialInvoiceNumber());
+            long invoicenumber = getNextSequence(em, 
+                                        organisation.getId() + "_InvoiceSequence", 
+                                        organisation.getInitialInvoiceNumber());
+            
             Date invoiceDate = new Date();
-            Date timelyPayment = new Date(invoiceDate.getTime() + (DAYINMILLIS * organisation.getPaymentPeriodInDays()));
+            Date timelyPayment = new Date(invoiceDate.getTime() + (DAYINMILLIS * organisation.getDefaultPaymentPeriodInDays()));
 
                 entity.setInvoiceNumber(invoicenumber);
             entity.setDateInvoiced(invoiceDate);
@@ -105,7 +130,7 @@ public class OrderCrudImpl extends AbstractContentCrud<String, Order> implements
     }
 
     @Transactional
-    private long getNextSequence(String id, long initialSequence) {
+    private static long getNextSequence(EntityManager em, String id, long initialSequence) {
 
         int maxRetries = 5;
 

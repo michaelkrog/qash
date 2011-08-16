@@ -1,36 +1,31 @@
 package dk.apaq.shopsystem.model;
 
-import dk.apaq.crud.HasId;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.GenericGenerator;
+
+import dk.apaq.crud.HasId;
 
 /**
- * An order
+ * Specifies an order.
  */
 @Entity
 @Table(name="OrderModel")
-public class Order extends AbstractOrganisationEntity implements Serializable, HasId<String> {
+public class Order extends AbstractContentEntity implements Serializable {
 
     
     private String currency = "USD";

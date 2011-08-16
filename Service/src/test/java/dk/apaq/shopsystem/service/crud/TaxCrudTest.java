@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.Crud;
+import dk.apaq.shopsystem.model.Organisation;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.junit.runner.RunWith;
@@ -49,13 +50,13 @@ public class TaxCrudTest {
     @Autowired
     private Service service;
 
-    /*
+    
     @Test
     public void testRead() {
         System.out.println("read");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Editable<String, Tax> crud = service.getTaxCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        Crud.Editable<String, Tax> crud = service.getTaxCrud(org);
         Tax result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -75,9 +76,9 @@ public class TaxCrudTest {
      @Test
     public void testListIds() {
         System.out.println("listIds");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Editable<String, Tax> crud = service.getTaxCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        Crud.Editable<String, Tax> crud = service.getTaxCrud(org);
 
         for(int i=0;i<10;i++)
             crud.create();
@@ -89,9 +90,9 @@ public class TaxCrudTest {
     @Test
     public void testCreate() {
         System.out.println("create");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Editable<String, Tax> crud = service.getTaxCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        Crud.Editable<String, Tax> crud = service.getTaxCrud(org);
         Tax tax = crud.read(crud.create());
 
         assertNotNull(tax);
@@ -100,9 +101,9 @@ public class TaxCrudTest {
     @Test
     public void testUpdate() {
         System.out.println("update");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Editable<String, Tax> crud = service.getTaxCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        Crud.Editable<String, Tax> crud = service.getTaxCrud(org);
         Tax result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -122,9 +123,9 @@ public class TaxCrudTest {
     @Test
     public void testDelete() {
         System.out.println("delete");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Editable<String, Tax> crud = service.getTaxCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        Crud.Editable<String, Tax> crud = service.getTaxCrud(org);
         Tax result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -143,12 +144,12 @@ public class TaxCrudTest {
 
     @Test
     public void testSecurity() {
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop1 = shopcrud.read(shopcrud.create());
-        Store shop2 = shopcrud.read(shopcrud.create());
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org1 = orgcrud.read(orgcrud.create());
+        Organisation org2 = orgcrud.read(orgcrud.create());
 
-        Crud.Editable<String, Tax> taxCrud1 = service.getTaxCrud(shop1);
-        Crud.Editable<String, Tax> taxCrud2 = service.getTaxCrud(shop2);
+        Crud.Editable<String, Tax> taxCrud1 = service.getTaxCrud(org1);
+        Crud.Editable<String, Tax> taxCrud2 = service.getTaxCrud(org2);
 
         Tax tax1 = taxCrud1.read(taxCrud1.create());
         Tax tax2 = taxCrud2.read(taxCrud2.create());
@@ -169,6 +170,6 @@ public class TaxCrudTest {
         } catch(SecurityException ex) { }
 
     }
-     * */
+     
      
 }

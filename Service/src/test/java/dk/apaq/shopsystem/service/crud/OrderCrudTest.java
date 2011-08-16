@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.apaq.shopsystem.model.Order;
 import dk.apaq.shopsystem.model.OrderStatus;
+import dk.apaq.shopsystem.model.Organisation;
 import dk.apaq.shopsystem.model.Payment;
 import dk.apaq.shopsystem.model.PaymentType;
 import dk.apaq.shopsystem.model.Store;
@@ -57,14 +58,14 @@ public class OrderCrudTest {
     private Service service;
 
 
-    /*
+    
     @Test
     public void testRead() {
         System.out.println("read");
 
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrderCrud(shop);
+        Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
+        Organisation organisation = orgcrud.read(orgcrud.create());
+        Crud.Complete<String, Order> crud = service.getOrderCrud(organisation);
         Order result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -85,9 +86,9 @@ public class OrderCrudTest {
     @Test
     public void testCreate() {
         System.out.println("create");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrderCrud(shop);
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation organisation = orgcrud.read(orgcrud.create());
+        Crud.Complete<String, Order> crud = service.getOrderCrud(organisation);
         Order item = crud.read(crud.create());
 
         assertNotNull(item);
@@ -96,9 +97,9 @@ public class OrderCrudTest {
     @Test
     public void testUpdate() {
         System.out.println("update");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrderCrud(shop);
+        Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
+        Organisation organisation = orgcrud.read(orgcrud.create());
+        Crud.Complete<String, Order> crud = service.getOrderCrud(organisation);
         Order result = crud.read(crud.create());
 
 
@@ -134,9 +135,9 @@ public class OrderCrudTest {
     @Test
     public void testDelete() {
         System.out.println("delete");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrderCrud(shop);
+        Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
+        Organisation organisation = orgcrud.read(orgcrud.create());
+        Crud.Complete<String, Order> crud = service.getOrderCrud(organisation);
         Order result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -156,10 +157,10 @@ public class OrderCrudTest {
     @Test
     public void testNotification() {
         System.out.println("delete");
-        MockCrudListener<String, Store> listener = new MockCrudListener<String, Store>();
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrderCrud(shop);
+        MockCrudListener<String, Organisation> listener = new MockCrudListener<String, Organisation>();
+        Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
+        Organisation organisation = orgcrud.read(orgcrud.create());
+        Crud.Complete<String, Order> crud = service.getOrderCrud(organisation);
         ((CrudNotifier)crud).addListener(listener);
         Order result = crud.read(crud.create());
 
@@ -180,9 +181,9 @@ public class OrderCrudTest {
     @Test
     public void testListIds() {
         System.out.println("listIds");
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Editable<String, Order> crud = service.getOrderCrud(shop);
+        Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
+        Organisation organisation = orgcrud.read(orgcrud.create());
+        Crud.Editable<String, Order> crud = service.getOrderCrud(organisation);
 
         for(int i=0;i<10;i++)
             crud.create();
@@ -197,9 +198,9 @@ public class OrderCrudTest {
         Date longAgo = new Date(new Date().getTime()-1000000000);
         Filter dateFilter = new CompareFilter("dateCreated", longAgo, CompareFilter.CompareType.GreaterOrEqual);
 
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop = shopcrud.read(shopcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrderCrud(shop);
+        Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
+        Organisation organisation = orgcrud.read(orgcrud.create());
+        Crud.Complete<String, Order> crud = service.getOrderCrud(organisation);
 
         for(int i=0;i<10;i++)
             crud.create();
@@ -210,12 +211,12 @@ public class OrderCrudTest {
 
     @Test
     public void testSecurity() {
-        Crud.Editable<String, Store> shopcrud = service.getShopCrud();
-        Store shop1 = shopcrud.read(shopcrud.create());
-        Store shop2 = shopcrud.read(shopcrud.create());
+        Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
+        Organisation org1 = orgcrud.read(orgcrud.create());
+        Organisation org2 = orgcrud.read(orgcrud.create());
 
-        Crud.Editable<String, Order> orderCrud1 = service.getOrderCrud(shop1);
-        Crud.Editable<String, Order> orderCrud2 = service.getOrderCrud(shop2);
+        Crud.Editable<String, Order> orderCrud1 = service.getOrderCrud(org1);
+        Crud.Editable<String, Order> orderCrud2 = service.getOrderCrud(org2);
 
         Order order1 = orderCrud1.read(orderCrud1.create());
         Order order2 = orderCrud2.read(orderCrud2.create());
@@ -236,5 +237,5 @@ public class OrderCrudTest {
         } catch(SecurityException ex) { }
 
     }
-*/
+
 }

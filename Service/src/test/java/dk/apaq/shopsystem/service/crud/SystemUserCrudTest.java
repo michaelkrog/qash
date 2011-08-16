@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import dk.apaq.shopsystem.model.Account;
+import dk.apaq.shopsystem.model.SystemUser;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -31,9 +31,9 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"/defaultspringcontext.xml"})
-public class AccountCrudTest {
+public class SystemUserCrudTest {
 
-    public AccountCrudTest() {
+    public SystemUserCrudTest() {
     }
 
     @BeforeClass
@@ -62,8 +62,8 @@ public class AccountCrudTest {
     @Test
     public void testCreate() {
         System.out.println("create");
-        Crud.Editable<String, Account> crud = service.getAccountCrud();
-        Account result = crud.read(crud.create());
+        Crud.Editable<String, SystemUser> crud = service.getSystemUserCrud();
+        SystemUser result = crud.read(crud.create());
         assertNotNull(result);
         assertNotNull(result.getId());
     }
@@ -74,8 +74,8 @@ public class AccountCrudTest {
     @Test
     public void testUpdate() {
         System.out.println("update");
-        Crud.Editable<String, Account> crud = service.getAccountCrud();
-        Account result = crud.read(crud.create());
+        Crud.Editable<String, SystemUser> crud = service.getSystemUserCrud();
+        SystemUser result = crud.read(crud.create());
 
         assertNotNull(result);
         assertNotNull(result.getId());
@@ -85,9 +85,9 @@ public class AccountCrudTest {
         result.setName("michael.krog");
         result.setDisplayname("Michael Krog");
 
-        service.getAccountCrud().update(result);
+        service.getSystemUserCrud().update(result);
 
-        result = service.getAccountCrud().read(id);
+        result = service.getSystemUserCrud().read(id);
 
         assertEquals("michael.krog", result.getName());
         assertEquals("Michael Krog", result.getDisplayname());
@@ -99,20 +99,20 @@ public class AccountCrudTest {
     @Test
     public void testDelete() {
         System.out.println("delete");
-        Crud.Editable<String, Account> crud = service.getAccountCrud();
-        Account result = crud.read(crud.create());
+        Crud.Editable<String, SystemUser> crud = service.getSystemUserCrud();
+        SystemUser result = crud.read(crud.create());
 
         assertNotNull(result);
         assertNotNull(result.getId());
 
         String id = result.getId();
 
-        result = service.getAccountCrud().read(id);
+        result = service.getSystemUserCrud().read(id);
         assertNotNull(result);
 
-        service.getAccountCrud().delete(id);
+        service.getSystemUserCrud().delete(id);
 
-        result = service.getAccountCrud().read(id);
+        result = service.getSystemUserCrud().read(id);
         assertNull(result);
     }
 
@@ -122,20 +122,20 @@ public class AccountCrudTest {
     @Test
     public void testRead() {
         System.out.println("read");
-        Crud.Editable<String, Account> crud = service.getAccountCrud();
-        Account result = crud.read(crud.create());
+        Crud.Editable<String, SystemUser> crud = service.getSystemUserCrud();
+        SystemUser result = crud.read(crud.create());
 
         assertNotNull(result);
         assertNotNull(result.getId());
 
         String id = result.getId();
 
-        result = service.getAccountCrud().read(id);
+        result = service.getSystemUserCrud().read(id);
         assertNotNull(result);
 
-        service.getAccountCrud().delete(id);
+        service.getSystemUserCrud().delete(id);
 
-        result = service.getAccountCrud().read(id);
+        result = service.getSystemUserCrud().read(id);
         assertNull(result);
     }
 
@@ -147,49 +147,49 @@ public class AccountCrudTest {
         System.out.println("listIds");
 
         for (int i = 0; i < 10; i++) {
-            service.getAccountCrud().create();
+            service.getSystemUserCrud().create();
         }
 
-        List<String> idlist = service.getAccountCrud().listIds();
+        List<String> idlist = service.getSystemUserCrud().listIds();
         assertTrue(idlist.size() >= 10);
     }
 
     @Test
     public void testListIdsWithParams() {
         System.out.println("listIds");
-        Crud.Editable<String, Account> crud = service.getAccountCrud();
+        Crud.Editable<String, SystemUser> crud = service.getSystemUserCrud();
             
         for (int i = 0; i < 10; i++) {
-            Account account = crud.read(crud.create());
+            SystemUser account = crud.read(crud.create());
             account.setName(Integer.toString(i));
             account.setEmail(i + "@gmail.com");
             account.getIdentifiers().add(Integer.toString(i));
-            service.getAccountCrud().update(account);
+            service.getSystemUserCrud().update(account);
         }
 
         Filter filter = new CompareFilter("name", "5", CompareFilter.CompareType.Equals);
-        List<String> idlist = service.getAccountCrud().listIds(filter, null, null);
+        List<String> idlist = service.getSystemUserCrud().listIds(filter, null, null);
         assertEquals(1, idlist.size());
 
         filter = new LikeFilter("email", "*@gmail.com");
-        idlist = service.getAccountCrud().listIds(filter, null, null);
+        idlist = service.getSystemUserCrud().listIds(filter, null, null);
         assertEquals(10, idlist.size());
 
         filter = new ContainsFilter("identifiers", "5");
-        idlist = service.getAccountCrud().listIds(filter, null, null);
+        idlist = service.getSystemUserCrud().listIds(filter, null, null);
         assertEquals(1, idlist.size());
     }
 
     @Test
     public void testSecurity() {
-        Crud.Editable<String, Account> crud = service.getAccountCrud();
-        Account account = crud.read(crud.create());
-        String id = account.getId();
-        account.setName(SecurityContextHolder.getContext().getAuthentication().getName());
-        service.getAccountCrud().update(account);
+        Crud.Editable<String, SystemUser> crud = service.getSystemUserCrud();
+        SystemUser user = crud.read(crud.create());
+        String id = user.getId();
+        user.setName(SecurityContextHolder.getContext().getAuthentication().getName());
+        service.getSystemUserCrud().update(user);
 
         //Allowed
-        service.getShopCrud().read(id);
+        service.getOrganisationCrud().read(id);
 
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("Jane", "Doe"));
 
@@ -201,7 +201,7 @@ public class AccountCrudTest {
          */
         try {
             //Not allowed
-            service.getAccountCrud().update(account);
+            service.getSystemUserCrud().update(user);
             fail("Should not be allowed");
         }
         catch (SecurityException ex) {
