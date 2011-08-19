@@ -34,6 +34,10 @@ public class AdminApplication extends Application {
 
         Table table = new Table();
         table.setContainerDataSource(container);
+        table.setSizeFull();
+        
+        mainWindow.addComponent(table);
+
 
 
         
