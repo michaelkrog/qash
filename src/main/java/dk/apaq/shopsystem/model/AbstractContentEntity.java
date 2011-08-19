@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-public class AbstractContentEntity extends AbstractEntity implements Serializable {
+public abstract class AbstractContentEntity extends AbstractEntity implements Serializable {
 
     @ManyToOne
     private Organisation organisation;
