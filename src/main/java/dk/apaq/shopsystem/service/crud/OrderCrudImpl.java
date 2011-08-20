@@ -39,7 +39,6 @@ public class OrderCrudImpl extends ContentCrud<Order> {
         public Order createInstance() {
             Order order = new Order();
             order.setOrganisation(organisation);
-            order.setNumber(getNextSequence(em, organisation.getId() + "_OrderSequence", organisation.getInitialOrdernumber()));
             order.setCurrency(organisation.getCurrency());
             return order;
         }
@@ -56,6 +55,17 @@ public class OrderCrudImpl extends ContentCrud<Order> {
         this.em = em;
         this.inventoryManager = inventoryManager;
     }
+
+    @Override
+    @Transactional
+    public String create() {
+        String id = super.create();
+        Order order = read(id);
+        order.setNumber(getNextSequence(em, organisation.getId() + "_OrderSequence", organisation.getInitialOrdernumber()));
+        update(order);
+        return id;
+    }
+
 
     @Override
     public Order read(String id) {
@@ -126,7 +136,6 @@ public class OrderCrudImpl extends ContentCrud<Order> {
         }
     }
 
-    @Transactional
     private static long getNextSequence(EntityManager em, String id, long initialSequence) {
 
         int maxRetries = 5;
