@@ -3,6 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:util="http://www.springframework.org/schema/util"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:p="http://www.springframework.org/schema/p"
@@ -22,7 +23,8 @@
        http://www.springframework.org/schema/security
        http://www.springframework.org/schema/security/spring-security-3.0.2.xsd
        http://www.springframework.org/schema/lang
-       http://www.springframework.org/schema/lang/spring-lang-2.0.xsd"
+       http://www.springframework.org/schema/lang/spring-lang-2.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"
         >
 
     <bean id="crud" class="dk.apaq.shopsystem.service.crud.EntityManagerCrudForSpring" scope="prototype">
@@ -67,7 +69,7 @@
     
     <!-- Scans within the base package of the application for @Components to configure as beans -->
     <!-- @Controller, @Service, @Configuration, etc. -->
-    <context:component-scan base-package="com.shoppinnet.controller" />
+    <context:component-scan base-package="dk.apaq.shopsystem.controller" />
    
    <!-- Enables the Spring MVC @Controller programming model -->
     <mvc:annotation-driven />
