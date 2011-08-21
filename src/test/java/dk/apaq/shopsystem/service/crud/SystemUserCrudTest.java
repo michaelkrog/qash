@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import dk.apaq.shopsystem.model.SystemUser;
+import dk.apaq.shopsystem.entity.SystemUser;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;

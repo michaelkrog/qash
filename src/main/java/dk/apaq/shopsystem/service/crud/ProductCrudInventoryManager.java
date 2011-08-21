@@ -2,7 +2,7 @@ package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.Crud;
 import dk.apaq.crud.Crud.Editable;
-import dk.apaq.shopsystem.model.Product;
+import dk.apaq.shopsystem.entity.Product;
 
 /**
  *

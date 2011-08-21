@@ -1,8 +1,8 @@
 package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.jpa.EntityManagerCrud.EntityManagerCrudAssist;
-import dk.apaq.shopsystem.model.AbstractContentEntity;
-import dk.apaq.shopsystem.model.Organisation;
+import dk.apaq.shopsystem.entity.AbstractContentEntity;
+import dk.apaq.shopsystem.entity.Organisation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.model;
+package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;

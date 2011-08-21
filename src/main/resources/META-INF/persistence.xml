@@ -2,33 +2,33 @@
 <persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
   <persistence-unit name="QashServiceNew" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>dk.apaq.shopsystem.model.Category</class>
-    <class>dk.apaq.shopsystem.model.Domain</class>
-    <class>dk.apaq.shopsystem.model.Module</class>
-    <class>dk.apaq.shopsystem.model.Order</class>
-    <class>dk.apaq.shopsystem.model.OrderLine</class>
-    <class>dk.apaq.shopsystem.model.OrderLineTax</class>
-    <class>dk.apaq.shopsystem.model.Organisation</class>
-    <class>dk.apaq.shopsystem.model.Page</class>
-    <class>dk.apaq.shopsystem.model.Payment</class>
-    <class>dk.apaq.shopsystem.model.Product</class>
-    <class>dk.apaq.shopsystem.model.Sequence</class>
-    <class>dk.apaq.shopsystem.model.Store</class>
-    <class>dk.apaq.shopsystem.model.SystemUser</class>
-    <class>dk.apaq.shopsystem.model.Tax</class>
-    <class>dk.apaq.shopsystem.model.Template</class>
-    <class>dk.apaq.shopsystem.model.Website</class>
+    <class>dk.apaq.shopsystem.entity.Domain</class>
+    <class>dk.apaq.shopsystem.entity.Product</class>
+    <class>dk.apaq.shopsystem.entity.SystemUser</class>
+    <class>dk.apaq.shopsystem.entity.Template</class>
+    <class>dk.apaq.shopsystem.entity.Order</class>
+    <class>dk.apaq.shopsystem.entity.Category</class>
+    <class>dk.apaq.shopsystem.entity.Module</class>
+    <class>dk.apaq.shopsystem.entity.Organisation</class>
+    <class>dk.apaq.shopsystem.entity.Sequence</class>
+    <class>dk.apaq.shopsystem.entity.Page</class>
+    <class>dk.apaq.shopsystem.entity.Tax</class>
+    <class>dk.apaq.shopsystem.entity.OrderLine</class>
+    <class>dk.apaq.shopsystem.entity.Website</class>
+    <class>dk.apaq.shopsystem.entity.Payment</class>
+    <class>dk.apaq.shopsystem.entity.Store</class>
+    <class>dk.apaq.shopsystem.entity.OrderLineTax</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.connection.username" value="root"/>
       <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-      <property name="hibernate.connection.password" value="root"/>
+      <property name="hibernate.connection.password" value="vanessa73"/>
       <property name="hibernate.show_sql" value="true"/>
-      <property name="hibernate.connection.url" value="jdbc:mysql://localhost/qashdb"/>
+      <property name="hibernate.connection.url" value="jdbc:mysql://shoppinnet.com/store_v2_developer"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect"/>
-       <property name="hibernate.connection.provider_class" value="com.jolbox.bonecp.provider.BoneCPConnectionProvider"/>
+      <property name="hibernate.connection.provider_class" value="com.jolbox.bonecp.provider.BoneCPConnectionProvider"/>
       <property name="bonecp.idleMaxAge" value="240"/>
       <property name="bonecp.idleConnectionTestPeriod" value="60"/>
       <property name="bonecp.partitionCount" value="3"/>
@@ -37,6 +37,6 @@
       <property name="bonecp.minConnectionsPerPartition" value="20"/>
       <property name="bonecp.statementsCacheSize" value="50"/>
       <property name="bonecp.releaseHelperThreads" value="3"/>
-      </properties>
+    </properties>
   </persistence-unit>
 </persistence>

@@ -1,10 +1,10 @@
 package dk.apaq.shopsystem.service.crud;
 
-import dk.apaq.shopsystem.model.Order;
-import dk.apaq.shopsystem.model.OrderLine;
-import dk.apaq.shopsystem.model.OrderStatus;
-import dk.apaq.shopsystem.model.Organisation;
-import dk.apaq.shopsystem.model.Sequence;
+import dk.apaq.shopsystem.entity.Order;
+import dk.apaq.shopsystem.entity.OrderLine;
+import dk.apaq.shopsystem.entity.OrderStatus;
+import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.Sequence;
 import dk.apaq.shopsystem.service.ServiceException;
 import java.util.Date;
 import javax.persistence.EntityManager;

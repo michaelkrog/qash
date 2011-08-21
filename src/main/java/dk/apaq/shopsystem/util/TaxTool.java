@@ -2,7 +2,7 @@ package dk.apaq.shopsystem.util;
 
 import java.util.List;
 
-import dk.apaq.shopsystem.model.Tax;
+import dk.apaq.shopsystem.entity.Tax;
 
 /**
  * A class that contains mathods there are often needed while working with Taxes.

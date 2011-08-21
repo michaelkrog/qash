@@ -11,8 +11,8 @@ import dk.apaq.filter.core.AndFilter;
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.limit.Limit;
 import dk.apaq.filter.sort.Sorter;
-import dk.apaq.shopsystem.model.AbstractContentEntity;
-import dk.apaq.shopsystem.model.Organisation;
+import dk.apaq.shopsystem.entity.AbstractContentEntity;
+import dk.apaq.shopsystem.entity.Organisation;
 import javax.persistence.EntityManager;
 
 /**

@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dk.apaq.shopsystem.OutputType;
-import dk.apaq.shopsystem.model.Order;
-import dk.apaq.shopsystem.model.OrderStatus;
-import dk.apaq.shopsystem.model.Store;
-import dk.apaq.shopsystem.model.Tax;
+import dk.apaq.shopsystem.entity.Order;
+import dk.apaq.shopsystem.entity.OrderStatus;
+import dk.apaq.shopsystem.entity.Store;
+import dk.apaq.shopsystem.entity.Tax;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;

@@ -1,12 +1,12 @@
 package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.Crud;
-import dk.apaq.shopsystem.model.Organisation;
+import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.junit.runner.RunWith;
-import dk.apaq.shopsystem.model.Store;
+import dk.apaq.shopsystem.entity.Store;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;

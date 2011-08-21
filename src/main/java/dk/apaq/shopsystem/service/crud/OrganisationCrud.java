@@ -2,7 +2,7 @@ package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.Crud;
 import dk.apaq.filter.limit.Limit;
-import dk.apaq.shopsystem.model.Organisation;
+import dk.apaq.shopsystem.entity.Organisation;
 import java.util.List;
 
 /**

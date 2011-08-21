@@ -5,7 +5,7 @@
 
 package dk.apaq.shopsystem.model;
 
-import dk.apaq.shopsystem.model.Tax;
+import dk.apaq.shopsystem.entity.Tax;
 import junit.framework.TestCase;
 
 /**

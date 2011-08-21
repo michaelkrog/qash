@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.model;
+package dk.apaq.shopsystem.entity;
 
 import dk.apaq.crud.HasId;
 import java.util.Date;

@@ -4,7 +4,7 @@ import com.vaadin.Application;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Window;
 import dk.apaq.crud.Crud;
-import dk.apaq.shopsystem.model.Organisation;
+import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.Service;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;

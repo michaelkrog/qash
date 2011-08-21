@@ -5,8 +5,8 @@
 
 package dk.apaq.shopsystem.model;
 
-import dk.apaq.shopsystem.model.OrderLine;
-import dk.apaq.shopsystem.model.Tax;
+import dk.apaq.shopsystem.entity.OrderLine;
+import dk.apaq.shopsystem.entity.Tax;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

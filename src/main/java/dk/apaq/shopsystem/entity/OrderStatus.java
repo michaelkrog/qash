@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.model;
+package dk.apaq.shopsystem.entity;
 
 /**
  * An enum with the status of an order. The states have the following order:

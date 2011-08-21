@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.model;
+package dk.apaq.shopsystem.entity;
 
 /**
  * Enum for types of taxsystem.

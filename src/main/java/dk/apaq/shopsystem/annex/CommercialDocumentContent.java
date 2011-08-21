@@ -5,9 +5,9 @@
 
 package dk.apaq.shopsystem.annex;
 
-import dk.apaq.shopsystem.model.Order;
-import dk.apaq.shopsystem.model.Payment;
-import dk.apaq.shopsystem.model.Store;
+import dk.apaq.shopsystem.entity.Order;
+import dk.apaq.shopsystem.entity.Payment;
+import dk.apaq.shopsystem.entity.Store;
 import java.util.ArrayList;
 import java.util.List;
 

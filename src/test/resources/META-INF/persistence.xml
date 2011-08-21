@@ -2,22 +2,22 @@
 <persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
   <persistence-unit name="QashServiceNew" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>dk.apaq.shopsystem.model.Category</class>
-    <class>dk.apaq.shopsystem.model.Domain</class>
-    <class>dk.apaq.shopsystem.model.Module</class>
-    <class>dk.apaq.shopsystem.model.Order</class>
-    <class>dk.apaq.shopsystem.model.OrderLine</class>
-    <class>dk.apaq.shopsystem.model.OrderLineTax</class>
-    <class>dk.apaq.shopsystem.model.Organisation</class>
-    <class>dk.apaq.shopsystem.model.Page</class>
-    <class>dk.apaq.shopsystem.model.Payment</class>
-    <class>dk.apaq.shopsystem.model.Product</class>
-    <class>dk.apaq.shopsystem.model.Sequence</class>
-    <class>dk.apaq.shopsystem.model.Store</class>
-    <class>dk.apaq.shopsystem.model.SystemUser</class>
-    <class>dk.apaq.shopsystem.model.Tax</class>
-    <class>dk.apaq.shopsystem.model.Template</class>
-    <class>dk.apaq.shopsystem.model.Website</class>
+    <class>dk.apaq.shopsystem.entity.Category</class>
+    <class>dk.apaq.shopsystem.entity.Domain</class>
+    <class>dk.apaq.shopsystem.entity.Module</class>
+    <class>dk.apaq.shopsystem.entity.Order</class>
+    <class>dk.apaq.shopsystem.entity.OrderLine</class>
+    <class>dk.apaq.shopsystem.entity.OrderLineTax</class>
+    <class>dk.apaq.shopsystem.entity.Organisation</class>
+    <class>dk.apaq.shopsystem.entity.Page</class>
+    <class>dk.apaq.shopsystem.entity.Payment</class>
+    <class>dk.apaq.shopsystem.entity.Product</class>
+    <class>dk.apaq.shopsystem.entity.Sequence</class>
+    <class>dk.apaq.shopsystem.entity.Store</class>
+    <class>dk.apaq.shopsystem.entity.SystemUser</class>
+    <class>dk.apaq.shopsystem.entity.Tax</class>
+    <class>dk.apaq.shopsystem.entity.Template</class>
+    <class>dk.apaq.shopsystem.entity.Website</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.connection.username" value="sa"/>

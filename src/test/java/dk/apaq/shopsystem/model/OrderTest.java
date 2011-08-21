@@ -5,11 +5,11 @@
 
 package dk.apaq.shopsystem.model;
 
-import dk.apaq.shopsystem.model.Product;
-import dk.apaq.shopsystem.model.Order;
-import dk.apaq.shopsystem.model.OrderLineTax;
-import dk.apaq.shopsystem.model.PaymentType;
-import dk.apaq.shopsystem.model.Tax;
+import dk.apaq.shopsystem.entity.Product;
+import dk.apaq.shopsystem.entity.Order;
+import dk.apaq.shopsystem.entity.OrderLineTax;
+import dk.apaq.shopsystem.entity.PaymentType;
+import dk.apaq.shopsystem.entity.Tax;
 import java.util.List;
 import junit.framework.TestCase;
 

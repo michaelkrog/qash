@@ -1,15 +1,15 @@
 package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.Crud;
-import dk.apaq.shopsystem.model.Organisation;
+import dk.apaq.shopsystem.entity.Organisation;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import dk.apaq.shopsystem.model.Store;
+import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.service.Service;
-import dk.apaq.shopsystem.model.Tax;
+import dk.apaq.shopsystem.entity.Tax;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
