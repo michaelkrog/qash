@@ -443,7 +443,7 @@
         <dk.apaq.crud.version>1.0.12</dk.apaq.crud.version>
         <dk.apaq.filter.version>1.0.10</dk.apaq.filter.version>
         <vaadin.version>6.6.2</vaadin.version>
-        <netbeans.hint.deploy.server>Tomcat60</netbeans.hint.deploy.server>
+        <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
 
     <!--modules>

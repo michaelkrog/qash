@@ -12,11 +12,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController  {
 
-    @RequestMapping("/home")
+    @RequestMapping("/")
     public ModelAndView helloWorld() {
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("home");
-        mav.addObject("message", "Shopsystem V.2");
+        mav.setViewName("layout");
+        mav.addObject("message", "ShoppinNet V.2");
         return mav;
     }
 }

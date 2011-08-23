@@ -63,6 +63,10 @@
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
+    
+    <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter">
+    </bean>
+
 
     <tx:annotation-driven />
     <context:annotation-config />

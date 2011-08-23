@@ -24,7 +24,7 @@
       <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
       <property name="hibernate.connection.password" value="vanessa73"/>
       <property name="hibernate.show_sql" value="true"/>
-      <property name="hibernate.connection.url" value="jdbc:mysql://shoppinnet.com/store_v2_developer"/>
+      <property name="hibernate.connection.url" value="jdbc:mysql://localhost/store_v2_developer"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect"/>
@@ -34,7 +34,7 @@
       <property name="bonecp.partitionCount" value="3"/>
       <property name="bonecp.acquireIncrement" value="10"/>
       <property name="bonecp.maxConnectionsPerPartition" value="60"/>
-      <property name="bonecp.minConnectionsPerPartition" value="20"/>
+      <property name="bonecp.minConnectionsPerPartition" value="10"/>
       <property name="bonecp.statementsCacheSize" value="50"/>
       <property name="bonecp.releaseHelperThreads" value="3"/>
     </properties>
