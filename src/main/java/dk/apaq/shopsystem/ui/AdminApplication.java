@@ -11,16 +11,21 @@ import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  *
  * @author krog
  */
+
+@Controller
 public class AdminApplication extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminApplication.class);
 
     @Override
+    @RequestMapping("/admintest")
     public void init() {
 
         ApplicationContext context =  VaadinSpringHelper.getSpringContextFromVaadinContext(this.getContext());

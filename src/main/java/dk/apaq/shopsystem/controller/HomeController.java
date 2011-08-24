@@ -19,13 +19,5 @@ public class HomeController  {
         mav.addObject("message", "ShoppinNet V.2");
         return mav;
     }
-    
-    @RequestMapping("/testing")
-    public ModelAndView helloWorld2() {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("layout");
-        mav.addObject("message", "Testing...");
-        return mav;
-    }
-        
+           
 }
