@@ -96,7 +96,7 @@
                 </executions>
             </plugin-->
 
-      <!-- A simple Jetty test server at http://localhost:8080/QashApp can be launched with the Maven goal jetty:run
+      <!-- A simple Jetty test server at http://localhost:8080/ShopSystem can be launched with the Maven goal jetty:run
         and stopped with jetty:stop -->
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
@@ -104,12 +104,12 @@
                 <version>6.1.26</version>
                 <configuration>
                     <stopPort>9966</stopPort>
-                    <stopKey>QashApp</stopKey>
+                    <stopKey>ShopSystem</stopKey>
           <!-- Redeploy every x seconds if changes are detected, 0 for no automatic redeployment -->
                     <scanIntervalSeconds>5</scanIntervalSeconds>
           <!-- make sure Jetty also finds the widgetset -->
                     <webAppConfig>
-                        <contextPath>/QashApp</contextPath>
+                        <contextPath>/ShopSystem</contextPath>
                         <baseResource implementation="org.mortbay.resource.ResourceCollection">
               <!-- Workaround for Maven/Jetty issue http://jira.codehaus.org/browse/JETTY-680 -->
               <!-- <resources>src/main/webapp,${project.build.directory}/${project.build.finalName}</resources> -->
@@ -122,15 +122,7 @@
     </build>
 
     <repositories>
-        <!--repository>
-            <id>vaadin-snapshots</id>
-            <url>http://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-            </snapshots>
-        </repository-->
+
         <repository>
             <id>vaadin-addons</id>
             <url>http://maven.vaadin.com/vaadin-addons</url>
@@ -461,12 +453,4 @@
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
 
-
-
-
-
-    <!--modules>
-        <module>QashApp</module>
-    <module>TestProject</module>
-  </modules-->
 </project>
