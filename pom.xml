@@ -434,6 +434,21 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
+        <!-- Vaadin template -->
+        <dependency>
+           <groupId>org.vaadin.addons</groupId>
+           <artifactId>reindeermods</artifactId>
+           <version>0.2</version>
+        </dependency>
+
+        <!-- Vaadin/TinyMCE wysiwyg editor -->
+        <dependency>
+           <groupId>org.vaadin.addons</groupId>
+           <artifactId>vaadin-wrapper-for-tinymce</artifactId>
+           <version>1.4</version>
+        </dependency>
+
     </dependencies>
 
 
@@ -445,6 +460,10 @@
         <vaadin.version>6.6.2</vaadin.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
+
+
+
+
 
     <!--modules>
         <module>QashApp</module>

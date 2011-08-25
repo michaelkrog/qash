@@ -19,13 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author krog
  */
 
-@Controller
 public class AdminApplication extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminApplication.class);
 
     @Override
-    @RequestMapping("/admintest")
     public void init() {
 
         ApplicationContext context =  VaadinSpringHelper.getSpringContextFromVaadinContext(this.getContext());
@@ -39,6 +37,7 @@ public class AdminApplication extends Application {
 
         Table table = new Table();
         table.setContainerDataSource(container);
+        table.setVisibleColumns(new Object[] {"name", "address", "telephone"});
         table.setSizeFull();
         
         mainWindow.addComponent(table);
