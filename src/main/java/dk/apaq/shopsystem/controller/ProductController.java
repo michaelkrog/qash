@@ -28,7 +28,7 @@ public class ProductController implements ApplicationContextAware {
     private ApplicationContext context;
 
 
-    @RequestMapping(value="/test/{Id}", method=RequestMethod.GET)
+    @RequestMapping(value="/product/{Id}", method=RequestMethod.GET)
     public ModelAndView helloWorld(HttpServletRequest request, HttpServletResponse response, @PathVariable("Id") String orgId, @PathVariable("Id") String Id) {
         Service service = context.getBean(Service.class);
 

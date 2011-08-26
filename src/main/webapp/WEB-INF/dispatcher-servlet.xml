@@ -39,8 +39,8 @@
           class="org.springframework.web.servlet.mvc.ParameterizableViewController"
           p:viewName="index" />
 
-    
+    <!-- Resources -->
     <mvc:resources mapping="/VAADIN/**" location="/VAADIN/"/>
-    
+    <mvc:resources mapping="/js/*" location="/js/"/>
     
 </beans>
