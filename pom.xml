@@ -105,11 +105,13 @@
                 <configuration>
                     <stopPort>9966</stopPort>
                     <stopKey>ShopSystem</stopKey>
+                      <init-param>
+  </init-param>
           <!-- Redeploy every x seconds if changes are detected, 0 for no automatic redeployment -->
                     <scanIntervalSeconds>5</scanIntervalSeconds>
           <!-- make sure Jetty also finds the widgetset -->
                     <webAppConfig>
-                        <contextPath>/ShopSystem</contextPath>
+                        <contextPath>/shopsystem</contextPath>
                         <baseResource implementation="org.mortbay.resource.ResourceCollection">
               <!-- Workaround for Maven/Jetty issue http://jira.codehaus.org/browse/JETTY-680 -->
               <!-- <resources>src/main/webapp,${project.build.directory}/${project.build.finalName}</resources> -->
