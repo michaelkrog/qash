@@ -1,8 +1,8 @@
 package dk.apaq.shopsystem.ui;
 
-import com.vaadin.ui.MenuBar.MenuItem;
 import dk.apaq.shopsystem.ui.view.OverView;
 import com.vaadin.Application;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.terminal.Sizeable;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -76,7 +76,8 @@ public class AdminApplication extends Application {
     
     private void buildMainLayout() {
         
-        setTheme("reindeer");
+        setTheme("reindeermods");
+        //setTheme("reindeer");
         setMainWindow(new Window("ShoppinNet - Administration"));
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
