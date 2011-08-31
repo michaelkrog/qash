@@ -2,14 +2,11 @@ package dk.apaq.shopsystem.ui;
 
 import dk.apaq.shopsystem.ui.view.OverView;
 import com.vaadin.Application;
-import com.vaadin.terminal.ThemeResource;
 import com.vaadin.terminal.Sizeable;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.SplitPanel;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
@@ -58,8 +55,6 @@ public class AdminApplication extends Application {
     private Button search = new Button("Search");
     private Button share = new Button("Share");
     private Button help = new Button("Help");
-    private SplitPanel verticalSplit = new SplitPanel(
-            SplitPanel.ORIENTATION_VERTICAL);
     private SplitPanel horizontalSplit = new SplitPanel(
             SplitPanel.ORIENTATION_HORIZONTAL);
     private NavigationTree tree = new NavigationTree();
@@ -76,52 +71,40 @@ public class AdminApplication extends Application {
     
     private void buildMainLayout() {
         
-        setTheme("reindeermods");
-        //setTheme("reindeer");
+        setTheme("reindeer");
         setMainWindow(new Window("ShoppinNet - Administration"));
         VerticalLayout layout = new VerticalLayout();
-        layout.setSizeFull();
+        layout.setWidth(1000,Sizeable.UNITS_PIXELS);
+        layout.setHeight("100%");
         
         //@TODO: Center page with a fixed width of 1000px
-        //layout.setWidth(1000,Sizeable.UNITS_PIXELS);
-        //layout.setHeight("100%");
         //layout.addComponentAsFirst(layout);
         //layout.setComponentAlignment(layout, Alignment.TOP_CENTER);
         
-        // Insert top bar
-        verticalSplit.setFirstComponent(createTopBar());
-        
-        // Set the initial split position for a 15 pixel bar in the top
-        verticalSplit.setSplitPosition(25, SplitPanel.UNITS_PIXELS);
-        
-        // Insert tree menu to the left
         horizontalSplit.setFirstComponent(tree);
-              
-        // Set the initial split position for a 200 pixel menu to the left
+        //layout.addComponent(createToolbar());
+        layout.addComponent(horizontalSplit);
+        
+
+        /* Allocate all available extra space to the horizontal split panel */
+        layout.setExpandRatio(horizontalSplit, 1);
+
+        /* Set the initial split position so we can have a 200 pixel menu to the left */
         horizontalSplit.setSplitPosition(200, SplitPanel.UNITS_PIXELS);
-        
-        // Insert horizontal split in the lower (second) part of the vertical split.
-        verticalSplit.setSecondComponent(horizontalSplit);
 
-        // Insert vertical split which includes the horizontal split, into the layout
-        layout.addComponent(verticalSplit);
-
-        // Allocate all available extra space to the horizontal split panel
-        //verticalSplit.setExpandRatio(horizontalSplit, 1);
-        
-        // Build window
         getMainWindow().setContent(layout);
     }
 
-      
-    public MenuBar createTopBar() {
-        
-        MenuBar mb = new MenuBar();
-        mb.addItem("ShoppinNet.com", null);
-        mb.setWidth("100%");
-        mb.setHeight("100%");
+    
+    public HorizontalLayout createToolbar() {
 
-        return mb;
+        HorizontalLayout hl = new HorizontalLayout();
+        hl.addComponent(newContact);
+        hl.addComponent(search);
+        hl.addComponent(share);
+        hl.addComponent(help);
+
+        return hl;
     }
     
     

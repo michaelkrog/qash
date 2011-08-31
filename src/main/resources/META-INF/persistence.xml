@@ -22,7 +22,7 @@
     <properties>
       <property name="hibernate.connection.username" value="root"/>
       <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-      <property name="hibernate.connection.password" value="vanessa73"/>
+      <property name="hibernate.connection.password" value=""/>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.connection.url" value="jdbc:mysql://localhost/store_v2_developer"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>

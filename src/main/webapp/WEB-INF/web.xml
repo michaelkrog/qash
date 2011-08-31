@@ -16,7 +16,7 @@
         <init-param>
             <description>Vaadin application class to start</description>
             <param-name>application</param-name>
-            <param-value>dk.apaq.shopsystem.ui.AdminApplication2</param-value>
+            <param-value>dk.apaq.shopsystem.ui.AdminApplication</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

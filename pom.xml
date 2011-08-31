@@ -236,22 +236,13 @@
             <artifactId>vaadin</artifactId>
             <version>${vaadin.version}</version>
         </dependency>
-        
-        <!-- This is also used by gwt-maven-plugin to deduce GWT version number. -->
+                    <!-- This is also used by gwt-maven-plugin to deduce GWT version number. -->
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <version>2.3.0</version>
             <scope>provided</scope>
         </dependency>
-        
-        <!-- Required while building widgetsets for vaadin add-ons -->
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-        
         <dependency>
             <groupId>dk.apaq.vaadin.addon</groupId>
             <artifactId>crudcontainer-addon</artifactId>
