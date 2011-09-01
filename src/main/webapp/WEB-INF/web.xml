@@ -18,6 +18,10 @@
             <param-name>application</param-name>
             <param-value>dk.apaq.shopsystem.ui.AdminApplication</param-value>
         </init-param>
+        <init-param>
+            <param-name>widgetset</param-name>
+            <param-value>dk.apaq.shopsystem.widgetset</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <listener>
@@ -44,4 +48,5 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+       
 </web-app>

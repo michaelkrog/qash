@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>build</actionName>
+            <goals>
+                <goal>install</goal>
+                <goal>jetty:stop</goal>
+                <goal>jetty:run</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-Restart jetty server</actionName>
+            <displayName>Restart jetty server</displayName>
+            <goals>
+                <goal>jetty:stop</goal>
+                <goal>jetty:run</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-Install vaadin widgetsets</actionName>
+            <displayName>Install vaadin widgetsets</displayName>
+            <goals>
+                <goal>mvn</goal>
+                <goal>vaadin:update-widgetset</goal>
+                <goal>install</goal>
+            </goals>
+        </action>
+    </actions>
