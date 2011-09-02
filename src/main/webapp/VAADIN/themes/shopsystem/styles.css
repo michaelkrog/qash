@@ -1,0 +1,40 @@
+@import url(../reindeer/styles.css);
+
+.v-categorylist .v-button {
+    font-size: 11px;
+    line-height: 14px;
+    color: #000;
+    font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.v-categorylist .v-nativebutton {
+    text-align: left;
+    border: none;
+    background: transparent;
+    line-height: 15px;
+    padding: 2px 0;
+}
+
+.v-categorylist .v-nativebutton span {
+    padding-left: 25px;
+}
+
+.v-categorylist .selected {
+    background: transparent url(images/categorylist/selected-bg.png) repeat-x;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: #384359 0 1px 0;
+    padding: 2px 0;
+}
+
+.v-categorylist {
+    background: #d1d7e2;
+}
+
+.v-categorylist .v-label {
+    padding: 7px 0 3px 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #505d6d;
+    text-shadow: #fff 0 1px 0;
+}

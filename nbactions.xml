@@ -25,4 +25,11 @@
                 <goal>install</goal>
             </goals>
         </action>
+        <action>
+            <actionName>CUSTOM-Compile widgetset</actionName>
+            <displayName>Compile widgetset</displayName>
+            <goals>
+                <goal>gwt:compile</goal>
+            </goals>
+        </action>
     </actions>

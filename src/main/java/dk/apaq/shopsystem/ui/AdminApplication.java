@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.ui;
 
+import dk.apaq.shopsystem.ui.CategoryList.SelectEvent;
 import dk.apaq.shopsystem.ui.view.OverView;
 import com.vaadin.Application;
 import com.vaadin.terminal.Sizeable;
@@ -58,7 +59,9 @@ public class AdminApplication extends Application {
     private SplitPanel horizontalSplit = new SplitPanel(
             SplitPanel.ORIENTATION_HORIZONTAL);
     private NavigationTree tree = new NavigationTree();
+    private CategoryList categoryList = new CategoryList();
     private OverView OverView = null;
+    private ListListener listListener = new ListListener();
     
     
     @Override
@@ -68,10 +71,18 @@ public class AdminApplication extends Application {
         setMainComponent(getOverView());
     }
 
+    private class ListListener implements CategoryList.SelectListener {
+
+        @Override
+        public void onSelect(SelectEvent event) {
+            getMainWindow().showNotification(event.getSelection());
+        }
+    
+    }
     
     private void buildMainLayout() {
         
-        setTheme("reindeer");
+        setTheme("shopsystem");
         setMainWindow(new Window("ShoppinNet - Administration"));
         VerticalLayout layout = new VerticalLayout();
         layout.setWidth(1000,Sizeable.UNITS_PIXELS);
@@ -81,7 +92,17 @@ public class AdminApplication extends Application {
         //layout.addComponentAsFirst(layout);
         //layout.setComponentAlignment(layout, Alignment.TOP_CENTER);
         
-        horizontalSplit.setFirstComponent(tree);
+        categoryList.setSizeFull();
+        categoryList.addListener(listListener);
+        categoryList.addCategory("Generelt");
+        categoryList.addItem("Brugere", "USERS");
+        categoryList.addItem("Produkter", "PRODUCTS");
+        categoryList.addItem("Ordrer", "ORDERS");
+        categoryList.addCategory("Web");
+        categoryList.addItem("Website", "WEBSITES");
+        
+        
+        horizontalSplit.setFirstComponent(categoryList);
         //layout.addComponent(createToolbar());
         layout.addComponent(horizontalSplit);
         
