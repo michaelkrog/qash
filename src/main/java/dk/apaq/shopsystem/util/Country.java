@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 /**
  *
@@ -47,17 +48,25 @@ public class Country {
 
         Locale[] locales = Locale.getAvailableLocales();
         for (Locale current : locales) {
-            String iso = current.getISO3Country();
+            String iso = getIsoCountry(current);
             String code = current.getCountry();
             String name = current.getDisplayCountry(locale);
 
-            if (!"".equals(iso) && !"".equals(code) && !"".equals(name)) {
+            if (iso!=null && !"".equals(iso) && !"".equals(code) && !"".equals(name)) {
                 countries.add(new Country(iso, code, name));
             }
         }
 
         Collections.sort(countries, new CountryComparator());
         return countries;
+    }
+    
+    private static String getIsoCountry(Locale locale) {
+        try {
+            return locale.getISO3Country();
+        } catch(MissingResourceException ex) {
+            return null;
+        }
     }
 }
 
