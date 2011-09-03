@@ -110,8 +110,8 @@ public class OrderEditor extends CustomComponent implements
     private boolean initialized = false;
     private boolean hasEditableColumns = false;
     private OrderLineChangeListener orderLineChangeListener = new OrderLineChangeListener();
-    private Sorter productSorter = new Sorter("name_sortable");
-    private Sorter paymentSorter = new Sorter("timestamp");
+    private Sorter productSorter = new Sorter("name");
+    private Sorter paymentSorter = new Sorter("dateChanged");
     private SystemSettings settings;
     private final PaymentChangeListener paymentChangeListener = new PaymentChangeListener();
     private final OrderChangeListener orderChangeListener = new OrderChangeListener();

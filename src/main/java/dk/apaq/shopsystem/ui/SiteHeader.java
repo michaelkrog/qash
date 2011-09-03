@@ -33,7 +33,7 @@ public class SiteHeader extends CustomComponent {
     private Button linkImportExport = new Button("Import/Export");
     private Link linkHelp = new Link("Help & Support", helpResource, "Help", 500, 500, Link.TARGET_BORDER_MINIMAL);
     private Link linkLogout = new Link("Log out", new ExternalResource("/logout"));
-    private Link linkContact = new Link("contact@qashapp.com", new ExternalResource("../contact.jsp"));
+    private Link linkContact = new Link("info@shoppinnet.com", new ExternalResource("../contact.jsp"));
     private final SettingsDialog settingsDialog = new SettingsDialog();
 
 

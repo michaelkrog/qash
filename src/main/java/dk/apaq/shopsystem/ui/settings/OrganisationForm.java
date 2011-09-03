@@ -25,12 +25,12 @@ import java.util.Arrays;
 public class OrganisationForm extends Form {
 
     private GridLayout ourLayout;
-    private Label lblName = new Label("Shop Name");
+    private Label lblName = new Label("Organsiation Name");
     private Label lblAddress = new Label("Address");
     private Label lblEmail = new Label("Email");
     private Label lblPhone = new Label("Phone");
     private Label lblVatNo = new Label("VatNo.");
-    private Label lblBankAccount = new Label("Bank");
+    //private Label lblBankAccount = new Label("Bank");
     private Button btnSave = new Button("Save");
 
 
@@ -54,7 +54,7 @@ public class OrganisationForm extends Form {
         @Override
         public Field createField(Item item, Object propertyId, Component uiContext) {
             Field f;
-            if ("countryCode".equals(propertyId)) {
+            if ("country".equals(propertyId)) {
                 return countries;
             } else {
                 f = super.createField(item, propertyId, uiContext);
@@ -63,17 +63,17 @@ public class OrganisationForm extends Form {
             if("name".equals(propertyId)) {
                 f.addValidator(new StringLengthValidator("Name should be at least one character.", 1, 30, true));
                 ((TextField)f).setInputPrompt("Name of Shop");
-            } else if("road".equals(propertyId)) {
+            } else if("address".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("Street and houseno.");
-            } else if("zipCode".equals(propertyId)) {
+            } else if("zip".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("Zipcode");
             } else if("city".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("City");
             } else if("email".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("Fx. my@address.net");
-            } else if("bankAccount".equals(propertyId)) {
+            } /*else if("bankAccount".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("Your bank account number");
-            }
+            }*/
 
             if(f instanceof TextField) {
                 ((TextField)f).setNullRepresentation("");
@@ -120,10 +120,10 @@ public class OrganisationForm extends Form {
         lblVatNo.setSizeUndefined();
         ourLayout.addComponent(lblVatNo, 0, 6);
         ourLayout.setComponentAlignment(lblVatNo, Alignment.MIDDLE_RIGHT);
-        lblBankAccount.setSizeUndefined();
-        ourLayout.addComponent(lblBankAccount, 0, 7);
-        ourLayout.setComponentAlignment(lblBankAccount, Alignment.MIDDLE_RIGHT);
-        ourLayout.addComponent(btnSave, 1, 8);
+        //lblBankAccount.setSizeUndefined();
+        //ourLayout.addComponent(lblBankAccount, 0, 7);
+        //ourLayout.setComponentAlignment(lblBankAccount, Alignment.MIDDLE_RIGHT);
+        ourLayout.addComponent(btnSave, 1, 7);
 
         btnSave.addListener(new Button.ClickListener() {
 
@@ -145,36 +145,36 @@ public class OrganisationForm extends Form {
         if (propertyId.equals("name")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             ourLayout.addComponent(field, 1, 0, 2, 0);
-        } else if (propertyId.equals("road")) {
+        } else if (propertyId.equals("address")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             ourLayout.addComponent(field, 1, 1, 2, 1);
-        } else if (propertyId.equals("zipCode")) {
+        } else if (propertyId.equals("zip")) {
             ourLayout.addComponent(field, 1, 2);
         } else if (propertyId.equals("city")) {
             ourLayout.addComponent(field, 2, 2);
-        } else if (propertyId.equals("countryCode")) {
+        } else if (propertyId.equals("country")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             ourLayout.addComponent(field, 1, 3, 2, 3);
-        } else if (propertyId.equals("phoneNo")) {
+        } else if (propertyId.equals("telephone")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             ourLayout.addComponent(field, 1, 4, 2, 4);
         } else if (propertyId.equals("email")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             ourLayout.addComponent(field, 1, 5, 2, 5);
-        } else if (propertyId.equals("cvr")) {
+        } else if (propertyId.equals("company_reg")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             ourLayout.addComponent(field, 1, 6, 2, 6);
-        } else if (propertyId.equals("bankAccount")) {
+        }/* else if (propertyId.equals("bankAccount")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             ourLayout.addComponent(field, 1, 7, 2, 7);
-        }
+        }*/
     }
 
     @Override
     public void setItemDataSource(Item newDataSource) {
         super.setItemDataSource(newDataSource, Arrays.asList(new String[]{
-                    "name", "road", "zipCode", "city", "countryCode", "phoneNo", "faxNo",
-                    "email", "web", "cvr", "bankAccount"}));
+                    "name", "address", "zip", "city", "country", "telephone",
+                    "email", "company_reg"}));
     }
 
 

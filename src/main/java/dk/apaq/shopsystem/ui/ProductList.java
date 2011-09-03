@@ -59,7 +59,7 @@ public class ProductList extends CustomComponent {
     private CrudContainer productContainer;
     private CrudContainer taxContainer;
     private ThemeResource resourceDelete = new ThemeResource("img/clear.png");
-    private Sorter productSorter = new Sorter("name_sortable");
+    private Sorter productSorter = new Sorter("name");
     private final ProductFilterGenerator filterGenerator = new ProductFilterGenerator();
 
     private class SearchFieldHandler implements TextChangeListener {

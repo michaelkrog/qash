@@ -69,17 +69,14 @@ public class AdminPanel extends CustomComponent implements com.vaadin.data.Item.
         categoryList.addItem("Brugere", "USERS");
         categoryList.addItem("Ordrer", "ORDERS");
         categoryList.addItem("Produkter", "STOCK");
+        categoryList.addCategory("Web");
+        categoryList.addItem("Sites", "WEBSITES");
+        
         categoryList.setSizeFull();
         categoryList.addListener(listListener);
         
         content.setSizeFull();
-        
-        /*leftLayout.addComponent(categoryList);
-        Component spacer = new Label();
-        leftLayout.addComponent(spacer);
-        ((VerticalLayout)leftLayout.getContent()).setExpandRatio(spacer, 1.0F);
-        ((VerticalLayout)leftLayout.getContent()).setMargin(false);
-*/
+
         mainLayout.addComponent(categoryList);
         mainLayout.addComponent(content);
         mainLayout.setSplitPosition(236, Component.UNITS_PIXELS);
@@ -91,7 +88,7 @@ public class AdminPanel extends CustomComponent implements com.vaadin.data.Item.
         outerLayout.setSizeFull();
         
         setCompositionRoot(outerLayout);
-        setContent("ORDERS");
+        categoryList.select("ORDERS");
     }
 
     public com.vaadin.data.Item getItemDataSource() {
