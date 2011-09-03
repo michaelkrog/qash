@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 
 /**
  *
@@ -28,7 +29,7 @@ public class CurrencyUtil {
 
         Locale[] locales = Locale.getAvailableLocales();
         for (Locale current : locales) {
-            String iso = current.getISO3Country();
+            String iso = getIsoCountry(current);
             String code = current.getCountry();
             String name = current.getDisplayCountry(locale);
 
@@ -45,5 +46,14 @@ public class CurrencyUtil {
         List<Currency> currencies = new ArrayList(currencyMap.values());
         Collections.sort(currencies, new CurrencyComparator());
         return currencies;
+    }
+    
+    
+    private static String getIsoCountry(Locale locale) {
+        try {
+            return locale.getISO3Country();
+        } catch(MissingResourceException ex) {
+            return null;
+        }
     }
 }
