@@ -25,10 +25,10 @@
       <property name="hibernate.connection.password" value=""/>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.connection.url" value="jdbc:mysql://localhost/store_v2_developer"/>
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.hbm2ddl.auto" value="create"/>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect"/>
-      <property name="hibernate.connection.provider_class" value="com.jolbox.bonecp.provider.BoneCPConnectionProvider"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+      <!--property name="hibernate.connection.provider_class" value="com.jolbox.bonecp.provider.BoneCPConnectionProvider"/>
       <property name="bonecp.idleMaxAge" value="240"/>
       <property name="bonecp.idleConnectionTestPeriod" value="60"/>
       <property name="bonecp.partitionCount" value="3"/>
@@ -36,7 +36,7 @@
       <property name="bonecp.maxConnectionsPerPartition" value="60"/>
       <property name="bonecp.minConnectionsPerPartition" value="10"/>
       <property name="bonecp.statementsCacheSize" value="50"/>
-      <property name="bonecp.releaseHelperThreads" value="3"/>
+      <property name="bonecp.releaseHelperThreads" value="3"/-->
     </properties>
   </persistence-unit>
 </persistence>

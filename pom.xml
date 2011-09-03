@@ -43,7 +43,9 @@
                 <version>2.2.0</version>
                 <configuration>
           <!-- if you don't specify any modules, the plugin will find them -->
-          <modules> <module>dk.apaq.shopsystem.widgetset</module> </modules>
+                    <modules> 
+                        <module>dk.apaq.shopsystem.widgetset</module> 
+                    </modules>
                     <webappDirectory>${project.build.directory}/${project.build.finalName}/VAADIN/widgetsets</webappDirectory>
           <!-- On Mac running Snow Leopard, add "-d32" -->
           <!-- This causes error messages (but build works) in phase "package": two processes would use the same debug
@@ -105,8 +107,8 @@
                 <configuration>
                     <stopPort>9966</stopPort>
                     <stopKey>ShopSystem</stopKey>
-                      <init-param>
-  </init-param>
+                    <init-param>
+                    </init-param>
           <!-- Redeploy every x seconds if changes are detected, 0 for no automatic redeployment -->
                     <scanIntervalSeconds>5</scanIntervalSeconds>
           <!-- make sure Jetty also finds the widgetset -->
@@ -431,16 +433,22 @@
         
         <!-- Vaadin theme -->
         <dependency>
-           <groupId>org.vaadin.addons</groupId>
-           <artifactId>reindeermods</artifactId>
-           <version>0.2</version>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>reindeermods</artifactId>
+            <version>0.2</version>
         </dependency>
 
         <!-- Vaadin/TinyMCE wysiwyg editor -->
         <dependency>
-           <groupId>org.vaadin.addons</groupId>
-           <artifactId>vaadin-wrapper-for-tinymce</artifactId>
-           <version>1.4</version>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>vaadin-wrapper-for-tinymce</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>browsercookies</artifactId>
+            <version>1.0.4</version>
         </dependency>
 
     </dependencies>
