@@ -28,6 +28,7 @@ public class SettingsDialog extends Window {
     private final Button buttonShowAll = new Button("Show all");
     private final Spacer spacer = new Spacer();
     private final OrganisationForm shopForm = new OrganisationForm();
+    private final UsersPanel usersPanel = new UsersPanel();
     //private final ReceiptForm receiptForm = new ReceiptForm();
     private final CurrencyAndTaxPanel currencyAndTaxPanel = new CurrencyAndTaxPanel();
     //private final PrinterSettingPanel printerSettingPanel = new PrinterSettingPanel();
@@ -54,8 +55,10 @@ public class SettingsDialog extends Window {
 
         CategoryGridPanel.Category cat1 = gridPanel.addCategory("General");
         CategoryGridPanel.Category cat2 = gridPanel.addCategory("Pepherials");
+        CategoryGridPanel.Category cat3 = gridPanel.addCategory("System");
         gridPanel.addComponent(cat1, new ThemeResource("img/home_48.png"), "Address", shopForm);
         gridPanel.addComponent(cat1, new ThemeResource("img/taxes_48.png"), "Currency and taxes", currencyAndTaxPanel);
+        gridPanel.addComponent(cat3, new ThemeResource("img/user_48.png"), "Users", usersPanel);
         //gridPanel.addComponent(cat1, new ThemeResource("img/receipt_48.png"), "Receipt", receiptForm);
         //gridPanel.addComponent(cat2, new ThemeResource("img/printer_48.png"), "Printer", printerSettingPanel);
         gridPanel.setSizeFull();

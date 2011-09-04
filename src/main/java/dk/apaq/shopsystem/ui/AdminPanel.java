@@ -66,7 +66,8 @@ public class AdminPanel extends CustomComponent implements com.vaadin.data.Item.
 
         CategoryList categoryList = new CategoryList();
         categoryList.addCategory("General");
-        categoryList.addItem("Brugere", "USERS");
+        categoryList.addItem("Butikker", "STORES");
+        categoryList.addItem("Kunder", "CUSTOMERS");
         categoryList.addItem("Ordrer", "ORDERS");
         categoryList.addItem("Produkter", "STOCK");
         categoryList.addCategory("Web");
@@ -79,7 +80,7 @@ public class AdminPanel extends CustomComponent implements com.vaadin.data.Item.
 
         mainLayout.addComponent(categoryList);
         mainLayout.addComponent(content);
-        mainLayout.setSplitPosition(236, Component.UNITS_PIXELS);
+        mainLayout.setSplitPosition(180, Component.UNITS_PIXELS);
 
         //outerLayout.addComponent(cookies);
         outerLayout.addComponent(header);
