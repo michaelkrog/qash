@@ -284,8 +284,8 @@ public class AnnexServiceTest extends TestCase {
         Store shop = getShop();
         Order order = getOrder(10);
 
-        //ByteArrayOutputStream out = new ByteArrayOutputStream();
-        FileOutputStream out = new FileOutputStream("receipt.html");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        //FileOutputStream out = new FileOutputStream("receipt.html");
 
         try {
             annexService.writeReceipt(shop, order, OutputType.Html, PageSize.A7, out, Locale.ENGLISH);
@@ -307,8 +307,8 @@ public class AnnexServiceTest extends TestCase {
         Store shop = getShop();
         Order order = getOrder(40);
 
-        //ByteArrayOutputStream out = new ByteArrayOutputStream();
-        FileOutputStream out = new FileOutputStream("receipt.png");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        //FileOutputStream out = new FileOutputStream("receipt.png");
         annexService.writeReceipt(shop, order, OutputType.Png, PageSize.A7, out, Locale.ENGLISH);
         
         //String value = new String(out.toByteArray());
@@ -324,8 +324,8 @@ public class AnnexServiceTest extends TestCase {
         Store shop = getShop();
         Order order = getOrder(40);
 
-        //ByteArrayOutputStream out = new ByteArrayOutputStream();
-        FileOutputStream out = new FileOutputStream("receipt.zip");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        //FileOutputStream out = new FileOutputStream("receipt.zip");
         annexService.writeReceipt(shop, order, OutputType.PngBundle, PageSize.A7, out, Locale.ENGLISH);
 
         //String value = new String(out.toByteArray());
@@ -374,8 +374,8 @@ public class AnnexServiceTest extends TestCase {
         Store shop = getShop();
         Order order = getOrder(40);
 
-        //ByteArrayOutputStream out = new ByteArrayOutputStream();
-        FileOutputStream out = new FileOutputStream("receipt.pdf");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        //FileOutputStream out = new FileOutputStream("receipt.pdf");
         annexService.writeReceipt(shop, order, OutputType.Pdf, PageSize.A7,  out, Locale.ENGLISH);
 
         //String value = new String(out.toByteArray());

@@ -29,7 +29,7 @@ public class SiteHeader extends CustomComponent {
     private Embedded logo = new Embedded(null, logoResource);
     private Link linkAccount = new Link("Your account", new ExternalResource("../account.jsp"));
     private Link linkStores = new Link("Your dashboard", new ExternalResource("../dashboard.jsp"));
-    private Button linkOptions = new Button("Shop options");
+    private Button linkOptions = new Button("Company options");
     private Button linkImportExport = new Button("Import/Export");
     private Link linkHelp = new Link("Help & Support", helpResource, "Help", 500, 500, Link.TARGET_BORDER_MINIMAL);
     private Link linkLogout = new Link("Log out", new ExternalResource("/logout"));
