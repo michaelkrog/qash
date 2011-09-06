@@ -37,6 +37,8 @@ public class HomeController  {
 
         //The viewresolver must deliver a view based on the given page.
         //This includes injecting needed javascript, fonts etc.
+        //Use velocity for views as it supports dynamic concatenation of
+        //different template data
         mav.setViewName(page.getId());
 
         mav.addObject("site", site);
