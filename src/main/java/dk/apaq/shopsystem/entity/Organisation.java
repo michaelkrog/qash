@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import org.hibernate.annotations.Cascade;
 
 /**
  * Specifies an organisation

@@ -14,7 +14,6 @@ import dk.apaq.shopsystem.entity.Tax;
 import java.util.Map;
 import java.util.WeakHashMap;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -23,10 +22,8 @@ import org.springframework.context.ApplicationContextAware;
 import dk.apaq.crud.Crud.*;
 import dk.apaq.crud.CrudNotifier;
 import dk.apaq.crud.jpa.EntityManagerCrud.EntityManagerCrudAssist;
-import dk.apaq.shopsystem.entity.AbstractContentEntity;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.crud.GenericContentCrudAssist;
-import dk.apaq.shopsystem.service.crud.ProductCrudInventoryManager;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import javax.persistence.PersistenceContext;
 

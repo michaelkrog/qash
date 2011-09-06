@@ -8,6 +8,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.service.Service;
 import dk.apaq.shopsystem.ui.ShopSystemTheme;
@@ -27,10 +28,10 @@ public class SettingsDialog extends Window {
     private final HorizontalLayout topLayout = new HorizontalLayout();
     private final Button buttonShowAll = new Button("Show all");
     private final Spacer spacer = new Spacer();
-    private final OrganisationForm shopForm = new OrganisationForm();
-    private final UsersPanel usersPanel = new UsersPanel();
+    private final OrganisationForm organisationForm = new OrganisationForm();
     //private final ReceiptForm receiptForm = new ReceiptForm();
     private final CurrencyAndTaxPanel currencyAndTaxPanel = new CurrencyAndTaxPanel();
+    private final UserManagerPanel userManagerPanel = new UserManagerPanel();
     //private final PrinterSettingPanel printerSettingPanel = new PrinterSettingPanel();
     private Item datasource;
     private Service service;
@@ -56,9 +57,9 @@ public class SettingsDialog extends Window {
         CategoryGridPanel.Category cat1 = gridPanel.addCategory("General");
         CategoryGridPanel.Category cat2 = gridPanel.addCategory("Pepherials");
         CategoryGridPanel.Category cat3 = gridPanel.addCategory("System");
-        gridPanel.addComponent(cat1, new ThemeResource("img/home_48.png"), "Address", shopForm);
+        gridPanel.addComponent(cat1, new ThemeResource("img/home_48.png"), "Address", organisationForm);
         gridPanel.addComponent(cat1, new ThemeResource("img/taxes_48.png"), "Currency and taxes", currencyAndTaxPanel);
-        gridPanel.addComponent(cat3, new ThemeResource("img/user_48.png"), "Users", usersPanel);
+        gridPanel.addComponent(cat3, new ThemeResource("img/user_48.png"), "Users", userManagerPanel);
         //gridPanel.addComponent(cat1, new ThemeResource("img/receipt_48.png"), "Receipt", receiptForm);
         //gridPanel.addComponent(cat2, new ThemeResource("img/printer_48.png"), "Printer", printerSettingPanel);
         gridPanel.setSizeFull();
@@ -85,11 +86,13 @@ public class SettingsDialog extends Window {
         Organisation org = ((HasBean<Organisation>)datasource).getBean();
         //Container c = new CrudContainer(this.service.getShopCrud(), Shop.class);
         //Item shopItem = c.getItem(shop.getId());
-        shopForm.setItemDataSource(datasource);
+        organisationForm.setItemDataSource(datasource);
         //receiptForm.setItemDataSource(datasource);
 
         currencyAndTaxPanel.setContainerDataSource(new CrudContainer(service.getTaxCrud(org), Tax.class));
-        currencyAndTaxPanel.setShopDataSource(datasource);
+        currencyAndTaxPanel.setOrganisationDataSource(datasource);
+        
+        userManagerPanel.setContainerDataSource(new CrudContainer(service.getSystemUserCrud(), SystemUser.class));
         gridPanel.showGrid();
     }
 

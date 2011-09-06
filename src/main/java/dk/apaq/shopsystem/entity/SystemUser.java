@@ -62,6 +62,7 @@ public class SystemUser extends AbstractEntity implements Principal, dk.apaq.cru
         this.displayname = displayname;
     }
 
+    @Override
     public String getName() {
         return name;
     }

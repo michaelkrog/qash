@@ -90,7 +90,9 @@
     text-align: center;
 }
 
-.v-printersettingpanel-settings-wrapper {
+.v-printersettingpanel-settings-wrapper ,
+.v-usermanagerpanel-settings-wrapper ,
+.v-currencyandtaxpanel-settings-wrapper {
     background:#E3E3E3;;
     border: 1px solid #afafaf;
     -moz-border-radius: 5px;

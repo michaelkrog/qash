@@ -45,7 +45,7 @@ public class CurrencyAndTaxPanel extends CustomComponent implements Container.Ed
     private final Button btnRemoveTax = new Button("Remove tax");
     private final Select defaultTaxSelect = new Select();
     private final Select defaultCurrencySelect = new Select();
-    private Item shopItem;
+    private Item organisationItem;
     private Item lastDefaultTax = null;
     private final CurrencyChangeListener currencyChangeListener = new CurrencyChangeListener();
     private final DefaultTaxChangeListener defaultTaxChangeListener = new DefaultTaxChangeListener();
@@ -94,16 +94,16 @@ public class CurrencyAndTaxPanel extends CustomComponent implements Container.Ed
     private class CurrencyChangeListener implements ValueChangeListener {
 
         public void valueChange(ValueChangeEvent event) {
-            if (shopItem instanceof Buffered) {
-                ((Buffered) shopItem).commit();
+            if (organisationItem instanceof Buffered) {
+                ((Buffered) organisationItem).commit();
             }
         }
     }
 
     public CurrencyAndTaxPanel() {
 
-        setStyleName("v-printersettingpanel");
-        settingsWrapper.setStyleName("v-printersettingpanel-settings-wrapper");
+        setStyleName("v-currencyandtaxpanel");
+        settingsWrapper.setStyleName("v-currencyandtaxpanel-settings-wrapper");
 
         innerLayout.addComponent(taxList);
         innerLayout.addComponent(settingsWrapper);
@@ -225,8 +225,8 @@ public class CurrencyAndTaxPanel extends CustomComponent implements Container.Ed
         return taxContainer;
     }
 
-    public void setShopDataSource(Item shopItem) {
-        this.shopItem = shopItem;
+    public void setOrganisationDataSource(Item shopItem) {
+        this.organisationItem = shopItem;
 
         defaultCurrencySelect.removeListener(currencyChangeListener);
         defaultCurrencySelect.setPropertyDataSource(shopItem.getItemProperty("currency"));
