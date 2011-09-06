@@ -15,6 +15,7 @@ import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.Window;
 import java.util.Arrays;
 
 /**
@@ -93,7 +94,12 @@ public class UserForm extends Form {
         btnChangePassword.addListener(new Button.ClickListener() {
 
             public void buttonClick(ClickEvent event) {
-                getApplication().getMainWindow().showNotification("This should change password when done");
+                //getApplication().getMainWindow().showNotification("This should change password when done");
+                NewPasswordPanel newPasswordForm = new NewPasswordPanel();
+                Window window = new Window("Change password");
+                window.setModal(true);
+                getApplication().getMainWindow().addWindow(window);
+                window.addComponent(newPasswordForm);
             }
         });
     }
