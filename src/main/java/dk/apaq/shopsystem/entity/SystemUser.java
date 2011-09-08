@@ -13,18 +13,13 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 /**
- * Defines a System User. A System User does not belong to any organisation, but belongs
- * to the system and can be used by any organisation in the system.
- * 
- * Example:
- * - System Administrators should be able to gain access to any organisation in the system.
- * - Super Users might maintain several Organisations.
- * - Simple users just access their own organisation.
+ * Defines a System User. A SystemUser is unique across the system, but can be
+ * owned by a specific Organsiation.
  * 
  * @author michael
  */
 @Entity
-public class SystemUser extends AbstractEntity implements Principal, dk.apaq.crud.HasId<String>, Serializable {
+public class SystemUser extends AbstractContentEntity implements Principal, dk.apaq.crud.HasId<String>, Serializable {
 
     private String displayname;
 
@@ -36,10 +31,6 @@ public class SystemUser extends AbstractEntity implements Principal, dk.apaq.cru
 
     private String password;
 
-    @ElementCollection(fetch=FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<String> identifiers = new ArrayList<String>();
-    
     @ElementCollection(fetch=FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
     private List<String> roles = new ArrayList<String>();
@@ -93,10 +84,6 @@ public class SystemUser extends AbstractEntity implements Principal, dk.apaq.cru
 
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
-    }
-
-    public List<String> getIdentifiers() {
-        return identifiers;
     }
 
     public List<String> getRoles() {

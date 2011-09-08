@@ -163,7 +163,6 @@ public class SystemUserCrudTest {
             SystemUser account = crud.read(crud.create());
             account.setName(Integer.toString(i));
             account.setEmail(i + "@gmail.com");
-            account.getIdentifiers().add(Integer.toString(i));
             service.getSystemUserCrud().update(account);
         }
 
@@ -175,9 +174,6 @@ public class SystemUserCrudTest {
         idlist = service.getSystemUserCrud().listIds(filter, null, null);
         assertEquals(10, idlist.size());
 
-        filter = new ContainsFilter("identifiers", "5");
-        idlist = service.getSystemUserCrud().listIds(filter, null, null);
-        assertEquals(1, idlist.size());
     }
 
     @Test
