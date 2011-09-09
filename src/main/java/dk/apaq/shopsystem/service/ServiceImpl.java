@@ -40,6 +40,7 @@ public class ServiceImpl implements Service, ApplicationContextAware {
 
     private OrganisationCrud orgCrud;
     private Crud.Complete<String, SystemUser> systemUserCrud;
+    private final Map<String, OrganisationService> orgServiceMap = new WeakHashMap<String,OrganisationService>();
     private final Map<String, Complete<String, Order>> crudMap = new WeakHashMap<String, Complete<String, Order>>();
     private ApplicationContext context;
 
@@ -61,6 +62,17 @@ public class ServiceImpl implements Service, ApplicationContextAware {
         }
         
     }
+
+    @Override
+    public OrganisationService getOrganisationService(Organisation org) {
+        OrganisationService service = orgServiceMap.get(org.getId());
+        if(service==null) {
+            service = (OrganisationService) context.getBean("organisationService", em, org.getId());
+            orgServiceMap.put(org.getId(), service);
+        }
+        return service;
+    }
+
 
     
     @Override

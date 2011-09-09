@@ -20,13 +20,21 @@ public interface Service {
 
     OrganisationCrud getOrganisationCrud();
     Crud.Complete<String, SystemUser> getSystemUserCrud();
+    OrganisationService getOrganisationService(Organisation org);
 
+    @Deprecated
     Crud.Editable<String, Store> getStoreCrud(Organisation organisation);
+    @Deprecated
     Crud.Complete<String, Category> getCategoryCrud(Organisation organisation);
+    @Deprecated
     Crud.Complete<String, Website> getWebsiteCrud(Organisation organisation);
+    @Deprecated
     Crud.Complete<String, Order> getOrderCrud(Organisation organisation);
+    @Deprecated
     Crud.Complete<String, Product> getProductCrud(Organisation organisation);
+    @Deprecated
     Crud.Editable<String, Tax> getTaxCrud(Organisation organisation);
+    @Deprecated
     Crud.Complete<String, Payment> getPaymentCrud(Organisation organisation);
 
 
