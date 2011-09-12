@@ -1,11 +1,11 @@
 package dk.apaq.shopsystem.ui;
 
-import com.vaadin.data.Buffered;
-import com.vaadin.data.Container;
-import com.vaadin.data.Validator.InvalidValueException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.vaadin.data.Buffered;
+import com.vaadin.data.Container;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Alignment;
@@ -19,7 +19,6 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.ui.data.util.CurrencyAmountFormatter;
 import dk.apaq.shopsystem.ui.data.util.CurrencyAmountValidator;
@@ -27,7 +26,7 @@ import dk.apaq.shopsystem.ui.common.FieldEnabler;
 import dk.apaq.vaadin.addon.crudcontainer.HasBean;
 
 /**
- *
+ * An editor for Products.
  * @author michaelzachariassenkrog
  */
 public class ProductEditor extends CustomComponent implements

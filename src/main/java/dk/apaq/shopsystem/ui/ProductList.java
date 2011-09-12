@@ -1,6 +1,5 @@
 package dk.apaq.shopsystem.ui;
 
-import dk.apaq.shopsystem.ui.common.CommonDialog;
 import com.vaadin.data.Buffered;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
@@ -24,10 +23,12 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 import com.vaadin.ui.themes.Reindeer;
+
 import dk.apaq.crud.Crud;
 import dk.apaq.filter.sort.Sorter;
 import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Tax;
+import dk.apaq.shopsystem.ui.common.CommonDialog;
 import dk.apaq.shopsystem.ui.data.ProductContainer;
 import dk.apaq.shopsystem.ui.data.util.NumberColumnGenerator;
 import dk.apaq.shopsystem.ui.common.ProductFilterGenerator;
@@ -37,7 +38,7 @@ import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
 import dk.apaq.vaadin.addon.crudcontainer.HasBean;
 
 /**
- *
+ * A List for products including filtering and editing.
  */
 public class ProductList extends CustomComponent {
 
@@ -88,7 +89,6 @@ public class ProductList extends CustomComponent {
 
         topVLayout.addComponent(titleLabel);
         topVLayout.addComponent(topHLayout);
-        //topVLayout.setStyleName(Reindeer.LAYOUT_BLUE);
         topVLayout.setMargin(true);
 
         topHLayout.setSpacing(true);
@@ -206,6 +206,7 @@ public class ProductList extends CustomComponent {
 
         dialog.addListener(new CloseListener() {
 
+            @Override
             public void windowClose(CloseEvent e) {
                 if (dialog.getResult() == CommonDialog.ButtonType.Close) {
                     editor.commit();
@@ -221,17 +222,6 @@ public class ProductList extends CustomComponent {
         });
 
     }
-
-    /*private Filter buildFilter(String text) {
-        if (text == null || "".equals(text)) {
-            return null;
-        }
-        LikeFilter filter1 = new LikeFilter("name", text, 0.7F, false);
-        LikeFilter filter2 = new LikeFilter("itemNo", text + "*");
-        LikeFilter filter3 = new LikeFilter("barcode", text + "*");
-
-        return new OrFilter(filter1, filter2, filter3);
-    }*/
 
     private void refreshProductContainer() {
         if (productCrud != null) {
