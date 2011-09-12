@@ -1,7 +1,7 @@
 package dk.apaq.shopsystem.ui;
 
 /**
- *
+ * Defines some styleclasses in use for the ShopSystem UI.
  */
 public class ShopSystemTheme {
 

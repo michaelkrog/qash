@@ -3,14 +3,11 @@ package dk.apaq.shopsystem.ui.common;
 import com.vaadin.terminal.Resource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
-import java.util.Iterator;
 
 /**
- *
+ * A Switchbutton panel that
  * @author michaelzachariassenkrog
  */
 public class SwitchButtonGroup extends CustomComponent {
@@ -20,13 +17,13 @@ public class SwitchButtonGroup extends CustomComponent {
 
     private class ClickHandler implements Button.ClickListener {
 
+        @Override
         public void buttonClick(ClickEvent event) {
             for(int i=0;i<getButtonCount();i++) {
                 Button button = getButton(i);
                 setSelected(button, button  == event.getButton());
             }
         }
-
     }
 
     public SwitchButtonGroup() {
