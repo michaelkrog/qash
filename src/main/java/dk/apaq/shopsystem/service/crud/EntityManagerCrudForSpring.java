@@ -18,13 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public class EntityManagerCrudForSpring<IDTYPE, BEANTYPE> extends EntityManagerCrud<IDTYPE, BEANTYPE> {
 
-    private final EntityManager em;
-    private final EntityManagerCrudAssist<IDTYPE, BEANTYPE> assist;
-
-    public EntityManagerCrudForSpring(EntityManager em, EntityManagerCrudAssist<IDTYPE, BEANTYPE> assist) {
-        super(em, assist);
-        this.em = em;
-        this.assist = assist;
+    public EntityManagerCrudForSpring(EntityManager em, Class clazz) {
+        super(em, clazz);
     }
 
     @Override
@@ -43,34 +38,6 @@ public class EntityManagerCrudForSpring<IDTYPE, BEANTYPE> extends EntityManagerC
     @Transactional
     public IDTYPE create() {
         return super.create();
-    }
-
-
-    public List<IDTYPE> listIds(Filter filter, Sorter sorter, Limit limit) {
-        Query q = FilterTranslatorForJPA.translate(em, new String[]{getIdProperty()}, assist.getEntityClass(), filter, sorter, limit);
-        return q.getResultList();
-    }
-
-    private String getIdProperty() {
-        Field field = getIdField();
-        if (field != null) {
-            return field.getName();
-        }
-        return null;
-    }
-
-    private Field getIdField() {
-        Class clazz = assist.getEntityClass();
-
-        while(clazz!=null) {
-            for (Field field : clazz.getDeclaredFields()) {
-                if (field.getAnnotation(Id.class) != null) {
-                    return field;
-                }
-            }
-            clazz = clazz.getSuperclass();
-        }
-        return null;
     }
 
 }

@@ -4,7 +4,6 @@ import dk.apaq.crud.Crud;
 import dk.apaq.crud.Crud.Complete;
 import dk.apaq.crud.Crud.Editable;
 import dk.apaq.crud.CrudNotifier;
-import dk.apaq.shopsystem.entity.AbstractUser;
 import dk.apaq.shopsystem.entity.Category;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Organisation;
@@ -14,7 +13,6 @@ import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.User;
 import dk.apaq.shopsystem.entity.Website;
-import dk.apaq.shopsystem.service.crud.GenericContentCrudAssist;
 import dk.apaq.shopsystem.service.crud.InventoryManager;
 import dk.apaq.shopsystem.service.crud.SecurityHandler;
 import java.util.Map;
@@ -94,7 +92,7 @@ public class OrganisationServiceImpl implements OrganisationService{
         Organisation organisation = readOrganisation();
         Complete crud = crudMap.get(clazz);
         if(crud==null) {
-            crud = (Crud.Complete<String, T>) context.getBean("contentCrud", em, organisation, new GenericContentCrudAssist(organisation, clazz));
+            crud = (Crud.Complete<String, T>) context.getBean("contentCrud", em, organisation, clazz);
             ((CrudNotifier)crud).addListener(new SecurityHandler.ContentSecurity(organisation));
             crudMap.put(clazz, crud);
         }

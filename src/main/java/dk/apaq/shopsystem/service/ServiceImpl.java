@@ -21,9 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import dk.apaq.crud.Crud.*;
 import dk.apaq.crud.CrudNotifier;
-import dk.apaq.crud.jpa.EntityManagerCrud.EntityManagerCrudAssist;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.service.crud.GenericContentCrudAssist;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import javax.persistence.PersistenceContext;
 
@@ -43,25 +41,6 @@ public class ServiceImpl implements Service, ApplicationContextAware {
     private final Map<String, OrganisationService> orgServiceMap = new WeakHashMap<String,OrganisationService>();
     private final Map<String, Complete<String, Order>> crudMap = new WeakHashMap<String, Complete<String, Order>>();
     private ApplicationContext context;
-
-    private class SystemUserCrudAssist implements EntityManagerCrudAssist<String, SystemUser> {
-
-        @Override
-        public Class<SystemUser> getEntityClass() {
-            return SystemUser.class;
-        }
-
-        @Override
-        public SystemUser createInstance() {
-            return new SystemUser();
-        }
-
-        @Override
-        public String getIdForEntity(SystemUser entity) {
-            return entity.getId();
-        }
-        
-    }
 
     @Override
     public OrganisationService getOrganisationService(Organisation org) {
@@ -89,7 +68,7 @@ public class ServiceImpl implements Service, ApplicationContextAware {
     public Complete<String, SystemUser> getSystemUserCrud() {
         LOG.debug("Retrieving AccountCrud");
         if(systemUserCrud==null) {
-            systemUserCrud = (Crud.Complete<String, SystemUser>) context.getBean("crud", em, new SystemUserCrudAssist());
+            systemUserCrud = (Crud.Complete<String, SystemUser>) context.getBean("crud", em, SystemUser.class);
             ((CrudNotifier)systemUserCrud).addListener(new SecurityHandler.AccountSecurity());
         }
         return systemUserCrud;
@@ -154,7 +133,7 @@ public class ServiceImpl implements Service, ApplicationContextAware {
         String crudId = organisation.getId() + "_" + clazz.getSimpleName();
         Complete crud = crudMap.get(crudId);
         if(crud==null) {
-            crud = (Crud.Complete<String, T>) context.getBean("contentCrud", em, organisation, new GenericContentCrudAssist(organisation, clazz));
+            crud = (Crud.Complete<String, T>) context.getBean("contentCrud", em, organisation, clazz);
             ((CrudNotifier)crud).addListener(new SecurityHandler.ContentSecurity(organisation));
             crudMap.put(crudId, crud);
         }

@@ -20,38 +20,8 @@ public class OrderCrudImpl extends ContentCrud<Order> {
     private final InventoryManager inventoryManager;
     private final EntityManager em;
 
-    private static class OrderCrudAssist implements EntityManagerCrudAssist<String, Order> {
-
-        private final EntityManager em;
-        private final Organisation organisation;
-
-        public OrderCrudAssist(EntityManager em, Organisation organisation) {
-            this.em = em;
-            this.organisation = organisation;
-        }
-
-        @Override
-        public Class<Order> getEntityClass() {
-            return Order.class;
-        }
-
-        @Override
-        public Order createInstance() {
-            Order order = new Order();
-            order.setOrganisation(organisation);
-            order.setCurrency(organisation.getCurrency());
-            return order;
-        }
-
-        @Override
-        public String getIdForEntity(Order entity) {
-            return entity.getId();
-        }
-
-    }
-
     public OrderCrudImpl(EntityManager em, Organisation organisation, InventoryManager inventoryManager) {
-        super(em, organisation, new OrderCrudAssist(em, organisation));
+        super(em, organisation, Order.class);
         this.em = em;
         this.inventoryManager = inventoryManager;
     }
@@ -62,6 +32,7 @@ public class OrderCrudImpl extends ContentCrud<Order> {
         String id = super.create();
         Order order = read(id);
         order.setNumber(getNextSequence(em, organisation.getId() + "_OrderSequence", organisation.getInitialOrdernumber()));
+        order.setCurrency(organisation.getCurrency());
         update(order);
         return id;
     }

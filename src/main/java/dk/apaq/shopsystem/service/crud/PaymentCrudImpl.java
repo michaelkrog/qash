@@ -25,7 +25,7 @@ public class PaymentCrudImpl extends ContentCrud<Payment> {
     private EntityManager em;
 
     public PaymentCrudImpl(EntityManager em, Organisation organisation, Crud.Editable<String, Order> orderCrud) {
-        super(em, organisation, new GenericContentCrudAssist<Payment>(organisation, Payment.class));
+        super(em, organisation, Payment.class);
         this.em = em;
 
         if(orderCrud == null) {

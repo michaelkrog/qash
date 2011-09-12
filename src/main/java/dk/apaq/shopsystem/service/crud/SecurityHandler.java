@@ -147,7 +147,7 @@ public final class SecurityHandler {
                 return;
             }
             
-            if(!organisation.getId().equals(entity.getOrganisation().getId())) {
+            if(entity.getOrganisation()==null || !organisation.getId().equals(entity.getOrganisation().getId())) {
                 throw new SecurityException("Now allowed to read content from other organisations.");
             }
         }

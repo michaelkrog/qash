@@ -14,6 +14,7 @@ import dk.apaq.filter.sort.Sorter;
 import dk.apaq.shopsystem.entity.AbstractContentEntity;
 import dk.apaq.shopsystem.entity.Organisation;
 import javax.persistence.EntityManager;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -24,14 +25,29 @@ public class ContentCrud<T extends AbstractContentEntity> extends EntityManagerC
     private static final Logger LOG = LoggerFactory.getLogger(ContentCrud.class);
     protected final Organisation organisation;
     private final Filter orgFilter;
+    private final Class<T> clazz;
     
-    
-    
-    public ContentCrud(EntityManager em, Organisation organisation, EntityManagerCrudAssist<String, T> assist) {
-        super(em, assist);
+    public ContentCrud(EntityManager em, Organisation organisation, Class<T> clazz) {
+        super(em, clazz);
         this.organisation = organisation;
+        this.clazz = clazz;
         this.orgFilter = new CompareFilter("organisation", organisation, CompareFilter.CompareType.Equals);
     }
+
+    @Override
+    @Transactional
+    public String create() {
+        T entity;
+        try {
+            entity = clazz.newInstance();
+        } catch (Exception ex) {
+            LOG.error("Unable to create instance of class " + clazz.getCanonicalName(), ex);
+            return null;
+        }
+        entity.setOrganisation(organisation);
+        return create(entity);
+    }
+
 
     @Override
     public List<String> listIds(Filter filter, Sorter sorter, Limit limit) {
