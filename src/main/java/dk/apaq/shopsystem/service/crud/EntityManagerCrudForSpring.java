@@ -1,19 +1,12 @@
 package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.jpa.EntityManagerCrud;
-import dk.apaq.filter.Filter;
-import dk.apaq.filter.jpa.FilterTranslatorForJPA;
-import dk.apaq.filter.limit.Limit;
-import dk.apaq.filter.sort.Sorter;
-import java.lang.reflect.Field;
-import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.Id;
-import javax.persistence.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- *
+ * This class extends EntityManagerCrud which holds all the logic. This instance makes sure that when intantiated via Spring the
+ * create, update and delete methods are marked as <code>Transactional</code>.
  * @author michaelzachariassenkrog
  */
 public class EntityManagerCrudForSpring<IDTYPE, BEANTYPE> extends EntityManagerCrud<IDTYPE, BEANTYPE> {
