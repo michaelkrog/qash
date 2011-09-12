@@ -1,24 +1,29 @@
 package dk.apaq.shopsystem.ui;
 
+import dk.apaq.shopsystem.ui.settings.SettingsDialog;
 import com.vaadin.event.MouseEvents.ClickEvent;
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.Resource;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Embedded;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Link;
+import com.vaadin.ui.NativeButton;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
 
-import dk.apaq.shopsystem.ui.settings.SettingsDialog;
-
 /**
- * Defines the header of the <code>AdminPanel</code>
+ *
  */
 public class SiteHeader extends CustomComponent {
 
     private CssLayout layout = new CssLayout();
+    private CssLayout logoColumn = new CssLayout();
     private CssLayout linkColumn1 = new CssLayout();
     private CssLayout linkColumn2 = new CssLayout();
     private CssLayout linkColumn3 = new CssLayout();
@@ -38,26 +43,55 @@ public class SiteHeader extends CustomComponent {
 
     public SiteHeader() {
 
-        logo.setWidth(135, UNITS_PIXELS);
+        //logo.setWidth(135, UNITS_PIXELS);
+       
+        //layout.addComponent(logo);
+        //layout.addComponent(linkColumn1);
+        //layout.addComponent(linkColumn2);
+        //layout.addComponent(linkColumn3);
+        //layout.addComponent(linkContact);
+
+        //linkColumn1.addComponent(linkAccount);
+        //linkColumn1.addComponent(linkStores);
+
+        //linkColumn2.addComponent(linkOptions);
+        //linkColumn2.addComponent(linkImportExport);
+
+        //linkColumn3.addComponent(linkLogout);
+        //linkColumn3.addComponent(linkHelp);
+
+        //layout.setStyleName("ge-header");
+        layout.addStyleName("toolbar-invert");
+        layout.setWidth("100%");
         
-        layout.addComponent(logo);
-        layout.addComponent(linkColumn1);
-        layout.addComponent(linkColumn2);
-        layout.addComponent(linkColumn3);
-        layout.addComponent(linkContact);
+        CssLayout right = new CssLayout();
+        right.setSizeUndefined();
+        right.addStyleName("right");
+        layout.addComponent(right);
+        Label text = new Label("Shopping is nothing... without you!");
+        right.addComponent(text);
+        
+        CssLayout left = new CssLayout();
+        left.setSizeUndefined();
+        left.addStyleName("left");
+        layout.addComponent(left);
 
-        linkColumn1.addComponent(linkAccount);
-        linkColumn1.addComponent(linkStores);
-
-        linkColumn2.addComponent(linkOptions);
-        linkColumn2.addComponent(linkImportExport);
-
-        linkColumn3.addComponent(linkLogout);
-        linkColumn3.addComponent(linkHelp);
-
-        layout.setStyleName("ge-header");
-        logo.setStyleName("ge-logo");
-        linkColumn1.setStyleName("ge-userinfo");
+        Label title = new Label("ShoppinNet");
+        title.addStyleName("h1");
+        left.addComponent(title);
+        
+        Button b = new Button("Action");
+        b = new NativeButton("Dashboard");
+        b.setIcon(new ThemeResource("../runo/icons/16/globe.png"));
+        left.addComponent(b);
+        
+        b = new NativeButton("Support");
+        b.setIcon(new ThemeResource("../runo/icons/16/email.png"));
+        left.addComponent(b);
+        
+        
+        //logo.setStyleName("ge-logo");
+        /*linkColumn1.setStyleName("ge-userinfo");
         linkColumn2.setStyleName("ge-userinfo");
         linkColumn3.setStyleName("ge-userinfo");
         linkContact.setStyleName("ge-phone");
@@ -66,12 +100,11 @@ public class SiteHeader extends CustomComponent {
         linkOptions.setStyleName(Reindeer.BUTTON_LINK);
         linkImportExport.setStyleName(Reindeer.BUTTON_LINK);
 
-        setStyleName("ge-header-container");
+        setStyleName("ge-header-container");*/
         setCompositionRoot(layout);
 
         logo.addListener(new ClickListener() {
 
-            @Override
             public void click(ClickEvent event) {
                 getApplication().getMainWindow().open(homeResource);
             }
@@ -79,7 +112,6 @@ public class SiteHeader extends CustomComponent {
 
         linkOptions.addListener(new Button.ClickListener() {
 
-            @Override
             public void buttonClick(Button.ClickEvent event) {
                 settingsDialog.center();
                 getApplication().getMainWindow().addWindow(settingsDialog);
@@ -88,9 +120,6 @@ public class SiteHeader extends CustomComponent {
 
     }
 
-    /**
-     * Gets the settingsdialog accessible via the SiteHeader.
-     */
     public SettingsDialog getSettingsDialog() {
         return settingsDialog;
     }

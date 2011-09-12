@@ -32,4 +32,18 @@
                 <goal>gwt:compile</goal>
             </goals>
         </action>
+        <action>
+            <actionName>CUSTOM-Jetty stop</actionName>
+            <displayName>Jetty stop</displayName>
+            <goals>
+                <goal>jetty:stop</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-GWT compile</actionName>
+            <displayName>GWT compile</displayName>
+            <goals>
+                <goal>gwt:compile</goal>
+            </goals>
+        </action>
     </actions>
