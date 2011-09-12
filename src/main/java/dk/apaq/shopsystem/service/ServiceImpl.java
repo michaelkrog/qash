@@ -46,7 +46,7 @@ public class ServiceImpl implements Service, ApplicationContextAware {
     public OrganisationService getOrganisationService(Organisation org) {
         OrganisationService service = orgServiceMap.get(org.getId());
         if(service==null) {
-            service = (OrganisationService) context.getBean("organisationService", em, org.getId());
+            service = (OrganisationService) context.getBean("organisationService", org);
             orgServiceMap.put(org.getId(), service);
         }
         return service;
@@ -76,52 +76,37 @@ public class ServiceImpl implements Service, ApplicationContextAware {
 
     @Override
     public Complete<String, Order> getOrderCrud(Organisation organisation) {
-        String crudId = organisation.getId() + "_Order";
-        Complete crud = crudMap.get(crudId);
-        if(crud==null) {
-            InventoryManager im = (InventoryManager) context.getBean("inventoryManager", getProductCrud(organisation));
-            crud = (Crud.Complete<String, Payment>) context.getBean("orderCrud", em, organisation, im);
-            ((CrudNotifier)crud).addListener(new SecurityHandler.ContentSecurity(organisation));
-            crudMap.put(crudId, crud);
-        }
-        return crud;
+        return getOrganisationService(organisation).getOrders();
     }
 
     @Override
     public Complete<String, Product> getProductCrud(Organisation organisation) {
-        return getGenericContentCrud(organisation, Product.class);
+        return getOrganisationService(organisation).getProducts();
     }
 
     @Override
     public Editable<String, Tax> getTaxCrud(Organisation organisation) {
-        return getGenericContentCrud(organisation, Tax.class);
+        return getOrganisationService(organisation).getTaxes();
     }
 
     @Override
     public Complete<String, Payment> getPaymentCrud(Organisation organisation) {
-        String crudId = organisation.getId() + "_Payment";
-        Complete crud = crudMap.get(crudId);
-        if(crud==null) {
-            crud = (Crud.Complete<String, Payment>) context.getBean("paymentCrud", em, organisation, getOrderCrud(organisation));
-            ((CrudNotifier)crud).addListener(new SecurityHandler.ContentSecurity(organisation));
-            crudMap.put(crudId, crud);
-        }
-        return crud;
+        return getOrganisationService(organisation).getPayments();
     }
 
     @Override
     public Complete<String, Category> getCategoryCrud(Organisation organisation) {
-        return getGenericContentCrud(organisation, Category.class);
+        return getOrganisationService(organisation).getCategories();
     }
 
     @Override
     public Editable<String, Store> getStoreCrud(Organisation organisation) {
-        return getGenericContentCrud(organisation, Store.class);
+        return getOrganisationService(organisation).getStores();
     }
 
     @Override
     public Complete<String, Website> getWebsiteCrud(Organisation organisation) {
-         return getGenericContentCrud(organisation, Website.class);
+         return getOrganisationService(organisation).getWebsites();
     }
 
     @Override
@@ -129,14 +114,5 @@ public class ServiceImpl implements Service, ApplicationContextAware {
         this.context = applicationContext;
     }
 
-    private <T> Complete<String, T> getGenericContentCrud(Organisation organisation, Class<T> clazz) {
-        String crudId = organisation.getId() + "_" + clazz.getSimpleName();
-        Complete crud = crudMap.get(crudId);
-        if(crud==null) {
-            crud = (Crud.Complete<String, T>) context.getBean("contentCrud", em, organisation, clazz);
-            ((CrudNotifier)crud).addListener(new SecurityHandler.ContentSecurity(organisation));
-            crudMap.put(crudId, crud);
-        }
-        return crud;
-    }
+   
 }

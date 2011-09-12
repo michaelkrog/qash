@@ -25,6 +25,7 @@
        http://www.springframework.org/schema/lang/spring-lang-2.0.xsd"
         >
 
+
     <bean id="crud" class="dk.apaq.shopsystem.service.crud.EntityManagerCrudForSpring" scope="prototype">
         <property name="transactionsHandledByProvider" value="false"/>
     </bean>
@@ -48,6 +49,8 @@
     <bean id="inventoryManager" class="dk.apaq.shopsystem.service.crud.ProductCrudInventoryManager" scope="prototype"/>
 
     <bean id="service" class="dk.apaq.shopsystem.service.ServiceImpl"/>
+    <bean id="organisationService" class="dk.apaq.shopsystem.service.OrganisationServiceImpl" scope="prototype"/>
+    
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="QashServiceNew"/>

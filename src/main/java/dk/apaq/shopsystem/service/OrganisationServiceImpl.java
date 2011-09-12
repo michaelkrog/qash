@@ -19,13 +19,15 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  */
-public class OrganisationServiceImpl implements OrganisationService{
+public class OrganisationServiceImpl implements OrganisationService, ApplicationContextAware{
 
     @PersistenceContext
     private EntityManager em;
@@ -113,5 +115,10 @@ public class OrganisationServiceImpl implements OrganisationService{
     @Override
     public Complete<String, User> getUsers() {
         return getGenericContentCrud(User.class);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.context = applicationContext;
     }
 }
