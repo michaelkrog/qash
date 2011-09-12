@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package dk.apaq.shopsystem.ui.util;
+package dk.apaq.shopsystem.ui.common;
 
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;

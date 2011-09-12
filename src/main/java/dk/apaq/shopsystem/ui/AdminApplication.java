@@ -22,7 +22,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 /**
- *
+ * The application class for the Admin application. This class contains no gui elements. Instead it uses <code>AdminPanel</code> which contains
+ * all Gui.
  * @author krog
  */
 
@@ -34,7 +35,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
     private Service service;
     private String organisationId;
     private AdminPanel adminPanel;
-    private CrudContainer<String, Organisation> orgContainer;
+    //private CrudContainer<String, Organisation> orgContainer;
     //private final ICEPush pusher = new ICEPush();
     //private final CrudChangeHandler crudChangeHandler = new CrudChangeHandler();
 
@@ -53,6 +54,11 @@ public class AdminApplication extends Application implements HttpServletRequestL
 
     }*/
     
+    @Override
+    /**
+     * Called on each new request. The method will detect which id is written in the url and then the
+     * the chosen organisation by calling <code>updateOrganisation</code>.
+     */
     public void onRequestStart(HttpServletRequest request, HttpServletResponse response) {
         String path = request.getPathInfo();
         if(path==null) {
@@ -68,15 +74,19 @@ public class AdminApplication extends Application implements HttpServletRequestL
             String tmp = path.substring(idStartIndex + 1);
             if(tmp.startsWith("id:")) {
                 this.organisationId = tmp.substring(3);
-                updateShop();
+                updateOrganisation();
             }
         }
     }
 
+    @Override
     public void onRequestEnd(HttpServletRequest request, HttpServletResponse response) { /* EMPTY */ }
 
 
     @Override
+    /**
+     * Called when the application is initialized. It will instantiate needed classes like service, AdminPanel etc.
+     */
     public void init() {
         LOG.debug("Initializing ShopSystem application");
         setLogoutURL("/");
@@ -84,9 +94,9 @@ public class AdminApplication extends Application implements HttpServletRequestL
         ApplicationContext context = VaadinSpringHelper.getSpringContextFromVaadinContext(getContext());
         service = context.getBean("service", Service.class);
         annexService = context.getBean("annexService", AnnexService.class);
-        orgContainer = new CrudContainer<String, Organisation>(service.getOrganisationCrud(), Organisation.class);
+        //orgContainer = new CrudContainer<String, Organisation>(service.getOrganisationCrud(), Organisation.class);
 
-        adminPanel = new AdminPanel(service, annexService);
+        adminPanel = new AdminPanel(annexService);
 
         setTheme("shopsystem");
         Window mainWindow = new Window();
@@ -105,19 +115,22 @@ public class AdminApplication extends Application implements HttpServletRequestL
         outerLayout.setExpandRatio(adminPanel, 1.0F);
         adminPanel.setSizeFull();
 
-        updateShop();
+        updateOrganisation();
 
         LOG.debug("ShopSystem application initialized");
         
     }
 
-    private void updateShop() {
+    /**
+     * Updates the organisation for this application and adds listeners for the cruds.
+     */
+    private void updateOrganisation() {
         if (service == null || this.organisationId == null) {
             return;
         }
 
-        Item item = orgContainer.getItem(organisationId);
-        adminPanel.setItemDataSource(item);
+        Organisation org = service.getOrganisationCrud().read(organisationId);
+        adminPanel.setOrganisationService(service.getOrganisationService(org));
 
         /*
         Organisation shop = service.get.read(shopId);

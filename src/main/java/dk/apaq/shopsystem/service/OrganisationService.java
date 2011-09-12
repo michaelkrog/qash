@@ -20,7 +20,7 @@ public interface OrganisationService {
     public Organisation readOrganisation();
     public void updateOrganisation(Organisation organisation);
 
-    Crud.Complete<String, User> getUsers();
+    Crud.Complete<String, ? extends User> getUsers();
 
     Crud.Editable<String, Store> getStores();
     Crud.Complete<String, Category> getCategories();

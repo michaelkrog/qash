@@ -1,4 +1,7 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.common;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.Alignment;
@@ -9,16 +12,13 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
-import dk.apaq.shopsystem.ui.util.Spacer;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- *
+ * A common class for creating a Dialog with common buttons.
  */
 public class CommonDialog extends Window  {
 
-    private Map<ButtonType, Button> buttonMap = new HashMap<ButtonType, Button>();
+    private Map<ButtonType, Button> buttonMap = new EnumMap<ButtonType, Button>(ButtonType.class);
     private HorizontalLayout buttonLayout = new HorizontalLayout();
     private VerticalLayout layout = new VerticalLayout();
     private Spacer spacer = new Spacer();
@@ -32,21 +32,33 @@ public class CommonDialog extends Window  {
 
     private class ButtonListener implements Button.ClickListener {
 
+        @Override
         public void buttonClick(ClickEvent event) {
             for(Map.Entry<ButtonType, Button> entry : buttonMap.entrySet()) {
                 if(entry.getValue() == event.getButton()) {
                     result = entry.getKey();
-                    close();;
+                    close();
                 }
             }
         }
 
     }
 
+     /**
+     * Creates a new dialog with Cancel and Ok buttons.
+     * @param caption The caption of the dialog.
+     * @param component The component to use as content in the dialog.
+     */
     public CommonDialog(String caption, Component component) {
         this(caption, component, ButtonType.Cancel, ButtonType.Ok);
     }
 
+    /**
+     * Creates a new dialog.
+     * @param caption The caption of the dialog.
+     * @param component The component to use as content in the dialog.
+     * @param buttons The buttons that should be shown.
+     */
     public CommonDialog(String caption, Component component, ButtonType ... buttons) {
         setCaption(caption);
         setModal(true);
@@ -80,19 +92,34 @@ public class CommonDialog extends Window  {
 
     }
 
+    /**
+     * Gets the button that was clicked.
+     * @return
+     */
     public ButtonType getResult() {
         return result;
     }
 
+    /**
+     * Sets the captions for a specific button.
+     * @param type
+     * @param caption
+     */
     public void setButtonCaption(ButtonType type, String caption) {
         Button button = buttonMap.get(type);
         button.setCaption(caption);
     }
 
+    /**
+     * Getes the button that has been marked at default or null if none has been marked.
+     */
     public ButtonType getDefaultButtonType() {
         return defaultButtonType;
     }
 
+    /**
+     * Sets the button that should be marked as default. This button will be clicked on Enter.
+     */
     public void setDefaultButtonType(ButtonType defaultButtonType) {
         this.defaultButtonType = defaultButtonType;
         for(Map.Entry<ButtonType, Button> entry: buttonMap.entrySet()) {
@@ -106,6 +133,5 @@ public class CommonDialog extends Window  {
             }
         }
     }
-
 
 }

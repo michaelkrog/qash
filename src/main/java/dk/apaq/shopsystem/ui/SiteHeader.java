@@ -1,6 +1,5 @@
 package dk.apaq.shopsystem.ui;
 
-import dk.apaq.shopsystem.ui.settings.SettingsDialog;
 import com.vaadin.event.MouseEvents.ClickEvent;
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.terminal.ExternalResource;
@@ -10,12 +9,12 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Link;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
 
+import dk.apaq.shopsystem.ui.settings.SettingsDialog;
+
 /**
- *
+ * Defines the header of the <code>AdminPanel</code>
  */
 public class SiteHeader extends CustomComponent {
 
@@ -72,6 +71,7 @@ public class SiteHeader extends CustomComponent {
 
         logo.addListener(new ClickListener() {
 
+            @Override
             public void click(ClickEvent event) {
                 getApplication().getMainWindow().open(homeResource);
             }
@@ -79,6 +79,7 @@ public class SiteHeader extends CustomComponent {
 
         linkOptions.addListener(new Button.ClickListener() {
 
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 settingsDialog.center();
                 getApplication().getMainWindow().addWindow(settingsDialog);
@@ -87,6 +88,9 @@ public class SiteHeader extends CustomComponent {
 
     }
 
+    /**
+     * Gets the settingsdialog accessible via the SiteHeader.
+     */
     public SettingsDialog getSettingsDialog() {
         return settingsDialog;
     }

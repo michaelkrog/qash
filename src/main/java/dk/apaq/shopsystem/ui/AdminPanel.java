@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.ui;
 
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalSplitPanel;
@@ -7,24 +8,20 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
-import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.Payment;
-import dk.apaq.shopsystem.entity.Product;
-import dk.apaq.shopsystem.entity.Store;
-import dk.apaq.shopsystem.service.Service;
-import dk.apaq.shopsystem.ui.CategoryList.SelectEvent;
+import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.ui.common.CategoryList;
+import dk.apaq.shopsystem.ui.common.CategoryList.SelectEvent;
 import dk.apaq.shopsystem.ui.print.PrintDocGeneratorImpl;
-import dk.apaq.vaadin.addon.crudcontainer.HasBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * Panel for handling gui in the admin application.
  * @author krog
  */
-public class AdminPanel extends CustomComponent implements com.vaadin.data.Item.Editor {
+public class AdminPanel extends CustomComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminPanel.class);
     private final SalesView salesView = new SalesView();
@@ -32,12 +29,12 @@ public class AdminPanel extends CustomComponent implements com.vaadin.data.Item.
     private final SiteHeader header = new SiteHeader();
     private final VerticalLayout outerLayout = new VerticalLayout();
     private Panel leftLayout;
-    private final Service service;
+    private OrganisationService orgService;
     private final AnnexService annexService;
-    private com.vaadin.data.Item datasource;
+    private BeanItem datasource;
     private VerticalLayout content = new VerticalLayout();
     private ListListener listListener = new ListListener();
-    
+
     private class ListListener implements CategoryList.SelectListener {
 
         @Override
@@ -48,9 +45,8 @@ public class AdminPanel extends CustomComponent implements com.vaadin.data.Item.
         
     }
 
-    public AdminPanel(Service service, AnnexService annexService) {
+    public AdminPanel(AnnexService annexService) {
         
-        this.service = service;
         this.annexService = annexService;
 
         stockWidget.setSizeFull();
@@ -92,36 +88,28 @@ public class AdminPanel extends CustomComponent implements com.vaadin.data.Item.
         categoryList.select("ORDERS");
     }
 
-    public com.vaadin.data.Item getItemDataSource() {
-        return datasource;
+    public void setOrganisationService(OrganisationService organisationService) {
+        this.orgService = organisationService;
+
+        Organisation org =this.orgService.readOrganisation();
+        this.datasource = new BeanItem(org);
+
+
+        stockWidget.setProductCrud(orgService.getProducts());
+        stockWidget.setTaxCrud(orgService.getTaxes());
+
+        salesView.setOrderCrud(orgService.getOrders());
+        salesView.setPaymentCrud(orgService.getPayments());
+        salesView.setProductCrud(orgService.getProducts());
+        salesView.setTaxCrud(orgService.getTaxes());
+        salesView.setPrintDocGenerator(new PrintDocGeneratorImpl(annexService, org));
+
+        leftLayout.setCaption(org.getName());
+
+        header.getSettingsDialog().setService(orgService);
+        header.getSettingsDialog().setDatasource(this.datasource);
     }
 
-    public void setItemDataSource(com.vaadin.data.Item newDataSource) {
-        this.datasource = newDataSource;
-
-        Organisation bean = ((HasBean<Organisation>)this.datasource).getBean();
-        Crud.Complete<String, Product> productCrud = service.getProductCrud(bean);
-        Crud.Editable<String, Payment> paymentCrud = service.getPaymentCrud(bean);
-
-        stockWidget.setProductCrud(productCrud);
-        stockWidget.setTaxCrud(service.getTaxCrud(bean));
-        salesView.setOrderCrud(service.getOrderCrud(bean));
-        salesView.setPaymentCrud(paymentCrud);
-        salesView.setProductCrud(productCrud);
-        salesView.setTaxCrud(service.getTaxCrud(bean));
-        salesView.setPrintDocGenerator(new PrintDocGeneratorImpl(annexService, bean));
-
-        leftLayout.setCaption(bean.getName());
-
-        header.getSettingsDialog().setService(service);
-        header.getSettingsDialog().setDatasource(newDataSource);
-    }
-
-
-    public Service getService() {
-        return service;
-    }
-    
     private void setContent(String name) {
         Component c = null;
         if("ORDERS".equals(name)) {

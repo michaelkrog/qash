@@ -1,16 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package dk.apaq.shopsystem.ui.util;
+package dk.apaq.shopsystem.ui.common;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Field;
-import com.vaadin.ui.Field.ValueChangeEvent;
 
 /**
- *
+ * A Utilty class that enabled a list of fields depending on the state of a CheckBox.
  * @author michaelzachariassenkrog
  */
 public class FieldEnabler {
@@ -24,6 +19,7 @@ public class FieldEnabler {
 
         this.checkBox.addListener(new Field.ValueChangeListener() {
 
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 for (Field field : FieldEnabler.this.fields) {
                     field.setEnabled(FieldEnabler.this.checkBox.booleanValue());

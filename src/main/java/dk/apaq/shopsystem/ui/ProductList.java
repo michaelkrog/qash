@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.ui;
 
+import dk.apaq.shopsystem.ui.common.CommonDialog;
 import com.vaadin.data.Buffered;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
@@ -29,8 +30,8 @@ import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.ui.data.ProductContainer;
 import dk.apaq.shopsystem.ui.data.util.NumberColumnGenerator;
-import dk.apaq.shopsystem.ui.util.ProductFilterGenerator;
-import dk.apaq.shopsystem.ui.util.Spacer;
+import dk.apaq.shopsystem.ui.common.ProductFilterGenerator;
+import dk.apaq.shopsystem.ui.common.Spacer;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
 import dk.apaq.vaadin.addon.crudcontainer.HasBean;

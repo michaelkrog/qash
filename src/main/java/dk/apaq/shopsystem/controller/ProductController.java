@@ -4,6 +4,7 @@ import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,9 +41,12 @@ public class ProductController implements ApplicationContextAware {
         //Get the organisation
         Organisation org = website.getOrganisation();
 
+        //Get relevant service
+        OrganisationService orgService = service.getOrganisationService(org);
+
         //Get the product owned by the organisation
-        Crud<String, Product> productCrud = service.getProductCrud(org);
-        Product product = productCrud.read(Id);
+        Crud<String, Product> products = orgService.getProducts();
+        Product product = products.read(Id);
 
         //Build output
         ModelAndView mav = new ModelAndView();

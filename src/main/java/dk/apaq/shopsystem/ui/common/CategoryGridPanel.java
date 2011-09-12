@@ -1,27 +1,21 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-package dk.apaq.shopsystem.ui.util;
+package dk.apaq.shopsystem.ui.common;
 
 import com.vaadin.terminal.Resource;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Embedded;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.Reindeer;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Generates a Grid of categorized Buttons. Each button is linked to a component that will be shown in place of the
+ * grid when clicked.
  *
+ * This is a layout similar to the one used by Gnome 3 and Mac OS for System Settings.
  * @author michaelzachariassenkrog
  */
 public class CategoryGridPanel extends CustomComponent  {
@@ -33,6 +27,9 @@ public class CategoryGridPanel extends CustomComponent  {
     private final Map<Category, Panel> categoryMap = new HashMap<Category, Panel>();
     private final IconClickHandler clickHandler = new IconClickHandler();
 
+    /**
+     * Category used within the panel.
+     */
     public class Category {
         private final String name;
 
@@ -45,8 +42,12 @@ public class CategoryGridPanel extends CustomComponent  {
         }
     }
 
+    /**
+     * Handler for Icon Clicks
+     */
     private class IconClickHandler implements Button.ClickListener {
 
+        @Override
         public void buttonClick(ClickEvent event) {
             Button button = event.getButton();
             Entry entry = (Entry) button.getData();
@@ -55,6 +56,9 @@ public class CategoryGridPanel extends CustomComponent  {
 
     }
 
+    /**
+     * An entry in the Grid.
+     */
     private class Entry {
         private final Resource resource;
         private final String text;
@@ -79,6 +83,9 @@ public class CategoryGridPanel extends CustomComponent  {
         }
     }
 
+    /**
+     * Creates a new instance of the Grid.
+     */
     public CategoryGridPanel() {
         outerIconLayout.setWidth(100, UNITS_PERCENTAGE);
         layout.setSizeFull();
@@ -87,6 +94,11 @@ public class CategoryGridPanel extends CustomComponent  {
         setStyleName("v-categorygridpanel");
     }
 
+    /**
+     * Adds a new Category.
+     * @param name The name of the Category.
+     * @return the new Category.
+     */
     public Category addCategory(String name) {
         Category cat = new Category(name);
         Panel panel = createPanel(name, outerIconLayout.getComponentCount() % 2 == 1);
@@ -96,7 +108,14 @@ public class CategoryGridPanel extends CustomComponent  {
         categoryMap.put(cat, panel);
         return cat;
     }
-    
+
+    /**
+     * Adds a new entry.
+     * @param category The category to place the button within.
+     * @param resource The resource for the icon.
+     * @param text The text for the icon.
+     * @param component The component to link the button with.
+     */
     public void addComponent(Category category, Resource resource, String text, Component component) {
         Panel panel = categoryMap.get(category);
         Entry entry = new Entry(resource, text, component);
@@ -110,9 +129,14 @@ public class CategoryGridPanel extends CustomComponent  {
         entryMap.put(component, entry);
     }
 
+    /**
+     * Removes an entry.
+     * @param component
+     */
     public void remove(Component component) {
         entryMap.remove(component);
     }
+
 
     private Panel createPanel(String caption, boolean odd) {
         Panel panel = new Panel(caption);
@@ -131,6 +155,9 @@ public class CategoryGridPanel extends CustomComponent  {
         layout.addComponent(component);
     }
 
+    /**
+     * Programaticly force the Panel to show the Grid of buttons instead of a selected component.
+     */
     public void showGrid() {
         if(layout.getComponent(0) == outerIconLayout) {
             return;

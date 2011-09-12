@@ -19,7 +19,7 @@ import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.Select;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.entity.Tax;
-import dk.apaq.shopsystem.ui.util.Spacer;
+import dk.apaq.shopsystem.ui.common.Spacer;
 import dk.apaq.shopsystem.util.CurrencyUtil;
 import java.util.Currency;
 import java.util.List;

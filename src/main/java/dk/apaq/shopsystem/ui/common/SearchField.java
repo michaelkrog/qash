@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.common;
 
 import com.vaadin.data.Container;
 import com.vaadin.terminal.PaintException;

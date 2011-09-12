@@ -4,6 +4,7 @@ import dk.apaq.crud.Crud;
 import dk.apaq.crud.Crud.Complete;
 import dk.apaq.crud.Crud.Editable;
 import dk.apaq.crud.CrudNotifier;
+import dk.apaq.shopsystem.entity.AbstractUser;
 import dk.apaq.shopsystem.entity.Category;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Organisation;
@@ -113,8 +114,8 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
 
     @Override
-    public Complete<String, User> getUsers() {
-        return getGenericContentCrud(User.class);
+    public Complete<String, ? extends User> getUsers() {
+        return getGenericContentCrud(AbstractUser.class);
     }
 
     @Override

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package dk.apaq.shopsystem.ui;
 
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
@@ -11,7 +6,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 
 /**
- *
+ * Class for accessiing Spring ApplicationContext from within Vaadin.
  * @author michaelzachariassenkrog
  */
 public class VaadinSpringHelper {

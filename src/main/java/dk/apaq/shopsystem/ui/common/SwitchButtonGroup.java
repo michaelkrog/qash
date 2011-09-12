@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui.util;
+package dk.apaq.shopsystem.ui.common;
 
 import com.vaadin.terminal.Resource;
 import com.vaadin.ui.Button;

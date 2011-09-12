@@ -23,7 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.ui.data.util.CurrencyAmountFormatter;
 import dk.apaq.shopsystem.ui.data.util.CurrencyAmountValidator;
-import dk.apaq.shopsystem.ui.util.FieldEnabler;
+import dk.apaq.shopsystem.ui.common.FieldEnabler;
 import dk.apaq.vaadin.addon.crudcontainer.HasBean;
 
 /**

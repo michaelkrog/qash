@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui.util;
+package dk.apaq.shopsystem.ui.common;
 
 import com.vaadin.Application;
 import com.vaadin.ui.Component;

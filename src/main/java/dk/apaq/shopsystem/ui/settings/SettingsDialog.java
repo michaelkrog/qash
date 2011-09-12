@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.ui.settings;
 
 import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -10,10 +11,12 @@ import com.vaadin.ui.Window;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Tax;
+import dk.apaq.shopsystem.entity.User;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.Service;
 import dk.apaq.shopsystem.ui.ShopSystemTheme;
-import dk.apaq.shopsystem.ui.util.CategoryGridPanel;
-import dk.apaq.shopsystem.ui.util.Spacer;
+import dk.apaq.shopsystem.ui.common.CategoryGridPanel;
+import dk.apaq.shopsystem.ui.common.Spacer;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import dk.apaq.vaadin.addon.crudcontainer.HasBean;
 
@@ -34,7 +37,7 @@ public class SettingsDialog extends Window {
     private final UserManagerPanel userManagerPanel = new UserManagerPanel();
     //private final PrinterSettingPanel printerSettingPanel = new PrinterSettingPanel();
     private Item datasource;
-    private Service service;
+    private OrganisationService service;
 
     public SettingsDialog() {
         
@@ -77,22 +80,22 @@ public class SettingsDialog extends Window {
         });
     }
 
-    public void setService(Service service) {
+    public void setService(OrganisationService service) {
         this.service = service;
     }
 
     public void setDatasource(Item datasource) {
         this.datasource = datasource;
-        Organisation org = ((HasBean<Organisation>)datasource).getBean();
+        Organisation org = getOrganisationFromItem(datasource);
         //Container c = new CrudContainer(this.service.getShopCrud(), Shop.class);
         //Item shopItem = c.getItem(shop.getId());
         organisationForm.setItemDataSource(datasource);
         //receiptForm.setItemDataSource(datasource);
 
-        currencyAndTaxPanel.setContainerDataSource(new CrudContainer(service.getTaxCrud(org), Tax.class));
+        currencyAndTaxPanel.setContainerDataSource(new CrudContainer(service.getTaxes(), Tax.class));
         currencyAndTaxPanel.setOrganisationDataSource(datasource);
         
-        userManagerPanel.setContainerDataSource(new CrudContainer(service.getSystemUserCrud(), SystemUser.class));
+        userManagerPanel.setContainerDataSource(new CrudContainer(service.getUsers(), User.class));
         gridPanel.showGrid();
     }
 
@@ -101,5 +104,16 @@ public class SettingsDialog extends Window {
         gridPanel.showGrid();
     }
 
+    private Organisation getOrganisationFromItem(Item item) {
+        if(item instanceof HasBean) {
+            return ((HasBean<Organisation>)item).getBean();
+        }
+
+        if(item instanceof BeanItem) {
+            return ((BeanItem<Organisation>)item).getBean();
+        }
+
+        return null;
+    }
 
 }

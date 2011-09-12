@@ -28,7 +28,7 @@ import dk.apaq.filter.sort.SortDirection;
 import dk.apaq.filter.sort.Sorter;
 import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.ui.data.util.CurrencyColumnGenerator;
-import dk.apaq.shopsystem.ui.util.Spacer;
+import dk.apaq.shopsystem.ui.common.Spacer;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
 import java.text.DateFormat;
 import java.util.Date;

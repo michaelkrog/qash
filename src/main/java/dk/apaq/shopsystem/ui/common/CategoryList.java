@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.common;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -10,7 +10,7 @@ import com.vaadin.ui.VerticalLayout;
 import java.lang.reflect.Method;
 
 /**
- *
+ * A list of categorized items. This can be made to imitate the look of the iTunes navigation bar.
  * @author michael
  */
 public class CategoryList extends CustomComponent {
@@ -19,6 +19,9 @@ public class CategoryList extends CustomComponent {
     private ButtonListener buttonListener = new ButtonListener();
     private Button lastSelected = null;
 
+    /**
+     * Listener for button clicks.
+     */
     private class ButtonListener implements Button.ClickListener {
 
         @Override
@@ -27,21 +30,37 @@ public class CategoryList extends CustomComponent {
         }
     }
 
+    /**
+     * Creates a new instance of CategoryList.
+     */
     public CategoryList() {
         setCompositionRoot(layout);
 
         setStyleName("v-categorylist");
     }
 
+    /**
+     * Adds a new category.
+     * @param name The name of the category.
+     */
     public void addCategory(String name) {
         Label label = new Label(name);
         layout.addComponent(label);
     }
 
+    /**
+     * Adds a new item to the last added category.
+     * @param name The caption of the new item. The caption will also be the data of the item.
+     */
     public void addItem(String name) {
         this.addItem(name, name);
     }
 
+    /**
+     * Adds a new item to the last added category.
+     * @param name The caption of the new item.
+     * @param data The data of the new item.
+     */
     public void addItem(String name, String data) {
         Button button = new NativeButton(name);
         button.setData(data);
@@ -50,12 +69,15 @@ public class CategoryList extends CustomComponent {
         layout.addComponent(button);
     }
 
-    public void select(String name) {
+    /**
+     * Selects the item which has the specified data.
+     */
+    public void select(String data) {
         for (int i = 0; i < layout.getComponentCount(); i++) {
             Component c = layout.getComponent(i);
             if (c instanceof Button) {
                 Button b = (Button) c;
-                if (name.equals(b.getData())) {
+                if (data.equals(b.getData())) {
                     changeSelection(b);
                     return;
                 }
@@ -63,6 +85,9 @@ public class CategoryList extends CustomComponent {
         }
     }
 
+    /**
+     * Adds a new <code>SelectListener</code> to the list.
+     */
     public void addListener(SelectListener listener) {
         addListener(SelectEvent.class, listener, SELECT_METHOD);
     }
@@ -82,6 +107,9 @@ public class CategoryList extends CustomComponent {
     }
 
     /**Event Handling **/
+    /**
+     * The listener used for the <code>CategoryList</code> events. 
+     */
     public interface SelectListener {
 
         public void onSelect(SelectEvent event);
@@ -96,6 +124,11 @@ public class CategoryList extends CustomComponent {
             this.selection = selection;
         }
 
+        /**
+         * Returns the selection performed in the CategoryList. This string returned is the data
+         * specified for the item in the CategoryList.
+         * @return
+         */
         public String getSelection() {
             return selection;
         }

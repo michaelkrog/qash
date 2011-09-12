@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui.util;
+package dk.apaq.shopsystem.ui.common;
 
 import dk.apaq.filter.Filter;
 import dk.apaq.filter.FilterGenerator;

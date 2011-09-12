@@ -18,10 +18,10 @@
             <param-name>application</param-name>
             <param-value>dk.apaq.shopsystem.ui.AdminApplication</param-value>
         </init-param>
-        <!--<init-param>
+        <init-param>
             <param-name>widgetset</param-name>
             <param-value>dk.apaq.shopsystem.widgetset</param-value>
-        </init-param>-->
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <listener>

@@ -19,7 +19,7 @@ import com.vaadin.ui.themes.Reindeer;
 
 import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.ui.data.util.CurrencyAmountFormatter;
-import dk.apaq.shopsystem.ui.util.SwitchButtonGroup;
+import dk.apaq.shopsystem.ui.common.SwitchButtonGroup;
 import java.text.NumberFormat;
 
 /**

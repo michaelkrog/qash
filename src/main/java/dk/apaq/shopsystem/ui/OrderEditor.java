@@ -1,5 +1,7 @@
 package dk.apaq.shopsystem.ui;
 
+import dk.apaq.shopsystem.ui.common.SearchField;
+import dk.apaq.shopsystem.ui.common.CommonDialog;
 import dk.apaq.shopsystem.ui.print.PrintDocGenerator;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.vaadin.data.Container.ItemSetChangeEvent;
@@ -57,8 +59,8 @@ import dk.apaq.shopsystem.ui.data.util.NumberFormatter;
 import dk.apaq.shopsystem.ui.data.util.NumberValidator;
 import dk.apaq.shopsystem.ui.data.util.PercentageFormatter;
 import dk.apaq.shopsystem.ui.data.util.PercentageValidator;
-import dk.apaq.shopsystem.ui.util.ProductFilterGenerator;
-import dk.apaq.shopsystem.ui.util.SystemSettings;
+import dk.apaq.shopsystem.ui.common.ProductFilterGenerator;
+import dk.apaq.shopsystem.ui.common.SystemSettings;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
 import dk.apaq.vaadin.addon.crudcontainer.HasBean;
 import java.text.DateFormat;
