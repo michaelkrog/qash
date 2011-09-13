@@ -12,6 +12,7 @@ import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.User;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.crud.UserCrud;
+import org.apache.commons.vfs2.FileSystem;
 
 /**
  *
@@ -31,4 +32,6 @@ public interface OrganisationService {
     Crud.Complete<String, Product> getProducts();
     Crud.Editable<String, Tax> getTaxes();
     Crud.Complete<String, Payment> getPayments();
+
+    FileSystem getFileSystem();
 }

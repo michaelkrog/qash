@@ -11,6 +11,7 @@ import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
+import org.apache.commons.vfs2.FileSystem;
 
 /**
  *
@@ -22,6 +23,8 @@ public interface Service {
     Crud.Complete<String, SystemUser> getSystemUserCrud();
     OrganisationService getOrganisationService(Organisation org);
 
+    FileSystem getFileSystem();
+    
     @Deprecated
     Crud.Editable<String, Store> getStoreCrud(Organisation organisation);
     @Deprecated

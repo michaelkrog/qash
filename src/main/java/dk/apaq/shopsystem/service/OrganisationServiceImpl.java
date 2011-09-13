@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.apache.commons.vfs2.FileSystem;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -123,6 +124,12 @@ public class OrganisationServiceImpl implements OrganisationService, Application
             ((CrudNotifier)userCrud).addListener(new SecurityHandler.ContentSecurity(organisation));
         }
         return userCrud;
+    }
+
+    @Override
+    public FileSystem getFileSystem() {
+        //Must create a filesystem for this organisation using Commons VFS and a local File Folder.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

@@ -14,6 +14,7 @@ import dk.apaq.shopsystem.entity.Tax;
 import java.util.Map;
 import java.util.WeakHashMap;
 import javax.persistence.EntityManager;
+import org.apache.commons.vfs2.FileSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -109,6 +110,12 @@ public class ServiceImpl implements Service, ApplicationContextAware {
          return getOrganisationService(organisation).getWebsites();
     }
 
+    @Override
+    public FileSystem getFileSystem() {
+        //Must create a filesystem for the system using Commons VFS and a local File Folder.
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.context = applicationContext;
