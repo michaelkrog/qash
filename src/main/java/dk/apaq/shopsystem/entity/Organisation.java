@@ -1,11 +1,7 @@
 package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 
 /**
  * Specifies an organisation
@@ -13,31 +9,17 @@ import javax.persistence.OneToMany;
 @Entity
 public class Organisation extends AbstractEntity implements Serializable {
 
-    @OneToMany(fetch=FetchType.EAGER)
-    private List<SystemUser> users = new ArrayList<SystemUser>();
-
     private String name;
-
     private String company_reg;
-
     private String address;
-
     private String zip;
-    
     private String city;
-
     private String country = "US";
-    
     private String email;
-    
     private String telephone;
-
-    private long initialOrdernumber=1;
-
-    private long initialInvoiceNumber=1;
-
-    private int defaultPaymentPeriodInDays=8;
-
+    private long initialOrdernumber = 1;
+    private long initialInvoiceNumber = 1;
+    private int defaultPaymentPeriodInDays = 8;
     private String currency = "USD";
 
     public String getCountry() {
@@ -128,14 +110,6 @@ public class Organisation extends AbstractEntity implements Serializable {
         this.telephone = telephone;
     }
 
-    public List<SystemUser> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<SystemUser> users) {
-        this.users = users;
-    }
-
     public String getZip() {
         return zip;
     }
@@ -143,7 +117,4 @@ public class Organisation extends AbstractEntity implements Serializable {
     public void setZip(String zip) {
         this.zip = zip;
     }
-
-    
-
 }
