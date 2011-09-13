@@ -44,15 +44,10 @@ public class ContentCrud<T extends AbstractContentEntity> extends EntityManagerC
             LOG.error("Unable to create instance of class " + clazz.getCanonicalName(), ex);
             return null;
         }
+        entity.setOrganisation(organisation);
         return create(entity);
     }
 
-    @Override
-    @Transactional
-    public <E extends T> String create(E entity) {
-        entity.setOrganisation(organisation);
-        return super.create(entity);
-    }
 
     @Override
     public List<String> listIds(Filter filter, Sorter sorter, Limit limit) {

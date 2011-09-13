@@ -16,7 +16,6 @@ import dk.apaq.shopsystem.entity.User;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.crud.InventoryManager;
 import dk.apaq.shopsystem.service.crud.SecurityHandler;
-import dk.apaq.shopsystem.service.crud.UserCrud;
 import java.util.Map;
 import java.util.WeakHashMap;
 import javax.persistence.EntityManager;
@@ -35,7 +34,6 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     @PersistenceContext
     private EntityManager em;
 
-    private UserCrud userCrud = null;
     private final Map<Class, Complete<String, Order>> crudMap = new WeakHashMap<Class, Complete<String, Order>>();
     private ApplicationContext context;
     private String orgId;
@@ -117,13 +115,8 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
 
     @Override
-    public UserCrud getUsers() {
-        Organisation organisation = readOrganisation();
-        if(userCrud==null) {
-            userCrud =  (UserCrud) context.getBean("userCrud", em, organisation);
-            ((CrudNotifier)userCrud).addListener(new SecurityHandler.ContentSecurity(organisation));
-        }
-        return userCrud;
+    public Complete<String, ? extends User> getUsers() {
+        return getGenericContentCrud(AbstractUser.class);
     }
 
     @Override

@@ -161,16 +161,16 @@ public class SystemUserCrudTest {
             
         for (int i = 0; i < 10; i++) {
             SystemUser account = crud.read(crud.create());
-            account.setName("SystemUserCrudTest_ " +Integer.toString(i));
-            account.setEmail(i + "@systemusercrudtest.com");
+            account.setName(Integer.toString(i));
+            account.setEmail(i + "@gmail.com");
             service.getSystemUserCrud().update(account);
         }
 
-        Filter filter = new CompareFilter("name", "SystemUserCrudTest_ 5", CompareFilter.CompareType.Equals);
+        Filter filter = new CompareFilter("name", "5", CompareFilter.CompareType.Equals);
         List<String> idlist = service.getSystemUserCrud().listIds(filter, null, null);
         assertEquals(1, idlist.size());
 
-        filter = new LikeFilter("email", "*@systemusercrudtest.com");
+        filter = new LikeFilter("email", "*@gmail.com");
         idlist = service.getSystemUserCrud().listIds(filter, null, null);
         assertEquals(10, idlist.size());
 
