@@ -15,10 +15,12 @@ public class Website extends AbstractContentEntity implements Serializable {
 
     @OneToMany
     private List<Domain> domains = new ArrayList<Domain>();
-    @OneToMany
+    
+    /*@OneToMany
     private List<Template> templates = new ArrayList();
     @OneToMany
-    private List<Module> modules = new ArrayList<Module>();
+    private List<Module> modules = new ArrayList<Module>();*/
+    
     @OneToMany
     private List<Page> pages = new ArrayList<Page>();
     private String name;
@@ -33,13 +35,13 @@ public class Website extends AbstractContentEntity implements Serializable {
         this.domains = domains;
     }
 
-    public List<Module> getModules() {
+    /*public List<Module> getModules() {
         return modules;
     }
 
     public void setModules(List<Module> modules) {
         this.modules = modules;
-    }
+    }*/
 
     public String getName() {
         return name;
@@ -57,13 +59,13 @@ public class Website extends AbstractContentEntity implements Serializable {
         this.pages = pages;
     }
 
-    public List<Template> getTemplates() {
+    /*public List<Template> getTemplates() {
         return templates;
     }
 
     public void setTemplates(List<Template> templates) {
         this.templates = templates;
-    }
+    }*/
 
     public String getTracking_code() {
         return tracking_code;
