@@ -4,7 +4,6 @@
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <class>dk.apaq.shopsystem.entity.Category</class>
     <class>dk.apaq.shopsystem.entity.Domain</class>
-    <class>dk.apaq.shopsystem.entity.Module</class>
     <class>dk.apaq.shopsystem.entity.Order</class>
     <class>dk.apaq.shopsystem.entity.OrderLine</class>
     <class>dk.apaq.shopsystem.entity.OrderLineTax</class>
@@ -15,8 +14,8 @@
     <class>dk.apaq.shopsystem.entity.Sequence</class>
     <class>dk.apaq.shopsystem.entity.Store</class>
     <class>dk.apaq.shopsystem.entity.SystemUser</class>
+    <class>dk.apaq.shopsystem.entity.SystemUserReference</class>
     <class>dk.apaq.shopsystem.entity.Tax</class>
-    <class>dk.apaq.shopsystem.entity.Template</class>
     <class>dk.apaq.shopsystem.entity.Website</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>

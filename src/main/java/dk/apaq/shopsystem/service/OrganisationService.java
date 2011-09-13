@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.service;
 
 import dk.apaq.crud.Crud;
+import dk.apaq.shopsystem.entity.AbstractUser;
 import dk.apaq.shopsystem.entity.Category;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Organisation;
@@ -10,6 +11,7 @@ import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.User;
 import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.service.crud.UserCrud;
 
 /**
  *
@@ -20,7 +22,7 @@ public interface OrganisationService {
     public Organisation readOrganisation();
     public void updateOrganisation(Organisation organisation);
 
-    Crud.Complete<String, ? extends User> getUsers();
+    UserCrud getUsers();
 
     Crud.Editable<String, Store> getStores();
     Crud.Complete<String, Category> getCategories();

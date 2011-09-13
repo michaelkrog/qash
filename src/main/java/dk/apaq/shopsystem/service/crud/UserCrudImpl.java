@@ -12,46 +12,57 @@ import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.limit.Limit;
 import dk.apaq.filter.sort.Sorter;
 import dk.apaq.shopsystem.entity.AbstractContentEntity;
+import dk.apaq.shopsystem.entity.AbstractUser;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.SystemUser;
+import dk.apaq.shopsystem.entity.SystemUserReference;
 import javax.persistence.EntityManager;
+import javax.transaction.NotSupportedException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author michaelzachariassenkrog
  */
-public class ContentCrud<T extends AbstractContentEntity> extends EntityManagerCrudForSpring<String, T> {
+public class UserCrudImpl extends EntityManagerCrudForSpring<String, AbstractUser> implements UserCrud {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ContentCrud.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserCrudImpl.class);
     protected final Organisation organisation;
     private final Filter orgFilter;
-    private final Class<T> clazz;
     
-    public ContentCrud(EntityManager em, Organisation organisation, Class<T> clazz) {
-        super(em, clazz);
+    public UserCrudImpl(EntityManager em, Organisation organisation) {
+        super(em, AbstractUser.class);
         this.organisation = organisation;
-        this.clazz = clazz;
         this.orgFilter = new CompareFilter("organisation", organisation, CompareFilter.CompareType.Equals);
     }
 
     @Override
     @Transactional
     public String create() {
-        T entity;
-        try {
-            entity = clazz.newInstance();
-        } catch (Exception ex) {
-            LOG.error("Unable to create instance of class " + clazz.getCanonicalName(), ex);
-            return null;
-        }
-        return create(entity);
+        throw new UnsupportedOperationException("No supported.");
     }
 
     @Override
     @Transactional
-    public <E extends T> String create(E entity) {
-        entity.setOrganisation(organisation);
-        return super.create(entity);
+    public  String create(AbstractUser entity) {
+        throw new UnsupportedOperationException("No supported.");
+    }
+
+    @Transactional
+    @Override
+    public  String createSystemUser() {
+        SystemUser user = new SystemUser();
+        user.setOrganisation(organisation);
+        return super.create(user);
+    }
+
+    @Transactional
+    @Override
+    public  String createSystemUserReference(SystemUser user) {
+        SystemUserReference userref = new SystemUserReference();
+        userref.setOrganisation(organisation);
+        userref.setUser(user);
+        return super.create(userref);
     }
 
     @Override
