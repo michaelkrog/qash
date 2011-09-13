@@ -46,6 +46,10 @@
         <property name="transactionsHandledByProvider" value="false"/>
     </bean>
 
+    <bean id="userCrud" class="dk.apaq.shopsystem.service.crud.UserCrudImpl" scope="prototype">
+        <property name="transactionsHandledByProvider" value="false"/>
+    </bean>
+
     <bean id="inventoryManager" class="dk.apaq.shopsystem.service.crud.ProductCrudInventoryManager" scope="prototype"/>
 
     <bean id="service" class="dk.apaq.shopsystem.service.ServiceImpl"/>

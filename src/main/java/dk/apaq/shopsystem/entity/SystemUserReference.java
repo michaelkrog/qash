@@ -1,13 +1,33 @@
 package dk.apaq.shopsystem.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 /**
  * Defines an Organisations reference to a SystemUser which it does not own. It is used when
  * an existing user needs access to the organisation. This reference describes the roles the
  * user has for this reference.
  */
+@Entity
 public class SystemUserReference extends AbstractUser {
 
+    @OneToOne
     private SystemUser user;
+    
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<String> roles = new ArrayList<String>();
+
+    @Override
+    public List<String> getRoles() {
+        return roles;
+    }
 
     public SystemUser getUser() {
         return user;
@@ -46,5 +66,4 @@ public class SystemUserReference extends AbstractUser {
     public boolean isLocked() {
         return user == null ? false : user.isLocked();
     }
-    
 }

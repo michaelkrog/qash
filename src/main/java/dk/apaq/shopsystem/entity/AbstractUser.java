@@ -19,14 +19,5 @@ import org.hibernate.annotations.FetchMode;
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public abstract class AbstractUser extends AbstractContentEntity implements User, Serializable {
 
-    @ElementCollection(fetch=FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<String> roles = new ArrayList<String>();
-
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    
 
 }

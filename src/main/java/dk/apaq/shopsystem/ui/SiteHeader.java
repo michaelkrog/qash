@@ -43,24 +43,7 @@ public class SiteHeader extends CustomComponent {
 
     public SiteHeader() {
 
-        //logo.setWidth(135, UNITS_PIXELS);
-       
-        //layout.addComponent(logo);
-        //layout.addComponent(linkColumn1);
-        //layout.addComponent(linkColumn2);
-        //layout.addComponent(linkColumn3);
-        //layout.addComponent(linkContact);
 
-        //linkColumn1.addComponent(linkAccount);
-        //linkColumn1.addComponent(linkStores);
-
-        //linkColumn2.addComponent(linkOptions);
-        //linkColumn2.addComponent(linkImportExport);
-
-        //linkColumn3.addComponent(linkLogout);
-        //linkColumn3.addComponent(linkHelp);
-
-        //layout.setStyleName("ge-header");
         layout.addStyleName("toolbar-invert");
         layout.setWidth("100%");
         
@@ -89,18 +72,8 @@ public class SiteHeader extends CustomComponent {
         b.setIcon(new ThemeResource("../runo/icons/16/email.png"));
         left.addComponent(b);
         
+        left.addComponent(linkOptions);
         
-        //logo.setStyleName("ge-logo");
-        /*linkColumn1.setStyleName("ge-userinfo");
-        linkColumn2.setStyleName("ge-userinfo");
-        linkColumn3.setStyleName("ge-userinfo");
-        linkContact.setStyleName("ge-phone");
-
-        linkHelp.setStyleName(Reindeer.BUTTON_LINK);
-        linkOptions.setStyleName(Reindeer.BUTTON_LINK);
-        linkImportExport.setStyleName(Reindeer.BUTTON_LINK);
-
-        setStyleName("ge-header-container");*/
         setCompositionRoot(layout);
 
         logo.addListener(new ClickListener() {
