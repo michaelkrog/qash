@@ -25,6 +25,7 @@ public class AdminPanel extends CustomComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminPanel.class);
     private final SalesView salesView = new SalesView();
+    private final ConstructionList constructionList = new ConstructionList();
     private final ProductList stockWidget = new ProductList();
     private final SiteHeader header;
     private final VerticalLayout outerLayout = new VerticalLayout();
@@ -67,6 +68,7 @@ public class AdminPanel extends CustomComponent {
         categoryList.addItem("Produkter", "STOCK");
         categoryList.addCategory("Web");
         categoryList.addItem("Sites", "WEBSITES");
+        categoryList.addItem("Martin byggeplads", "CONSTRUCTION");
         
         categoryList.setSizeFull();
         categoryList.addListener(listListener);
@@ -123,6 +125,10 @@ public class AdminPanel extends CustomComponent {
         
         if("STOCK".equals(name)) {
             c = stockWidget;
+        }
+        
+        if("CONSTRUCTION".equals(name)) {
+            c = constructionList;
         }
         
         if(c==null) {
