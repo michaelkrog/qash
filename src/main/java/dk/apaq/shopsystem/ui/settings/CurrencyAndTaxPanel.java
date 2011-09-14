@@ -17,10 +17,13 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.Select;
 import com.vaadin.ui.VerticalLayout;
+import dk.apaq.shopsystem.entity.Organisation;
 
 import dk.apaq.shopsystem.entity.Tax;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.ui.common.Spacer;
 import dk.apaq.shopsystem.util.CurrencyUtil;
+import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import java.util.Currency;
 import java.util.List;
 
@@ -28,7 +31,7 @@ import java.util.List;
  *
  * @author michaelzachariassenkrog
  */
-public class CurrencyAndTaxPanel extends CustomComponent implements Container.Editor {
+public class CurrencyAndTaxPanel extends CustomComponent {
 
     private final VerticalLayout outerLayout = new VerticalLayout();
     private final HorizontalLayout innerLayout = new HorizontalLayout();
@@ -50,6 +53,7 @@ public class CurrencyAndTaxPanel extends CustomComponent implements Container.Ed
     private final CurrencyChangeListener currencyChangeListener = new CurrencyChangeListener();
     private final DefaultTaxChangeListener defaultTaxChangeListener = new DefaultTaxChangeListener();
     private Container taxContainer;
+    private OrganisationService service;
 
     private class TaxListSelectionHandler implements ValueChangeListener {
 
@@ -94,9 +98,9 @@ public class CurrencyAndTaxPanel extends CustomComponent implements Container.Ed
     private class CurrencyChangeListener implements ValueChangeListener {
 
         public void valueChange(ValueChangeEvent event) {
-            if (organisationItem instanceof Buffered) {
-                ((Buffered) organisationItem).commit();
-            }
+            Organisation org = service.readOrganisation();
+            org.setCurrency((String) event.getProperty().getValue());
+            service.updateOrganisation(org);
         }
     }
 
@@ -156,8 +160,7 @@ public class CurrencyAndTaxPanel extends CustomComponent implements Container.Ed
         innerLayout.setSizeFull();
         outerLayout.setSizeFull();
         setSizeFull();
-        ;
-
+        
         taxList.addListener(new TaxListSelectionHandler());
 
         defaultTaxSelect.setNewItemsAllowed(false);
@@ -201,6 +204,12 @@ public class CurrencyAndTaxPanel extends CustomComponent implements Container.Ed
 
     }
 
+    public void setService(OrganisationService service) {
+        this.service=service;
+    }
+
+    /*
+    @Deprecated
     public void setContainerDataSource(Container newDataSource) {
         defaultTaxSelect.removeListener(defaultTaxChangeListener);
 
@@ -221,17 +230,45 @@ public class CurrencyAndTaxPanel extends CustomComponent implements Container.Ed
 
     }
 
+    @Deprecated
     public Container getContainerDataSource() {
         return taxContainer;
     }
 
+    @Deprecated
     public void setOrganisationDataSource(Item shopItem) {
         this.organisationItem = shopItem;
 
         defaultCurrencySelect.removeListener(currencyChangeListener);
         defaultCurrencySelect.setPropertyDataSource(shopItem.getItemProperty("currency"));
         defaultCurrencySelect.addListener(currencyChangeListener);
+    }*/
+
+    @Override
+    public void attach() {
+        defaultTaxSelect.removeListener(defaultTaxChangeListener);
+        defaultCurrencySelect.removeListener(currencyChangeListener);
+
+        this.taxContainer = new CrudContainer(service.getTaxes(), Tax.class);
+        taxList.setContainerDataSource(this.taxContainer);
+        defaultTaxSelect.setContainerDataSource(this.taxContainer);
+        lastDefaultTax = null;
+
+        defaultTaxSelect.setValue(getDefaultTaxId());
+
+        for (Object id : this.taxContainer.getItemIds()) {
+            Item item = this.taxContainer.getItem(id);
+            if (Boolean.TRUE.equals(item.getItemProperty("defaultEnabled").getValue())) {
+                defaultTaxSelect.setValue(id);
+            }
+        }
+        defaultTaxSelect.addListener(defaultTaxChangeListener);
+        defaultCurrencySelect.addListener(currencyChangeListener);
+
+        Organisation org = service.readOrganisation();
+        defaultCurrencySelect.setValue(org.getCurrency());
     }
+
 
     private Object getDefaultTaxId() {
         Container c = this.defaultTaxSelect.getContainerDataSource();

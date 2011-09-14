@@ -83,17 +83,14 @@ public class SettingsDialog extends Window {
     public void setService(OrganisationService service) {
         this.service = service;
         organisationForm.setService(service);
+        currencyAndTaxPanel.setService(service);
     }
 
     public void setDatasource(Item datasource) {
         this.datasource = datasource;
         Organisation org = getOrganisationFromItem(datasource);
-        //organisationForm.setItemDataSource(datasource);
         //receiptForm.setItemDataSource(datasource);
 
-        currencyAndTaxPanel.setContainerDataSource(new CrudContainer(service.getTaxes(), Tax.class));
-        currencyAndTaxPanel.setOrganisationDataSource(datasource);
-        
         userManagerPanel.setContainerDataSource(new CrudContainer(service.getUsers(), User.class));
         gridPanel.showGrid();
     }
