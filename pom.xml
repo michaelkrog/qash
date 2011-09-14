@@ -9,7 +9,6 @@
         
     <scm>
         <connection>scm:svn:https://subversion.assembla.com/svn/qash/trunk</connection>
-    <!--developerConnection>scm:svn:https://127.0.0.1/svn/my-project</developerConnection-->
         <url>https://subversion.assembla.com/svn/qash/trunk</url>
     </scm>
 

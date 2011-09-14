@@ -30,8 +30,11 @@ public class Page implements Serializable, BasicEntity {
     private String title;
     private String description;
     private String keywords;
+    
     @ManyToOne
     private Website website;
+    
+    
 
     public String getId() {
         return id;
