@@ -10,19 +10,30 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.ListSelect;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.Window.CloseEvent;
+import dk.apaq.shopsystem.entity.BaseUser;
+import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Tax;
+import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.service.crud.UserCrud;
+import dk.apaq.shopsystem.ui.VaadinServiceHolder;
+import dk.apaq.shopsystem.ui.common.CommonDialog;
 import dk.apaq.shopsystem.ui.common.Spacer;
+import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
 /**
  *
  * @author michael
  */
-public class UserManagerPanel extends CustomComponent implements Editor {
+public class UserManagerPanel extends CustomComponent {
 
     private final VerticalLayout outerLayout = new VerticalLayout();
     private final HorizontalLayout innerLayout = new HorizontalLayout();
@@ -30,11 +41,12 @@ public class UserManagerPanel extends CustomComponent implements Editor {
     private final VerticalLayout settingsWrapper = new VerticalLayout();
     private final Spacer settingsLayoutSpacer = new Spacer();
     private final Spacer defaultSettingsLayoutSpacer = new Spacer();
-    private final Table userList = new Table("Andre brugere");
+    private final ListSelect userList = new ListSelect();
     private final UserForm userForm = new UserForm();
     private final Button btnNewUser = new Button("New user");
     private final Button btnRemoveUser = new Button("Remove user");
     private Container userContainer;
+    private OrganisationService service;
 
     private class ListSelectionHandler implements ValueChangeListener {
 
@@ -48,6 +60,49 @@ public class UserManagerPanel extends CustomComponent implements Editor {
                 userForm.setItemDataSource(item);
             }
         }
+    }
+    
+    private class CreateUserWindow extends CustomComponent {
+
+        private GridLayout layout = new GridLayout(2, 4);
+        private Label lblDisplayName = new Label("Fulde navn:");
+        private Label lblName = new Label("Kontonavn");
+        private Label lblPassword = new Label("Adgangskode");
+        private Label lblPasswordRepeat = new Label("Bekræft");
+        private TextField txtDisplayName = new TextField();
+        private TextField txtName = new TextField();
+        private PasswordField txtPassword = new PasswordField();
+        private PasswordField txtPasswordRepeat = new PasswordField();
+        
+        public CreateUserWindow() {
+            layout.addComponent(lblDisplayName, 0, 0);
+            layout.addComponent(lblName, 0, 1);
+            layout.addComponent(lblPassword, 0, 2);
+            layout.addComponent(lblPasswordRepeat, 0, 3);
+            layout.addComponent(txtDisplayName, 1, 0);
+            layout.addComponent(txtName, 1, 1);
+            layout.addComponent(txtPassword, 1, 2);
+            layout.addComponent(txtPasswordRepeat, 1, 3);
+            
+            setCompositionRoot(layout);
+        }
+        
+        public String getDisplayName() {
+            return (String) txtDisplayName.getValue();
+        }
+        
+        public String getName() {
+            return (String) txtName.getValue();
+        }
+        
+        public String getPassword() {
+            return (String) txtPassword.getValue();
+        }
+        
+        public boolean isPasswordsEqual() {
+            return txtPassword.getValue().equals(txtPasswordRepeat.getValue());
+        }
+        
     }
 
     public UserManagerPanel() {
@@ -81,19 +136,16 @@ public class UserManagerPanel extends CustomComponent implements Editor {
         outerLayout.setSpacing(true);
         innerLayout.setSpacing(true);
 
-        userList.setWidth(200, UNITS_PIXELS);
-        userList.setHeight(100, UNITS_PERCENTAGE);
-        //userList.setNewItemsAllowed(false);
-        //userList.setNullSelectionAllowed(false);
-        //userList.setItemCaptionPropertyId("name");
+        userList.setNewItemsAllowed(false);
+        userList.setNullSelectionAllowed(false);
+        userList.setItemCaptionPropertyId("name");
         userList.setImmediate(true);
-        userList.setStyleName(Reindeer.TABLE_BORDERLESS);
-        userList.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_HIDDEN);
         userList.setContainerDataSource(userContainer);
 
         setCompositionRoot(outerLayout);
 
-
+        userList.setWidth(200, UNITS_PIXELS);
+        userList.setHeight(100, UNITS_PERCENTAGE);
         settingsWrapper.setSizeFull();
         innerLayout.setSizeFull();
         outerLayout.setSizeFull();
@@ -104,39 +156,45 @@ public class UserManagerPanel extends CustomComponent implements Editor {
         btnNewUser.addListener(new Button.ClickListener() {
 
             public void buttonClick(ClickEvent event) {
-                Object id = userContainer.addItem();
-                Item item = userContainer.getItem(id);
-                item.getItemProperty("name").setValue("Unnamed user");
-                if (item instanceof Buffered) {
-                    ((Buffered) item).commit();
-                }
-                userList.setValue(id);
+                final CreateUserWindow cuw = new CreateUserWindow();
+                final CommonDialog dialog = new CommonDialog("Opret ny bruger", cuw);
+                dialog.setModal(true);
+                dialog.setWidth(300, UNITS_PIXELS);
+                dialog.setButtonCaption(CommonDialog.ButtonType.Ok, "Opret bruger");
+                dialog.setButtonCaption(CommonDialog.ButtonType.Cancel, "Annuller");
+                getApplication().getMainWindow().addWindow(dialog);
+                dialog.addListener(new Window.CloseListener() {
+
+                    @Override
+                    public void windowClose(CloseEvent e) {
+                        if(dialog.getResult() == CommonDialog.ButtonType.Ok) {
+                            UserCrud users = service.getUsers();
+                            String id = users.createSystemUser();
+                            SystemUser user = (SystemUser) users.read(id);
+                            user.setDisplayname(cuw.getDisplayName());
+                            user.setName(cuw.getName());
+                            user.setPassword(cuw.getPassword());
+                            users.update(user);
+                        }
+                    }
+                });
             }
         });
 
         btnRemoveUser.addListener(new Button.ClickListener() {
 
             public void buttonClick(ClickEvent event) {
-                Object id = userList.getValue();
-                if (id == null) {
-                    return;
-                }
-                userContainer.removeItem(id);
+                String id = (String) userList.getValue();
+                service.getUsers().delete(id);
             }
         });
 
     }
 
-    public void setContainerDataSource(Container newDataSource) {
-
-        this.userContainer = newDataSource;
-        userList.setContainerDataSource(newDataSource);
-        userList.setVisibleColumns(new String[]{"displayname"});
-        
-    }
-
-    public Container getContainerDataSource() {
-        return userContainer;
+    @Override
+    public void attach() {
+        this.service = VaadinServiceHolder.getService(getApplication());
+        this.userList.setContainerDataSource(new CrudContainer(service.getUsers(), BaseUser.class));
     }
 
 

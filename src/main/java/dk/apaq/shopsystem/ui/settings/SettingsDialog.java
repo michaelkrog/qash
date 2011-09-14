@@ -88,10 +88,8 @@ public class SettingsDialog extends Window {
 
     public void setDatasource(Item datasource) {
         this.datasource = datasource;
-        Organisation org = getOrganisationFromItem(datasource);
         //receiptForm.setItemDataSource(datasource);
 
-        userManagerPanel.setContainerDataSource(new CrudContainer(service.getUsers(), User.class));
         gridPanel.showGrid();
     }
 
