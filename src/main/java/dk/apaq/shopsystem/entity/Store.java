@@ -1,17 +1,36 @@
 package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 
-import dk.apaq.crud.HasId;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Defines a physical store.
  *
  */
 @Entity
-public class Store extends AbstractContentEntity implements Serializable {
+public class Store implements Serializable, ContentEntity {
+
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    protected String id;
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateCreated = new Date();
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateChanged = new Date();
+
+    @ManyToOne
+    private Organisation organisation;
 
     private String name;
     private String road;
@@ -21,6 +40,39 @@ public class Store extends AbstractContentEntity implements Serializable {
     private String faxNo;
     private String email;
     private String countryCode = "US";
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date date) {
+        this.dateCreated = date;
+    }
+
+    public Date getDateChanged() {
+        return dateChanged;
+    }
+
+    public void setDateChanged(Date dateChanged) {
+        this.dateChanged = dateChanged;
+    }
+
+    @Override
+    public Organisation getOrganisation() {
+        return organisation;
+    }
+
+    public void setOrganisation(Organisation organisation) {
+        this.organisation = organisation;
+    }
 
     public String getCountryCode() {
         return countryCode;

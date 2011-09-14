@@ -1,20 +1,34 @@
 package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * A tax specified on an OrderLine.
  * @author michael
  */
 @Entity
-public class OrderLineTax extends AbstractEntity implements Serializable {
+public class OrderLineTax implements Serializable, BasicEntity {
+
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    protected String id;
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateCreated = new Date();
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateChanged = new Date();
 
     private String referenceId;
-
     private String name;
-
     private double rate;
 
     public OrderLineTax() {
@@ -30,6 +44,30 @@ public class OrderLineTax extends AbstractEntity implements Serializable {
         this(tax.getId(), tax.getName(), tax.getRate());
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date date) {
+        this.dateCreated = date;
+    }
+
+    public Date getDateChanged() {
+        return dateChanged;
+    }
+
+    public void setDateChanged(Date dateChanged) {
+        this.dateChanged = dateChanged;
+    }
+    
     public String getName() {
         return name;
     }

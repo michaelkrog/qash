@@ -11,13 +11,11 @@ import dk.apaq.filter.core.AndFilter;
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.limit.Limit;
 import dk.apaq.filter.sort.Sorter;
-import dk.apaq.shopsystem.entity.AbstractContentEntity;
 import dk.apaq.shopsystem.entity.BaseUser;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.SystemUserReference;
 import javax.persistence.EntityManager;
-import javax.transaction.NotSupportedException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

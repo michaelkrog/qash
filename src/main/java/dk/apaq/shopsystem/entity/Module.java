@@ -1,15 +1,11 @@
 package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 /**
  * Specifies a module for a web page.
  */
-@Entity
-@Table(name="ModuleModel")
-public class Module extends AbstractEntity implements Serializable {
+public class Module implements Serializable {
 
     private String name;
     private String description;

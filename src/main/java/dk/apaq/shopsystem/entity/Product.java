@@ -5,14 +5,32 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
-import dk.apaq.crud.HasId;
 import dk.apaq.shopsystem.util.TaxTool;
+import java.util.Date;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Specifies a product.
  */
 @Entity
-public class Product extends AbstractContentEntity implements Serializable {
+public class Product implements Serializable, ContentEntity {
+
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    protected String id;
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateCreated = new Date();
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateChanged = new Date();
+
+    @ManyToOne
+    private Organisation organisation;
 
     private String name;
     private String itemNo;
@@ -29,6 +47,39 @@ public class Product extends AbstractContentEntity implements Serializable {
     public Product() {
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date date) {
+        this.dateCreated = date;
+    }
+
+    public Date getDateChanged() {
+        return dateChanged;
+    }
+
+    public void setDateChanged(Date dateChanged) {
+        this.dateChanged = dateChanged;
+    }
+
+    @Override
+    public Organisation getOrganisation() {
+        return organisation;
+    }
+
+    public void setOrganisation(Organisation organisation) {
+        this.organisation = organisation;
+    }
+    
     public Category getCategory() {
         return category;
     }

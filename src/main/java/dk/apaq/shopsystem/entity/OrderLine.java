@@ -1,11 +1,16 @@
 package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * A line in an order. This is not the same as an item. A line may or may not reference the item being sold.
@@ -14,18 +19,25 @@ import javax.persistence.OneToOne;
  *
  */
 @Entity
-public class OrderLine extends AbstractEntity implements Serializable {
+public class OrderLine implements Serializable, BasicEntity {
 
     private static final int PERCENTAGEDIVIDE = 100;
- 
+
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    protected String id;
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateCreated = new Date();
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateChanged = new Date();
+
     private String title;
-    
     private String itemId;
-
     private String itemNo;
-
     private double quantity;
-    
     private double price;
 
     /*@Column(name="UNITTYPE")
@@ -51,6 +63,30 @@ public class OrderLine extends AbstractEntity implements Serializable {
         }
 
         return calculation;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date date) {
+        this.dateCreated = date;
+    }
+
+    public Date getDateChanged() {
+        return dateChanged;
+    }
+
+    public void setDateChanged(Date dateChanged) {
+        this.dateChanged = dateChanged;
     }
 
     public OrderLineTax getTax() {

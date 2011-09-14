@@ -1,8 +1,13 @@
 package dk.apaq.shopsystem.entity;
 
-import dk.apaq.crud.HasId;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * A tax that is imposed sales.
@@ -10,7 +15,21 @@ import javax.persistence.Entity;
  *
  */
 @Entity
-public class Tax extends AbstractContentEntity implements Serializable {
+public class Tax implements Serializable, ContentEntity {
+
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    protected String id;
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateCreated = new Date();
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateChanged = new Date();
+
+    @ManyToOne
+    private Organisation organisation;
 
     private String name;
     private double rate;
@@ -22,6 +41,39 @@ public class Tax extends AbstractContentEntity implements Serializable {
     public Tax(String name, double rate) {
         this.name = name;
         this.rate = rate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date date) {
+        this.dateCreated = date;
+    }
+
+    public Date getDateChanged() {
+        return dateChanged;
+    }
+
+    public void setDateChanged(Date dateChanged) {
+        this.dateChanged = dateChanged;
+    }
+
+    @Override
+    public Organisation getOrganisation() {
+        return organisation;
+    }
+
+    public void setOrganisation(Organisation organisation) {
+        this.organisation = organisation;
     }
 
     /**

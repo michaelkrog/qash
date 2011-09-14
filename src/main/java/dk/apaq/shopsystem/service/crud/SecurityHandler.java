@@ -3,7 +3,7 @@ package dk.apaq.shopsystem.service.crud;
 import dk.apaq.crud.CrudEvent.WithEntity;
 import dk.apaq.crud.CrudEvent.WithId;
 import dk.apaq.crud.core.BaseCrudListener;
-import dk.apaq.shopsystem.entity.AbstractContentEntity;
+import dk.apaq.shopsystem.entity.ContentEntity;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Organisation;
 import java.util.List;
@@ -128,7 +128,7 @@ public final class SecurityHandler {
         }
     }
 
-    public static class ContentSecurity<T extends AbstractContentEntity> extends BaseCrudListener<String, T> {
+    public static class ContentSecurity<T extends ContentEntity> extends BaseCrudListener<String, T> {
 
         private final Organisation organisation;
 

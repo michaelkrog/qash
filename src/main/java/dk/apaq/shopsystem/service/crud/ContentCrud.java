@@ -11,7 +11,7 @@ import dk.apaq.filter.core.AndFilter;
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.limit.Limit;
 import dk.apaq.filter.sort.Sorter;
-import dk.apaq.shopsystem.entity.AbstractContentEntity;
+import dk.apaq.shopsystem.entity.ContentEntity;
 import dk.apaq.shopsystem.entity.Organisation;
 import javax.persistence.EntityManager;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author michaelzachariassenkrog
  */
-public class ContentCrud<T extends AbstractContentEntity> extends EntityManagerCrudForSpring<String, T> {
+public class ContentCrud<T extends ContentEntity> extends EntityManagerCrudForSpring<String, T> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContentCrud.class);
     protected final Organisation organisation;

@@ -1,13 +1,29 @@
 package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Specifies an organisation
  */
 @Entity
-public class Organisation extends AbstractEntity implements Serializable {
+public class Organisation implements Serializable, BasicEntity {
+
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    protected String id;
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateCreated = new Date();
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateChanged = new Date();
 
     private String name;
     private String company_reg;
@@ -21,6 +37,30 @@ public class Organisation extends AbstractEntity implements Serializable {
     private long initialInvoiceNumber = 1;
     private int defaultPaymentPeriodInDays = 8;
     private String currency = "USD";
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date date) {
+        this.dateCreated = date;
+    }
+
+    public Date getDateChanged() {
+        return dateChanged;
+    }
+
+    public void setDateChanged(Date dateChanged) {
+        this.dateChanged = dateChanged;
+    }
 
     public String getCountry() {
         return country;
