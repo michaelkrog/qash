@@ -4,25 +4,19 @@ import com.vaadin.data.Buffered;
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.Editor;
 import com.vaadin.data.Item;
-import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.ListSelect;
-import com.vaadin.ui.Select;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.ui.common.Spacer;
-import dk.apaq.shopsystem.util.CurrencyUtil;
-import java.util.Currency;
-import java.util.List;
 
 /**
  *
@@ -36,7 +30,7 @@ public class UserManagerPanel extends CustomComponent implements Editor {
     private final VerticalLayout settingsWrapper = new VerticalLayout();
     private final Spacer settingsLayoutSpacer = new Spacer();
     private final Spacer defaultSettingsLayoutSpacer = new Spacer();
-    private final ListSelect userList = new ListSelect();
+    private final Table userList = new Table("Andre brugere");
     private final UserForm userForm = new UserForm();
     private final Button btnNewUser = new Button("New user");
     private final Button btnRemoveUser = new Button("Remove user");
@@ -87,16 +81,19 @@ public class UserManagerPanel extends CustomComponent implements Editor {
         outerLayout.setSpacing(true);
         innerLayout.setSpacing(true);
 
-        userList.setNewItemsAllowed(false);
-        userList.setNullSelectionAllowed(false);
-        userList.setItemCaptionPropertyId("name");
+        userList.setWidth(200, UNITS_PIXELS);
+        userList.setHeight(100, UNITS_PERCENTAGE);
+        //userList.setNewItemsAllowed(false);
+        //userList.setNullSelectionAllowed(false);
+        //userList.setItemCaptionPropertyId("name");
         userList.setImmediate(true);
+        userList.setStyleName(Reindeer.TABLE_BORDERLESS);
+        userList.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_HIDDEN);
         userList.setContainerDataSource(userContainer);
 
         setCompositionRoot(outerLayout);
 
-        userList.setWidth(200, UNITS_PIXELS);
-        userList.setHeight(100, UNITS_PERCENTAGE);
+
         settingsWrapper.setSizeFull();
         innerLayout.setSizeFull();
         outerLayout.setSizeFull();
@@ -134,7 +131,8 @@ public class UserManagerPanel extends CustomComponent implements Editor {
 
         this.userContainer = newDataSource;
         userList.setContainerDataSource(newDataSource);
-
+        userList.setVisibleColumns(new String[]{"displayname"});
+        
     }
 
     public Container getContainerDataSource() {
