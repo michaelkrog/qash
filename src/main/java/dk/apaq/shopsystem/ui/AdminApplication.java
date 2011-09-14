@@ -35,6 +35,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
     private Service service;
     private String organisationId;
     private AdminPanel adminPanel;
+    private SiteHeader siteHeader;
     //private CrudContainer<String, Organisation> orgContainer;
     //private final ICEPush pusher = new ICEPush();
     //private final CrudChangeHandler crudChangeHandler = new CrudChangeHandler();
@@ -90,13 +91,15 @@ public class AdminApplication extends Application implements HttpServletRequestL
     public void init() {
         LOG.debug("Initializing ShopSystem application");
         setLogoutURL("/");
-        //refresher.setRefreshInterval(60000);
+
+        //Load classes from spring
         ApplicationContext context = VaadinSpringHelper.getSpringContextFromVaadinContext(getContext());
         service = context.getBean("service", Service.class);
         annexService = context.getBean("annexService", AnnexService.class);
-        //orgContainer = new CrudContainer<String, Organisation>(service.getOrganisationCrud(), Organisation.class);
+        // Spring end
 
-        adminPanel = new AdminPanel(annexService);
+        siteHeader = new SimpleSiteHeader();
+        adminPanel = new AdminPanel(siteHeader, annexService);
 
         setTheme("shopsystem");
         Window mainWindow = new Window();

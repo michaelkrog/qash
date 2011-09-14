@@ -26,7 +26,7 @@ public class AdminPanel extends CustomComponent {
     private static final Logger LOG = LoggerFactory.getLogger(AdminPanel.class);
     private final SalesView salesView = new SalesView();
     private final ProductList stockWidget = new ProductList();
-    private final SiteHeader header = new SiteHeader();
+    private final SiteHeader header;
     private final VerticalLayout outerLayout = new VerticalLayout();
     private Panel leftLayout;
     private OrganisationService orgService;
@@ -45,8 +45,8 @@ public class AdminPanel extends CustomComponent {
         
     }
 
-    public AdminPanel(AnnexService annexService) {
-        
+    public AdminPanel(SiteHeader siteHeader, AnnexService annexService) {
+        this.header = siteHeader;
         this.annexService = annexService;
 
         stockWidget.setSizeFull();
