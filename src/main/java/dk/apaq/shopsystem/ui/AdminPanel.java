@@ -29,7 +29,6 @@ public class AdminPanel extends CustomComponent {
     private final SiteHeader header;
     private final VerticalLayout outerLayout = new VerticalLayout();
     private Panel leftLayout;
-    private OrganisationService orgService;
     private final AnnexService annexService;
     private BeanItem datasource;
     private VerticalLayout content = new VerticalLayout();
@@ -86,12 +85,16 @@ public class AdminPanel extends CustomComponent {
         
         setCompositionRoot(outerLayout);
         categoryList.select("ORDERS");
+        
+
     }
 
-    public void setOrganisationService(OrganisationService organisationService) {
-        this.orgService = organisationService;
+    @Override
+    public void attach() {
+        //This should be cleaned up
+        OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
 
-        Organisation org =this.orgService.readOrganisation();
+        Organisation org = orgService.readOrganisation();
         this.datasource = new BeanItem(org);
 
 
@@ -110,6 +113,8 @@ public class AdminPanel extends CustomComponent {
         header.getSettingsDialog().setDatasource(this.datasource);
     }
 
+    
+    
     private void setContent(String name) {
         Component c = null;
         if("ORDERS".equals(name)) {

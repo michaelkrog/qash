@@ -36,7 +36,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
     private String organisationId;
     private AdminPanel adminPanel;
     private SiteHeader siteHeader;
-    //private CrudContainer<String, Organisation> orgContainer;
+    private VerticalLayout outerLayout = new VerticalLayout();
     //private final ICEPush pusher = new ICEPush();
     //private final CrudChangeHandler crudChangeHandler = new CrudChangeHandler();
 
@@ -97,16 +97,16 @@ public class AdminApplication extends Application implements HttpServletRequestL
         service = context.getBean("service", Service.class);
         annexService = context.getBean("annexService", AnnexService.class);
         // Spring end
-
+        
         siteHeader = new SimpleSiteHeader();
-        adminPanel = new AdminPanel(siteHeader, annexService);
+        
 
         setTheme("shopsystem");
         Window mainWindow = new Window();
         setMainWindow(mainWindow);
 
         
-        VerticalLayout outerLayout = new VerticalLayout();
+        
         outerLayout.setMargin(false);
         outerLayout.setSizeFull();
         outerLayout.setStyleName(Reindeer.LAYOUT_WHITE);
@@ -114,14 +114,11 @@ public class AdminApplication extends Application implements HttpServletRequestL
         mainWindow.setContent(outerLayout);
 
         //outerLayout.addComponent(pusher);
-        outerLayout.addComponent(adminPanel);
-        outerLayout.setExpandRatio(adminPanel, 1.0F);
-        adminPanel.setSizeFull();
-
+        
         updateOrganisation();
 
         LOG.debug("ShopSystem application initialized");
-        
+       
     }
 
     /**
@@ -131,9 +128,24 @@ public class AdminApplication extends Application implements HttpServletRequestL
         if (service == null || this.organisationId == null) {
             return;
         }
+        
+        if(adminPanel != null) {
+            //Remove existing adminPanel from layout
+            outerLayout.removeComponent(adminPanel);
+        }
 
         Organisation org = service.getOrganisationCrud().read(organisationId);
-        adminPanel.setOrganisationService(service.getOrganisationService(org));
+        if(org==null) {
+            getMainWindow().showNotification("Organsiation with id "+organisationId+" does not exist.", Window.Notification.TYPE_ERROR_MESSAGE);
+            return;
+        }
+        
+        VaadinServiceHolder.setService(this, service.getOrganisationService(org));
+        adminPanel = new AdminPanel(siteHeader, annexService);
+        
+        outerLayout.addComponent(adminPanel);
+        outerLayout.setExpandRatio(adminPanel, 1.0F);
+        adminPanel.setSizeFull();
 
         /*
         Organisation shop = service.get.read(shopId);
