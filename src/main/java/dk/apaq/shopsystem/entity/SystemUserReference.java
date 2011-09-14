@@ -15,19 +15,10 @@ import org.hibernate.annotations.FetchMode;
  * user has for this reference.
  */
 @Entity
-public class SystemUserReference extends AbstractUser {
+public class SystemUserReference extends BaseUser {
 
     @OneToOne
     private SystemUser user;
-    
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<String> roles = new ArrayList<String>();
-
-    @Override
-    public List<String> getRoles() {
-        return roles;
-    }
 
     public SystemUser getUser() {
         return user;

@@ -11,7 +11,7 @@ import dk.apaq.filter.Filter;
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.core.ContainsFilter;
 import dk.apaq.filter.core.LikeFilter;
-import dk.apaq.shopsystem.entity.AbstractUser;
+import dk.apaq.shopsystem.entity.BaseUser;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.Service;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -166,16 +166,21 @@ public class OrganisationUserTest {
         //Create a systemuser through service
         SystemUser user = service.getSystemUserCrud().read(service.getSystemUserCrud().create());
         user.setName("michael");
+        user.getRoles().add("ROLE_ORGADMIN");
         service.getSystemUserCrud().update(user);
 
         //create af reference through orgservice.
         SystemUserReference userRef = (SystemUserReference) crud.read(crud.createSystemUserReference(user));
+        userRef.getRoles().add("ROLE_ORGUSER");
+        crud.update(userRef);
 
         //Check that both are ok and that the reference works.
         assertNotNull(user);
         assertNotNull(userRef);
         assertEquals("michael", user.getName());
         assertEquals("michael", userRef.getName());
+        assertEquals("ROLE_ORGADMIN", user.getRoles().get(0));
+        assertEquals("ROLE_ORGUSER", userRef.getRoles().get(0));
 
         //delete the reference
         crud.delete(userRef.getId());

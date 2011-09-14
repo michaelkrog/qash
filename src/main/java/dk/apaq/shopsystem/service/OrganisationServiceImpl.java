@@ -4,7 +4,7 @@ import dk.apaq.crud.Crud;
 import dk.apaq.crud.Crud.Complete;
 import dk.apaq.crud.Crud.Editable;
 import dk.apaq.crud.CrudNotifier;
-import dk.apaq.shopsystem.entity.AbstractUser;
+import dk.apaq.shopsystem.entity.BaseUser;
 import dk.apaq.shopsystem.entity.Category;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Organisation;

@@ -15,7 +15,7 @@ import org.hibernate.annotations.FetchMode;
  * @author michael
  */
 @Entity
-public class SystemUser extends AbstractUser implements dk.apaq.crud.HasId<String> {
+public class SystemUser extends BaseUser implements dk.apaq.crud.HasId<String> {
 
     private String displayname;
     private String email;
@@ -23,14 +23,6 @@ public class SystemUser extends AbstractUser implements dk.apaq.crud.HasId<Strin
     private String name;
     private String password;
     private boolean locked;
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<String> roles = new ArrayList<String>();
-
-    @Override
-    public List<String> getRoles() {
-        return roles;
-    }
 
     @Override
     public String getDisplayname() {
