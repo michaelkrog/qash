@@ -113,7 +113,8 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     @Override
     @Transactional
     public void updateOrganisation(Organisation org) {
-        em.persist(org);
+        em.merge(org);
+        em.flush();
     }
 
     @Override

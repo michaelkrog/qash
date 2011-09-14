@@ -3,6 +3,7 @@ package dk.apaq.shopsystem.ui.settings;
 import com.vaadin.data.Buffered;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -15,6 +16,8 @@ import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
+import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.util.Country;
 import java.util.Arrays;
 
@@ -32,6 +35,7 @@ public class OrganisationForm extends Form {
     private Label lblVatNo = new Label("VatNo.");
     //private Label lblBankAccount = new Label("Bank");
     private Button btnSave = new Button("Save");
+    private OrganisationService service;
 
 
 
@@ -129,9 +133,8 @@ public class OrganisationForm extends Form {
 
             public void buttonClick(ClickEvent event) {
                 commit();
-                if(getItemDataSource() instanceof Buffered) {
-                    ((Buffered)getItemDataSource()).commit();
-                }
+                Organisation org = ((BeanItem<Organisation>)getItemDataSource()).getBean();
+                service.updateOrganisation(org);
             }
         });
     }
@@ -170,12 +173,29 @@ public class OrganisationForm extends Form {
         }*/
     }
 
+    public void setService(OrganisationService service) {
+        this.service = service;
+        
+    }
+
     @Override
+    @Deprecated
     public void setItemDataSource(Item newDataSource) {
         super.setItemDataSource(newDataSource, Arrays.asList(new String[]{
                     "name", "address", "zip", "city", "country", "telephone",
                     "email", "company_reg"}));
     }
+
+    @Override
+    public void attach() {
+        if(service!=null) {
+            BeanItem<Organisation> item = new BeanItem<Organisation>(service.readOrganisation());
+            super.setItemDataSource(item, Arrays.asList(new String[]{
+                        "name", "address", "zip", "city", "country", "telephone",
+                        "email", "company_reg"}));
+        }
+    }
+
 
 
 }
