@@ -68,7 +68,7 @@ public class AdminPanel extends CustomComponent {
         categoryList.addItem("Produkter", "STOCK");
         categoryList.addCategory("Web");
         categoryList.addItem("Sites", "WEBSITES");
-        categoryList.addItem("Martin byggeplads", "CONSTRUCTION");
+        categoryList.addItem("Martins byggeplads", "CONSTRUCTION");
         
         categoryList.setSizeFull();
         categoryList.addListener(listListener);

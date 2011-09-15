@@ -1,10 +1,8 @@
 package dk.apaq.shopsystem.ui.common;
 
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.Reindeer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,19 +15,21 @@ import java.util.List;
 public class Grid extends CustomComponent {
     
     private Object Data;
-    private List header = new ArrayList();
-    private List field = new ArrayList();
-    //private String[] action;
+    private List Header = new ArrayList();
+    private List HeaderType = new ArrayList();
+    private List Field = new ArrayList();
     
     
-    public void addHeader(String value) {
-	this.header.add(value);
+    public void addHeader(String value, String type) {
+        this.Header.add(value);
+        this.HeaderType.add(value);
     }
 
-    public void addField(Object value) {
-	this.field.add(value);
+    public void addField(String value) {
+	this.Field.add(value);
     }
     
+    @Override
     public void setData(Object data) {
         this.Data = data;
     }
@@ -41,18 +41,36 @@ public class Grid extends CustomComponent {
         VerticalLayout content = new VerticalLayout();
         setStyleName("v-orderlist");
         
-        // Crete test label
-        Label label = new Label("Byggeplads!");
-        label.setStyleName(Reindeer.LABEL_H1);
-        
         // Create table
         Table table = new Table();
         table.setSizeFull();
+        table.setPageLength(50);
         //grid.setVisibleColumns(new Object[]{"delete", "number", "status", "dateChanged", "totalWithTax"});      
-        table.addItem(this.Data);
-        //table.addItem(new Object[] {"Nicolaus","Copernicus",new Integer(1473)}, new Integer(1));
         
-        // Insert grid into layout
+        if(this.Data == null) {
+            table.addContainerProperty("Information", String.class,  null);
+            table.addItem(new Object[] {"No data available!"}, new Integer(1));
+        }
+        else {
+            for (int i = 0; i < this.Header.size(); i++) {
+                
+                if (this.HeaderType.get(i) == "string") {
+                  table.addContainerProperty(this.Header.get(i), String.class,  null); 
+                }
+                if (this.HeaderType.get(i) == "boolean") {
+                  table.addContainerProperty(this.Header.get(i), Boolean.class,  null); 
+                }
+                // Which import for date?
+                //if (this.HeaderType.get(i) == "date") {
+                //  table.addContainerProperty(this.Header.get(i), Date.class,  null); 
+                //}
+            }
+            
+            table.addItem(this.Data);
+            table.setVisibleColumns(this.Field.toArray());
+        }
+        
+        // Insert components into content
         content.addComponent(table);
         
         // Define layout root
