@@ -20,11 +20,12 @@ public class Grid extends CustomComponent implements Container.Viewer {
     private List headerType = new ArrayList();
     private List field = new ArrayList();
     private Table table = new Table();
+    VerticalLayout content = new VerticalLayout();
     
     
     public void addHeader(String value, String type) {
         this.header.add(value);
-        this.headerType.add(value);
+        this.headerType.add(type);
     }
 
     public void addField(String value) {
@@ -44,45 +45,45 @@ public class Grid extends CustomComponent implements Container.Viewer {
     }
     
     
-    public Grid() {
+    @Override
+    public void attach() {
         
         // Create layout
-        VerticalLayout content = new VerticalLayout();
         setStyleName("v-orderlist");
         
         // Create table
-        table.setSizeFull();
-        table.setPageLength(50);
-        //grid.setVisibleColumns(new Object[]{"delete", "number", "status", "dateChanged", "totalWithTax"});      
+        this.table.setSizeFull();
+        this.table.setPageLength(30);
         
-        if(this.data == null) {
-            table.addContainerProperty("Information", String.class,  null);
-            table.addItem(new Object[] {"No data available!"}, new Integer(1));
+        if(this.data.size() == 0) {
+            this.table.setContainerDataSource(null);
+            this.table.addContainerProperty("Information", String.class,  null);
+            this.table.addItem(new Object[] {"No data available!"}, new Integer(1));
         }
         else {
             for (int i = 0; i < this.header.size(); i++) {
                 
-                if (this.headerType.get(i) == "string") {
-                  table.addContainerProperty(this.header.get(i), String.class,  null); 
+                this.table.setColumnHeader(this.field.get(i), this.header.get(i).toString());
+                
+                String colHeaderType = this.headerType.get(i).toString();
+                if ("SomeCustomFieldStuffHereIfNeeded".equals(colHeaderType)) {
+                     //Some custom field stuff can be added here
                 }
-                if (this.headerType.get(i) == "boolean") {
-                  table.addContainerProperty(this.header.get(i), Boolean.class,  null); 
-                }
-                // Which import for date?
-                //if (this.HeaderType.get(i) == "date") {
-                //  table.addContainerProperty(this.Header.get(i), Date.class,  null); 
-                //}
             }
             
-            table.addItem(this.data);
+            // Show only the needed columns, hide the rest
             table.setVisibleColumns(this.field.toArray());
         }
         
         // Insert components into content
-        content.addComponent(table);
-        
-        // Define layout root
-        setCompositionRoot(content);
+        this.content.addComponent(table);
     }
     
+    
+    public Grid() {
+        
+        // Define layout root
+        setCompositionRoot(this.content);
+    }
+        
 }

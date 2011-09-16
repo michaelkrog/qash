@@ -4,8 +4,9 @@ import com.vaadin.data.Container;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.entity.BaseUser;
+import dk.apaq.shopsystem.entity.Product;
+import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.ui.common.Grid;
-import dk.apaq.shopsystem.entity.User;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
@@ -21,15 +22,15 @@ public class ConstructionList extends CustomComponent {
         
         // Get data
         OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
-        Container c = new CrudContainer(orgService.getUsers(), BaseUser.class);
+        Container c = new CrudContainer(orgService.getProducts(), Product.class);
         
         // Create grid
         Grid grid = new Grid();
         grid.setContainerDataSource(c);
         
         // Add grid headers
-        grid.addHeader("Name", "string");
-        grid.addHeader("Created", "string");
+        grid.addHeader("Name", "");
+        grid.addHeader("Created", "");
        
         // Add grid fields
         grid.addField("name");
