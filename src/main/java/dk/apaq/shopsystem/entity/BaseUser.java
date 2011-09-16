@@ -79,4 +79,17 @@ public abstract class BaseUser implements User, Serializable, ContentEntity {
     public List<String> getRoles() {
         return roles;
     }
+
+
+    public abstract String getName();
+
+    public abstract String getDisplayname();
+
+    public abstract String getEmail();
+
+    public abstract String getPassword();
+
+    public abstract boolean isEmailVerified();
+
+    public abstract boolean isLocked();
 }
