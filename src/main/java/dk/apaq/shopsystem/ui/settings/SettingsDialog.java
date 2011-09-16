@@ -13,7 +13,7 @@ import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.User;
 import dk.apaq.shopsystem.service.OrganisationService;
-import dk.apaq.shopsystem.service.Service;
+import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.ui.ShopSystemTheme;
 import dk.apaq.shopsystem.ui.common.CategoryGridPanel;
 import dk.apaq.shopsystem.ui.common.Spacer;

@@ -17,7 +17,7 @@ import org.apache.commons.vfs2.FileSystem;
  *
  * @author michaelzachariassenkrog
  */
-public interface Service {
+public interface SystemService {
 
     OrganisationCrud getOrganisationCrud();
     Crud.Complete<String, SystemUser> getSystemUserCrud();

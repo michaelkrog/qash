@@ -52,9 +52,12 @@
 
     <bean id="inventoryManager" class="dk.apaq.shopsystem.service.crud.ProductCrudInventoryManager" scope="prototype"/>
 
-    <bean id="service" class="dk.apaq.shopsystem.service.ServiceImpl"/>
+    <bean id="service" class="dk.apaq.shopsystem.service.SystemServiceImpl"/>
     <bean id="organisationService" class="dk.apaq.shopsystem.service.OrganisationServiceImpl" scope="prototype"/>
-    
+
+    <bean id="filesystemUri" class="java.lang.String">
+    	<constructor-arg type="String" value="ram://"/>
+    </bean> 
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="QashServiceNew"/>

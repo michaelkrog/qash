@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.apaq.shopsystem.entity.Store;
-import dk.apaq.shopsystem.service.Service;
+import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
@@ -52,7 +52,7 @@ public class PaymentCrudTest {
     }
 
     @Autowired
-    private Service service;
+    private SystemService service;
 
     
     @Test

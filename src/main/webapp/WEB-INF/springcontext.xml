@@ -57,6 +57,10 @@
     <bean id="organisationService" class="dk.apaq.shopsystem.service.OrganisationServiceImpl" scope="prototype"/>
     <bean id="annexService" class="dk.apaq.shopsystem.annex.AnnexServiceImpl"/>
 
+    <bean id="filesystemUri" class="java.lang.String">
+    	<constructor-arg type="String" value="file:///Users/michael/data"/>
+    </bean> 
+    
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="QashServiceNew"/>
         <property name="jpaVendorAdapter">

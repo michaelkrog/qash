@@ -9,7 +9,7 @@ import dk.apaq.filter.Filter;
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.core.ContainsFilter;
 import dk.apaq.filter.core.LikeFilter;
-import dk.apaq.shopsystem.service.Service;
+import dk.apaq.shopsystem.service.SystemService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.junit.runner.RunWith;
@@ -54,7 +54,7 @@ public class SystemUserCrudTest {
     public void tearDown() {
     }
     @Autowired
-    private Service service;
+    private SystemService service;
 
     /**
      * Test of create method, of class service.getAccountCrud().

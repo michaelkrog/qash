@@ -8,7 +8,7 @@ import com.vaadin.ui.SplitPanel;
 import com.vaadin.ui.Table;
 import dk.apaq.shopsystem.ui.VaadinSpringHelper;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.service.Service;
+import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.shopsystem.ui.VaadinSpringHelper;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;

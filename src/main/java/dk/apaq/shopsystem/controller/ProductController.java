@@ -5,7 +5,7 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.OrganisationService;
-import dk.apaq.shopsystem.service.Service;
+import dk.apaq.shopsystem.service.SystemService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.BeansException;
@@ -31,7 +31,7 @@ public class ProductController implements ApplicationContextAware {
 
     @RequestMapping(value="/product/{Id}", method=RequestMethod.GET)
     public ModelAndView helloWorld(HttpServletRequest request, HttpServletResponse response, @PathVariable("Id") String orgId, @PathVariable("Id") String Id) {
-        Service service = context.getBean(Service.class);
+        SystemService service = context.getBean(SystemService.class);
 
         //TODO: Somehow get a website that matches the request url.
         //      This may require a new crud managing websites across all

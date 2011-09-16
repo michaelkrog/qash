@@ -10,7 +10,7 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Product;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import dk.apaq.shopsystem.service.Service;
+import dk.apaq.shopsystem.service.SystemService;
 import java.util.List;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -53,7 +53,7 @@ public class ProductCrudTest extends AbstractJUnit4SpringContextTests   {
     }
 
     @Autowired
-    private Service service;
+    private SystemService service;
 
     
     

@@ -2,7 +2,7 @@ package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.service.Service;
+import dk.apaq.shopsystem.service.SystemService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.junit.runner.RunWith;
@@ -48,7 +48,7 @@ public class OrganisationCrudTest extends AbstractJUnit4SpringContextTests  {
     }
 
     @Autowired
-    private Service service;
+    private SystemService service;
 
    
     @Test

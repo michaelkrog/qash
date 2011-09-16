@@ -19,10 +19,16 @@ import dk.apaq.shopsystem.service.crud.SecurityHandler;
 import dk.apaq.shopsystem.service.crud.UserCrud;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystem;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.VFS;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,11 +40,15 @@ public class OrganisationServiceImpl implements OrganisationService, Application
 
     @PersistenceContext
     private EntityManager em;
+    
+    @Autowired
+    private SystemService service;
 
     private UserCrud userCrud = null;
     private final Map<Class, Complete<String, Order>> crudMap = new WeakHashMap<Class, Complete<String, Order>>();
     private ApplicationContext context;
     private String orgId;
+    private FileSystem fs;
 
     public OrganisationServiceImpl(Organisation org) {
         this.orgId = org.getId();
@@ -129,8 +139,23 @@ public class OrganisationServiceImpl implements OrganisationService, Application
 
     @Override
     public FileSystem getFileSystem() {
-        //Must create a filesystem for this organisation using Commons VFS and a local File Folder.
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(fs==null) {
+            try {
+                //Must create a filesystem for this organisation using Commons VFS and a local File Folder.
+                FileSystem systemFs = service.getFileSystem();
+                FileObject fo = systemFs.getRoot().resolveFile("Organisations/"+orgId);
+                fo.createFolder();
+                fs = VFS.getManager().resolveFile(fo.getURL().toString()).getFileSystem();
+                
+                fs.resolveFile("Modules").createFolder();
+                fs.resolveFile("Templates").createFolder();
+                
+            } catch (FileSystemException ex) {
+                Logger.getLogger(OrganisationServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RuntimeException(ex);
+            }
+        }
+        return fs;
     }
 
     @Override

@@ -12,7 +12,7 @@ import dk.apaq.crud.CrudNotifier;
 import dk.apaq.crud.core.BaseCrudListener;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.service.Service;
+import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +32,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
     private static final Logger LOG = LoggerFactory.getLogger(AdminApplication.class);
     
     private AnnexService annexService;
-    private Service service;
+    private SystemService service;
     private String organisationId;
     private AdminPanel adminPanel;
     private SiteHeader siteHeader;
@@ -94,7 +94,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
 
         //Load classes from spring
         ApplicationContext context = VaadinSpringHelper.getSpringContextFromVaadinContext(getContext());
-        service = context.getBean("service", Service.class);
+        service = context.getBean("service", SystemService.class);
         annexService = context.getBean("annexService", AnnexService.class);
         // Spring end
         

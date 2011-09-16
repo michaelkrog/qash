@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.apaq.shopsystem.entity.Store;
-import dk.apaq.shopsystem.service.Service;
+import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.entity.Tax;
 import java.util.List;
 import org.junit.After;
@@ -48,7 +48,7 @@ public class TaxCrudTest {
     }
 
     @Autowired
-    private Service service;
+    private SystemService service;
 
     
     @Test

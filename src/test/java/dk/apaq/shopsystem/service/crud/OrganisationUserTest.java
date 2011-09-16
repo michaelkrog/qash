@@ -13,7 +13,7 @@ import dk.apaq.filter.core.ContainsFilter;
 import dk.apaq.filter.core.LikeFilter;
 import dk.apaq.shopsystem.entity.BaseUser;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.service.Service;
+import dk.apaq.shopsystem.service.SystemService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.junit.runner.RunWith;
@@ -67,7 +67,7 @@ public class OrganisationUserTest {
     public void tearDown() {
     }
     @Autowired
-    private Service service;
+    private SystemService service;
     
     private OrganisationService orgService;
 

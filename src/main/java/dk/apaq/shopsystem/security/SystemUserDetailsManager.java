@@ -6,7 +6,7 @@ import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.core.ContainsFilter;
 import dk.apaq.filter.core.OrFilter;
 import dk.apaq.shopsystem.entity.SystemUser;
-import dk.apaq.shopsystem.service.Service;
+import dk.apaq.shopsystem.service.SystemService;
 import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
@@ -20,10 +20,10 @@ import org.springframework.security.provisioning.UserDetailsManager;
  */
 public class SystemUserDetailsManager implements UserDetailsManager {
 
-    private Service service = null;
+    private SystemService service = null;
     private Crud.Complete<String, SystemUser> crud;
     
-    public SystemUserDetailsManager(Service service) {
+    public SystemUserDetailsManager(SystemService service) {
         this.service = service;
         this.crud = service.getSystemUserCrud();
     }

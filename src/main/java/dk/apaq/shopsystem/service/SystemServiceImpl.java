@@ -13,8 +13,10 @@ import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.Tax;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import org.apache.commons.vfs2.FileSystem;
+import org.apache.commons.vfs2.FileSystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -24,15 +26,18 @@ import dk.apaq.crud.Crud.*;
 import dk.apaq.crud.CrudNotifier;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
+import java.io.IOException;
 import javax.persistence.PersistenceContext;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.VFS;
 
 /**
  *
  * @author michaelzachariassenkrog
  */
-public class ServiceImpl implements Service, ApplicationContextAware {
+public class SystemServiceImpl implements SystemService, ApplicationContextAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SystemServiceImpl.class);
 
     @PersistenceContext
     private EntityManager em;
@@ -42,6 +47,7 @@ public class ServiceImpl implements Service, ApplicationContextAware {
     private final Map<String, OrganisationService> orgServiceMap = new WeakHashMap<String,OrganisationService>();
     private final Map<String, Complete<String, Order>> crudMap = new WeakHashMap<String, Complete<String, Order>>();
     private ApplicationContext context;
+    private FileSystem fileSystem;
 
     @Override
     public OrganisationService getOrganisationService(Organisation org) {
@@ -112,8 +118,24 @@ public class ServiceImpl implements Service, ApplicationContextAware {
 
     @Override
     public FileSystem getFileSystem() {
-        //Must create a filesystem for the system using Commons VFS and a local File Folder.
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(fileSystem==null) {
+            try {
+                //Must create a filesystem for the system using Commons VFS and a local File Folder.
+                FileObject f = VFS.getManager().resolveFile(context.getBean("filesystemUri", String.class));
+                
+                f.resolveFile("System/Modules/Standard").createFolder();
+                f.resolveFile("System/Modules/Optional").createFolder();
+                f.resolveFile("System/Templates/Standard").createFolder();
+                f.resolveFile("System/Templates/Optional").createFolder();
+                f.resolveFile("Organisations").createFolder();
+                
+                fileSystem = f.getFileSystem();
+            } catch (FileSystemException ex) {
+                LOG.error("Unable to resolve filesystem.", ex);
+                throw new RuntimeException(ex);
+            }
+        }
+        return fileSystem;
     }
     
     @Override
