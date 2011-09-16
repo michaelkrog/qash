@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.ui.common;
 
+import com.vaadin.data.Container;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
@@ -12,26 +13,34 @@ import java.util.List;
  * @author Martin Christensen
  */
 
-public class Grid extends CustomComponent {
+public class Grid extends CustomComponent implements Container.Viewer {
     
-    private Object Data;
-    private List Header = new ArrayList();
-    private List HeaderType = new ArrayList();
-    private List Field = new ArrayList();
+    private Container data;
+    private List header = new ArrayList();
+    private List headerType = new ArrayList();
+    private List field = new ArrayList();
+    private Table table = new Table();
     
     
     public void addHeader(String value, String type) {
-        this.Header.add(value);
-        this.HeaderType.add(value);
+        this.header.add(value);
+        this.headerType.add(value);
     }
 
     public void addField(String value) {
-	this.Field.add(value);
+	this.field.add(value);
     }
+
+    @Override
+    public Container getContainerDataSource() {
+        return this.data;
+    }
+
     
     @Override
-    public void setData(Object data) {
-        this.Data = data;
+    public void setContainerDataSource(Container data) {
+        this.data = data;
+        table.setContainerDataSource(data);
     }
     
     
@@ -42,23 +51,22 @@ public class Grid extends CustomComponent {
         setStyleName("v-orderlist");
         
         // Create table
-        Table table = new Table();
         table.setSizeFull();
         table.setPageLength(50);
         //grid.setVisibleColumns(new Object[]{"delete", "number", "status", "dateChanged", "totalWithTax"});      
         
-        if(this.Data == null) {
+        if(this.data == null) {
             table.addContainerProperty("Information", String.class,  null);
             table.addItem(new Object[] {"No data available!"}, new Integer(1));
         }
         else {
-            for (int i = 0; i < this.Header.size(); i++) {
+            for (int i = 0; i < this.header.size(); i++) {
                 
-                if (this.HeaderType.get(i) == "string") {
-                  table.addContainerProperty(this.Header.get(i), String.class,  null); 
+                if (this.headerType.get(i) == "string") {
+                  table.addContainerProperty(this.header.get(i), String.class,  null); 
                 }
-                if (this.HeaderType.get(i) == "boolean") {
-                  table.addContainerProperty(this.Header.get(i), Boolean.class,  null); 
+                if (this.headerType.get(i) == "boolean") {
+                  table.addContainerProperty(this.header.get(i), Boolean.class,  null); 
                 }
                 // Which import for date?
                 //if (this.HeaderType.get(i) == "date") {
@@ -66,8 +74,8 @@ public class Grid extends CustomComponent {
                 //}
             }
             
-            table.addItem(this.Data);
-            table.setVisibleColumns(this.Field.toArray());
+            table.addItem(this.data);
+            table.setVisibleColumns(this.field.toArray());
         }
         
         // Insert components into content

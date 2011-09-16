@@ -13,7 +13,7 @@ import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 public class ConstructionList extends CustomComponent {
    
     // Declare variables
-    private VerticalLayout Layout = new VerticalLayout();
+    private VerticalLayout layout = new VerticalLayout();
     
     
     @Override
@@ -25,7 +25,7 @@ public class ConstructionList extends CustomComponent {
         
         // Create grid
         Grid grid = new Grid();
-        grid.setData(c);
+        grid.setContainerDataSource(c);
         
         // Add grid headers
         grid.addHeader("Name", "string");
@@ -36,14 +36,14 @@ public class ConstructionList extends CustomComponent {
         grid.addField("dateCreated");
         
         // Insert grid into layout
-        this.Layout.addComponent(grid);
+        this.layout.addComponent(grid);
     }
     
     
     public ConstructionList() {
         
         // Define layout root
-        setCompositionRoot(this.Layout);
+        setCompositionRoot(this.layout);
     }
     
 }
