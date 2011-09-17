@@ -12,7 +12,7 @@ import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.ui.common.Form;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
-public class ConstructionList extends CustomComponent {
+public class ConstructionForm extends CustomComponent {
    
     // Declare variables
     private VerticalLayout layout = new VerticalLayout();
@@ -23,11 +23,11 @@ public class ConstructionList extends CustomComponent {
         
         // Get data
         OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
-        Container c = new CrudContainer(orgService.getProducts(), Product.class);
+        //Container c = new CrudContainer(orgService.getProducts().read("1"), Product.class);
         
         // Create grid
         Grid grid = new Grid();
-        grid.setContainerDataSource(c);
+        //grid.setContainerDataSource(c);
         
         // Add grid headers
         grid.addHeader("Name", "");
@@ -37,7 +37,7 @@ public class ConstructionList extends CustomComponent {
         grid.addField("name");
         grid.addField("dateCreated");
         
-        Form form = new Form();
+        //Form form = new Form();
         
         
         // Insert grid into layout
@@ -46,7 +46,7 @@ public class ConstructionList extends CustomComponent {
     }
     
     
-    public ConstructionList() {
+    public ConstructionForm() {
         
         // Define layout root
         setCompositionRoot(this.layout);

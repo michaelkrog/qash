@@ -77,6 +77,9 @@ public class Grid extends CustomComponent implements Container.Viewer {
         
         // Insert components into content
         this.content.addComponent(table);
+        
+        //Form form = new Form();
+        //this.content.addComponent(form);
     }
     
     
