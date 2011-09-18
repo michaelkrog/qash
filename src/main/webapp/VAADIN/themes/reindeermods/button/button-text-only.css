@@ -1,0 +1,8 @@
+.v-button-text-only{
+	background: transparent;
+	height: auto;
+	padding: 0;
+	opacity: 0;
+        border: 0;
+        color: #555555;
+	}

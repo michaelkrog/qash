@@ -101,7 +101,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
         siteHeader = new SimpleSiteHeader();
         
 
-        setTheme("shopsystem");
+        setTheme("reindeermods");
         Window mainWindow = new Window();
         setMainWindow(mainWindow);
 
@@ -129,10 +129,11 @@ public class AdminApplication extends Application implements HttpServletRequestL
             return;
         }
         
+        /*
         if(adminPanel != null) {
             //Remove existing adminPanel from layout
             outerLayout.removeComponent(adminPanel);
-        }
+        }*/
 
         Organisation org = service.getOrganisationCrud().read(organisationId);
         if(org==null) {
@@ -141,8 +142,15 @@ public class AdminApplication extends Application implements HttpServletRequestL
         }
         
         VaadinServiceHolder.setService(this, service.getOrganisationService(org));
-        adminPanel = new AdminPanel(siteHeader, annexService);
+        /*
+        AdminPanel2 adminPanel2 = new AdminPanel2();
+        outerLayout.removeAllComponents();
+        outerLayout.addComponent(adminPanel2);
+        outerLayout.setExpandRatio(adminPanel2, 1.0F);
+        */
         
+        adminPanel = new AdminPanel(siteHeader, annexService);
+        outerLayout.removeAllComponents();
         outerLayout.addComponent(adminPanel);
         outerLayout.setExpandRatio(adminPanel, 1.0F);
         adminPanel.setSizeFull();

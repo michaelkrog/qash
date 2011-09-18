@@ -62,7 +62,9 @@ public class CommonDialog extends Window  {
     public CommonDialog(String caption, Component component, ButtonType ... buttons) {
         setCaption(caption);
         setModal(true);
-
+        setWidth(500, UNITS_PIXELS);
+        setHeight(170, UNITS_PIXELS);
+        
         buttonMap.put(ButtonType.Cancel, new Button("Cancel"));
         buttonMap.put(ButtonType.Ok, new Button("Ok"));
         buttonMap.put(ButtonType.Close, new Button("Close"));
@@ -111,7 +113,7 @@ public class CommonDialog extends Window  {
     }
 
     /**
-     * Getes the button that has been marked at default or null if none has been marked.
+     * Gets the button that has been marked as default or null if none has been marked.
      */
     public ButtonType getDefaultButtonType() {
         return defaultButtonType;

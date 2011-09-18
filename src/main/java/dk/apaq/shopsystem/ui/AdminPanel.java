@@ -26,6 +26,7 @@ public class AdminPanel extends CustomComponent {
     private static final Logger LOG = LoggerFactory.getLogger(AdminPanel.class);
     private final SalesView salesView = new SalesView();
     private final ConstructionList constructionList = new ConstructionList();
+    //private final CommonDialog constructionForm = new CommonDialog("",new ConstructionForm("1"));
     private final ProductList stockWidget = new ProductList();
     private final SiteHeader header;
     private final VerticalLayout outerLayout = new VerticalLayout();
@@ -68,7 +69,7 @@ public class AdminPanel extends CustomComponent {
         categoryList.addItem("Produkter", "STOCK");
         categoryList.addCategory("Web");
         categoryList.addItem("Sites", "WEBSITES");
-        categoryList.addItem("Martins byggeplads", "CONSTRUCTION");
+        categoryList.addItem("CommonGrid test", "CONSTRUCTIONLIST");
         
         categoryList.setSizeFull();
         categoryList.addListener(listListener);
@@ -118,6 +119,7 @@ public class AdminPanel extends CustomComponent {
     
     
     private void setContent(String name) {
+        
         Component c = null;
         if("ORDERS".equals(name)) {
             c = salesView;
@@ -127,13 +129,15 @@ public class AdminPanel extends CustomComponent {
             c = stockWidget;
         }
         
-        if("CONSTRUCTION".equals(name)) {
+        if("CONSTRUCTIONLIST".equals(name)) {
             c = constructionList;
         }
         
         if(c==null) {
             c = new Label("Ingen widget til dette område endnu");
         }
+        
+        
         content.removeAllComponents();
         content.addComponent(c);
     }
