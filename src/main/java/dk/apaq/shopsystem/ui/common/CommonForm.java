@@ -50,6 +50,9 @@ public class CommonForm extends CustomComponent implements Container.Viewer {
     @Override
     public void setContainerDataSource(Container data) {
         this.data = data;
+        if (this.itemId == null) {
+            this.itemId = data.addItem().toString();
+        }
         form.setItemDataSource(data.getItem(this.itemId));
     }
     

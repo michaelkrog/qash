@@ -142,12 +142,12 @@ public class AdminApplication extends Application implements HttpServletRequestL
         }
         
         VaadinServiceHolder.setService(this, service.getOrganisationService(org));
-        /*
+        
         AdminPanel2 adminPanel2 = new AdminPanel2();
         outerLayout.removeAllComponents();
         outerLayout.addComponent(adminPanel2);
         outerLayout.setExpandRatio(adminPanel2, 1.0F);
-        */
+        /*
         
         adminPanel = new AdminPanel(siteHeader, annexService);
         outerLayout.removeAllComponents();
@@ -155,7 +155,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
         outerLayout.setExpandRatio(adminPanel, 1.0F);
         adminPanel.setSizeFull();
 
-        /*
+        
         Organisation shop = service.get.read(shopId);
         ((CrudNotifier)service.getItemCrud(shop)).addListener(crudChangeHandler);
         ((CrudNotifier)service.getOrderCrud(shop)).addListener(crudChangeHandler);

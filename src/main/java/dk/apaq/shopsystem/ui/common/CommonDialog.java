@@ -63,7 +63,7 @@ public class CommonDialog extends Window  {
         setCaption(caption);
         setModal(true);
         setWidth(500, UNITS_PIXELS);
-        setHeight(170, UNITS_PIXELS);
+        //setHeight(170, UNITS_PIXELS);
         
         buttonMap.put(ButtonType.Cancel, new Button("Cancel"));
         buttonMap.put(ButtonType.Ok, new Button("Ok"));
