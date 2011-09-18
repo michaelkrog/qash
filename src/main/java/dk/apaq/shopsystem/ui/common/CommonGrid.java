@@ -86,6 +86,7 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
             if (this.edit == true) {
                 this.table.setSelectable(true);
                 this.table.setImmediate(true);
+                //this.table.setNullSelectionAllowed(false); 
                 this.table.addListener(new Property.ValueChangeListener() {
                     @Override
                     public void valueChange(ValueChangeEvent event) {

@@ -59,6 +59,12 @@ public class CommonForm extends CustomComponent implements Container.Viewer {
         
         this.form.setWidth("250px");
         
+        // Enable buffering so that commit() must be called for the form
+         // before input is written to the data. (Form input is not written
+         // immediately through to the underlying object.)
+         this.form.setWriteThrough(true);
+         this.form.setImmediate(true);
+        
         if(this.data.size() == 0) {
             this.label.setCaption("No data available!");
             this.content.addComponent(label);
@@ -69,7 +75,8 @@ public class CommonForm extends CustomComponent implements Container.Viewer {
             for (int i = 0; i < this.description.size(); i++) {
                 
                 this.form.addField(this.field.get(i).toString(), new TextField(this.description.get(i).toString()));
-
+                //Property property = this.form.getItemProperty(this.field.get(i));  
+                
                 String colfieldType = this.fieldType.get(i).toString();
                 if ("SomeCustomFieldStuffHereIfNeeded".equals(colfieldType)) {
                      //Some custom field stuff can be added here
@@ -78,6 +85,8 @@ public class CommonForm extends CustomComponent implements Container.Viewer {
             
 
         }
+        
+        this.form.setVisibleItemProperties(this.field.toArray());
         
         // Insert form into content
         this.content.addComponent(this.form);

@@ -25,24 +25,28 @@ public class ConstructionForm extends CustomComponent {
         
         // Create form
         CommonForm form = new CommonForm();
-        form.setContainerDataSource(c);
         
         // Set the items id to be shown in the form
         form.setItemId(this.itemId);
         
+        // Bind data to the form
+        form.setContainerDataSource(c);
+        
         // Add form descriptions
-        form.addDescription("Name");
         form.addDescription("Price");
-        //form.addDescription("Changed");
+        form.addDescription("Name");
+        //form.addDescription("In Stock");
+        form.addDescription("Created");
        
         // Add form fields
-        form.addField("name", "");
         form.addField("price", "");
-        //form.addField("dateChanged", "");
+        form.addField("name", "");
+        
+        //form.addField("quantityInStock", "");
+        form.addField("dateCreated", "");
         
         // Insert form into layout
         this.layout.addComponent(form);
-        //this.layout.addComponent(form);
     }
     
     

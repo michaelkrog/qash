@@ -37,7 +37,6 @@ public class ConstructionList extends CustomComponent {
         
         // Insert grid into layout
         this.layout.addComponent(grid);
-        //this.layout.addComponent(form);
     }
     
     
