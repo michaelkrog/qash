@@ -5,6 +5,7 @@ import com.vaadin.event.MouseEvents.ClickEvent;
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.Resource;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
@@ -17,14 +18,14 @@ import com.vaadin.ui.themes.Reindeer;
 /**
  *
  */
-public class AutopilotSiteHeader extends CustomComponent {
+public class AutopilotSiteHeader extends CustomComponent implements SiteHeader {
 
     private CssLayout layout = new CssLayout();
     private CssLayout linkColumn1 = new CssLayout();
     private CssLayout linkColumn2 = new CssLayout();
     private Resource homeResource = new ExternalResource("/");
     private Resource helpResource = new ExternalResource("http://help.qashapp.com");
-    private Resource logoResource = new ExternalResource("../images/ge-logo.png");
+    private Resource logoResource = new ThemeResource("images/ge-logo.png");
     private Embedded logo = new Embedded(null, logoResource);
     private Button linkOptions = new Button("Company options");
     private Button linkImportExport = new Button("Import/Export");

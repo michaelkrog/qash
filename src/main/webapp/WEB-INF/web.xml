@@ -25,6 +25,20 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+        <servlet>
+        <servlet-name>SecondAdminServlet</servlet-name>
+        <servlet-class>com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>
+        <init-param>
+            <description>Vaadin application class to start</description>
+            <param-name>application</param-name>
+            <param-value>dk.apaq.shopsystem.ui.AdminApplication2</param-value>
+        </init-param>
+        <init-param>
+            <param-name>widgetset</param-name>
+            <param-value>dk.apaq.shopsystem.widgetset</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -36,6 +50,10 @@
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/admin/*</url-pattern>
+    </servlet-mapping>
+        <servlet-mapping>
+        <servlet-name>SecondAdminServlet</servlet-name>
+        <url-pattern>/admin2/*</url-pattern>
     </servlet-mapping>
     <!--filter>
         <filter-name>springSecurityFilterChain</filter-name>
