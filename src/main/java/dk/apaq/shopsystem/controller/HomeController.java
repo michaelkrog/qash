@@ -1,9 +1,9 @@
 package dk.apaq.shopsystem.controller;
 
-import dk.apaq.shopsystem.entity.Module;
+import dk.apaq.shopsystem.rendering.Module;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Page;
-import dk.apaq.shopsystem.entity.Template;
+import dk.apaq.shopsystem.rendering.Theme;
 import dk.apaq.shopsystem.entity.Website;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -29,7 +29,7 @@ public class HomeController  {
 
         //Based on the url we need to get a Page
         Page page = null;
-        Template template = /*page.getTemplate()*/ null;
+        Theme template = /*page.getTemplate()*/ null;
 
         List<Module> modules = /*page.getModules() */ null;
 

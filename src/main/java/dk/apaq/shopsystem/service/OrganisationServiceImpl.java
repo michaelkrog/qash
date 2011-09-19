@@ -14,19 +14,23 @@ import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.User;
 import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.rendering.Template;
+import dk.apaq.shopsystem.rendering.Theme;
 import dk.apaq.shopsystem.service.crud.InventoryManager;
 import dk.apaq.shopsystem.service.crud.SecurityHandler;
+import dk.apaq.shopsystem.service.crud.ThemeCrud;
 import dk.apaq.shopsystem.service.crud.UserCrud;
+import dk.apaq.vfs.Directory;
+import dk.apaq.vfs.FileSystem;
+import dk.apaq.vfs.impl.subfs.SubFs;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystem;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.VFS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -37,6 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 public class OrganisationServiceImpl implements OrganisationService, ApplicationContextAware{
+
+    private static final Logger LOG = LoggerFactory.getLogger(OrganisationServiceImpl.class);
 
     @PersistenceContext
     private EntityManager em;
@@ -138,20 +144,37 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
 
     @Override
+    public Crud<String, Theme> getThemes() {
+        try {
+            return new ThemeCrud(getFileSystem().getRoot().getDirectory("Themes"));
+        } catch (FileNotFoundException ex) {
+            LOG.error("Unable to create themecrud.", ex);
+            throw new RuntimeException(ex);
+        }
+    }
+
+
+    
+
+    @Override
     public FileSystem getFileSystem() {
         if(fs==null) {
             try {
                 //Must create a filesystem for this organisation using Commons VFS and a local File Folder.
                 FileSystem systemFs = service.getFileSystem();
-                FileObject fo = systemFs.getRoot().resolveFile("Organisations/"+orgId);
-                fo.createFolder();
-                fs = VFS.getManager().resolveFile(fo.getURL().toString()).getFileSystem();
+                Directory orgsDir = systemFs.getRoot().getDirectory("Organisations");
+                if(!orgsDir.hasDirectory(orgId)) orgsDir.createDirectory(orgId);
+
+                Directory orgDir = orgsDir.getDirectory(orgId);
+                FileSystem fs = new SubFs(systemFs, orgDir);
+
+                Directory root = fs.getRoot();
+
+                if(root.hasDirectory("Modules")) root.createDirectory("Modules");
+                if(root.hasDirectory("Themes")) root.createDirectory("Themes");
                 
-                fs.resolveFile("Modules").createFolder();
-                fs.resolveFile("Templates").createFolder();
-                
-            } catch (FileSystemException ex) {
-                Logger.getLogger(OrganisationServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                LOG.error("Unable to resolve filesystem for organisation.", ex);
                 throw new RuntimeException(ex);
             }
         }

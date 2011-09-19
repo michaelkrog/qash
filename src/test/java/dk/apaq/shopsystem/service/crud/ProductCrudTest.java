@@ -62,7 +62,7 @@ public class ProductCrudTest extends AbstractJUnit4SpringContextTests   {
         System.out.println("read");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Product> crud = service.getProductCrud(org);
+        Crud.Complete<String, Product> crud = service.getOrganisationService(org).getProducts();
         Product result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -86,7 +86,7 @@ public class ProductCrudTest extends AbstractJUnit4SpringContextTests   {
         System.out.println("create");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Product> crud = service.getProductCrud(org);
+        Crud.Complete<String, Product> crud = service.getOrganisationService(org).getProducts();
         Product item = crud.read(crud.create());
 
         assertNotNull(item);
@@ -97,7 +97,7 @@ public class ProductCrudTest extends AbstractJUnit4SpringContextTests   {
         System.out.println("update");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Product> crud = service.getProductCrud(org);
+        Crud.Complete<String, Product> crud = service.getOrganisationService(org).getProducts();
         Product result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -120,7 +120,7 @@ public class ProductCrudTest extends AbstractJUnit4SpringContextTests   {
         System.out.println("delete");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Product> crud = service.getProductCrud(org);
+        Crud.Complete<String, Product> crud = service.getOrganisationService(org).getProducts();
         Product result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -142,7 +142,7 @@ public class ProductCrudTest extends AbstractJUnit4SpringContextTests   {
         System.out.println("listIds");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Product> crud = service.getProductCrud(org);
+        Crud.Editable<String, Product> crud = service.getOrganisationService(org).getProducts();
 
         for(int i=0;i<10;i++)
             crud.create();
@@ -157,7 +157,7 @@ public class ProductCrudTest extends AbstractJUnit4SpringContextTests   {
         System.out.println("listIds");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Product> crud = service.getProductCrud(org);
+        Crud.Complete<String, Product> crud = service.getOrganisationService(org).getProducts();
         Product item = crud.read(crud.create());
         item.setName("Bob & Anne");
         item.setBarcode("1001");
@@ -186,7 +186,7 @@ public class ProductCrudTest extends AbstractJUnit4SpringContextTests   {
         System.out.println("listIds");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Product> crud = service.getProductCrud(org);
+        Crud.Complete<String, Product> crud = service.getOrganisationService(org).getProducts();
 
         Product item = crud.read(crud.create());
         item.setName("Bob");
@@ -224,8 +224,8 @@ public class ProductCrudTest extends AbstractJUnit4SpringContextTests   {
         Organisation org1 = orgcrud.read(orgcrud.create());
         Organisation org2 = orgcrud.read(orgcrud.create());
 
-        Crud.Editable<String, Product> itemCrud1 = service.getProductCrud(org1);
-        Crud.Editable<String, Product> itemCrud2 = service.getProductCrud(org2);
+        Crud.Editable<String, Product> itemCrud1 = service.getOrganisationService(org1).getProducts();
+        Crud.Editable<String, Product> itemCrud2 = service.getOrganisationService(org2).getProducts();
 
         Product item1 = itemCrud1.read(itemCrud1.create());
         Product item2 = itemCrud2.read(itemCrud2.create());

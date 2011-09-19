@@ -61,7 +61,7 @@ public class PaymentCrudTest {
 
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Payment> crud = service.getPaymentCrud(org);
+        Crud.Complete<String, Payment> crud = service.getOrganisationService(org).getPayments();
         Payment result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -83,7 +83,7 @@ public class PaymentCrudTest {
         System.out.println("listIds");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Payment> crud = service.getPaymentCrud(org);
+        Crud.Complete<String, Payment> crud = service.getOrganisationService(org).getPayments();
 
         for(int i=0;i<10;i++)
             crud.create();
@@ -97,7 +97,7 @@ public class PaymentCrudTest {
         System.out.println("create");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Payment> crud = service.getPaymentCrud(org);
+        Crud.Complete<String, Payment> crud = service.getOrganisationService(org).getPayments();
         Payment result = crud.read(crud.create());
         assertNotNull(result);
     }
@@ -108,13 +108,13 @@ public class PaymentCrudTest {
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
 
-        Crud.Complete<String, Order> orderCrud = service.getOrderCrud(org);
+        Crud.Complete<String, Order> orderCrud = service.getOrganisationService(org).getOrders();
         Order order = orderCrud.read(orderCrud.create());
         order.setCurrency("DKK");
         order.addOrderLine("Test", 1, 194.95, null);
         orderCrud.update(order);
 
-        Crud.Complete<String, Payment> crud = service.getPaymentCrud(org);
+        Crud.Complete<String, Payment> crud = service.getOrganisationService(org).getPayments();
         Payment result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -159,7 +159,7 @@ public class PaymentCrudTest {
         System.out.println("delete");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Payment> crud = service.getPaymentCrud(org);
+        Crud.Complete<String, Payment> crud = service.getOrganisationService(org).getPayments();
         Payment result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -182,25 +182,25 @@ public class PaymentCrudTest {
         Organisation org1 = orgcrud.read(orgcrud.create());
         Organisation org2 = orgcrud.read(orgcrud.create());
 
-        Crud.Complete<String, Order> orderCrud = service.getOrderCrud(org1);
+        Crud.Complete<String, Order> orderCrud = service.getOrganisationService(org1).getOrders();
         Order order = orderCrud.read(orderCrud.create());
         order.setCurrency("DKK");
         order.addOrderLine("Test", 1, 194.95, null);
         order.setStatus(OrderStatus.Accepted);
         orderCrud.update(order);
 
-        Crud.Complete<String, Order> orderCrud2 = service.getOrderCrud(org2);
+        Crud.Complete<String, Order> orderCrud2 = service.getOrganisationService(org2).getOrders();
         Order order2 = orderCrud2.read(orderCrud2.create());
         order2.setCurrency("DKK");
         order2.addOrderLine("Test", 1, 194.95, null);
         order2.setStatus(OrderStatus.Accepted);
         orderCrud2.update(order2);
 
-        Crud.Complete<String, Payment> crud1 = service.getPaymentCrud(org1);
+        Crud.Complete<String, Payment> crud1 = service.getOrganisationService(org1).getPayments();
         Payment result1 = crud1.read(crud1.create());
         result1.setOrderId(order.getId());
 
-        Crud.Complete<String, Payment> crud2 = service.getPaymentCrud(org2);
+        Crud.Complete<String, Payment> crud2 = service.getOrganisationService(org2).getPayments();
         Payment result2 = crud2.read(crud2.create());
         result2.setOrderId(order2.getId());
 

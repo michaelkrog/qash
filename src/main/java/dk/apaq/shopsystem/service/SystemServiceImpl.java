@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import javax.persistence.EntityManager;
-import org.apache.commons.vfs2.FileSystem;
-import org.apache.commons.vfs2.FileSystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -26,11 +24,12 @@ import dk.apaq.crud.Crud.*;
 import dk.apaq.crud.CrudNotifier;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
+import dk.apaq.vfs.Directory;
+import dk.apaq.vfs.FileSystem;
+import dk.apaq.vfs.impl.nativefs.NativeFileSystem;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.persistence.PersistenceContext;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.VFS;
-
 /**
  *
  * @author michaelzachariassenkrog
@@ -82,55 +81,29 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
     }
 
     @Override
-    public Complete<String, Order> getOrderCrud(Organisation organisation) {
-        return getOrganisationService(organisation).getOrders();
-    }
-
-    @Override
-    public Complete<String, Product> getProductCrud(Organisation organisation) {
-        return getOrganisationService(organisation).getProducts();
-    }
-
-    @Override
-    public Editable<String, Tax> getTaxCrud(Organisation organisation) {
-        return getOrganisationService(organisation).getTaxes();
-    }
-
-    @Override
-    public Complete<String, Payment> getPaymentCrud(Organisation organisation) {
-        return getOrganisationService(organisation).getPayments();
-    }
-
-    @Override
-    public Complete<String, Category> getCategoryCrud(Organisation organisation) {
-        return getOrganisationService(organisation).getCategories();
-    }
-
-    @Override
-    public Editable<String, Store> getStoreCrud(Organisation organisation) {
-        return getOrganisationService(organisation).getStores();
-    }
-
-    @Override
-    public Complete<String, Website> getWebsiteCrud(Organisation organisation) {
-         return getOrganisationService(organisation).getWebsites();
-    }
-
-    @Override
     public FileSystem getFileSystem() {
         if(fileSystem==null) {
             try {
                 //Must create a filesystem for the system using Commons VFS and a local File Folder.
-                FileObject f = VFS.getManager().resolveFile(context.getBean("filesystemUri", String.class));
-                
-                f.resolveFile("System/Modules/Standard").createFolder();
-                f.resolveFile("System/Modules/Optional").createFolder();
-                f.resolveFile("System/Templates/Standard").createFolder();
-                f.resolveFile("System/Templates/Optional").createFolder();
-                f.resolveFile("Organisations").createFolder();
-                
-                fileSystem = f.getFileSystem();
-            } catch (FileSystemException ex) {
+                fileSystem =new NativeFileSystem(context.getBean("filesystemUri", String.class));
+
+                Directory root = fileSystem.getRoot();
+                if(root.hasDirectory("System")) root.createDirectory("System");
+                if(root.hasDirectory("Organisations")) root.createDirectory("Organisations");
+
+                Directory system = root.getDirectory("System");
+                if(system.hasDirectory("Modules")) system.createDirectory("Modules");
+                if(system.hasDirectory("Templates")) system.createDirectory("Templates");
+
+                Directory modules = system.getDirectory("Modules");
+                if(modules.hasDirectory("Standard")) modules.createDirectory("Standard");
+                if(modules.hasDirectory("Optional")) modules.createDirectory("Optional");
+
+                Directory templates = system.getDirectory("Templates");
+                if(templates.hasDirectory("Standard")) templates.createDirectory("Standard");
+                if(templates.hasDirectory("Optional")) templates.createDirectory("Optional");
+
+            } catch (IOException ex) {
                 LOG.error("Unable to resolve filesystem.", ex);
                 throw new RuntimeException(ex);
             }

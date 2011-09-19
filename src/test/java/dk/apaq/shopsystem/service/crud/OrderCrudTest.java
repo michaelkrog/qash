@@ -65,7 +65,7 @@ public class OrderCrudTest {
 
         Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
         Organisation organisation = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrderCrud(organisation);
+        Crud.Complete<String, Order> crud = service.getOrganisationService(organisation).getOrders();
         Order result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -88,7 +88,7 @@ public class OrderCrudTest {
         System.out.println("create");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation organisation = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrderCrud(organisation);
+        Crud.Complete<String, Order> crud = service.getOrganisationService(organisation).getOrders();
         Order item = crud.read(crud.create());
 
         assertNotNull(item);
@@ -99,7 +99,7 @@ public class OrderCrudTest {
         System.out.println("update");
         Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
         Organisation organisation = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrderCrud(organisation);
+        Crud.Complete<String, Order> crud = service.getOrganisationService(organisation).getOrders();
         Order result = crud.read(crud.create());
 
 
@@ -137,7 +137,7 @@ public class OrderCrudTest {
         System.out.println("delete");
         Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
         Organisation organisation = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrderCrud(organisation);
+        Crud.Complete<String, Order> crud = service.getOrganisationService(organisation).getOrders();
         Order result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -160,7 +160,7 @@ public class OrderCrudTest {
         MockCrudListener<String, Organisation> listener = new MockCrudListener<String, Organisation>();
         Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
         Organisation organisation = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrderCrud(organisation);
+        Crud.Complete<String, Order> crud = service.getOrganisationService(organisation).getOrders();
         ((CrudNotifier)crud).addListener(listener);
         Order result = crud.read(crud.create());
 
@@ -183,7 +183,7 @@ public class OrderCrudTest {
         System.out.println("listIds");
         Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
         Organisation organisation = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Order> crud = service.getOrderCrud(organisation);
+        Crud.Editable<String, Order> crud = service.getOrganisationService(organisation).getOrders();
 
         for(int i=0;i<10;i++)
             crud.create();
@@ -200,7 +200,7 @@ public class OrderCrudTest {
 
         Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
         Organisation organisation = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrderCrud(organisation);
+        Crud.Complete<String, Order> crud = service.getOrganisationService(organisation).getOrders();
 
         for(int i=0;i<10;i++)
             crud.create();
@@ -215,8 +215,8 @@ public class OrderCrudTest {
         Organisation org1 = orgcrud.read(orgcrud.create());
         Organisation org2 = orgcrud.read(orgcrud.create());
 
-        Crud.Editable<String, Order> orderCrud1 = service.getOrderCrud(org1);
-        Crud.Editable<String, Order> orderCrud2 = service.getOrderCrud(org2);
+        Crud.Editable<String, Order> orderCrud1 = service.getOrganisationService(org1).getOrders();
+        Crud.Editable<String, Order> orderCrud2 = service.getOrganisationService(org2).getOrders();
 
         Order order1 = orderCrud1.read(orderCrud1.create());
         Order order2 = orderCrud2.read(orderCrud2.create());

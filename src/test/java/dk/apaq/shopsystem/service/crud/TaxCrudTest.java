@@ -56,7 +56,7 @@ public class TaxCrudTest {
         System.out.println("read");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Tax> crud = service.getTaxCrud(org);
+        Crud.Editable<String, Tax> crud = service.getOrganisationService(org).getTaxes();
         Tax result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -78,7 +78,7 @@ public class TaxCrudTest {
         System.out.println("listIds");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Tax> crud = service.getTaxCrud(org);
+        Crud.Editable<String, Tax> crud = service.getOrganisationService(org).getTaxes();
 
         for(int i=0;i<10;i++)
             crud.create();
@@ -92,7 +92,7 @@ public class TaxCrudTest {
         System.out.println("create");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Tax> crud = service.getTaxCrud(org);
+        Crud.Editable<String, Tax> crud = service.getOrganisationService(org).getTaxes();
         Tax tax = crud.read(crud.create());
 
         assertNotNull(tax);
@@ -103,7 +103,7 @@ public class TaxCrudTest {
         System.out.println("update");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Tax> crud = service.getTaxCrud(org);
+        Crud.Editable<String, Tax> crud = service.getOrganisationService(org).getTaxes();
         Tax result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -125,7 +125,7 @@ public class TaxCrudTest {
         System.out.println("delete");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Tax> crud = service.getTaxCrud(org);
+        Crud.Editable<String, Tax> crud = service.getOrganisationService(org).getTaxes();
         Tax result = crud.read(crud.create());
 
         assertNotNull(result);
@@ -148,8 +148,8 @@ public class TaxCrudTest {
         Organisation org1 = orgcrud.read(orgcrud.create());
         Organisation org2 = orgcrud.read(orgcrud.create());
 
-        Crud.Editable<String, Tax> taxCrud1 = service.getTaxCrud(org1);
-        Crud.Editable<String, Tax> taxCrud2 = service.getTaxCrud(org2);
+        Crud.Editable<String, Tax> taxCrud1 = service.getOrganisationService(org1).getTaxes();
+        Crud.Editable<String, Tax> taxCrud2 = service.getOrganisationService(org2).getTaxes();
 
         Tax tax1 = taxCrud1.read(taxCrud1.create());
         Tax tax2 = taxCrud2.read(taxCrud2.create());
