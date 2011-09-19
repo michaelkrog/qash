@@ -175,13 +175,13 @@ public class OrganisationServiceImpl implements OrganisationService, Application
                 if(!orgsDir.hasDirectory(orgId)) orgsDir.createDirectory(orgId);
 
                 Directory orgDir = orgsDir.getDirectory(orgId);
-                FileSystem fs = new SubFs(systemFs, orgDir);
+                fs = new SubFs(systemFs, orgDir);
 
                 Directory root = fs.getRoot();
 
-                if(root.hasDirectory("Content")) root.createDirectory("Content");
-                if(root.hasDirectory("Modules")) root.createDirectory("Modules");
-                if(root.hasDirectory("Themes")) root.createDirectory("Themes");
+                if(!root.hasDirectory("Content")) root.createDirectory("Content");
+                if(!root.hasDirectory("Modules")) root.createDirectory("Modules");
+                if(!root.hasDirectory("Themes")) root.createDirectory("Themes");
                 
             } catch (IOException ex) {
                 LOG.error("Unable to resolve filesystem for organisation.", ex);

@@ -51,25 +51,25 @@ public class FilesystemTest {
     /*************** CANNOT DO THE TEST UNTIL JAVAVFS HAS SUPPORT FOR FILESYSTEM IN RAM ************/
     @Test
     public void testFoldersExists() throws IOException {
-        /*FileSystem fs = service.getFileSystem();
+        FileSystem fs = service.getFileSystem();
         Directory root = fs.getRoot();
 
         root.getDirectory("System").getDirectory("Modules").getDirectory("Standard");
         root.getDirectory("System").getDirectory("Modules").getDirectory("Optional");
-        root.getDirectory("System").getDirectory("Templates").getDirectory("Standard");
-        root.getDirectory("System").getDirectory("Templates").getDirectory("Optional");
-        root.getDirectory("Organisations");*/
+        root.getDirectory("System").getDirectory("Themes").getDirectory("Standard");
+        root.getDirectory("System").getDirectory("Themes").getDirectory("Optional");
+        root.getDirectory("Organisations");
     }
     
     @Test
     public void testOrgansiationFoldersExists() throws IOException {
-        /*OrganisationCrud crud = service.getOrganisationCrud();
+        OrganisationCrud crud = service.getOrganisationCrud();
         Organisation o = crud.read(crud.create());
         
         OrganisationService os = service.getOrganisationService(o);
         
         FileSystem fs = os.getFileSystem();
         fs.getRoot().getDirectory("Modules");
-        fs.getRoot().getDirectory("Templates");*/
+        fs.getRoot().getDirectory("Themes");
     }
 }
