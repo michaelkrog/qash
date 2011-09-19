@@ -26,12 +26,14 @@ public interface OrganisationService {
 
     Crud.Editable<String, Store> getStores();
     Crud.Complete<String, Category> getCategories();
-    Crud.Complete<String, Website> getWebsites();
     Crud.Complete<String, Order> getOrders();
     Crud.Complete<String, Product> getProducts();
     Crud.Editable<String, Tax> getTaxes();
     Crud.Complete<String, Payment> getPayments();
+
+    Crud.Complete<String, Website> getWebsites();
     Crud<String,Theme> getThemes();
+    Crud<String,Theme> getModules();
 
     FileSystem getFileSystem();
 }

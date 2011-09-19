@@ -93,13 +93,13 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
 
                 Directory system = root.getDirectory("System");
                 if(system.hasDirectory("Modules")) system.createDirectory("Modules");
-                if(system.hasDirectory("Templates")) system.createDirectory("Templates");
+                if(system.hasDirectory("Themes")) system.createDirectory("Themes");
 
                 Directory modules = system.getDirectory("Modules");
                 if(modules.hasDirectory("Standard")) modules.createDirectory("Standard");
                 if(modules.hasDirectory("Optional")) modules.createDirectory("Optional");
 
-                Directory templates = system.getDirectory("Templates");
+                Directory templates = system.getDirectory("Themes");
                 if(templates.hasDirectory("Standard")) templates.createDirectory("Standard");
                 if(templates.hasDirectory("Optional")) templates.createDirectory("Optional");
 

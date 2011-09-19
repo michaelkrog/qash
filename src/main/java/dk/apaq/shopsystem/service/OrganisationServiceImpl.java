@@ -146,15 +146,24 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     @Override
     public Crud<String, Theme> getThemes() {
         try {
-            return new ThemeCrud(getFileSystem().getRoot().getDirectory("Themes"));
+            return new ThemeCrud((Directory)service.getFileSystem().getNode("/System/Themes/Standard"),
+                                                (Directory)getFileSystem().getNode("/Themes"));
         } catch (FileNotFoundException ex) {
             LOG.error("Unable to create themecrud.", ex);
             throw new RuntimeException(ex);
         }
     }
 
-
-    
+    @Override
+    public Crud<String, Theme> getModules() {
+        try {
+            return new ThemeCrud((Directory)service.getFileSystem().getNode("/System/Modules/Standard"),
+                                                (Directory)getFileSystem().getNode("/Modules"));
+        } catch (FileNotFoundException ex) {
+            LOG.error("Unable to create themecrud.", ex);
+            throw new RuntimeException(ex);
+        }
+    }
 
     @Override
     public FileSystem getFileSystem() {
@@ -170,6 +179,7 @@ public class OrganisationServiceImpl implements OrganisationService, Application
 
                 Directory root = fs.getRoot();
 
+                if(root.hasDirectory("Content")) root.createDirectory("Content");
                 if(root.hasDirectory("Modules")) root.createDirectory("Modules");
                 if(root.hasDirectory("Themes")) root.createDirectory("Themes");
                 

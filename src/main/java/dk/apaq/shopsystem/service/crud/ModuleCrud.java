@@ -17,44 +17,55 @@ import org.slf4j.LoggerFactory;
 public class ModuleCrud implements Crud<String, Module> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ModuleCrud.class);
-    private final Directory dir;
+     private final Directory standardDir;
+    private final Directory orgDir;
 
-    public ModuleCrud(Directory dir) {
-        this.dir = dir;
+    public ModuleCrud(Directory standardThemeFolder, Directory organsiationThemeFolder) {
+        this.standardDir = standardThemeFolder;
+        this.orgDir = organsiationThemeFolder;
     }
-    
+
     @Override
-    public Module  read(String id) {
+    public Module read(String id) {
         try {
-            return new Module(dir.getDirectory(id));
+            if (orgDir.hasDirectory(id)) {
+                return new Module(orgDir.getDirectory(id));
+            }
+
+            if (standardDir.hasDirectory(id)) {
+                return new Module(standardDir.getDirectory(id));
+            }
+
         } catch (IOException ex) {
-            return null;
         }
+
+        return null;
+
     }
 
     @Override
     public List<String> listIds() {
-        return listIds(null);
-    }
-
-    @Override
-    public List<String> listIds(Limit limit) {
         List<String> idlist = new ArrayList<String>();
 
-        int count=0;
-        for(Directory subdir : dir.getDirectories()) {
-            if(subdir.isBundle() && "module".equals(subdir.getSuffix())) {
-                if(limit==null || count>=limit.getOffset()) {
-                    idlist.add(subdir.getName());
-                }
+        for (Directory subdir : standardDir.getDirectories()) {
+            if (subdir.isBundle() && "module".equals(subdir.getSuffix())) {
+                idlist.add(subdir.getName());
+            }
+        }
 
-                if(limit!=null && count>=(limit.getOffset() + limit.getCount())) {
-                    break;
-                }
+        for (Directory subdir : orgDir.getDirectories()) {
+            String name = subdir.getName();
+            if (subdir.isBundle() && "module".equals(subdir.getSuffix()) && !idlist.contains(name)) {
+                idlist.add(name);
             }
         }
 
         return Collections.unmodifiableList(idlist);
+    }
+
+    @Override
+    public List<String> listIds(Limit limit) {
+        throw new UnsupportedOperationException("listing ids with limit not supported.");
     }
 
 }
