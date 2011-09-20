@@ -38,7 +38,7 @@ public class ModuleTest {
     @Before
     public void setUp() throws IOException {
         FileSystem fs =  service.getFileSystem();
-        themeDir = fs.getRoot().getDirectory("Modules", true).getDirectory("Image.module", true);
+        themeDir = fs.getRoot().getDirectory("System", true).getDirectory("Modules", true).getDirectory("Standard", true).getDirectory("Image.module", true);
 
         //theme.info
         File infoFile = themeDir.getFile("module.info", true);

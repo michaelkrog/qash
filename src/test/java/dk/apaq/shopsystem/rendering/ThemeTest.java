@@ -38,7 +38,7 @@ public class ThemeTest {
     @Before
     public void setUp() throws IOException {
         FileSystem fs =  service.getFileSystem();
-        themeDir = fs.getRoot().getDirectory("Themes", true).getDirectory("AutoPilot.theme", true);
+        themeDir = fs.getRoot().getDirectory("System", true).getDirectory("Themes", true).getDirectory("Standard", true).getDirectory("AutoPilot.theme", true);
 
         //theme.info
         File infoFile = themeDir.getFile("theme.info", true);
