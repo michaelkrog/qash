@@ -1,9 +1,9 @@
 package dk.apaq.shopsystem.controller;
 
-import dk.apaq.shopsystem.rendering.Module;
+import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Page;
-import dk.apaq.shopsystem.rendering.Theme;
+import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.entity.Website;
 import java.util.List;
 import org.springframework.stereotype.Controller;

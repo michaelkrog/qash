@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.rendering;
+package dk.apaq.shopsystem.entity;
 
 import dk.apaq.vfs.File;
 import java.io.IOException;

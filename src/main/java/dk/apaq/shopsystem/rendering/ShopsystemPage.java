@@ -1,5 +1,9 @@
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.shopsystem.entity.Theme;
+import dk.apaq.shopsystem.entity.Template;
+import dk.apaq.shopsystem.entity.Module;
+import dk.apaq.shopsystem.entity.Component;
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.crud.ThemeCrud;
@@ -33,7 +37,7 @@ public class ShopsystemPage extends WebPage implements IMarkupCacheKeyProvider, 
         Module module = modules.read(id);
         Component component = module.listComponents().get(0);
         
-        CustomWicketComponent customWicketComponent = new CustomWicketComponent("placeholder_1", component);
+        WicketComponent customWicketComponent = new WicketComponent("placeholder_1", component);
         add(customWicketComponent);
     }
 

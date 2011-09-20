@@ -9,8 +9,8 @@ import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.Website;
-import dk.apaq.shopsystem.rendering.Module;
-import dk.apaq.shopsystem.rendering.Theme;
+import dk.apaq.shopsystem.entity.Module;
+import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.crud.UserCrud;
 import dk.apaq.vfs.FileSystem;
 

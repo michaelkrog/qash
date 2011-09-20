@@ -2,7 +2,7 @@ package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.Crud;
 import dk.apaq.filter.limit.Limit;
-import dk.apaq.shopsystem.rendering.Module;
+import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.vfs.Directory;
 import java.io.IOException;
 import java.util.ArrayList;

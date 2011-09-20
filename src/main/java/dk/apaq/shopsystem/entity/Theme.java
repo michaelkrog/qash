@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.rendering;
+package dk.apaq.shopsystem.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

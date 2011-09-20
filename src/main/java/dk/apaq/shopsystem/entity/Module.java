@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.rendering;
+package dk.apaq.shopsystem.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -6,7 +6,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import dk.apaq.shopsystem.rendering.Component.ComponentParameter;
+import dk.apaq.shopsystem.entity.Component.ComponentParameter;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;
 import java.io.FileNotFoundException;

@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.shopsystem.entity.Component;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,13 +26,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author michael
  */
-public class CustomWicketComponent extends Panel implements IMarkupResourceStreamProvider {
+public class WicketComponent extends Panel implements IMarkupResourceStreamProvider {
 
-    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(CustomWicketComponent.class);
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(WicketComponent.class);
     
     private final Component component;
     
-    public CustomWicketComponent(String id, Component component) {
+    public WicketComponent(String id, Component component) {
         super(id);
         this.component = component;
         try {

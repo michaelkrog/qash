@@ -53,7 +53,11 @@
 
     <bean id="inventoryManager" class="dk.apaq.shopsystem.service.crud.ProductCrudInventoryManager" scope="prototype"/>
 
-    <bean id="service" class="dk.apaq.shopsystem.service.SystemServiceImpl"/>
+    <bean id="filesystemPopulator" class="dk.apaq.shopsystem.service.DefaultFileSystemPopulator"/>
+    
+    <bean id="service" class="dk.apaq.shopsystem.service.SystemServiceImpl">
+        <property name="fileSystemPopulator" ref="filesystemPopulator"/>
+    </bean>
     <bean id="organisationService" class="dk.apaq.shopsystem.service.OrganisationServiceImpl" scope="prototype"/>
     <bean id="annexService" class="dk.apaq.shopsystem.annex.AnnexServiceImpl"/>
 

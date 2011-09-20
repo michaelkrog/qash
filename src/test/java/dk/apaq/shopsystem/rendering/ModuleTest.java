@@ -5,6 +5,7 @@
 
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;
@@ -39,18 +40,6 @@ public class ModuleTest {
     public void setUp() throws IOException {
         FileSystem fs =  service.getFileSystem();
         themeDir = fs.getRoot().getDirectory("System", true).getDirectory("Modules", true).getDirectory("Standard", true).getDirectory("Image.module", true);
-
-        //theme.info
-        File infoFile = themeDir.getFile("module.info", true);
-        OutputStreamWriter infoOsw = new OutputStreamWriter(infoFile.getOutputStream());
-        infoOsw.write("{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}, components:{\"SingleImage\":{\"description\":\"A simple component for displaying an image\",  \"parameters\":{ \"path\":{ \"type\":\"String\",  \"default\":\"\",  \"optionalText\":\"The filesystem path for the image\" },  \"title\":{  \"type\":\"String\", \"default\":\"\",  \"optionalText\":\"The title of the image\" },\"styleclass\":{  \"type\":\"String\",  \"default\":\"\", \"optionalText\":\"Special styleclass to append to image\"} }    } } }");
-        infoOsw.close();
-
-        //FrontPage.html
-        File frontPageFile = themeDir.getFile("SingleImage.code", true);
-        OutputStreamWriter frontOsw = new OutputStreamWriter(frontPageFile.getOutputStream());
-        frontOsw.write("var test = 1;");
-        frontOsw.close();
 
 
     }

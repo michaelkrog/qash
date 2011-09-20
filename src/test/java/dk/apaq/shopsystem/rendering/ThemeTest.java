@@ -5,6 +5,7 @@
 
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;
