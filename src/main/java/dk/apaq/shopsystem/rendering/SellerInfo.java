@@ -5,26 +5,27 @@ package dk.apaq.shopsystem.rendering;
  */
 public class SellerInfo {
 
-    private final String organisationId;
-    private final String organisationName;
-    private final String organisationsEmail;
+    private final String id;
+    private final String name;
+    private final String email;
 
     public SellerInfo(String organisationId, String organisationName, String organisationsEmail) {
-        this.organisationId = organisationId;
-        this.organisationName = organisationName;
-        this.organisationsEmail = organisationsEmail;
+        this.id = organisationId;
+        this.name = organisationName;
+        this.email = organisationsEmail;
     }
 
-    public String getOrganisationId() {
-        return organisationId;
+    public String getId() {
+        return id;
     }
 
-    public String getOrganisationName() {
-        return organisationName;
+    public String getName() {
+        return name;
     }
 
-    public String getOrganisationsEmail() {
-        return organisationsEmail;
+    public String getEmail() {
+        return email;
     }
+
     
 }
