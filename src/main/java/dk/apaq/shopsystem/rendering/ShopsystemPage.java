@@ -1,6 +1,9 @@
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.service.crud.ThemeCrud;
+import java.util.List;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
@@ -27,7 +30,14 @@ public class ShopsystemPage extends WebPage implements IMarkupCacheKeyProvider, 
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
         OrganisationService service = ((WicketApplication)getApplication()).getService();
-        Template template = service.getThemes().read(service.getThemes().listIds().get(0)).listTemplates().get(0);
+        Crud<String, Theme> themes = service.getThemes();
+        
+        List<String> ids = themes.listIds();
+        String id = ids.get(0);
+        
+        Theme theme = themes.read(id);
+        
+        Template template = theme.listTemplates().get(0);
         return new VfsResourceStream(template.getFile());
     }
 
