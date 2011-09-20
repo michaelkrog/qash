@@ -38,10 +38,10 @@ public class ThemeTest {
     @Before
     public void setUp() throws IOException {
         FileSystem fs =  service.getFileSystem();
-        themeDir = fs.getRoot().getDirectory("System", true).getDirectory("Themes", true).getDirectory("Standard", true).getDirectory("AutoPilot.theme", true);
+        themeDir = fs.getRoot().getDirectory("System").getDirectory("Themes").getDirectory("Standard").getDirectory("Basic.theme");
 
         //theme.info
-        File infoFile = themeDir.getFile("theme.info", true);
+        /*File infoFile = themeDir.getFile("theme.info", true);
         OutputStreamWriter infoOsw = new OutputStreamWriter(infoFile.getOutputStream());
         infoOsw.write("{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}, templates:{\"FrontPage\":{ \"description\":\"A nice landing page template\" } }    }");
         infoOsw.close();
@@ -50,7 +50,7 @@ public class ThemeTest {
         File frontPageFile = themeDir.getFile("FrontPage.html", true);
         OutputStreamWriter frontOsw = new OutputStreamWriter(frontPageFile.getOutputStream());
         frontOsw.write("<html><body></body></html>");
-        frontOsw.close();
+        frontOsw.close();*/
 
 
     }

@@ -50,6 +50,11 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
     private final Map<String, Complete<String, Order>> crudMap = new WeakHashMap<String, Complete<String, Order>>();
     private ApplicationContext context;
     private FileSystem fileSystem;
+    private FileSystemPopulator filesystemPopulator;
+
+    public void setFileSystemPopulator(FileSystemPopulator populator) {
+        this.filesystemPopulator = populator;
+    }
 
     @Override
     public OrganisationService getOrganisationService(Organisation org) {
@@ -103,16 +108,9 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
                 if(!templates.hasDirectory("Standard")) templates.createDirectory("Standard");
                 if(!templates.hasDirectory("Optional")) templates.createDirectory("Optional");
 
-                URL contentUrl = getClass().getResource("/defaultContent");
-                try {
-                    File file = new File(contentUrl.toURI());
-                    FileSystem defaultContentFs = new NativeFileSystem(file);
-                    //defaultContentFs.getRoot().
-
-                } catch (URISyntaxException ex) {
-                    LOG.error("Unable to resolve default content.", ex);
+                if(filesystemPopulator!=null) {
+                    filesystemPopulator.populate(fileSystem);
                 }
-
             } catch (IOException ex) {
                 LOG.error("Unable to resolve filesystem.", ex);
                 throw new RuntimeException(ex);
