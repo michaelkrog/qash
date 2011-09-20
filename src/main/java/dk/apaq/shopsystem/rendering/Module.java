@@ -132,8 +132,9 @@ public String getVersion() {
             List<Component> newList = new ArrayList<Component>();
             for (Map.Entry<String, ComponentInfo> entry : info.getComponentMap().entrySet()) {
                 try {
-                    File file = dir.getFile(entry.getKey() + ".code");
-                    newList.add(new Component(entry.getKey(), entry.getValue().getDescription(), file, entry.getValue().getParameters()));
+                    File codeFile = dir.getFile(entry.getKey() + ".code");
+                    File markupFile = dir.getFile(entry.getKey() + ".html");
+                    newList.add(new Component(entry.getKey(), entry.getValue().getDescription(), codeFile, markupFile, entry.getValue().getParameters()));
                 } catch (FileNotFoundException ex) {
                     //Cannot find file - warn about it but otherwise ignore it.
                     LOG.warn("Component registered in module is not found. [Module=" + getName() + ";Component=" + entry.getKey() + "]");

@@ -37,9 +37,7 @@ public class WicketApplication extends WebApplication {
 
         Organisation organisation = service.getOrganisationCrud().read(service.getOrganisationCrud().create());
         orgService = service.getOrganisationService(organisation);
-        getResourceSettings().setResourceFinder(new ShopSystemResourceFinder(service.getFileSystem(), orgService.getFileSystem()));
-
-        //getMarkupSettings().setMarkupFactory(new ShopSystemMarkupFactory());
+        
     }
 
     public OrganisationService getService() {

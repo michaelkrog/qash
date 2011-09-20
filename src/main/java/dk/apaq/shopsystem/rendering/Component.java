@@ -12,7 +12,8 @@ public class Component {
 
     private final String name;
     private final String description;
-    private final File file;
+    private final File codeFile;
+    private final File markupFile;
     private final Map<String, ComponentParameter> paramMap;
 
     public class ComponentParameter {
@@ -29,13 +30,15 @@ public class Component {
 
     }
 
-    public Component(String name, String description, File file, Map<String, ComponentParameter> paramMap) {
+    public Component(String name, String description, File codeFile, File markupFile, Map<String, ComponentParameter> paramMap) {
         this.name = name;
         this.description = description;
-        this.file = file;
+        this.codeFile = codeFile;
+        this.markupFile = markupFile;
         this.paramMap = paramMap;
     }
 
+    
     public String getName() {
         return name;
     }
@@ -44,8 +47,12 @@ public class Component {
         return description;
     }
 
-    public InputStream getContent() throws IOException {
-        return file.getInputStream();
+    public File getCodeFile() {
+        return codeFile;
+    }
+
+    public File getMarkupFile() {
+        return markupFile;
     }
 
     public Map<String, ComponentParameter> getParamMap() {

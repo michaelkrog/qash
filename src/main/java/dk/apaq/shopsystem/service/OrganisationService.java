@@ -9,6 +9,7 @@ import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.rendering.Module;
 import dk.apaq.shopsystem.rendering.Theme;
 import dk.apaq.shopsystem.service.crud.UserCrud;
 import dk.apaq.vfs.FileSystem;
@@ -33,7 +34,7 @@ public interface OrganisationService {
 
     Crud.Complete<String, Website> getWebsites();
     Crud<String,Theme> getThemes();
-    Crud<String,Theme> getModules();
+    Crud<String,Module> getModules();
 
     FileSystem getFileSystem();
 }

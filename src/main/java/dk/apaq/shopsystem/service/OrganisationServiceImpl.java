@@ -14,9 +14,11 @@ import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.User;
 import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.rendering.Module;
 import dk.apaq.shopsystem.rendering.Template;
 import dk.apaq.shopsystem.rendering.Theme;
 import dk.apaq.shopsystem.service.crud.InventoryManager;
+import dk.apaq.shopsystem.service.crud.ModuleCrud;
 import dk.apaq.shopsystem.service.crud.SecurityHandler;
 import dk.apaq.shopsystem.service.crud.ThemeCrud;
 import dk.apaq.shopsystem.service.crud.UserCrud;
@@ -155,12 +157,12 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
 
     @Override
-    public Crud<String, Theme> getModules() {
+    public Crud<String, Module> getModules() {
         try {
-            return new ThemeCrud((Directory)service.getFileSystem().getNode("/System/Modules/Standard"),
+            return new ModuleCrud((Directory)service.getFileSystem().getNode("/System/Modules/Standard"),
                                                 (Directory)getFileSystem().getNode("/Modules"));
         } catch (FileNotFoundException ex) {
-            LOG.error("Unable to create themecrud.", ex);
+            LOG.error("Unable to create modulecrud.", ex);
             throw new RuntimeException(ex);
         }
     }

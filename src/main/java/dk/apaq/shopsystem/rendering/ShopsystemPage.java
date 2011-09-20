@@ -3,7 +3,12 @@ package dk.apaq.shopsystem.rendering;
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.crud.ThemeCrud;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
@@ -19,7 +24,17 @@ public class ShopsystemPage extends WebPage implements IMarkupCacheKeyProvider, 
     private Template template;
 
     public ShopsystemPage(PageParameters pageParameters) {
-
+        OrganisationService service = ((WicketApplication)getApplication()).getService();
+        Crud<String, Module> modules = service.getModules();
+        
+        List<String> ids = modules.listIds();
+        String id = ids.get(0);
+        
+        Module module = modules.read(id);
+        Component component = module.listComponents().get(0);
+        
+        CustomWicketComponent customWicketComponent = new CustomWicketComponent("placeholder_1", component);
+        add(customWicketComponent);
     }
 
     @Override
