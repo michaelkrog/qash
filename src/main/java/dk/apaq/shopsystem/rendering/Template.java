@@ -27,7 +27,9 @@ public class Template {
         return description;
     }
 
-    public InputStream getContent() throws IOException {
-        return file.getInputStream();
+    public File getFile() {
+        return file;
     }
+
+    
 }

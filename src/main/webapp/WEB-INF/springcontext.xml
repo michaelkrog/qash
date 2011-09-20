@@ -60,7 +60,9 @@
     <bean id="filesystem" class="dk.apaq.vfs.impl.nativefs.NativeFileSystem">
     	<constructor-arg type="java.io.File" value="file:${user.home}/filesystem"/>
     </bean>
-    
+
+    <bean id="wicketApplication" class="dk.apaq.shopsystem.rendering.WicketApplication"/>
+
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="ShopSystem"/>
         <property name="jpaVendorAdapter">

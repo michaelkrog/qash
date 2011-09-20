@@ -1,0 +1,14 @@
+{
+   "version":"1.0.0",
+   "releaseDate":"2011-01-01",
+   "seller": {
+      "id":"1",
+      "name":"Apaq",
+      "email": "contact@apaq.dk"
+   },
+   templates:{
+        "FrontPage":{
+            "description":"A blank page"
+            }
+        }
+    }

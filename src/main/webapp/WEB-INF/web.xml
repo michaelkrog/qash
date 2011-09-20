@@ -47,6 +47,20 @@
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
+    <servlet>
+    <servlet-name>wicket</servlet-name>
+    <servlet-class>org.apache.wicket.protocol.http.WicketServlet</servlet-class>
+    <init-param>
+        <param-name>applicationFactoryClassName</param-name>
+        <param-value>org.apache.wicket.spring.SpringWebApplicationFactory</param-value>
+    </init-param>
+    <init-param>
+        <param-name>applicationBean</param-name>
+        <param-value>wicketApplication</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/admin/*</url-pattern>
@@ -54,6 +68,10 @@
         <servlet-mapping>
         <servlet-name>SecondAdminServlet</servlet-name>
         <url-pattern>/admin2/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>wicket</servlet-name>
+        <url-pattern>/wicket/*</url-pattern>
     </servlet-mapping>
     <!--filter>
         <filter-name>springSecurityFilterChain</filter-name>

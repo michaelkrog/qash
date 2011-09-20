@@ -11,6 +11,7 @@ import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.Tax;
+import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
@@ -27,8 +28,10 @@ import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.FileSystem;
 import dk.apaq.vfs.impl.nativefs.NativeFileSystem;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import javax.persistence.PersistenceContext;
 /**
  *
@@ -99,6 +102,16 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
                 Directory templates = system.getDirectory("Themes", true);
                 if(!templates.hasDirectory("Standard")) templates.createDirectory("Standard");
                 if(!templates.hasDirectory("Optional")) templates.createDirectory("Optional");
+
+                URL contentUrl = getClass().getResource("/defaultContent");
+                try {
+                    File file = new File(contentUrl.toURI());
+                    FileSystem defaultContentFs = new NativeFileSystem(file);
+                    //defaultContentFs.getRoot().
+
+                } catch (URISyntaxException ex) {
+                    LOG.error("Unable to resolve default content.", ex);
+                }
 
             } catch (IOException ex) {
                 LOG.error("Unable to resolve filesystem.", ex);
