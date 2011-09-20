@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptComponent;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.entity.Template;
 import dk.apaq.shopsystem.entity.Module;
@@ -23,11 +24,11 @@ import org.apache.wicket.util.resource.IResourceStream;
 /**
  *
  */
-public class ShopsystemPage extends WebPage implements IMarkupCacheKeyProvider, IMarkupResourceStreamProvider{
+public class WicketPage extends WebPage implements IMarkupCacheKeyProvider, IMarkupResourceStreamProvider{
 
     private Template template;
 
-    public ShopsystemPage(PageParameters pageParameters) {
+    public WicketPage(PageParameters pageParameters) {
         OrganisationService service = ((WicketApplication)getApplication()).getService();
         Crud<String, Module> modules = service.getModules();
         
@@ -37,7 +38,7 @@ public class ShopsystemPage extends WebPage implements IMarkupCacheKeyProvider, 
         Module module = modules.read(id);
         Component component = module.listComponents().get(0);
         
-        WicketComponent customWicketComponent = new WicketComponent("placeholder_1", component);
+        SimpleScriptComponent customWicketComponent = new SimpleScriptComponent("placeholder_1", component);
         add(customWicketComponent);
     }
 

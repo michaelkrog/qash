@@ -1,6 +1,10 @@
-package dk.apaq.shopsystem.rendering;
+package dk.apaq.shopsystem.rendering.simplescript;
 
+import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptContainerWrapper;
+import dk.apaq.shopsystem.rendering.simplescript.SimpleScript;
 import dk.apaq.shopsystem.entity.Component;
+import dk.apaq.shopsystem.rendering.VfsResourceStream;
+import dk.apaq.shopsystem.rendering.WicketApplication;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,13 +30,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author michael
  */
-public class WicketComponent extends Panel implements IMarkupResourceStreamProvider {
+public class SimpleScriptComponent extends Panel implements IMarkupResourceStreamProvider {
 
-    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(WicketComponent.class);
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(SimpleScriptComponent.class);
     
     private final Component component;
     
-    public WicketComponent(String id, Component component) {
+    public SimpleScriptComponent(String id, Component component) {
         super(id);
         this.component = component;
         try {
@@ -41,9 +45,9 @@ public class WicketComponent extends Panel implements IMarkupResourceStreamProvi
             
             Invocable inv = (Invocable) engine;
             engine.put("service", ((WicketApplication)getApplication()).getService());
-            engine.put("parent", new ScriptPreparedContainerWrapper(this));
+            engine.put("parent", new SimpleScriptContainerWrapper(this));
             engine.eval(new InputStreamReader(component.getCodeFile().getInputStream()));
-            SimpleComponentScript componentScript = inv.getInterface(SimpleComponentScript.class);
+            SimpleScript componentScript = inv.getInterface(SimpleScript.class);
             
                 
             componentScript.render();

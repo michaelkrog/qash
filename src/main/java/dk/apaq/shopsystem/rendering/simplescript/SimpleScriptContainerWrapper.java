@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.rendering;
+package dk.apaq.shopsystem.rendering.simplescript;
 
 import org.apache.wicket.MarkupContainer;
 
@@ -6,11 +6,11 @@ import org.apache.wicket.MarkupContainer;
  *
  * @author michael
  */
-public class ScriptPreparedContainerWrapper {
+public class SimpleScriptContainerWrapper {
     
     private final MarkupContainer container;
 
-    public ScriptPreparedContainerWrapper(MarkupContainer container) {
+    public SimpleScriptContainerWrapper(MarkupContainer container) {
         this.container = container;
     }
     

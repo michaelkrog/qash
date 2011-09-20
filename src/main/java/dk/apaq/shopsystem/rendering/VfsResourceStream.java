@@ -86,4 +86,10 @@ public class VfsResourceStream implements IResourceStream {
         return Time.valueOf(file.getLastModified());
     }
 
+    @Override
+    public String toString() {
+        return file.getPath().toString();
+    }
+    
+   
 }

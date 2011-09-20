@@ -23,8 +23,8 @@ public class WicketApplication extends WebApplication {
      * @see org.apache.wicket.Application#getHomePage()
      */
     @Override
-    public Class<ShopsystemPage> getHomePage() {
-        return ShopsystemPage.class;
+    public Class<WicketPage> getHomePage() {
+        return WicketPage.class;
     }
 
     /**

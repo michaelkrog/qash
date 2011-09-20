@@ -29,9 +29,9 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
     @Test
     public void homepageRendersSuccessfully() {
         //start and render the test page
-        tester.startPage(ShopsystemPage.class);
+        tester.startPage(WicketPage.class);
 
         //assert rendered page class
-        tester.assertRenderedPage(ShopsystemPage.class);
+        tester.assertRenderedPage(WicketPage.class);
     }
 }
