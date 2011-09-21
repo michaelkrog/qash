@@ -4,6 +4,7 @@
  */
 package dk.apaq.shopsystem.ui;
 
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -15,6 +16,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.ui.common.CommonDialog;
 
 /**
@@ -37,36 +39,33 @@ public class AdminPanel2 extends CustomComponent {
         this.content.setSizeFull();
         this.accordion.setSizeFull();
         
-        Panel tab1 = new Panel();
-        tab1.addComponent(OpenInDialog("Contact informations", new ConstructionForm(null)));
-        tab1.addComponent(OpenInContent("Users",new ConstructionList()));
-        tab1.addComponent(OpenInDialog("Add new user", new ConstructionForm(null)));
+        this.accordion.setStyleName("v-accordion-borderless");
         
-        this.accordion.addTab(tab1, "Organisation settings", null);
+        // Navigation contents
+        Panel tab1 = new Panel();
+        tab1.addComponent(OpenInContent("Stores",new StoreList(), false));
+        tab1.addComponent(OpenInDialog("Add new store", new StoreEdit(), true));
+        
+        tab1.addComponent(OpenInContent("Users",new UserList(), false));
+        tab1.addComponent(OpenInDialog("Add new user", new UserEdit(), true));
+        
+        tab1.addComponent(OpenInContent("Themes",new ThemeList(), false));
+        tab1.addComponent(OpenInDialog("Add new theme", new ThemeEdit(), false));
+        this.accordion.addTab(tab1, "Settings", null);
         
         Panel tab2 = new Panel();
-        tab2.addComponent(OpenInContent("Products",new ConstructionList()));
-        tab2.addComponent(OpenInDialog("Add new product", new ConstructionForm(null)));
+        tab2.addComponent(OpenInContent("Products",new ConstructionList(), false));
+        tab2.addComponent(OpenInDialog("Add new product", new ConstructionForm(), false));
         this.accordion.addTab(tab2, "Products", null);
         
         Panel tab3 = new Panel();
         //tab3.addComponent(OpenInContent("ConstructionList",new ConstructionList()));
         //tab3.addComponent(OpenInContent("ConstructionForm",new ConstructionForm("1")));
         this.accordion.addTab(tab3, "Newsletters", null);
-
-        // A container for the this.accordion.
-        Panel panel = new Panel();
-        panel.setSizeFull();
-        panel.setHeight("300px");
-        //panel.setWidth("200px");
+        // ***
         
-        panel.addComponent(this.accordion);
-
-        // Trim its layout to allow the Accordion take all space.
-        panel.getLayout().setSizeFull();
-        panel.getLayout().setMargin(false);
         
-        this.innerLayout.addComponent(panel);
+        this.innerLayout.addComponent(this.accordion);
         
         this.innerLayout.addComponent(content);
         this.innerLayout.getComponent(0).setWidth("200px");
@@ -79,11 +78,12 @@ public class AdminPanel2 extends CustomComponent {
     }    
     
 
-    public Button OpenInContent(final String buttonText, final Component target) {
+    public Button OpenInContent(final String buttonText, final Component target, Boolean buttonMargin) {
        
-        Button button = new Button(buttonText);
-        
-        //button.setStyleName("v-button-text-only");
+        Button button = new Button(" " + buttonText);
+        button.setStyleName(Reindeer.BUTTON_LINK);
+        button.addStyleName("v-accordion-button");
+        button.setIcon(new ThemeResource("../shopsystem/icons/7/dot.png"));
         button.addListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
@@ -91,16 +91,21 @@ public class AdminPanel2 extends CustomComponent {
                     content.addComponent(target);
             }
         });
-               
+        
+        if (buttonMargin == true) {
+            button.addStyleName("v-accordion-button-margin");
+        }
+        
         return button;
     }
     
     
-    public Button OpenInDialog(final String buttonText, final Component target) {
+    public Button OpenInDialog(final String buttonText, final Component target, Boolean buttonMargin) {
         
-        Button button = new Button(buttonText);
-        
-        //button.setStyleName("v-button-text-only");
+        Button button = new Button(" " + buttonText);
+        button.setStyleName(Reindeer.BUTTON_LINK);
+        button.addStyleName("v-accordion-button");
+        button.setIcon(new ThemeResource("../shopsystem/icons/7/dot.png"));
         button.addListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
@@ -109,6 +114,10 @@ public class AdminPanel2 extends CustomComponent {
             }
         });
                
+        if (buttonMargin == true) {
+            button.addStyleName("v-accordion-button-margin");
+        }
+        
         return button;
         
         

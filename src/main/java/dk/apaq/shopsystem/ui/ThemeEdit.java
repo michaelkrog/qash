@@ -3,12 +3,12 @@ package dk.apaq.shopsystem.ui;
 import com.vaadin.data.Container;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
-import dk.apaq.shopsystem.entity.Product;
+import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.ui.common.CommonForm;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
-public class ConstructionForm extends CustomComponent {
+public class ThemeEdit extends CustomComponent {
    
     // Declare variables
     private VerticalLayout layout = new VerticalLayout();
@@ -19,7 +19,7 @@ public class ConstructionForm extends CustomComponent {
         
         // Get data
         OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
-        Container c = new CrudContainer(orgService.getProducts(), Product.class);
+        Container c = new CrudContainer(orgService.getThemes(), Theme.class);
         
         // Create form
         CommonForm form = new CommonForm();
@@ -33,16 +33,10 @@ public class ConstructionForm extends CustomComponent {
         // Add form descriptions
         
         form.addDescription("Name");
-        form.addDescription("Price");
-        //form.addDescription("In Stock");
         form.addDescription("Created");
        
         // Add form fields
         form.addField("name", "");
-        form.addField("price", "");
-        
-        
-        //form.addField("quantityInStock", "");
         form.addField("dateCreated", "");
         
         // Insert form into layout
@@ -50,14 +44,14 @@ public class ConstructionForm extends CustomComponent {
     }
     
     
-    public ConstructionForm(String id) {
+    public ThemeEdit(String id) {
         this.itemId = id;
         
         // Define layout root
         setCompositionRoot(this.layout);
     }
     
-    public ConstructionForm() {
+    public ThemeEdit() {
         this.itemId = null;
         
         // Define layout root
@@ -65,3 +59,4 @@ public class ConstructionForm extends CustomComponent {
     }
     
 }
+

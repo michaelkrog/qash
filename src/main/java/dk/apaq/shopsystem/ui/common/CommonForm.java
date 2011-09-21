@@ -89,7 +89,7 @@ public class CommonForm extends CustomComponent implements Container.Viewer {
 
         }
         
-        this.form.setVisibleItemProperties(this.field.toArray());
+        this.form.setVisibleItemProperties(new Object[] {});
         
         // Insert form into content
         this.content.addComponent(this.form);

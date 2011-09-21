@@ -2,6 +2,9 @@
 @import url(layout.css);
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
+@import "button/button.css";
+@import "accordion/accordion.css";
+
 /* CATEGORY LIST */
 .v-categorylist .v-button {
     font-size: 11px;

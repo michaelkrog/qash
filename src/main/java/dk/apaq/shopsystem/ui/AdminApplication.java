@@ -101,7 +101,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
         siteHeader = new SimpleSiteHeader();
         
 
-        setTheme("reindeermods");
+        setTheme("shopsystem");
         Window mainWindow = new Window();
         setMainWindow(mainWindow);
 
