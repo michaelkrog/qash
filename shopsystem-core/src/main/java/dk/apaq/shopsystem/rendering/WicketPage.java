@@ -6,6 +6,7 @@ import dk.apaq.shopsystem.entity.Template;
 import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.entity.Component;
 import dk.apaq.crud.Crud;
+import dk.apaq.shopsystem.context.DataContext;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.crud.ThemeCrud;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class WicketPage extends WebPage implements IMarkupCacheKeyProvider, IMar
     private Template template;
 
     public WicketPage(PageParameters pageParameters) {
-        OrganisationService service = ((WicketApplication)getApplication()).getService();
+        OrganisationService service = DataContext.getService();
         Crud<String, Module> modules = service.getModules();
         
         List<String> ids = modules.listIds();
@@ -49,7 +50,7 @@ public class WicketPage extends WebPage implements IMarkupCacheKeyProvider, IMar
 
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
-        OrganisationService service = ((WicketApplication)getApplication()).getService();
+        OrganisationService service = DataContext.getService();
         Crud<String, Theme> themes = service.getThemes();
         
         List<String> ids = themes.listIds();

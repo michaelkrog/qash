@@ -17,8 +17,6 @@ public class WicketApplication extends WebApplication {
     @Autowired
     private SystemService service;
 
-    private OrganisationService orgService;
-
     /**
      * @see org.apache.wicket.Application#getHomePage()
      */
@@ -34,13 +32,5 @@ public class WicketApplication extends WebApplication {
     public void init() {
         super.init();
         // add your configuration here
-
-        Organisation organisation = service.getOrganisationCrud().read(service.getOrganisationCrud().create());
-        orgService = service.getOrganisationService(organisation);
-        
-    }
-
-    public OrganisationService getService() {
-        return orgService;
     }
 }

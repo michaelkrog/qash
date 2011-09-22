@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.rendering.simplescript;
 
+import dk.apaq.shopsystem.context.DataContext;
 import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptContainerWrapper;
 import dk.apaq.shopsystem.rendering.simplescript.SimpleScript;
 import dk.apaq.shopsystem.entity.Component;
@@ -44,7 +45,7 @@ public class SimpleScriptComponent extends Panel implements IMarkupResourceStrea
             ScriptEngine engine = mgr.getEngineByName("JavaScript");
             
             Invocable inv = (Invocable) engine;
-            engine.put("service", ((WicketApplication)getApplication()).getService());
+            engine.put("service", DataContext.getService());
             engine.put("parent", new SimpleScriptContainerWrapper(this));
             engine.eval(new InputStreamReader(component.getCodeFile().getInputStream()));
             SimpleScript componentScript = inv.getInterface(SimpleScript.class);

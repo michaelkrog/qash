@@ -1,5 +1,7 @@
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.shopsystem.context.DataContext;
+import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.SystemService;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.tester.WicketTester;
@@ -20,18 +22,26 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
 
     private WicketTester tester;
     
+    @Autowired
+    private SystemService service;
+
     @Before
     public void setUp() {
+        String id = service.getOrganisationCrud().create();
+        Organisation org = service.getOrganisationCrud().read(id);
+        DataContext.setService(service.getOrganisationService(org));
+        
         WebApplication app = applicationContext.getBean("wicketApplication", WebApplication.class);
         tester = new WicketTester(app);
     }
 
     @Test
     public void homepageRendersSuccessfully() {
+        
         //start and render the test page
-        //tester.startPage(WicketPage.class);
+        tester.startPage(WicketPage.class);
 
         //assert rendered page class
-        //tester.assertRenderedPage(WicketPage.class);
+        tester.assertRenderedPage(WicketPage.class);
     }
 }
