@@ -25,7 +25,7 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-        <servlet>
+    <servlet>
         <servlet-name>SecondAdminServlet</servlet-name>
         <servlet-class>com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>
         <init-param>
@@ -39,6 +39,14 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <filter>
+        <filter-name>DataContextFilter</filter-name>
+        <filter-class>dk.apaq.shopsystem.filter.DataContextFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DataContextFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -48,24 +56,23 @@
         <load-on-startup>2</load-on-startup>
     </servlet>
     <servlet>
-    <servlet-name>wicket</servlet-name>
-    <servlet-class>org.apache.wicket.protocol.http.WicketServlet</servlet-class>
-    <init-param>
-        <param-name>applicationFactoryClassName</param-name>
-        <param-value>org.apache.wicket.spring.SpringWebApplicationFactory</param-value>
-    </init-param>
-    <init-param>
-        <param-name>applicationBean</param-name>
-        <param-value>wicketApplication</param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-</servlet>
-
+        <servlet-name>wicket</servlet-name>
+        <servlet-class>org.apache.wicket.protocol.http.WicketServlet</servlet-class>
+        <init-param>
+            <param-name>applicationFactoryClassName</param-name>
+            <param-value>org.apache.wicket.spring.SpringWebApplicationFactory</param-value>
+        </init-param>
+        <init-param>
+            <param-name>applicationBean</param-name>
+            <param-value>wicketApplication</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/admin/*</url-pattern>
     </servlet-mapping>
-        <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>SecondAdminServlet</servlet-name>
         <url-pattern>/admin2/*</url-pattern>
     </servlet-mapping>
@@ -85,7 +92,6 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-    
     <!--filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -94,5 +100,4 @@
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping-->
-       
 </web-app>
