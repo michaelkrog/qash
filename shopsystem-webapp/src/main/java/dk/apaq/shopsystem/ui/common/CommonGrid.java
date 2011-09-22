@@ -3,6 +3,9 @@ package dk.apaq.shopsystem.ui.common;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
@@ -25,26 +28,35 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
     private List header = new ArrayList();
     private List field = new ArrayList();
     private List fieldType = new ArrayList();
+    private List action = new ArrayList();
+    private List actionTarget = new ArrayList();
+    
     final private Table table = new Table();
     VerticalLayout content = new VerticalLayout();
     
     
-    public void setEdit (Boolean value) {
-        this.edit = value;
+    public void setEdit (Boolean edit) {
+        this.edit = edit;
     }
     
-    public void setEditCaption (String value) {
-        this.editCaption = value;
+    public void setEditCaption (String editCaption) {
+        this.editCaption = editCaption;
     }
         
-    public void addHeader(String value) {
-        this.header.add(value);
+    public void addHeader(String header) {
+        this.header.add(header);
     }
 
-    public void addField(String value, String type) {
-	this.field.add(value);
-        this.fieldType.add(type);
+    public void addField(String field, String fieldType) {
+	this.field.add(field);
+        this.fieldType.add(fieldType);
     }
+    
+    public void addAction(String action, Component actionTarget) {
+	this.action.add(action);
+        this.actionTarget.add(actionTarget);
+    }
+    
 
     @Override
     public Container getContainerDataSource() {
@@ -62,8 +74,14 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
     @Override
     public void attach() {
         
+        // Create panel
+        for (int i = 0; i < this.action.size(); i++) {
+            
+        }
+        
         // Create table
-        this.table.setSizeFull();
+        this.table.setWidth("100%");
+        this.table.setHeight("100%");
         this.table.setPageLength(30);
         
         if(this.data.size() == 0) {
@@ -120,4 +138,24 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
         getApplication().getMainWindow().addWindow(dialog);
     }
         
+    
+        
+    public Button OpenInDialog(final String buttonText, final Component target) {
+        
+        Button button = new Button(buttonText);
+        //button.setStyleName(Reindeer.BUTTON_LINK);
+        //button.addStyleName("v-accordion-button");
+        //button.setIcon(new ThemeResource("../shopsystem/icons/7/dot.png"));
+        button.addListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                CommonDialog dialog = new CommonDialog(buttonText, target);
+                getApplication().getMainWindow().addWindow(dialog);
+            }
+        });
+        
+        return button;
+        
+        
+    }
 }

@@ -1,19 +1,14 @@
 package dk.apaq.shopsystem.ui;
 
 import com.vaadin.Application;
-import com.vaadin.data.Item;
 import com.vaadin.terminal.gwt.server.HttpServletRequestListener;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
-import dk.apaq.crud.CrudEvent.WithEntity;
-import dk.apaq.crud.CrudEvent.WithId;
-import dk.apaq.crud.CrudNotifier;
-import dk.apaq.crud.core.BaseCrudListener;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.SystemService;
-import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +29,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
     private AnnexService annexService;
     private SystemService service;
     private String organisationId;
-    private AdminPanel adminPanel;
+    private AdminPanel3 adminPanel;
     private SiteHeader siteHeader;
     private VerticalLayout outerLayout = new VerticalLayout();
     //private final ICEPush pusher = new ICEPush();
@@ -98,19 +93,22 @@ public class AdminApplication extends Application implements HttpServletRequestL
         annexService = context.getBean("annexService", AnnexService.class);
         // Spring end
         
-        siteHeader = new SimpleSiteHeader();
+        siteHeader = new AutopilotSiteHeader();
         
 
         setTheme("shopsystem");
         Window mainWindow = new Window();
+        mainWindow.setSizeFull();
         setMainWindow(mainWindow);
 
         
         
-        outerLayout.setMargin(false);
-        outerLayout.setSizeFull();
-        outerLayout.setStyleName(Reindeer.LAYOUT_WHITE);
-
+        outerLayout.setMargin(true);
+        outerLayout.setWidth("100%");
+        outerLayout.setHeight("100%");
+        //outerLayout.setSizeFull();
+        outerLayout.setStyleName("v-layout-outer");
+        
         mainWindow.setContent(outerLayout);
 
         //outerLayout.addComponent(pusher);
@@ -129,11 +127,10 @@ public class AdminApplication extends Application implements HttpServletRequestL
             return;
         }
         
-        /*
         if(adminPanel != null) {
             //Remove existing adminPanel from layout
             outerLayout.removeComponent(adminPanel);
-        }*/
+        }
 
         Organisation org = service.getOrganisationCrud().read(organisationId);
         if(org==null) {
@@ -142,20 +139,19 @@ public class AdminApplication extends Application implements HttpServletRequestL
         }
         
         VaadinServiceHolder.setService(this, service.getOrganisationService(org));
+        //adminPanel = new AdminPanel(siteHeader, annexService);
+        AdminPanel3 adminPanel3 = new AdminPanel3();
         
-        AdminPanel2 adminPanel2 = new AdminPanel2();
         outerLayout.removeAllComponents();
-        outerLayout.addComponent(adminPanel2);
-        outerLayout.setExpandRatio(adminPanel2, 1.0F);
-        /*
-        
-        adminPanel = new AdminPanel(siteHeader, annexService);
-        outerLayout.removeAllComponents();
-        outerLayout.addComponent(adminPanel);
-        outerLayout.setExpandRatio(adminPanel, 1.0F);
-        adminPanel.setSizeFull();
+        outerLayout.addComponent(adminPanel3);
+        outerLayout.setComponentAlignment(adminPanel3, Alignment.MIDDLE_CENTER);
+        outerLayout.setExpandRatio(adminPanel3, 1.0F);
+        //adminPanel3.setSizeFull();
+        adminPanel3.setWidth("1000px");
+        adminPanel3.setHeight("100%");
+        adminPanel3.setStyleName("v-layout-inner");
 
-        
+        /*
         Organisation shop = service.get.read(shopId);
         ((CrudNotifier)service.getItemCrud(shop)).addListener(crudChangeHandler);
         ((CrudNotifier)service.getOrderCrud(shop)).addListener(crudChangeHandler);
