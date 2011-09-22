@@ -1,9 +1,10 @@
 @import url(../reindeermods/styles.css);
-@import url(layout.css);
+/*@import url(layout.css);*/
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
 @import "button/button.css";
-@import "accordion/accordion.css";
+@import "navigationpanel/navigationpanel.css";
+@import "layout/layout.css";
 
 /* CATEGORY LIST */
 .v-categorylist .v-button {
