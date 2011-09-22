@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.ui.common;
 
+import dk.apaq.shopsystem.ui.StoreList;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -11,8 +12,16 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.ui.ConstructionForm;
+import dk.apaq.shopsystem.ui.StoreList;
+import dk.apaq.shopsystem.ui.common.CommonDialog;
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Creates a grid combined with common functionality for listing various data
@@ -28,11 +37,13 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
     private List header = new ArrayList();
     private List field = new ArrayList();
     private List fieldType = new ArrayList();
-    private List action = new ArrayList();
-    private List actionTarget = new ArrayList();
+    private List button = new ArrayList();
+    private List buttonComponent = new ArrayList();
+    private List buttonMethod = new ArrayList();
+    private List buttonTarget = new ArrayList();
     
     final private Table table = new Table();
-    VerticalLayout content = new VerticalLayout();
+    final VerticalLayout content = new VerticalLayout();
     
     
     public void setEdit (Boolean edit) {
@@ -52,9 +63,12 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
         this.fieldType.add(fieldType);
     }
     
-    public void addAction(String action, Component actionTarget) {
-	this.action.add(action);
-        this.actionTarget.add(actionTarget);
+    public void addButton(String button, String buttonComponent, String buttonMethod, String buttonTarget) {
+        
+	this.button.add(button);
+        this.buttonComponent.add(buttonComponent);
+        this.buttonMethod.add(buttonMethod);
+        this.buttonTarget.add(buttonTarget);
     }
     
 
@@ -75,8 +89,8 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
     public void attach() {
         
         // Create panel
-        for (int i = 0; i < this.action.size(); i++) {
-            
+        for (int i = 0; i < this.button.size(); i++) {
+            this.content.addComponent(createButton(this.button.get(i).toString(),this.buttonComponent.get(i).toString(),this.buttonMethod.get(i).toString(),this.buttonTarget.get(i).toString()));
         }
         
         // Create table
@@ -140,17 +154,61 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
         
     
         
-    public Button OpenInDialog(final String buttonText, final Component target) {
+    private Button createButton(final String buttonText, final String buttonComponent, final String buttonMethod, final String buttonTarget) {
         
         Button button = new Button(buttonText);
+        //buttonComponent.get
         //button.setStyleName(Reindeer.BUTTON_LINK);
         //button.addStyleName("v-accordion-button");
         //button.setIcon(new ThemeResource("../shopsystem/icons/7/dot.png"));
         button.addListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
-                CommonDialog dialog = new CommonDialog(buttonText, target);
-                getApplication().getMainWindow().addWindow(dialog);
+                
+                if ("dialog".equals(buttonTarget)) {
+                    // ?
+                    //CommonDialog dialog = new CommonDialog(buttonText, buttonComponent(buttonTarget));
+                    //getApplication().getMainWindow().addWindow(dialog);
+                }
+                if ("content".equals(buttonTarget)) {
+                    // ?
+                }
+                if (!"dialog".equals(buttonTarget) && !"content".equals(buttonTarget)) {
+                  
+                    try {
+                        try {
+                            System.out.println("Creating instance: " +buttonComponent);
+                            Object newInstance = (Object) Class.forName(buttonComponent).newInstance();
+                            
+                            System.out.println("Finding methods...");
+                            Method[] allMethods = newInstance.getClass().getDeclaredMethods();
+                            
+                            for (Method m : allMethods) {
+                                System.out.println("Found: " + m.getName());
+                                if (m.getName().equalsIgnoreCase(buttonMethod)) {
+                                    try {
+                                        
+                                        Object o = m.invoke(newInstance, new Locale(buttonMethod));
+                                        System.out.println(buttonMethod + ":" + o);
+                                        
+                                    } catch (IllegalArgumentException ex) {
+                                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                                    } catch (InvocationTargetException ex) {
+                                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                            }
+                            
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        } catch (InstantiationException ex) {
+                            Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                   
+                }
             }
         });
         

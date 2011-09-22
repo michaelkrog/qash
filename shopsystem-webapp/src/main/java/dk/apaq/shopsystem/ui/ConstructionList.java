@@ -1,10 +1,10 @@
 package dk.apaq.shopsystem.ui;
 
+import dk.apaq.shopsystem.ui.common.CommonGrid;
 import com.vaadin.data.Container;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.entity.Product;
-import dk.apaq.shopsystem.ui.common.CommonGrid;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 

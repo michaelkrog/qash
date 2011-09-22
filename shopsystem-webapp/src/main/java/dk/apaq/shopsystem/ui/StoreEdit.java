@@ -1,11 +1,11 @@
 package dk.apaq.shopsystem.ui;
 
+import dk.apaq.shopsystem.ui.common.CommonForm;
 import com.vaadin.data.Container;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.service.OrganisationService;
-import dk.apaq.shopsystem.ui.common.CommonForm;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
 public class StoreEdit extends CustomComponent {
