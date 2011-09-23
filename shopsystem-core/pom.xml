@@ -12,6 +12,9 @@
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <dk.apaq.crud.version>1.0.20</dk.apaq.crud.version>
+        <dk.apaq.filter.version>1.0.10</dk.apaq.filter.version>
+        <vaadin.version>6.6.2</vaadin.version>
     </properties>
     <name>ShopSystem Core</name>
 
