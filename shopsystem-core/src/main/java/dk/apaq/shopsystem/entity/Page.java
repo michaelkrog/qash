@@ -1,10 +1,17 @@
 package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.GenericGenerator;
@@ -30,6 +37,10 @@ public class Page implements Serializable, BasicEntity {
     private String title;
     private String description;
     private String keywords;
+    private String themeName;
+    private String templateName;
+    
+    //private List<ComponentInformation> placeholderMap = new ArrayList<ComponentInformation>();
     
     @ManyToOne
     private Website website;
@@ -100,5 +111,20 @@ public class Page implements Serializable, BasicEntity {
         this.website = website;
     }
 
+    /*
+    public List<String> getPlaceholderIds() {
+        return new ArrayList(placeholderMap.keySet());
+    }
     
+    public List<ComponentInformation> getComponentInformations(String placeholderId){
+        return placeholderMap.get(placeholderId);
+    }
+    
+    public void removePlaceholderId(String id) {
+        placeholderMap.remove(id);
+    }
+    
+    public void clearPlaceholderInformation() {
+        placeholderMap.clear();
+    }*/
 }
