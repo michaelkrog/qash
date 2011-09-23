@@ -7,6 +7,7 @@ import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.entity.Component;
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.context.DataContext;
+import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.crud.ThemeCrud;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.resource.IResourceStream;
 
@@ -30,6 +32,8 @@ public class WicketPage extends WebPage implements IMarkupCacheKeyProvider, IMar
     private Template template;
 
     public WicketPage(PageParameters pageParameters) {
+        Page page = RequestCycle.get().getMetaData(WicketRequestMapper2.PAGE);
+        
         OrganisationService service = DataContext.getService();
         Crud<String, Module> modules = service.getModules();
         
