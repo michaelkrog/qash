@@ -20,6 +20,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>dk.apaq.filter</groupId>
+            <artifactId>filter-jpa</artifactId>
+            <version>1.0.10</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.apaq.crud</groupId>
+            <artifactId>crud-core</artifactId>
+            <version>1.0.20</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>
