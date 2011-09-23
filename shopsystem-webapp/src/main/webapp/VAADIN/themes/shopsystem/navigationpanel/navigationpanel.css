@@ -3,6 +3,8 @@
     background-image: url(../../shopsystem/images/stripes.png);
     background-repeat: repeat;
 }
+
+/* THIS BREAKS OTHER BUTTONS THAN THE ONES IN NAVIGATION 
 .v-button-link .v-button-caption,
 .v-nativebutton-link .v-nativebutton-caption {
     color: #ffffff;
@@ -11,5 +13,4 @@
     text-decoration: none;
     padding: 5px 5px 5px 15px;
     
-    /*border: 1px solid #ffffff;*/
-}
+}*/
