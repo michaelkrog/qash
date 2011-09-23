@@ -1,17 +1,164 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>shopsystem</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>shopsystem</artifactId>
+        <groupId>dk.apaq.shopsystem</groupId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
     <groupId>dk.apaq.shopsystem</groupId>
-    <version>2.0-SNAPSHOT</version>
-  </parent>
-  <groupId>dk.apaq.shopsystem</groupId>
-  <artifactId>shopsystem-core</artifactId>
-  <url>http://maven.apache.org</url>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <artifactId>shopsystem-core</artifactId>
+    <url>http://maven.apache.org</url>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <name>ShopSystem Core</name>
+
+    <dependencies>
+
+<!-- HIBERNATE -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>3.6.4.Final</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>3.6.4.Final</version>
+        </dependency>
+        <!--dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+            <version>3.6.4.Final</version>
+        </dependency-->
+        <dependency>
+            <groupId>com.jolbox</groupId>
+            <artifactId>bonecp</artifactId>
+            <version>0.7.1.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.jolbox</groupId>
+            <artifactId>bonecp-provider</artifactId>
+            <version>0.7.1.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- CRUD & Filter-->
+        <dependency>
+            <groupId>dk.apaq.crud</groupId>
+            <artifactId>crud-core</artifactId>
+            <version>${dk.apaq.crud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.apaq.crud</groupId>
+            <artifactId>crud-jpa</artifactId>
+            <version>${dk.apaq.crud.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>dk.apaq.filter</groupId>
+            <artifactId>filter-jpa</artifactId>
+            <version>${dk.apaq.filter.version}</version>
+        </dependency>
+        
+        <!-- Velocity -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.6.2</version>
+            <type>jar</type>
+        </dependency>
+        
+        <!-- xhtml renderer -->
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>core-renderer</artifactId>
+            <version>R8</version>
+        </dependency>
+
+        <!-- itext -->
+        <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>2.0.8</version>
+        </dependency>
+
+
+        <!-- Batik SVG builder -->
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-dom</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-swing</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-gvt</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-svggen</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+
+        
+    <!-- JAVA VFS -->
+        <dependency>
+            <groupId>dk.apaq.vfs</groupId>
+            <artifactId>javavfs</artifactId>
+            <version>1.0.3-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+
+         <!-- DB DRIVERS -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>

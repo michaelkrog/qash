@@ -89,7 +89,7 @@ public class VfsResourceStream implements IResourceStream {
     @Override
     public String toString() {
         //TODO
-        return getClass().getName();// file.getPath().toString();
+        return file.getPath().toString();
     }
     
    
