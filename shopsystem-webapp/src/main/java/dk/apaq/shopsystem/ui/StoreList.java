@@ -28,7 +28,7 @@ public class StoreList extends CustomComponent {
         grid.setEditCaption("Edit user");
 
         // Add buttons
-        grid.addButton("Delete","StoreList","DeleteStore","");
+        grid.addButton("Delete",StoreList.class.getName(),"DeleteStore","");
         
         // Add grid headers
         grid.addHeader("Name");
