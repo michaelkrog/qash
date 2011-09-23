@@ -24,15 +24,11 @@ public class WicketRequestMapper2 extends AbstractBookmarkableMapper {
     @Override
     protected UrlInfo parseRequest(Request request) {
         Url url = request.getUrl();
-        /*if (url.getSegments().size() >= 3 &&
-        urlStartsWith(url, getContext().getNamespace(),
-        getContext().getBookmarkableIdentifier()))
-        {*/
         // try to extract page and component information from URL
         PageComponentInfo info = getPageComponentInfo(url);
 
 
-        // load the page class
+        // get page name
         String pageName = url.getSegments().get(0);
         Page page = new Page();
         page.setName(pageName);
@@ -43,16 +39,11 @@ public class WicketRequestMapper2 extends AbstractBookmarkableMapper {
 
         return new UrlInfo(info, WicketPage.class, pageParameters);
 
-        //}
-        //return null;
     }
 
     @Override
     protected Url buildUrl(UrlInfo info) {
         Url url = new Url();
-        //url.getSegments().add(getContext().getNamespace());
-        //url.getSegments().add(getContext().getBookmarkableIdentifier());
-        //url.getSegments().add(info.getPageClass().getName());
         Page page = RequestCycle.get().getMetaData(PAGE);
         
         url.getSegments().add(page.getName());
