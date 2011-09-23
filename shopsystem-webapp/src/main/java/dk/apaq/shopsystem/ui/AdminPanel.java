@@ -63,13 +63,18 @@ public class AdminPanel extends CustomComponent {
 
         CategoryList categoryList = new CategoryList();
         categoryList.addCategory("General");
-        categoryList.addItem("Butikker", "STORES");
         categoryList.addItem("Kunder", "CUSTOMERS");
         categoryList.addItem("Ordrer", "ORDERS");
         categoryList.addItem("Produkter", "STOCK");
-        categoryList.addCategory("Web");
-        categoryList.addItem("Sites", "WEBSITES");
-        categoryList.addItem("CommonGrid test", "CONSTRUCTIONLIST");
+        
+        categoryList.addCategory("Stores");
+        categoryList.addItem("Aalborg", "STORE:3123123213123");
+        categoryList.addItem("Aarhus", "STORE:3123123213123");
+        categoryList.addItem("København", "STORE:3123123213123");
+        
+        categoryList.addCategory("Websites");
+        categoryList.addItem("Bikez", "WEBSITE:1341312312");
+        categoryList.addItem("Trendy Jewelry", "WEBSITE:141352424");
         
         categoryList.setSizeFull();
         categoryList.addListener(listListener);
@@ -78,7 +83,7 @@ public class AdminPanel extends CustomComponent {
 
         mainLayout.addComponent(categoryList);
         mainLayout.addComponent(content);
-        mainLayout.setSplitPosition(180, Component.UNITS_PIXELS);
+        mainLayout.setSplitPosition(147, Component.UNITS_PIXELS);
 
         //outerLayout.addComponent(cookies);
         outerLayout.addComponent(header);

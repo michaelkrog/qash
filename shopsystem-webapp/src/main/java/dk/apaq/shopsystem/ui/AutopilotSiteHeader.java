@@ -39,6 +39,7 @@ public class AutopilotSiteHeader extends CustomComponent implements SiteHeader {
 
         logo.setWidth(135, UNITS_PIXELS);
 
+        layout.setMargin(false, true, false, true);
         layout.addComponent(logo);
         layout.addComponent(linkColumn1);
         layout.addComponent(linkColumn2);
