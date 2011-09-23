@@ -1,0 +1,119 @@
+
+#ge-header-container {
+    position:absolute;
+    top:0px;
+}
+
+
+#ge-header-container, .ge-header-container{
+    width:100%;
+    height:56px;
+    margin:0px auto;
+    background-image:url(../images/ge-header-background.png);
+    background-position:top center;
+    background-repeat:repeat-x;
+    
+}
+
+.ge-header{
+    width:950px;
+    height:56px;
+    margin:0px auto;
+}
+
+.ge-logo{
+    width:153px;
+    height:35px;
+    position:relative;
+    float:left;
+    margin-top:10px;
+}
+
+.ge-userinfo div[role=button] {
+    display:block;
+}
+
+.ge-userinfo div[role=button]:hover,
+.ge-userinfo div[role=button]:hover span{
+    text-decoration:underline;
+    color: white;
+    
+}
+
+
+.ge-userinfo span,
+.ge-userinfo a:visited span,
+.ge-userinfo div[role=button] span {
+    font-family: 'Open Sans', serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    text-shadow: 0px 1px 1px #3f3f3f;
+    letter-spacing: 0em;
+    word-spacing: 0em;
+    line-height: 1.2;
+    color: #dadada;
+    text-decoration: none;
+}
+
+.ge-userinfo {
+    height:32px;
+    float:left;
+    border-left:1px solid #9a9a9a;
+    padding-left:20px;
+    padding-right:20px;
+    vertical-align: middle;
+    margin-top:10px;
+}
+
+.ge-userinfo span {
+    padding-right: 16px;
+    background: transparent url(../images/linkarrow.png) no-repeat center right;
+}
+
+.ge-userinfo a {
+    text-decoration:none;
+    color: #dadada;
+}
+
+.ge-userinfo a:hover span,
+.ge-userinfo a span,
+.ge-userinfo a:link span,
+.ge-userinfo a:visited span {
+    color: #dadada;
+}
+
+.ge-userinfo a:hover span {
+    color: white;
+    text-decoration:underline;
+}
+
+
+.ge-phone span,
+.ge-phone a:hover span,
+.ge-phone a:visited span,
+.ge-phone a:link span {
+
+    font-family: 'Open Sans', serif;
+    color:#ffffff;
+    font-size:20px;
+    line-height:normal;
+    text-shadow:0px 1px 0px #000000;
+    text-align:right;
+    text-decoration:none;
+    
+}
+
+.ge-phone {
+    
+    width:220px;
+    height:35px;
+    position:relative;
+    float:right;
+    margin-top:14px;
+}
+
+.ge-phone a {
+    text-decoration:none;
+    color:white;
+}
