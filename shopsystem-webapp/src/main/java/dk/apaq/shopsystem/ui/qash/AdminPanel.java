@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.qash;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Component;
@@ -11,9 +11,12 @@ import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.ui.ConstructionList;
+import dk.apaq.shopsystem.ui.SiteHeader;
+import dk.apaq.shopsystem.ui.VaadinServiceHolder;
 import dk.apaq.shopsystem.ui.common.CategoryList;
 import dk.apaq.shopsystem.ui.common.CategoryList.SelectEvent;
-import dk.apaq.shopsystem.ui.print.PrintDocGeneratorImpl;
+import dk.apaq.shopsystem.ui.qash.print.PrintDocGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

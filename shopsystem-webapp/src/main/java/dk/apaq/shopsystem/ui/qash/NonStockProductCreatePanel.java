@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.qash;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;

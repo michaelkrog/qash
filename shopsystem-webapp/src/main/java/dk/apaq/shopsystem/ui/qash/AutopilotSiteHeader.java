@@ -1,6 +1,6 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.qash;
 
-import dk.apaq.shopsystem.ui.settings.SettingsDialog;
+import dk.apaq.shopsystem.ui.qash.settings.SettingsDialog;
 import com.vaadin.event.MouseEvents.ClickEvent;
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.terminal.ExternalResource;
@@ -14,6 +14,7 @@ import com.vaadin.ui.Link;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
+import dk.apaq.shopsystem.ui.SiteHeader;
 
 /**
  *

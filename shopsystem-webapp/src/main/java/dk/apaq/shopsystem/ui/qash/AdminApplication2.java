@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.qash;
 
 import com.vaadin.Application;
 import com.vaadin.terminal.gwt.server.HttpServletRequestListener;
@@ -8,6 +8,10 @@ import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.SystemService;
+import dk.apaq.shopsystem.ui.AdminApplication;
+import dk.apaq.shopsystem.ui.SiteHeader;
+import dk.apaq.shopsystem.ui.VaadinServiceHolder;
+import dk.apaq.shopsystem.ui.VaadinSpringHelper;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

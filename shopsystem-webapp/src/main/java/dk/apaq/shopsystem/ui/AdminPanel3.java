@@ -18,7 +18,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.ui.common.CommonDialog;
-import dk.apaq.shopsystem.ui.settings.SettingsDialog;
+import dk.apaq.shopsystem.ui.qash.settings.SettingsDialog;
 
 /**
  *

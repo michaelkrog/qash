@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.qash;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
@@ -27,7 +27,7 @@ import dk.apaq.filter.core.OrFilter;
 import dk.apaq.filter.sort.SortDirection;
 import dk.apaq.filter.sort.Sorter;
 import dk.apaq.shopsystem.entity.OrderStatus;
-import dk.apaq.shopsystem.ui.data.util.CurrencyColumnGenerator;
+import dk.apaq.shopsystem.ui.qash.data.util.CurrencyColumnGenerator;
 import dk.apaq.shopsystem.ui.common.Spacer;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
 import java.text.DateFormat;

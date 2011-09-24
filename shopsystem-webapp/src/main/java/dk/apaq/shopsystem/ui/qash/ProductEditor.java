@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.qash;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +20,9 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import dk.apaq.shopsystem.entity.Tax;
-import dk.apaq.shopsystem.ui.data.util.CurrencyAmountFormatter;
-import dk.apaq.shopsystem.ui.data.util.CurrencyAmountValidator;
+import dk.apaq.shopsystem.ui.ShopSystemTheme;
+import dk.apaq.shopsystem.ui.qash.data.util.CurrencyAmountFormatter;
+import dk.apaq.shopsystem.ui.qash.data.util.CurrencyAmountValidator;
 import dk.apaq.shopsystem.ui.common.FieldEnabler;
 import dk.apaq.vaadin.addon.crudcontainer.HasBean;
 

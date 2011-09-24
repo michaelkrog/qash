@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.qash;
 
 import com.vaadin.data.Buffered;
 import com.vaadin.data.Container;
@@ -29,8 +29,8 @@ import dk.apaq.filter.sort.Sorter;
 import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.ui.common.CommonDialog;
-import dk.apaq.shopsystem.ui.data.ProductContainer;
-import dk.apaq.shopsystem.ui.data.util.NumberColumnGenerator;
+import dk.apaq.shopsystem.ui.qash.data.ProductContainer;
+import dk.apaq.shopsystem.ui.qash.data.util.NumberColumnGenerator;
 import dk.apaq.shopsystem.ui.common.ProductFilterGenerator;
 import dk.apaq.shopsystem.ui.common.Spacer;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;

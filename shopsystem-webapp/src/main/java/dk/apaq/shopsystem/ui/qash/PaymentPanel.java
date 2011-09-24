@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.qash;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ConversionException;
@@ -18,7 +18,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
 import dk.apaq.shopsystem.entity.PaymentType;
-import dk.apaq.shopsystem.ui.data.util.CurrencyAmountFormatter;
+import dk.apaq.shopsystem.ui.ShopSystemTheme;
+import dk.apaq.shopsystem.ui.qash.data.util.CurrencyAmountFormatter;
 import dk.apaq.shopsystem.ui.common.SwitchButtonGroup;
 import java.text.NumberFormat;
 

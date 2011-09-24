@@ -1,6 +1,6 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.qash;
 
-import dk.apaq.shopsystem.ui.print.PrintDocGenerator;
+import dk.apaq.shopsystem.ui.qash.print.PrintDocGenerator;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeEvent;

@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.ui;
 
+import dk.apaq.shopsystem.ui.qash.AutopilotSiteHeader;
 import com.vaadin.Application;
 import com.vaadin.terminal.gwt.server.HttpServletRequestListener;
 import com.vaadin.ui.Alignment;
