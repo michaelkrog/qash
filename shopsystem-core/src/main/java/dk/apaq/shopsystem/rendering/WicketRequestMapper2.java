@@ -1,6 +1,8 @@
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.shopsystem.context.DataContext;
 import dk.apaq.shopsystem.entity.Page;
+import dk.apaq.shopsystem.service.OrganisationService;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
@@ -30,6 +32,7 @@ public class WicketRequestMapper2 extends AbstractBookmarkableMapper {
 
         // get page name
         String pageName = url.getSegments().get(0);
+        OrganisationService service = null;//DataContext.getService().
         Page page = new Page();
         page.setName(pageName);
         RequestCycle.get().setMetaData(PAGE, page);

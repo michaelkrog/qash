@@ -9,10 +9,12 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -40,6 +42,7 @@ public class Page implements Serializable, BasicEntity {
     private String themeName;
     private String templateName;
     
+    //@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     //private List<ComponentInformation> placeholderMap = new ArrayList<ComponentInformation>();
     
     @ManyToOne
