@@ -17,7 +17,7 @@
         <init-param>
             <description>Vaadin application class to start</description>
             <param-name>application</param-name>
-            <param-value>dk.apaq.shopsystem.ui.AdminApplication</param-value>
+            <param-value>dk.apaq.shopsystem.ui.shoppinnet.AdminApplication</param-value>
         </init-param>
         <init-param>
             <param-name>widgetset</param-name>

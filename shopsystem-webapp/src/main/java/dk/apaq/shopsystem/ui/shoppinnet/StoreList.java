@@ -1,14 +1,15 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.shoppinnet;
 
 import dk.apaq.shopsystem.ui.common.CommonGrid;
 import com.vaadin.data.Container;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
-import dk.apaq.shopsystem.entity.Product;
+import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.ui.VaadinServiceHolder;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
-public class UserList extends CustomComponent {
+public class StoreList extends CustomComponent {
    
     // Declare variables
     private VerticalLayout layout = new VerticalLayout();
@@ -19,13 +20,16 @@ public class UserList extends CustomComponent {
         
         // Get data
         OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
-        Container c = new CrudContainer(orgService.getUsers(), Product.class);
+        Container c = new CrudContainer(orgService.getStores(), Store.class);
         
         // Create grid
         CommonGrid grid = new CommonGrid();
         grid.setContainerDataSource(c);
         grid.setEdit(true);
         grid.setEditCaption("Edit user");
+
+        // Add buttons
+        grid.addButton("Delete",StoreList.class.getName(),"DeleteStore","");
         
         // Add grid headers
         grid.addHeader("Name");
@@ -40,10 +44,24 @@ public class UserList extends CustomComponent {
     }
     
     
-    public UserList() {
+    public StoreList() {
         
         // Define layout root
         setCompositionRoot(this.layout);
+    }
+    
+       
+    public void setId(String id) {
+        //this.edit = edit;
+    }
+        
+    
+    public void DeleteStore() {
+        
+        System.out.println("Store should be deleted here...");
+        // Delete store
+        //OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
+        //orgService.getStores().delete(id);
     }
     
 }

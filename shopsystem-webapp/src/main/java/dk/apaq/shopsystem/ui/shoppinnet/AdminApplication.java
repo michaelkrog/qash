@@ -1,6 +1,6 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.shoppinnet;
 
-import dk.apaq.shopsystem.ui.qash.AutopilotSiteHeader;
+
 import com.vaadin.Application;
 import com.vaadin.terminal.gwt.server.HttpServletRequestListener;
 import com.vaadin.ui.Alignment;
@@ -10,6 +10,11 @@ import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.SystemService;
+import dk.apaq.shopsystem.ui.shoppinnet.AdminPanel;
+import dk.apaq.shopsystem.ui.AutopilotSiteHeader;
+import dk.apaq.shopsystem.ui.SiteHeader;
+import dk.apaq.shopsystem.ui.VaadinServiceHolder;
+import dk.apaq.shopsystem.ui.VaadinSpringHelper;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,8 +35,8 @@ public class AdminApplication extends Application implements HttpServletRequestL
     private AnnexService annexService;
     private SystemService service;
     private String organisationId;
-    private AdminPanel3 adminPanel;
     private SiteHeader siteHeader;
+    private AdminPanel adminPanel;
     private VerticalLayout outerLayout = new VerticalLayout();
     //private final ICEPush pusher = new ICEPush();
     //private final CrudChangeHandler crudChangeHandler = new CrudChangeHandler();
@@ -97,7 +102,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
         siteHeader = new AutopilotSiteHeader();
         
 
-        setTheme("shopsystem");
+        setTheme("shoppinnet");
         Window mainWindow = new Window();
         mainWindow.setSizeFull();
         setMainWindow(mainWindow);
@@ -135,29 +140,22 @@ public class AdminApplication extends Application implements HttpServletRequestL
 
         Organisation org = service.getOrganisationCrud().read(organisationId);
         if(org==null) {
-            getMainWindow().showNotification("Organsiation with id "+organisationId+" does not exist.", Window.Notification.TYPE_ERROR_MESSAGE);
+            getMainWindow().showNotification("Organisation with id "+organisationId+" does not exist.", Window.Notification.TYPE_ERROR_MESSAGE);
             return;
         }
         
         VaadinServiceHolder.setService(this, service.getOrganisationService(org));
-        //adminPanel = new AdminPanel(siteHeader, annexService);
-        AdminPanel3 adminPanel3 = new AdminPanel3();
+        adminPanel = new AdminPanel();
         
         outerLayout.removeAllComponents();
-        outerLayout.addComponent(adminPanel3);
-        outerLayout.setComponentAlignment(adminPanel3, Alignment.MIDDLE_CENTER);
-        outerLayout.setExpandRatio(adminPanel3, 1.0F);
-        //adminPanel3.setSizeFull();
-        adminPanel3.setWidth("1000px");
-        adminPanel3.setHeight("100%");
-        adminPanel3.setStyleName("v-layout-inner");
+        outerLayout.addComponent(adminPanel);
+        outerLayout.setComponentAlignment(adminPanel, Alignment.MIDDLE_CENTER);
+        outerLayout.setExpandRatio(adminPanel, 1.0F);
+        //adminPanel.setSizeFull();
+        adminPanel.setWidth("1000px");
+        adminPanel.setHeight("100%");
+        adminPanel.setStyleName("v-layout-inner");
 
-        /*
-        Organisation shop = service.get.read(shopId);
-        ((CrudNotifier)service.getItemCrud(shop)).addListener(crudChangeHandler);
-        ((CrudNotifier)service.getOrderCrud(shop)).addListener(crudChangeHandler);
-        ((CrudNotifier)service.getTaxCrud(shop)).addListener(crudChangeHandler);
-*/
         
 
     }

@@ -1,14 +1,15 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.shoppinnet;
 
 import dk.apaq.shopsystem.ui.common.CommonForm;
 import com.vaadin.data.Container;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
-import dk.apaq.shopsystem.entity.Theme;
+import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.ui.VaadinServiceHolder;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
-public class ThemeEdit extends CustomComponent {
+public class StoreEdit extends CustomComponent {
    
     // Declare variables
     private VerticalLayout layout = new VerticalLayout();
@@ -19,7 +20,7 @@ public class ThemeEdit extends CustomComponent {
         
         // Get data
         OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
-        Container c = new CrudContainer(orgService.getThemes(), Theme.class);
+        Container c = new CrudContainer(orgService.getStores(), Store.class);
         
         // Create form
         CommonForm form = new CommonForm();
@@ -44,14 +45,14 @@ public class ThemeEdit extends CustomComponent {
     }
     
     
-    public ThemeEdit(String id) {
+    public StoreEdit(String id) {
         this.itemId = id;
         
         // Define layout root
         setCompositionRoot(this.layout);
     }
     
-    public ThemeEdit() {
+    public StoreEdit() {
         this.itemId = null;
         
         // Define layout root

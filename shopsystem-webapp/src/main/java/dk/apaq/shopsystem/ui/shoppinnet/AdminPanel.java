@@ -1,43 +1,33 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.shoppinnet;
+
 
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.ui.common.CommonDialog;
 
-/**
- *
- * @author Martin Christensen
- */
-public class AdminPanel2 extends CustomComponent {
+
+public class AdminPanel extends CustomComponent {
     
     private HorizontalLayout innerLayout = new HorizontalLayout();
     private VerticalLayout outerLayout = new VerticalLayout();
     private VerticalLayout content = new VerticalLayout();
     private Accordion accordion = new Accordion();
-    //private Panel tabContent = new Panel();
     
     
-    public AdminPanel2() {
+    public AdminPanel() {
         
-        this.outerLayout.setSizeFull();
-        this.innerLayout.setSizeFull();
-        this.content.setSizeFull();
-        this.accordion.setSizeFull();
+        this.outerLayout.setWidth("100%");
+        this.innerLayout.setWidth("100%");
+        this.content.setWidth("100%");
+        //this.accordion.setSizeFull();
         
         this.accordion.setStyleName("v-accordion-borderless");
         
@@ -54,8 +44,8 @@ public class AdminPanel2 extends CustomComponent {
         this.accordion.addTab(tab1, "Settings", null);
         
         Panel tab2 = new Panel();
-        tab2.addComponent(OpenInContent("Products",new ConstructionList(), false));
-        tab2.addComponent(OpenInDialog("Add new product", new ConstructionForm(), false));
+        //tab2.addComponent(OpenInContent("Products",new ConstructionList(), false));
+        //tab2.addComponent(OpenInDialog("Add new product", new ConstructionForm(), false));
         this.accordion.addTab(tab2, "Products", null);
         
         Panel tab3 = new Panel();
@@ -71,7 +61,7 @@ public class AdminPanel2 extends CustomComponent {
         this.innerLayout.getComponent(0).setWidth("200px");
         this.innerLayout.setExpandRatio(this.content, 1.0f);
         
-        this.outerLayout.addComponent(new SimpleSiteHeader());
+        this.outerLayout.addComponent(new Header());
         this.outerLayout.addComponent(innerLayout);
         
         setCompositionRoot(this.outerLayout);

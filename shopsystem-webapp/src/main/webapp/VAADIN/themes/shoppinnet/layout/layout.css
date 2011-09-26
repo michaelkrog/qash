@@ -1,0 +1,8 @@
+.v-layout-outer {
+    background-color: #555555;
+}
+
+.v-layout-inner {
+    background-color: #5d5d5d;
+    border: 1px solid #444444;
+}

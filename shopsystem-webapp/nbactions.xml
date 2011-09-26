@@ -39,4 +39,11 @@
                 <netbeans.deploy.profilemode>true</netbeans.deploy.profilemode>
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-GWT compile</actionName>
+            <displayName>GWT compile</displayName>
+            <goals>
+                <goal>gwt:compile</goal>
+            </goals>
+        </action>
     </actions>

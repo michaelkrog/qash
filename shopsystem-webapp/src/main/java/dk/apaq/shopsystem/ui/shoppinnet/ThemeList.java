@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.shoppinnet;
 
 import dk.apaq.shopsystem.ui.common.CommonGrid;
 import com.vaadin.data.Container;
@@ -6,6 +6,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.ui.VaadinServiceHolder;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
 public class ThemeList extends CustomComponent {
