@@ -8,10 +8,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
-<<<<<<< .mine
-=======
-import dk.apaq.shopsystem.ui.ConstructionForm;
->>>>>>> .r154
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
