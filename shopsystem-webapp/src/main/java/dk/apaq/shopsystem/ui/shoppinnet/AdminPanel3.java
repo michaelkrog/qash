@@ -1,20 +1,14 @@
 package dk.apaq.shopsystem.ui.shoppinnet;
 
-import com.vaadin.terminal.ThemeResource;
-import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.NativeButton;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.ui.common.CommonDialog;
-import dk.apaq.shopsystem.ui.settings.SettingsDialog;
+import dk.apaq.shopsystem.ui.qash.settings.SettingsDialog;
 
 /**
  *

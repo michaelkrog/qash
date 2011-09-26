@@ -1,20 +1,14 @@
 package dk.apaq.shopsystem.ui.common;
 
-import dk.apaq.shopsystem.ui.StoreList;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.ui.ConstructionForm;
-import dk.apaq.shopsystem.ui.StoreList;
-import dk.apaq.shopsystem.ui.common.CommonDialog;
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
