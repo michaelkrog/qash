@@ -9,10 +9,9 @@ import com.vaadin.ui.Window;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.SystemService;
-import dk.apaq.shopsystem.ui.SiteHeader;
+import dk.apaq.shopsystem.ui.shoppinnet.AdminPanel;
 import dk.apaq.shopsystem.ui.VaadinServiceHolder;
 import dk.apaq.shopsystem.ui.VaadinSpringHelper;
-import dk.apaq.shopsystem.ui.qash.AutopilotSiteHeader;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,10 +29,9 @@ public class AdminApplication extends Application implements HttpServletRequestL
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminApplication.class);
     
-    private AnnexService annexService;
+    //private AnnexService annexService;
     private SystemService service;
     private String organisationId;
-    private SiteHeader siteHeader;
     private AdminPanel adminPanel;
     private VerticalLayout outerLayout = new VerticalLayout();
     //private final ICEPush pusher = new ICEPush();
@@ -94,10 +92,10 @@ public class AdminApplication extends Application implements HttpServletRequestL
         //Load classes from spring
         ApplicationContext context = VaadinSpringHelper.getSpringContextFromVaadinContext(getContext());
         service = context.getBean("service", SystemService.class);
-        annexService = context.getBean("annexService", AnnexService.class);
+        //annexService = context.getBean("annexService", AnnexService.class);
         // Spring end
         
-        siteHeader = new AutopilotSiteHeader();
+        //siteHeader = new AutopilotSiteHeader();
         
 
         setTheme("shoppinnet");

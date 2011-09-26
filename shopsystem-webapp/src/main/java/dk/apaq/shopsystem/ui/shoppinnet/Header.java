@@ -64,6 +64,10 @@ public class Header extends CustomComponent {
         b = new NativeButton("Support");
         b.setIcon(new ThemeResource("../runo/icons/16/email.png"));
         left.addComponent(b);
+        
+        b = new NativeButton("QASH Register Edition");
+        b.setIcon(new ThemeResource("../runo/icons/16/reload.png"));
+        left.addComponent(b);
 
         setCompositionRoot(layout);
 

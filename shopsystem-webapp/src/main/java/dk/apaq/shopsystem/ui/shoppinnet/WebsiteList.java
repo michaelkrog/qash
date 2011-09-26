@@ -4,12 +4,12 @@ import dk.apaq.shopsystem.ui.common.CommonGrid;
 import com.vaadin.data.Container;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
-import dk.apaq.shopsystem.entity.Theme;
+import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.ui.VaadinServiceHolder;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
-public class ThemeList extends CustomComponent {
+public class WebsiteList extends CustomComponent {
    
     // Declare variables
     private VerticalLayout layout = new VerticalLayout();
@@ -20,13 +20,18 @@ public class ThemeList extends CustomComponent {
         
         // Get data
         OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
-        Container c = new CrudContainer(orgService.getThemes(), Theme.class);
+        Container c = new CrudContainer(orgService.getWebsites(), Website.class);
         
         // Create grid
         CommonGrid grid = new CommonGrid();
         grid.setContainerDataSource(c);
         grid.setEdit(true);
-        grid.setEditCaption("Edit Theme");
+        grid.setEditCaption("Edit Website");
+
+        // Add buttons
+        grid.addButton("Add",WebsiteList.class.getName(),"Add","");
+        grid.addButton("Edit",WebsiteList.class.getName(),"Edit","");
+        grid.addButton("Delete",WebsiteList.class.getName(),"Delete","");
         
         // Add grid headers
         grid.addHeader("Name");
@@ -41,10 +46,11 @@ public class ThemeList extends CustomComponent {
     }
     
     
-    public ThemeList() {
+    public WebsiteList() {
         
         // Define layout root
         setCompositionRoot(this.layout);
     }
+    
     
 }

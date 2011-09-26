@@ -30,29 +30,56 @@ public class AdminPanel extends CustomComponent {
         //this.accordion.setSizeFull();
         
         this.accordion.setStyleName("v-accordion-borderless");
+        this.accordion.addStyleName("v-navigationpanel");
         
         // Navigation contents
         Panel tab1 = new Panel();
-        tab1.addComponent(OpenInContent("Stores",new StoreList(), false));
-        tab1.addComponent(OpenInDialog("Add new store", new StoreEdit(), true));
+        tab1.addComponent(OpenInContent("Websites",new WebsiteList(), false));
+        tab1.addComponent(OpenInContent("Templates",new ThemeList(), false));
+        tab1.addComponent(OpenInContent("Modules",new ModuleList(), true));
         
-        tab1.addComponent(OpenInContent("Users",new UserList(), false));
-        tab1.addComponent(OpenInDialog("Add new user", new UserEdit(), true));
-        
-        tab1.addComponent(OpenInContent("Themes",new ThemeList(), false));
-        tab1.addComponent(OpenInDialog("Add new theme", new ThemeEdit(), false));
+        tab1.addComponent(OpenInContent("Domains",new DomainList(), false));
+        tab1.addComponent(OpenInContent("Freights",new WebsiteList(), false));
+        tab1.addComponent(OpenInContent("Taxes",new TaxList(), false));
+        tab1.addComponent(OpenInContent("Payment Methods",new PaymentList(), false));
         this.accordion.addTab(tab1, "Settings", null);
         
+        Panel tab8 = new Panel();
+        tab8.addComponent(OpenInContent("Pages",new UserList(), false));
+        this.accordion.addTab(tab8, "Pages", null);   
+        
+        Panel tab5 = new Panel();
+        tab5.addComponent(OpenInContent("Products",new ProductList(), false));
+        tab5.addComponent(OpenInContent("Product Groups",new ProductCategoryList(), false));
+        tab5.addComponent(OpenInContent("Price Groups",new UserList(), false));
+        this.accordion.addTab(tab5, "Products", null);   
+        
+        Panel tab4 = new Panel();
+        tab4.addComponent(OpenInContent("Users",new UserList(), false));
+        tab4.addComponent(OpenInContent("User Groups",new UserList(), false));
+        tab4.addComponent(OpenInContent("Discount Codes",new UserList(), false));
+        tab4.addComponent(OpenInContent("Newsletters",new UserList(), false));
+        this.accordion.addTab(tab4, "Customers", null);     
+        
+        Panel tab7 = new Panel();
+        tab7.addComponent(OpenInContent("Orders",new OrderList(), false));
+        tab7.addComponent(OpenInContent("ePay Administration",new UserList(), false));
+        tab7.addComponent(OpenInContent("PayPal Administration",new UserList(), false));
+        this.accordion.addTab(tab7, "Orders", null);   
+        
         Panel tab2 = new Panel();
-        //tab2.addComponent(OpenInContent("Products",new ConstructionList(), false));
-        //tab2.addComponent(OpenInDialog("Add new product", new ConstructionForm(), false));
-        this.accordion.addTab(tab2, "Products", null);
+        tab2.addComponent(OpenInContent("Google Adwords",new UserList(), false));
+        tab2.addComponent(OpenInContent("Facebook Advertising",new UserList(), false));
+        this.accordion.addTab(tab2, "Marketing", null);
         
         Panel tab3 = new Panel();
-        //tab3.addComponent(OpenInContent("ConstructionList",new ConstructionList()));
-        //tab3.addComponent(OpenInContent("ConstructionForm",new ConstructionForm("1")));
-        this.accordion.addTab(tab3, "Newsletters", null);
-        // ***
+        tab3.addComponent(OpenInContent("Google Analytics",new UserList(), false));
+        this.accordion.addTab(tab3, "Stats", null);
+        
+        Panel tab6 = new Panel();
+        //
+        this.accordion.addTab(tab6, "Import/Export", null); 
+        
         
         
         this.innerLayout.addComponent(this.accordion);

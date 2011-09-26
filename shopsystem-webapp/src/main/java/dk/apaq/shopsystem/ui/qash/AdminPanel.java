@@ -11,7 +11,7 @@ import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.OrganisationService;
-import dk.apaq.shopsystem.ui.ConstructionList;
+//import dk.apaq.shopsystem.ui.ConstructionList;
 import dk.apaq.shopsystem.ui.SiteHeader;
 import dk.apaq.shopsystem.ui.VaadinServiceHolder;
 import dk.apaq.shopsystem.ui.common.CategoryList;
@@ -28,7 +28,7 @@ public class AdminPanel extends CustomComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminPanel.class);
     private final SalesView salesView = new SalesView();
-    private final ConstructionList constructionList = new ConstructionList();
+    //private final ConstructionList constructionList = new ConstructionList();
     //private final CommonDialog constructionForm = new CommonDialog("",new ConstructionForm("1"));
     private final ProductList stockWidget = new ProductList();
     private final SiteHeader header;
@@ -137,9 +137,9 @@ public class AdminPanel extends CustomComponent {
             c = stockWidget;
         }
         
-        if("CONSTRUCTIONLIST".equals(name)) {
-            c = constructionList;
-        }
+        //if("CONSTRUCTIONLIST".equals(name)) {
+        //    c = constructionList;
+        //}
         
         if(c==null) {
             c = new Label("Ingen widget til dette område endnu");

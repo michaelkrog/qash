@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.ui.shoppinnet;
 
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
@@ -25,7 +26,7 @@ public class AdminPanel3 extends CustomComponent {
     
     // Temp company button
     private Button linkOptions = new Button("Company options");
-    private final SettingsDialog settingsDialog = new SettingsDialog();
+    //private final SettingsDialog settingsDialog = new SettingsDialog();
     
     
     public AdminPanel3() {
@@ -49,16 +50,16 @@ public class AdminPanel3 extends CustomComponent {
       
         // Create navigation panel
         this.navigation.addComponent(linkOptions);
-        linkOptions.addListener(new Button.ClickListener() {
+        /*linkOptions.addListener(new Button.ClickListener() {
 
             public void buttonClick(Button.ClickEvent event) {
                 settingsDialog.center();
                 getApplication().getMainWindow().addWindow(settingsDialog);
             }
-        });
+        });*/
         
         this.navigation.setStyleName("v-navigationpanel");
-        this.navigation.addComponent(OpenInDialog("Settings",new SettingsDialog()));
+        //this.navigation.addComponent(OpenInDialog("Settings",new SettingsDialog()));
         this.navigation.addComponent(OpenInContent("Stores",new StoreList()));
         this.navigation.addComponent(OpenInContent("Products",new StoreList()));
         this.navigation.addComponent(OpenInContent("Customers",new StoreList()));

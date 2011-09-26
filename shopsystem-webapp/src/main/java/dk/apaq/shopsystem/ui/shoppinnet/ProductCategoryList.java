@@ -1,14 +1,15 @@
-package dk.apaq.shopsystem.ui;
+package dk.apaq.shopsystem.ui.shoppinnet;
 
 import dk.apaq.shopsystem.ui.common.CommonGrid;
 import com.vaadin.data.Container;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
-import dk.apaq.shopsystem.entity.Product;
+import dk.apaq.shopsystem.entity.Category;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.ui.VaadinServiceHolder;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
-public class ConstructionList extends CustomComponent {
+public class ProductCategoryList extends CustomComponent {
    
     // Declare variables
     private VerticalLayout layout = new VerticalLayout();
@@ -19,13 +20,13 @@ public class ConstructionList extends CustomComponent {
         
         // Get data
         OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
-        Container c = new CrudContainer(orgService.getProducts(), Product.class);
+        Container c = new CrudContainer(orgService.getCategories(), Category.class);
         
         // Create grid
         CommonGrid grid = new CommonGrid();
         grid.setContainerDataSource(c);
         grid.setEdit(true);
-        grid.setEditCaption("Edit product");
+        grid.setEditCaption("Edit Product Group");
         
         // Add grid headers
         grid.addHeader("Name");
@@ -40,7 +41,7 @@ public class ConstructionList extends CustomComponent {
     }
     
     
-    public ConstructionList() {
+    public ProductCategoryList() {
         
         // Define layout root
         setCompositionRoot(this.layout);
