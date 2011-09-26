@@ -91,30 +91,13 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
     @Override
     public FileSystem getFileSystem() {
         if(fileSystem==null) {
-            try {
-                //Must create a filesystem for the system using Commons VFS and a local File Folder.
-                fileSystem =context.getBean("filesystem", FileSystem.class);
+            //Must create a filesystem for the system using Commons VFS and a local File Folder.
+            fileSystem =context.getBean("filesystem", FileSystem.class);
 
-                Directory root = fileSystem.getRoot();
-                if(!root.hasDirectory("Organisations")) root.createDirectory("Organisations");
-
-                Directory system = root.getDirectory("System", true);
-                
-                Directory modules = system.getDirectory("Modules", true);
-                if(!modules.hasDirectory("Standard")) modules.createDirectory("Standard");
-                if(!modules.hasDirectory("Optional")) modules.createDirectory("Optional");
-
-                Directory templates = system.getDirectory("Themes", true);
-                if(!templates.hasDirectory("Standard")) templates.createDirectory("Standard");
-                if(!templates.hasDirectory("Optional")) templates.createDirectory("Optional");
-
-                if(filesystemPopulator!=null) {
-                    filesystemPopulator.populate(fileSystem);
-                }
-            } catch (IOException ex) {
-                LOG.error("Unable to resolve filesystem.", ex);
-                throw new RuntimeException(ex);
+            if(filesystemPopulator!=null) {
+                filesystemPopulator.populate(fileSystem);
             }
+            
         }
         return fileSystem;
     }

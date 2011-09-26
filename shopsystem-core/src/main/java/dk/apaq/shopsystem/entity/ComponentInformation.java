@@ -3,14 +3,11 @@ package dk.apaq.shopsystem.entity;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.MapKey;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -20,6 +17,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 public class ComponentInformation implements Serializable {
 
+    
+    
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
@@ -27,14 +26,8 @@ public class ComponentInformation implements Serializable {
     private String moduleName;
     private String componentName;
     
-    @ElementCollection
-    @JoinTable(name = "MappingTable",
-    joinColumns =
-    @JoinColumn(name = "mapOwner"))
-    @Column(name = "mapValueItem",
-    nullable = false)
-    @MapKey()
-    private Map<String, Object> parameterMap = new HashMap<String, Object>();
+    @ElementCollection(fetch= FetchType.EAGER)
+    private Map<String, ComponentParameter> parameterMap = new HashMap<String, ComponentParameter>();
 
     public String getId() {
         return id;
@@ -60,7 +53,7 @@ public class ComponentInformation implements Serializable {
         this.moduleName = moduleName;
     }
 
-    public Map<String, Object> getParameterMap() {
+    public Map<String, ComponentParameter> getParameterMap() {
         return parameterMap;
     }
 }
