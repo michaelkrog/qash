@@ -1,13 +1,8 @@
 package dk.apaq.shopsystem.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.ElementCollection;
+import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import javax.persistence.Temporal;
 
 /**
  * Defines a System User. A SystemUser is unique across the system, but can be
@@ -24,6 +19,13 @@ public class SystemUser extends BaseUser implements dk.apaq.crud.HasId<String> {
     private String name;
     private String password;
     private boolean locked;
+    
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date birthDay = new Date();
+    
+    private String phone;
+
+    
 
     @Override
     public String getDisplayname() {
@@ -78,4 +80,22 @@ public class SystemUser extends BaseUser implements dk.apaq.crud.HasId<String> {
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
     }
+
+    public Date getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    @Override
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    
 }

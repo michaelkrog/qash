@@ -10,7 +10,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.Fetch;
@@ -34,7 +33,7 @@ public abstract class BaseUser implements User, Serializable, ContentEntity {
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateChanged = new Date();
-
+    
     @ManyToOne
     private Organisation organisation;
 
@@ -81,15 +80,25 @@ public abstract class BaseUser implements User, Serializable, ContentEntity {
     }
 
 
+    @Override
     public abstract String getName();
 
+    @Override
     public abstract String getDisplayname();
 
+    @Override
     public abstract String getEmail();
 
+    @Override
     public abstract String getPassword();
 
+    @Override
     public abstract boolean isEmailVerified();
 
+    @Override
     public abstract boolean isLocked();
+    
+    public abstract String getPhone();
+    
+    public abstract Date getBirthDay();
 }

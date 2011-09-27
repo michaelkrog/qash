@@ -15,51 +15,51 @@ import org.hibernate.annotations.GenericGenerator;
  * Specifies a web domain for a website.
  */
 @Entity
-@Table(name="DomainModel")
+@Table(name = "DomainModel")
 public class Domain implements Serializable, BasicEntity {
 
     @Id
-    @GeneratedValue(generator="system-uuid")
+    @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
     protected String id;
-
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateCreated = new Date();
-
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateChanged = new Date();
+    private String name;
+    private boolean isdefault;
+    private String languageCode;
+    private String currencyCode;
 
-     public String getId() {
+    @Override
+    public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    @Override
     public Date getDateCreated() {
         return dateCreated;
     }
 
+    @Override
     public void setDateCreated(Date date) {
         this.dateCreated = date;
     }
 
+    @Override
     public Date getDateChanged() {
         return dateChanged;
     }
 
+    @Override
     public void setDateChanged(Date dateChanged) {
         this.dateChanged = dateChanged;
     }
-
-    private String name;
-
-    private boolean isdefault;
-
-    private String languageCode;
-
-    private String currencyCode;
 
     public String getCurrencyCode() {
         return currencyCode;
@@ -92,7 +92,4 @@ public class Domain implements Serializable, BasicEntity {
     public void setName(String name) {
         this.name = name;
     }
-
-
-
 }

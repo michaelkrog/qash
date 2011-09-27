@@ -2,6 +2,7 @@ package dk.apaq.shopsystem.entity;
 
 import dk.apaq.crud.HasId;
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,4 +20,10 @@ public interface User extends Principal, HasId<String> {
     public boolean isEmailVerified() ;
 
     public boolean isLocked();
+    
+    public String getPhone();
+
+    
+    public Date getBirthDay();
+
 }

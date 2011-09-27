@@ -1,13 +1,8 @@
 package dk.apaq.shopsystem.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.ElementCollection;
+import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 /**
  * Defines an Organisations reference to a SystemUser which it does not own. It is used when
@@ -56,5 +51,15 @@ public class SystemUserReference extends BaseUser {
     @Override
     public boolean isLocked() {
         return user == null ? false : user.isLocked();
+    }
+    
+    @Override
+    public Date getBirthDay() {
+        return user == null ? null : user.getBirthDay();
+    }
+    
+    @Override
+    public String getPhone() {
+        return user == null ? null : user.getPhone();
     }
 }
