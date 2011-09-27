@@ -1,20 +1,11 @@
 package dk.apaq.shopsystem.service;
 
-import dk.apaq.shopsystem.entity.Category;
-import dk.apaq.shopsystem.entity.Store;
-import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.crud.Crud;
-import dk.apaq.shopsystem.service.crud.InventoryManager;
 import dk.apaq.shopsystem.service.crud.SecurityHandler;
 import dk.apaq.shopsystem.entity.SystemUser;
-import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Order;
-import dk.apaq.shopsystem.entity.Payment;
-import dk.apaq.shopsystem.entity.Tax;
-import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +16,7 @@ import dk.apaq.crud.Crud.*;
 import dk.apaq.crud.CrudNotifier;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
-import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.FileSystem;
-import dk.apaq.vfs.impl.nativefs.NativeFileSystem;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
 import javax.persistence.PersistenceContext;
 /**
  *

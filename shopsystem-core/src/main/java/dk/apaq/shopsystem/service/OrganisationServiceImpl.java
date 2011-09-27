@@ -57,6 +57,8 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     private ApplicationContext context;
     private String orgId;
     private FileSystem fs;
+    private final Map<String, WebsiteService> webServiceMap = new WeakHashMap<String,WebsiteService>();
+    
 
     public OrganisationServiceImpl(Organisation org) {
         this.orgId = org.getId();
@@ -112,6 +114,16 @@ public class OrganisationServiceImpl implements OrganisationService, Application
          return getGenericContentCrud(Website.class);
     }
 
+    @Override
+    public WebsiteService getWebsiteService(Website website) {
+        WebsiteService websiteService = webServiceMap.get(website.getId());
+        if(websiteService==null) {
+            websiteService = (WebsiteService) context.getBean("websiteService", website);
+            webServiceMap.put(website.getId(), websiteService);
+        }
+        return websiteService;
+    }
+    
     private <T> Complete<String, T> getGenericContentCrud(Class<T> clazz) {
         Organisation organisation = readOrganisation();
         Complete crud = crudMap.get(clazz);
@@ -125,14 +137,13 @@ public class OrganisationServiceImpl implements OrganisationService, Application
 
     @Override
     public Organisation readOrganisation() {
-        return em.find(Organisation.class, this.orgId);
+        return service.getOrganisationCrud().read(this.orgId);
     }
 
     @Override
     @Transactional
     public void updateOrganisation(Organisation org) {
-        em.merge(org);
-        em.flush();
+        this.service.getOrganisationCrud().update(org);
     }
 
     @Override

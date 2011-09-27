@@ -35,6 +35,8 @@ public interface OrganisationService {
     Crud.Complete<String, Website> getWebsites();
     Crud<String,Theme> getThemes();
     Crud<String,Module> getModules();
+    
+    WebsiteService getWebsiteService(Website website);
 
     FileSystem getFileSystem();
 }

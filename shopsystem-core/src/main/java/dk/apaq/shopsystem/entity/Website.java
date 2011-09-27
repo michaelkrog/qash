@@ -36,11 +36,6 @@ public class Website implements Serializable, ContentEntity {
     @OneToMany
     private List<Domain> domains = new ArrayList<Domain>();
     
-    /*@OneToMany
-    private List<Template> templates = new ArrayList();
-    @OneToMany
-    private List<Module> modules = new ArrayList<Module>();*/
-    
     @OneToMany
     private List<Page> pages = new ArrayList<Page>();
     private String name;
