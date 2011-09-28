@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.service;
 
 import dk.apaq.crud.Crud;
+import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.crud.SecurityHandler;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Order;
@@ -31,11 +32,13 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
 
     private OrganisationCrud orgCrud;
     private Crud.Complete<String, SystemUser> systemUserCrud;
+    private Crud.Filterable<String, Website> websiteCrud;
     private final Map<String, OrganisationService> orgServiceMap = new WeakHashMap<String,OrganisationService>();
     private final Map<String, Complete<String, Order>> crudMap = new WeakHashMap<String, Complete<String, Order>>();
     private ApplicationContext context;
     private FileSystem fileSystem;
     private FileSystemPopulator filesystemPopulator;
+    private final Map<String, WebsiteService> webServiceMap = new WeakHashMap<String,WebsiteService>();
 
     public void setFileSystemPopulator(FileSystemPopulator populator) {
         this.filesystemPopulator = populator;
@@ -85,6 +88,26 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
             
         }
         return fileSystem;
+    }
+
+    @Override
+    public Filterable<String, Website> getWebsites() {
+        LOG.debug("Retrieving crud for all websites.");
+        if(websiteCrud==null) {
+            websiteCrud = (Crud.Filterable<String, Website>) context.getBean("crud", em, Website.class);
+            //((CrudNotifier)systemUserCrud).addListener(new SecurityHandler.AccountSecurity());
+        }
+        return websiteCrud;
+    }
+
+    @Override
+    public WebsiteService getWebsiteService(Website website) {
+        WebsiteService websiteService = webServiceMap.get(website.getId());
+        if(websiteService==null) {
+            websiteService = (WebsiteService) context.getBean("websiteService", website);
+            webServiceMap.put(website.getId(), websiteService);
+        }
+        return websiteService;
     }
     
     @Override

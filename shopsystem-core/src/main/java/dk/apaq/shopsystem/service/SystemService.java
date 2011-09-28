@@ -23,8 +23,16 @@ public interface SystemService {
     OrganisationService getOrganisationService(Organisation org);
 
     FileSystem getFileSystem();
+
+    /**
+     * Returns a crud for all websites in the system.
+     */
+    Crud.Filterable<String, Website> getWebsites();
     
-
-
+    /**
+     * Returns a WebsiteService for a specific website.
+     */
+    WebsiteService getWebsiteService(Website website);
+    
 
 }

@@ -3,6 +3,7 @@ package dk.apaq.shopsystem.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -30,6 +31,9 @@ public class Domain implements Serializable, BasicEntity {
     private boolean isdefault;
     private String languageCode;
     private String currencyCode;
+    
+    @ManyToOne
+    private Website website;
 
     @Override
     public String getId() {
@@ -92,4 +96,14 @@ public class Domain implements Serializable, BasicEntity {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Website getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(Website website) {
+        this.website = website;
+    }
+    
+    
 }

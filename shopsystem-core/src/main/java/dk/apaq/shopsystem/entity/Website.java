@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -33,11 +34,12 @@ public class Website implements Serializable, ContentEntity {
     @ManyToOne
     private Organisation organisation;
 
-    @OneToMany
+    @OneToMany(cascade= CascadeType.REMOVE)
     private List<Domain> domains = new ArrayList<Domain>();
     
-    @OneToMany
+    @OneToMany(cascade= CascadeType.REMOVE)
     private List<Page> pages = new ArrayList<Page>();
+    
     private String name;
     private String tracking_code;
     private String tracking_code_invoice;

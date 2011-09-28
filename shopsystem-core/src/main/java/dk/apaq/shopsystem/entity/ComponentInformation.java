@@ -16,8 +16,6 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 public class ComponentInformation implements Serializable {
-
-    
     
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -25,6 +23,7 @@ public class ComponentInformation implements Serializable {
     protected String id;
     private String moduleName;
     private String componentName;
+    private String placeholderName;
     
     @ElementCollection(fetch= FetchType.EAGER)
     private Map<String, ComponentParameter> parameterMap = new HashMap<String, ComponentParameter>();
@@ -51,6 +50,14 @@ public class ComponentInformation implements Serializable {
 
     public void setModuleName(String moduleName) {
         this.moduleName = moduleName;
+    }
+
+    public String getPlaceholderName() {
+        return placeholderName;
+    }
+
+    public void setPlaceholderName(String placeholderName) {
+        this.placeholderName = placeholderName;
     }
 
     public Map<String, ComponentParameter> getParameterMap() {

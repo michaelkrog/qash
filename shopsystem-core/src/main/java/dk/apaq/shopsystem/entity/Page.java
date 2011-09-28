@@ -2,8 +2,10 @@ package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.CascadeType;
@@ -42,8 +44,8 @@ public class Page implements Serializable, BasicEntity {
     private String themeName;
     private String templateName;
     
-    //@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    //private List<ComponentInformation> placeholderMap = new ArrayList<ComponentInformation>();
+    @ElementCollection(fetch= FetchType.EAGER)
+    private List<ComponentInformation> placeholderList = new ArrayList<ComponentInformation>();
     
     @ManyToOne
     private Website website;
@@ -114,20 +116,56 @@ public class Page implements Serializable, BasicEntity {
         this.website = website;
     }
 
-    /*
+    public void addComponentInformation(ComponentInformation ci) {
+        placeholderList.add(ci);
+    }
+    
     public List<String> getPlaceholderIds() {
-        return new ArrayList(placeholderMap.keySet());
+        List<String> ids = new ArrayList<String>();
+        for(ComponentInformation c : placeholderList) {
+            if(!ids.contains(c.getPlaceholderName())) {
+                ids.add(c.getPlaceholderName());
+            }
+        }
+        return Collections.unmodifiableList(ids);
+    }
+    
+    public List<ComponentInformation> getComponentInformations(){
+        return Collections.unmodifiableList(placeholderList);
     }
     
     public List<ComponentInformation> getComponentInformations(String placeholderId){
-        return placeholderMap.get(placeholderId);
+        List<ComponentInformation> list = new ArrayList<ComponentInformation>();
+        for(ComponentInformation c : placeholderList) {
+            if(placeholderId.equals(c.getPlaceholderName())) {
+                list.add(c);
+            }
+        }
+        return Collections.unmodifiableList(list);
     }
     
-    public void removePlaceholderId(String id) {
-        placeholderMap.remove(id);
+    public void removeComponentInformation(String componentInformationId) {
+        Iterator<ComponentInformation> it = placeholderList.iterator();
+        while(it.hasNext()) {
+            ComponentInformation c = it.next();
+            if(componentInformationId.equals(c.getId())) {
+                it.remove();
+                return;
+            }
+        }
+    }
+    
+    public void removePlaceholderId(String placeholderId) {
+        Iterator<ComponentInformation> it = placeholderList.iterator();
+        while(it.hasNext()) {
+            ComponentInformation c = it.next();
+            if(placeholderId.equals(c.getPlaceholderName())) {
+                it.remove();
+            }
+        }
     }
     
     public void clearPlaceholderInformation() {
-        placeholderMap.clear();
-    }*/
+        placeholderList.clear();
+    }
 }
