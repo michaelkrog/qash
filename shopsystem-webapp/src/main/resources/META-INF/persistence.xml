@@ -6,6 +6,7 @@
     <class>dk.apaq.shopsystem.entity.ComponentInformation</class>
     <class>dk.apaq.shopsystem.entity.ComponentParameter</class>
     <class>dk.apaq.shopsystem.entity.Domain</class>
+    <class>dk.apaq.shopsystem.entity.DomainRegistration</class>
     <class>dk.apaq.shopsystem.entity.Order</class>
     <class>dk.apaq.shopsystem.entity.OrderLine</class>
     <class>dk.apaq.shopsystem.entity.OrderLineTax</class>
