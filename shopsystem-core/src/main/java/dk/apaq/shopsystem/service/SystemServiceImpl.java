@@ -38,8 +38,7 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
     private ApplicationContext context;
     private FileSystem fileSystem;
     private FileSystemPopulator filesystemPopulator;
-    private final Map<String, WebsiteService> webServiceMap = new WeakHashMap<String,WebsiteService>();
-
+    
     public void setFileSystemPopulator(FileSystemPopulator populator) {
         this.filesystemPopulator = populator;
     }
@@ -100,16 +99,6 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
         return websiteCrud;
     }
 
-    @Override
-    public WebsiteService getWebsiteService(Website website) {
-        WebsiteService websiteService = webServiceMap.get(website.getId());
-        if(websiteService==null) {
-            websiteService = (WebsiteService) context.getBean("websiteService", website);
-            webServiceMap.put(website.getId(), websiteService);
-        }
-        return websiteService;
-    }
-    
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.context = applicationContext;

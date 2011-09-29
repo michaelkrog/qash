@@ -2,6 +2,7 @@ package dk.apaq.shopsystem.service;
 
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.Category;
+import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Payment;
@@ -10,6 +11,7 @@ import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.entity.Module;
+import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.crud.UserCrud;
 import dk.apaq.vfs.FileSystem;
@@ -32,11 +34,12 @@ public interface OrganisationService {
     Crud.Editable<String, Tax> getTaxes();
     Crud.Complete<String, Payment> getPayments();
 
+    Crud.Complete<String, Domain> getDomains();
     Crud.Complete<String, Website> getWebsites();
     Crud<String,Theme> getThemes();
     Crud<String,Module> getModules();
-    
-    WebsiteService getWebsiteService(Website website);
+
+    Crud.Complete<String,Page> getPages(Website website);
 
     FileSystem getFileSystem();
 }

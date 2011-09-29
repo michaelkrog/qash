@@ -29,10 +29,6 @@ public interface SystemService {
      */
     Crud.Filterable<String, Website> getWebsites();
     
-    /**
-     * Returns a WebsiteService for a specific website.
-     */
-    WebsiteService getWebsiteService(Website website);
     
 
 }

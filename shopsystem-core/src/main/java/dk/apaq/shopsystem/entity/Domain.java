@@ -17,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "DomainModel")
-public class Domain implements Serializable, BasicEntity {
+public class Domain implements Serializable, ContentEntity {
 
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -27,13 +27,12 @@ public class Domain implements Serializable, BasicEntity {
     private Date dateCreated = new Date();
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateChanged = new Date();
+
     private String name;
-    private boolean isdefault;
-    private String languageCode;
-    private String currencyCode;
+    private boolean verified;
     
     @ManyToOne
-    private Website website;
+    private Organisation organisation;
 
     @Override
     public String getId() {
@@ -65,30 +64,6 @@ public class Domain implements Serializable, BasicEntity {
         this.dateChanged = dateChanged;
     }
 
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-    }
-
-    public boolean isDefault() {
-        return isdefault;
-    }
-
-    public void setDefault(boolean value) {
-        this.isdefault = value;
-    }
-
-    public String getLanguageCode() {
-        return languageCode;
-    }
-
-    public void setLanguageCode(String languageCode) {
-        this.languageCode = languageCode;
-    }
-
     public String getName() {
         return name;
     }
@@ -97,13 +72,23 @@ public class Domain implements Serializable, BasicEntity {
         this.name = name;
     }
 
-    public Website getWebsite() {
-        return website;
+    public boolean isVerified() {
+        return verified;
     }
 
-    public void setWebsite(Website website) {
-        this.website = website;
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
-    
+
+    @Override
+    public Organisation getOrganisation() {
+        return organisation;
+    }
+
+    @Override
+    public void setOrganisation(Organisation organisation) {
+        this.organisation = organisation;
+    }
+
     
 }

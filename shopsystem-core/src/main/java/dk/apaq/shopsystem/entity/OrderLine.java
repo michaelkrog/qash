@@ -73,18 +73,22 @@ public class OrderLine implements Serializable, BasicEntity {
         this.id = id;
     }
 
+    @Override
     public Date getDateCreated() {
         return dateCreated;
     }
 
+    @Override
     public void setDateCreated(Date date) {
         this.dateCreated = date;
     }
 
+    @Override
     public Date getDateChanged() {
         return dateChanged;
     }
 
+    @Override
     public void setDateChanged(Date dateChanged) {
         this.dateChanged = dateChanged;
     }

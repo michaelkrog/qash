@@ -1,54 +1,37 @@
 package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * Defines a Website.
+ *
  */
 @Entity
-public class Website implements Serializable, ContentEntity {
+public class DomainRegistration implements Serializable, BasicEntity {
 
     @Id
-    @GeneratedValue(generator="system-uuid")
+    @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
-    protected String id;
-
+    private String id;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateCreated = new Date();
-
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateChanged = new Date();
-
     @ManyToOne
-    private Organisation organisation;
+    private Domain domain;
+    private String subDomain;
+    private String languageCode;
 
-    @OneToMany(cascade= CascadeType.REMOVE, fetch=FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<DomainRegistration> domains = new ArrayList<DomainRegistration>();
-    
-    private String name;
-
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
     public void setId(String id) {
         this.id = id;
     }
@@ -73,26 +56,27 @@ public class Website implements Serializable, ContentEntity {
         this.dateChanged = dateChanged;
     }
 
-    @Override
-    public Organisation getOrganisation() {
-        return organisation;
+    public Domain getDomain() {
+        return domain;
     }
 
-    public void setOrganisation(Organisation organisation) {
-        this.organisation = organisation;
+    public void setDomain(Domain domain) {
+        this.domain = domain;
     }
 
-    public List<DomainRegistration> getDomainRegistrations() {
-        return domains;
+    public String getLanguageCode() {
+        return languageCode;
     }
 
-    public String getName() {
-        return name;
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getSubDomain() {
+        return subDomain;
     }
 
-
+    public void setSubDomain(String subDomain) {
+        this.subDomain = subDomain;
+    }
 }
