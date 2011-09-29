@@ -52,8 +52,9 @@ public class DataContextFilter implements Filter {
         List<String> idlist = service.getWebsites().listIds(filter, null);
         
         if (!idlist.isEmpty()) {
-            //resolve organsiation from domain/servername
             Website site = service.getWebsites().read(idlist.get(0));
+            DataContext.setWebsite(site);
+            
             Organisation org = site.getOrganisation();
             if (org != null) {
                 DataContext.setService(service.getOrganisationService(org));
@@ -61,9 +62,6 @@ public class DataContextFilter implements Filter {
         }
         
         try {
-            if (DataContext.getService() == null) {
-                LOG.debug("No service available for domain '" + domain + "'");
-            }
             chain.doFilter(request, response);
         } catch (Throwable t) {
             if (t instanceof ServletException) {
