@@ -16,11 +16,14 @@ public class ContainsDomainFilterInterpreter extends AbstractInterpreter<Contain
             return false;
         }
 
-        String paramName = getParamName();
-        String subJpql = "select from Domain as dom where dom.name = " + paramName;
-        String jpql = "(" + subJpql + ") in elements(e." + filter.getPropertyId() + ")";
+        String paramName1 = getParamName();
+        String paramName2 = getParamName();
+        String subJpql = "from e.domains as dr where dr.subDomain = :" + paramName1 + " and dr.domain.name = :"+paramName2;
+        String jpql = "exists (" + subJpql + ")";
+        //String jpql = "e.domains.subDomain = :"+paramName1+" and e.domains.domain.name = :"+paramName2;
         clause.appendStatement(jpql);
-        clause.appendParameter(paramName, filter.getDomain());
+        clause.appendParameter(paramName1, filter.getSubDomain());
+        clause.appendParameter(paramName2, filter.getDomain());
         return true;
     }
 }

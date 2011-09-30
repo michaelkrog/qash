@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Index;
 
 /**
  *
@@ -25,6 +26,8 @@ public class DomainRegistration implements Serializable, BasicEntity {
     private Date dateChanged = new Date();
     @ManyToOne
     private Domain domain;
+
+    @Index(name="Index_name")
     private String subDomain;
     private String languageCode;
 

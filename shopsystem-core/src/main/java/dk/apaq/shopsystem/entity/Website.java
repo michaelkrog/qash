@@ -37,7 +37,7 @@ public class Website implements Serializable, ContentEntity {
     @ManyToOne
     private Organisation organisation;
 
-    @OneToMany(cascade= CascadeType.REMOVE, fetch=FetchType.EAGER)
+    @OneToMany(cascade= CascadeType.ALL, fetch=FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
     private List<DomainRegistration> domains = new ArrayList<DomainRegistration>();
     

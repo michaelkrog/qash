@@ -10,16 +10,22 @@ import dk.apaq.filter.core.AbstractFilterComponent;
 public class ContainsDomainFilter extends AbstractFilterComponent{
 
     private final String domain;
+    private final String subDomain;
 
-    public ContainsDomainFilter(String propertyId, String domain) {
+    public ContainsDomainFilter(String propertyId, String domain, String subDomain) {
         super(propertyId);
         this.domain = domain;
+        this.subDomain = subDomain;
     }
 
     public String getDomain() {
         return domain;
     }
-    
+
+    public String getSubDomain() {
+        return subDomain;
+    }
+
     @Override
     public boolean passesFilter(FiltrationItem item) {
         throw new UnsupportedOperationException("Not supported yet.");

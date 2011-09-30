@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Index;
 
 /**
  * Specifies a web domain for a website.
@@ -28,6 +29,7 @@ public class Domain implements Serializable, ContentEntity {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateChanged = new Date();
 
+    @Index(name="Index_name")
     private String name;
     private boolean verified;
     

@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import dk.apaq.crud.Crud.*;
 import dk.apaq.crud.CrudNotifier;
+import dk.apaq.filter.jpa.FilterTranslatorForJPA;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.vfs.FileSystem;
@@ -38,7 +39,12 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
     private ApplicationContext context;
     private FileSystem fileSystem;
     private FileSystemPopulator filesystemPopulator;
-    
+
+    public SystemServiceImpl() {
+        FilterTranslatorForJPA.registerInterpreter(ContainsDomainFilter.class, new ContainsDomainFilterInterpreter());
+    }
+
+
     public void setFileSystemPopulator(FileSystemPopulator populator) {
         this.filesystemPopulator = populator;
     }
