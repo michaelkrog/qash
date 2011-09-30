@@ -48,7 +48,7 @@ public class DataContextFilter implements Filter {
         String domain = request.getServerName();
 
         //Optimize this by putting results in a map and listen for updateevents.
-        dk.apaq.filter.Filter filter = new ContainsDomainFilter("domains", domain);
+        dk.apaq.filter.Filter filter = new ContainsDomainFilter("domains","", domain);
         List<String> idlist = service.getWebsites().listIds(filter, null);
         
         if (!idlist.isEmpty()) {
