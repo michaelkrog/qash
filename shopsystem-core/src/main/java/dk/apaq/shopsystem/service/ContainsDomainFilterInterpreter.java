@@ -20,7 +20,6 @@ public class ContainsDomainFilterInterpreter extends AbstractInterpreter<Contain
         String paramName2 = getParamName();
         String subJpql = "from e.domains as dr where dr.subDomain = :" + paramName1 + " and dr.domain.name = :"+paramName2;
         String jpql = "exists (" + subJpql + ")";
-        //String jpql = "e.domains.subDomain = :"+paramName1+" and e.domains.domain.name = :"+paramName2;
         clause.appendStatement(jpql);
         clause.appendParameter(paramName1, filter.getSubDomain());
         clause.appendParameter(paramName2, filter.getDomain());
