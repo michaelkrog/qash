@@ -112,7 +112,7 @@ public class WebsiteCrudTest {
         crud.update(website);
 
         //create a thousands organsiations with each there domain, site and subdomain.
-        for(int i=0;i<2500;i++) {
+        for(int i=0;i<500;i++) {
             Organisation tmpOrg = orgcrud.read(orgcrud.create());
             OrganisationService tmpOrgService = service.getOrganisationService(org);
 
@@ -126,6 +126,10 @@ public class WebsiteCrudTest {
             tmpdr.setSubDomain("test_"+i);
             tmpSite.getDomainRegistrations().add(dr);
             tmpOrgService.getWebsites().update(website);
+
+            if(i % 1000 == 0) {
+                System.gc();
+            }
         }
 
         long startTime = System.currentTimeMillis();
