@@ -24,7 +24,7 @@ import org.hibernate.annotations.GenericGenerator;
  *
  */
 @Entity
-public class Page implements Serializable, BasicEntity {
+public class Page implements Serializable, WebContentEntity {
 
     @Id
     @GeneratedValue(generator="system-uuid")
@@ -44,7 +44,7 @@ public class Page implements Serializable, BasicEntity {
     private String themeName;
     private String templateName;
     
-    @ElementCollection(fetch= FetchType.EAGER)
+    @OneToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
     private List<ComponentInformation> placeholderList = new ArrayList<ComponentInformation>();
     
     @ManyToOne
@@ -108,6 +108,22 @@ public class Page implements Serializable, BasicEntity {
         this.title = title;
     }
 
+    public String getThemeName() {
+        return themeName;
+    }
+
+    public void setThemeName(String themeName) {
+        this.themeName = themeName;
+    }
+
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
+    }
+    
     public Website getWebsite() {
         return website;
     }

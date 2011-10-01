@@ -2,6 +2,7 @@ package dk.apaq.shopsystem.service;
 
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.Category;
+import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Order;
@@ -25,9 +26,9 @@ public interface SystemService {
     FileSystem getFileSystem();
 
     /**
-     * Returns a crud for all websites in the system.
+     * Returns a crud for all domains in the system.
      */
-    Crud.Filterable<String, Website> getWebsites();
+    Crud.Filterable<String, Domain> getDomains();
     
     
 

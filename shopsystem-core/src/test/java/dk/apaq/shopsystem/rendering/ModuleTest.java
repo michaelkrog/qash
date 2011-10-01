@@ -6,6 +6,7 @@
 package dk.apaq.shopsystem.rendering;
 
 import dk.apaq.shopsystem.entity.Module;
+import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptComponent;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;
@@ -65,8 +66,10 @@ public class ModuleTest {
         assertEquals("Apaq", instance.getSellerInfo().getName());
         assertEquals("mic@apaq.dk", instance.getSellerInfo().getEmail());
         assertEquals(1, instance.listComponents().size());
+        
+        //SimpleScript script = new SimpleScriptComponent(null, null)
 
-        assertEquals(String.class, instance.listComponents().get(0).getParamMap().get("path").getType());
+        //assertEquals(String.class, instance.listComponents().get(0).getParamMap().get("text").getType());
 
     }
 

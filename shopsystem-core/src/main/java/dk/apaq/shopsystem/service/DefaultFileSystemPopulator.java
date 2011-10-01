@@ -17,10 +17,17 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFileSystemPopulator.class);
     
-    private String themeInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}, templates:{\"Simple\":{ \"description\":\"A simple page template\"}}}";
+    private String themeInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
     private String template = "<html><body><div wicket:id=\"placeholder_1\"/></body></html>";
-    private String moduleInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}, components:{\"SingleImage\":{\"description\":\"A simple component for displaying an image\",  \"parameters\":{ \"path\":{ \"type\":\"String\",  \"default\":\"\",  \"optionalText\":\"The filesystem path for the image\" },  \"title\":{  \"type\":\"String\", \"default\":\"\",  \"optionalText\":\"The title of the image\" },\"styleclass\":{  \"type\":\"String\",  \"default\":\"\", \"optionalText\":\"Special styleclass to append to image\"} }    } } }";
-    private String componentCode = "function render(){}";
+    private String moduleInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
+    
+    private String componentCode = "/*\n" +
+                                    "*@Description(value=\"A simple module\")\n"+
+                                    "*@Parameter(name=\"path\",type=\"String\",optionalText=\"The filesystem path for the image\")\n"+
+                                    "*@Parameter(name=\"title\",type=\"String\",optionalText=\"The title of the image\")\n"+
+                                    "*@Parameter(name=\"styleclass\",type=\"String\",optionalText=\"Special styleclass to append to the image\")\n"+
+                                    "*/\n"+
+                                    "function render(){}\n";
     private String componentMarkup = "<wicket:panel><div>This is from a component</div></wicket:panel>";
     
     @Override

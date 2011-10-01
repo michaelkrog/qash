@@ -1,14 +1,18 @@
 package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.Crud;
+import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.shopsystem.entity.Organisation;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.service.SystemService;
+import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.service.OrganisationService;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -24,9 +28,9 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/defaultspringcontext.xml"})
-public class WebsiteCrudTest {
+public class DomainCrudTest {
 
-    public WebsiteCrudTest() {
+    public DomainCrudTest() {
     }
 
     @BeforeClass
@@ -55,8 +59,8 @@ public class WebsiteCrudTest {
         System.out.println("read");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Website> crud = service.getOrganisationService(org).getWebsites();
-        Website result = crud.read(crud.create());
+        Crud.Editable<String, Domain> crud = service.getOrganisationService(org).getDomains();
+        Domain result = crud.read(crud.create());
 
         assertNotNull(result);
         assertNotNull(result.getId());
@@ -77,7 +81,7 @@ public class WebsiteCrudTest {
         System.out.println("listIds");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Website> crud = service.getOrganisationService(org).getWebsites();
+        Crud.Editable<String, Domain> crud = service.getOrganisationService(org).getDomains();
 
         for(int i=0;i<10;i++)
             crud.create();
@@ -85,16 +89,62 @@ public class WebsiteCrudTest {
         List<String> idlist = crud.listIds();
         assertTrue(idlist.size() >= 10);
     }
+     
+       @Test
+    public void testListIdsByDomain() {
+        System.out.println("listIds");
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org = orgcrud.read(orgcrud.create());
+        OrganisationService orgService = service.getOrganisationService(org);
+
+        Crud.Complete<String, Website> websiteCrud = orgService.getWebsites();
+        Website website = websiteCrud.read(websiteCrud.create());
+
+        Crud.Complete<String, Domain> domainCrud = orgService.getDomains();
+        Domain domain = domainCrud.read(domainCrud.create());
+        domain.setName("www.blabla.dk");
+        domain.setWebsite(website);
+        orgService.getDomains().update(domain);
+
+        
+        //create a thousands organsiations with each there domain, site and subdomain.
+        for(int i=0;i<2000;i++) {
+            Organisation tmpOrg = orgcrud.read(orgcrud.create());
+            OrganisationService tmpOrgService = service.getOrganisationService(org);
+
+            Website tmpSite = tmpOrgService.getWebsites().read(tmpOrgService.getWebsites().create());
+
+            Domain tmpDomain = tmpOrgService.getDomains().read(tmpOrgService.getDomains().create());
+            tmpDomain.setName("tmpdomain_"+i);
+            tmpDomain.setWebsite(tmpSite);
+            tmpOrgService.getDomains().update(tmpDomain);
+
+            
+            if(i % 1000 == 0) {
+                System.gc();
+            }
+        }
+
+        long startTime = System.currentTimeMillis();
+        List<String> ids = domainCrud.listIds(new CompareFilter("name", "www.blabla.dk", CompareFilter.CompareType.Equals), null);
+        long endTime = System.currentTimeMillis();
+        assertFalse(ids.isEmpty());
+        assertTrue("Searching by domain took more than 25 msec(time:"+(endTime-startTime)+"ms.)", endTime-startTime<25);
+        System.out.println("Searching by domain took more "+(endTime-startTime)+"ms.");
+
+        ids = domainCrud.listIds(new CompareFilter("name", "blabla.dk", CompareFilter.CompareType.Equals), null);
+        assertTrue(ids.isEmpty());
+    }
 
     @Test
     public void testCreate() {
         System.out.println("create");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Website> crud = service.getOrganisationService(org).getWebsites();
-        Website Website = crud.read(crud.create());
+        Crud.Editable<String, Domain> crud = service.getOrganisationService(org).getDomains();
+        Domain Domain = crud.read(crud.create());
 
-        assertNotNull(Website);
+        assertNotNull(Domain);
     }
 
     @Test
@@ -102,19 +152,19 @@ public class WebsiteCrudTest {
         System.out.println("update");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Website> crud = service.getOrganisationService(org).getWebsites();
-        Website result = crud.read(crud.create());
+        Crud.Editable<String, Domain> crud = service.getOrganisationService(org).getDomains();
+        Domain result = crud.read(crud.create());
 
         assertNotNull(result);
         assertNotNull(result.getId());
 
         String id = result.getId();
 
-        result.setName("My Site");
+        result.setName("Moms");
         crud.update(result);
 
         result = crud.read(id);
-        assertEquals("My Site", result.getName());
+        assertEquals("Moms", result.getName());
         
     }
 
@@ -123,8 +173,8 @@ public class WebsiteCrudTest {
         System.out.println("delete");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Website> crud = service.getOrganisationService(org).getWebsites();
-        Website result = crud.read(crud.create());
+        Crud.Editable<String, Domain> crud = service.getOrganisationService(org).getDomains();
+        Domain result = crud.read(crud.create());
 
         assertNotNull(result);
         assertNotNull(result.getId());
@@ -146,24 +196,24 @@ public class WebsiteCrudTest {
         Organisation org1 = orgcrud.read(orgcrud.create());
         Organisation org2 = orgcrud.read(orgcrud.create());
 
-        Crud.Editable<String, Website> WebsiteCrud1 = service.getOrganisationService(org1).getWebsites();
-        Crud.Editable<String, Website> WebsiteCrud2 = service.getOrganisationService(org2).getWebsites();
+        Crud.Editable<String, Domain> DomainCrud1 = service.getOrganisationService(org1).getDomains();
+        Crud.Editable<String, Domain> DomainCrud2 = service.getOrganisationService(org2).getDomains();
 
-        Website Website1 = WebsiteCrud1.read(WebsiteCrud1.create());
-        Website Website2 = WebsiteCrud2.read(WebsiteCrud2.create());
+        Domain Domain1 = DomainCrud1.read(DomainCrud1.create());
+        Domain Domain2 = DomainCrud2.read(DomainCrud2.create());
 
         //Allowed
-        WebsiteCrud1.read(Website1.getId());
-        WebsiteCrud2.update(Website2);
+        DomainCrud1.read(Domain1.getId());
+        DomainCrud2.update(Domain2);
 
         try {
-            WebsiteCrud1.read(Website2.getId());
+            DomainCrud1.read(Domain2.getId());
             fail("Should not be allowed");
         } catch(SecurityException ex) { }
 
 
         try {
-            WebsiteCrud2.update(Website1);
+            DomainCrud2.update(Domain1);
             fail("Should not be allowed");
         } catch(SecurityException ex) { }
 

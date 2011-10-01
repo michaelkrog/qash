@@ -3,6 +3,7 @@ package dk.apaq.shopsystem.entity;
 import dk.apaq.vfs.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -14,23 +15,9 @@ public class Component {
     private final String description;
     private final File codeFile;
     private final File markupFile;
-    private final Map<String, ComponentParameter> paramMap;
+    private final Map<String, ParameterDefinition> paramMap;
 
-    public class ComponentParameter {
-        private Class type;
-        private String optionalText;
-
-        public Class getType() {
-            return type;
-        }
-
-        public String getOptionalText() {
-            return optionalText;
-        }
-
-    }
-
-    public Component(String name, String description, File codeFile, File markupFile, Map<String, ComponentParameter> paramMap) {
+    public Component(String name, String description, File codeFile, File markupFile, Map<String, ParameterDefinition> paramMap) {
         this.name = name;
         this.description = description;
         this.codeFile = codeFile;
@@ -38,7 +25,7 @@ public class Component {
         this.paramMap = paramMap;
     }
 
-    
+
     public String getName() {
         return name;
     }
@@ -55,8 +42,10 @@ public class Component {
         return markupFile;
     }
 
-    public Map<String, ComponentParameter> getParamMap() {
-        return paramMap;
+    public Map<String, ParameterDefinition> getParameterMap() {
+        return Collections.unmodifiableMap(paramMap);
     }
+
+    
     
 }

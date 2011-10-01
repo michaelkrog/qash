@@ -7,6 +7,7 @@ import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.entity.Component;
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.context.DataContext;
+import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.crud.ThemeCrud;
@@ -27,42 +28,54 @@ import org.apache.wicket.util.resource.IResourceStream;
 /**
  *
  */
-public class WicketPage extends WebPage implements IMarkupCacheKeyProvider, IMarkupResourceStreamProvider{
+public class WicketPage extends WebPage implements /*IMarkupCacheKeyProvider,*/ IMarkupResourceStreamProvider{
 
     private Template template;
-
+    private Theme theme;
+    
     public WicketPage(PageParameters pageParameters) {
         Page page = RequestCycle.get().getMetaData(WicketRequestMapper2.PAGE);
         
+        String themeName = page.getThemeName();
+        String templateName = page.getTemplateName();
+        
         OrganisationService service = DataContext.getService();
-        Crud<String, Module> modules = service.getModules();
         
-        List<String> ids = modules.listIds();
-        String id = ids.get(0);
+        theme = service.getThemes().read(themeName);
+        template = theme.getTemplate(templateName);
         
-        Module module = modules.read(id);
-        Component component = module.listComponents().get(0);
-        
-        SimpleScriptComponent customWicketComponent = new SimpleScriptComponent("placeholder_1", component);
-        add(customWicketComponent);
+        for(String availablePlaceHolder : template.getPlaceHolderIds()) {
+            List<ComponentInformation> infolist = page.getComponentInformations(availablePlaceHolder);
+            
+            if(infolist==null) {
+                continue;
+            }
+            
+            for(ComponentInformation info : infolist) {
+                Module module = service.getModules().read(info.getModuleName());
+                if(module==null) {
+                    continue;
+                }
+                
+                Component component = module.getComponent(info.getComponentName());
+                if(component==null) {
+                    continue;
+                }
+                
+                SimpleScriptComponent customWicketComponent = new SimpleScriptComponent("placeholder_1", component);
+                add(customWicketComponent);
+            }
+        }
+
     }
 
-    @Override
+    /*@Override
     public String getCacheKey(MarkupContainer container, Class<?> containerClass) {
         return "template:AutoPilot:FrontPage";
-    }
+    }*/
 
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
-        OrganisationService service = DataContext.getService();
-        Crud<String, Theme> themes = service.getThemes();
-        
-        List<String> ids = themes.listIds();
-        String id = ids.get(0);
-        
-        Theme theme = themes.read(id);
-        
-        Template template = theme.listTemplates().get(0);
         return new VfsResourceStream(template.getFile());
     }
 

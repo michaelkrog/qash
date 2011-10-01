@@ -28,12 +28,13 @@ public class ModuleCrud implements Crud<String, Module> {
     @Override
     public Module read(String id) {
         try {
-            if (orgDir.hasDirectory(id)) {
-                return new Module(orgDir.getDirectory(id));
+            String name = id + ".module";
+            if (orgDir.hasDirectory(name)) {
+                return new Module(orgDir.getDirectory(name));
             }
 
-            if (standardDir.hasDirectory(id)) {
-                return new Module(standardDir.getDirectory(id));
+            if (standardDir.hasDirectory(name)) {
+                return new Module(standardDir.getDirectory(name));
             }
 
         } catch (IOException ex) {

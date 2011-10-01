@@ -119,7 +119,7 @@ public class OrganisationServiceImpl implements OrganisationService, Application
 
     @Override
     public Complete<String, Page> getPages(Website website) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getWebContentCrud(website, Page.class);
     }
 
     
@@ -132,6 +132,16 @@ public class OrganisationServiceImpl implements OrganisationService, Application
             ((CrudNotifier)crud).addListener(new SecurityHandler.ContentSecurity(organisation));
             crudMap.put(clazz, crud);
         }
+        return crud;
+    }
+    
+    private <T> Complete<String, T> getWebContentCrud(Website website, Class<T> clazz) {
+        Complete crud = crudMap.get(clazz);
+        //if(crud==null) {
+            crud = (Crud.Complete<String, T>) context.getBean("webContentCrud", em, website, clazz);
+            //((CrudNotifier)crud).addListener(new SecurityHandler.ContentSecurity(organisation));
+        //    crudMap.put(clazz, crud);
+        //}
         return crud;
     }
 

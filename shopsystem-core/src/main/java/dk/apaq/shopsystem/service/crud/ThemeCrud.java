@@ -31,15 +31,17 @@ public class ThemeCrud implements Crud<String, Theme> {
     @Override
     public Theme read(String id) {
         try {
-            if (orgDir.hasDirectory(id)) {
-                return new Theme(orgDir.getDirectory(id));
+            String dirName = id + ".theme";
+            if (orgDir.hasDirectory(dirName)) {
+                return new Theme(orgDir.getDirectory(dirName));
             }
 
-            if (standardDir.hasDirectory(id)) {
-                return new Theme(standardDir.getDirectory(id));
+            if (standardDir.hasDirectory(dirName)) {
+                return new Theme(standardDir.getDirectory(dirName));
             }
 
         } catch (IOException ex) {
+            LOG.error("Could not read Theme.", ex);
         }
         
         return null;

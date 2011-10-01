@@ -2,18 +2,14 @@ package dk.apaq.shopsystem.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import dk.apaq.shopsystem.entity.Component.ComponentParameter;
+import dk.apaq.shopsystem.util.ScriptAnnotation;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;
-import java.io.FileNotFoundException;
+import dk.apaq.vfs.Node;
+import dk.apaq.vfs.NodeFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -33,57 +29,26 @@ public class Module implements Serializable {
     private final File infoFile;
     private ModuleInfo info;
     private List<Component> componentList;
-    private ClassDeserializer classDeserializer = new ClassDeserializer();
-    private Gson gson = new GsonBuilder().registerTypeAdapter(Class.class, classDeserializer).setDateFormat("yyyy-MM-dd").create();
+    //private ClassDeserializer classDeserializer = new ClassDeserializer();
+    private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+    private CodeNodeFilter codeNodeFilter = new CodeNodeFilter();
 
-    private class ClassDeserializer implements JsonDeserializer<Class> {
+    
+    private class CodeNodeFilter implements NodeFilter {
 
         @Override
-        public Class deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            String text = json.getAsJsonPrimitive().getAsString();
-            if("String".equalsIgnoreCase(text)) {
-                return String.class;
-            }
-
-            if("Integer".equalsIgnoreCase(text)) {
-                return Integer.class;
-            }
-
-            if("Double".equalsIgnoreCase(text)) {
-                return Double.class;
-            }
-
-            if("Date".equalsIgnoreCase(text)) {
-                return Date.class;
-            }
-
-            throw new JsonParseException("Unable to parse class [text="+text+"]");
+        public boolean accept(Node node) {
+            return "code".equals(node.getSuffix());
         }
-
+        
     }
-
-    private static class ComponentInfo {
-
-        private String description;
-        private Map<String, Component.ComponentParameter> parameters;
-
-        public String getDescription() {
-            return description;
-        }
-
-        public Map<String, ComponentParameter> getParameters() {
-            return parameters;
-        }
-
-    }
-
+    
     private static class ModuleInfo {
 
         private String version;
         private Date releaseDate;
         private SellerInfo seller;
-        private Map<String, ComponentInfo> components = new HashMap<String, ComponentInfo>();
-
+        
         public String getVersion() {
             return version;
         }
@@ -96,9 +61,6 @@ public class Module implements Serializable {
             return seller;
         }
 
-        public Map<String, ComponentInfo> getComponentMap() {
-            return components;
-        }
     }
 
     public Module(Directory dir) throws IOException {
@@ -127,23 +89,54 @@ public String getVersion() {
         return dir.getBaseName();
     }
 
+    public Component getComponent(String name) {
+        for(Component component : listComponents()) {
+            if(name.equals(component.getName())) {
+                return component;
+            }
+        }
+        return null;
+    }
+    
     public List<Component> listComponents() {
         if (componentList == null) {
             List<Component> newList = new ArrayList<Component>();
-            for (Map.Entry<String, ComponentInfo> entry : info.getComponentMap().entrySet()) {
+            for(File codeFile : dir.getFiles(codeNodeFilter)) {
+                String name = codeFile.getBaseName();
                 try {
-                    File codeFile = dir.getFile(entry.getKey() + ".code");
-                    File markupFile = dir.getFile(entry.getKey() + ".html");
-                    newList.add(new Component(entry.getKey(), entry.getValue().getDescription(), codeFile, markupFile, entry.getValue().getParameters()));
-                } catch (FileNotFoundException ex) {
+                    String description = null;
+                    Map<String, ParameterDefinition> paramMap = new HashMap<String, ParameterDefinition>();
+                    File markupFile = dir.getFile(name + ".html");
+                    
+                    List<ScriptAnnotation.Annotation> annotations = ScriptAnnotation.read(codeFile.getInputStream());
+                    for(ScriptAnnotation.Annotation annotation : annotations) {
+                        if("Description".equals(annotation.getName())) {
+                            description = annotation.getMap().get("value");
+                        }
+                        
+                        if("Parameter".equals(annotation.getName())) {
+                            String paramName = annotation.getMap().get("name");
+                            String paramType = annotation.getMap().get("type");
+                            String paramDefault = annotation.getMap().get("default");
+                            String paramOptText = annotation.getMap().get("optionalText");
+                            if(paramName!=null && paramType!=null) {
+                                paramMap.put(paramName, new ParameterDefinition(paramType, paramDefault, paramOptText));
+                            }
+                        }
+                    }
+                    
+                    newList.add(new Component(name, description, codeFile, markupFile, paramMap));
+                } catch (IOException ex) {
                     //Cannot find file - warn about it but otherwise ignore it.
-                    LOG.warn("Component registered in module is not found. [Module=" + getName() + ";Component=" + entry.getKey() + "]");
+                    LOG.warn("Component registered in module is not found. [Module=" + getName() + ";Component=" + name + "]");
                 }
             }
+
             componentList = Collections.unmodifiableList(newList);
         }
         return componentList;
     }
 
+    
     
 }

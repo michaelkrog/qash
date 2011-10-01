@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContextAware;
 import dk.apaq.crud.Crud.*;
 import dk.apaq.crud.CrudNotifier;
 import dk.apaq.filter.jpa.FilterTranslatorForJPA;
+import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.vfs.FileSystem;
@@ -33,7 +34,7 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
 
     private OrganisationCrud orgCrud;
     private Crud.Complete<String, SystemUser> systemUserCrud;
-    private Crud.Filterable<String, Website> websiteCrud;
+    private Crud.Filterable<String, Domain> domainCrud;
     private final Map<String, OrganisationService> orgServiceMap = new WeakHashMap<String,OrganisationService>();
     private final Map<String, Complete<String, Order>> crudMap = new WeakHashMap<String, Complete<String, Order>>();
     private ApplicationContext context;
@@ -41,10 +42,9 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
     private FileSystemPopulator filesystemPopulator;
 
     public SystemServiceImpl() {
-        FilterTranslatorForJPA.registerInterpreter(ContainsDomainFilter.class, new ContainsDomainFilterInterpreter());
     }
 
-
+    
     public void setFileSystemPopulator(FileSystemPopulator populator) {
         this.filesystemPopulator = populator;
     }
@@ -96,13 +96,13 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
     }
 
     @Override
-    public Filterable<String, Website> getWebsites() {
+    public Filterable<String, Domain> getDomains() {
         LOG.debug("Retrieving crud for all websites.");
-        if(websiteCrud==null) {
-            websiteCrud = (Crud.Filterable<String, Website>) context.getBean("crud", em, Website.class);
+        if(domainCrud==null) {
+            domainCrud = (Crud.Filterable<String, Domain>) context.getBean("crud", em, Domain.class);
             //((CrudNotifier)systemUserCrud).addListener(new SecurityHandler.AccountSecurity());
         }
-        return websiteCrud;
+        return domainCrud;
     }
 
     @Override

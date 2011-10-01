@@ -35,6 +35,9 @@ public class Domain implements Serializable, ContentEntity {
     
     @ManyToOne
     private Organisation organisation;
+    
+    @ManyToOne
+    private Website website;
 
     @Override
     public String getId() {
@@ -92,5 +95,12 @@ public class Domain implements Serializable, ContentEntity {
         this.organisation = organisation;
     }
 
-    
+    public Website getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(Website website) {
+        this.website = website;
+    }
+
 }

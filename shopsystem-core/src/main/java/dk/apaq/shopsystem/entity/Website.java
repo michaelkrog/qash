@@ -37,10 +37,6 @@ public class Website implements Serializable, ContentEntity {
     @ManyToOne
     private Organisation organisation;
 
-    @OneToMany(cascade= CascadeType.ALL, fetch=FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<DomainRegistration> domains = new ArrayList<DomainRegistration>();
-    
     private String name;
 
     @Override
@@ -80,10 +76,6 @@ public class Website implements Serializable, ContentEntity {
 
     public void setOrganisation(Organisation organisation) {
         this.organisation = organisation;
-    }
-
-    public List<DomainRegistration> getDomainRegistrations() {
-        return domains;
     }
 
     public String getName() {
