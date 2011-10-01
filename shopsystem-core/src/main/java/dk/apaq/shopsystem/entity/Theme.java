@@ -2,7 +2,7 @@ package dk.apaq.shopsystem.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dk.apaq.shopsystem.rendering.CustomMarkupParserr;
+import dk.apaq.shopsystem.rendering.CustomMarkupParser;
 import dk.apaq.shopsystem.rendering.VfsResourceStream;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;
@@ -137,7 +137,7 @@ public class Theme implements Serializable {
     }
     private List<String> parsePlaceHolders(File file) throws IOException {
         List<String> placeHolders = new ArrayList<String>();
-        CustomMarkupParserr parser = new CustomMarkupParserr(new MarkupResourceStream(new VfsResourceStream(file)));
+        CustomMarkupParser parser = new CustomMarkupParser(new MarkupResourceStream(new VfsResourceStream(file)));
         try {
             Markup m = parser.parse();
             Iterator<MarkupElement> it =  m.iterator();
