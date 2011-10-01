@@ -1,12 +1,9 @@
 package dk.apaq.shopsystem.filter;
 
 import dk.apaq.filter.core.CompareFilter;
-import dk.apaq.filter.core.ContainsFilter;
 import dk.apaq.shopsystem.context.DataContext;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.Website;
-import dk.apaq.shopsystem.service.ContainsDomainFilter;
 import dk.apaq.shopsystem.service.SystemService;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -45,19 +42,22 @@ public class DataContextFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         
-        String domain = request.getServerName();
+        String serverName = request.getServerName();
 
         //Optimize this by putting results in a map and listen for updateevents.
-        dk.apaq.filter.Filter filter = new ContainsDomainFilter("domains","", domain);
-        List<String> idlist = service.getWebsites().listIds(filter, null);
+        dk.apaq.filter.Filter filter = new CompareFilter("name", serverName, CompareFilter.CompareType.Equals);
+        List<String> idlist = service.getDomains().listIds(filter, null);
         
         if (!idlist.isEmpty()) {
-            Website site = service.getWebsites().read(idlist.get(0));
-            DataContext.setWebsite(site);
+            Domain domain = service.getDomains().read(idlist.get(0));
             
-            Organisation org = site.getOrganisation();
-            if (org != null) {
-                DataContext.setService(service.getOrganisationService(org));
+            if(domain.getWebsite()!=null) {
+                DataContext.setWebsite(domain.getWebsite());
+
+                Organisation org = domain.getWebsite().getOrganisation();
+                if (org != null) {
+                    DataContext.setService(service.getOrganisationService(org));
+                }
             }
         }
         
