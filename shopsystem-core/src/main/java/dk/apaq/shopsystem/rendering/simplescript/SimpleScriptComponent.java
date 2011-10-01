@@ -1,22 +1,12 @@
 package dk.apaq.shopsystem.rendering.simplescript;
 
 import dk.apaq.shopsystem.context.DataContext;
-import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptContainerWrapper;
-import dk.apaq.shopsystem.rendering.simplescript.SimpleScript;
 import dk.apaq.shopsystem.entity.Component;
 import dk.apaq.shopsystem.entity.ComponentParameter;
 import dk.apaq.shopsystem.rendering.VfsResourceStream;
-import dk.apaq.shopsystem.rendering.WicketApplication;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.CharBuffer;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.script.Compilable;
-import javax.script.CompiledScript;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -25,6 +15,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.resource.StringResourceStream;
 import org.slf4j.LoggerFactory;
 
 
@@ -38,6 +29,8 @@ public class SimpleScriptComponent extends Panel implements IMarkupResourceStrea
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(SimpleScriptComponent.class);
     
     private final Component component;
+    private boolean failed = false;
+    private String error;
     
     public SimpleScriptComponent(String id, Component component, Map<String, ComponentParameter> paramMap) {
         super(id);
@@ -53,18 +46,31 @@ public class SimpleScriptComponent extends Panel implements IMarkupResourceStrea
             engine.eval(new InputStreamReader(component.getCodeFile().getInputStream()));
             SimpleScript componentScript = inv.getInterface(SimpleScript.class);
             
+            if(componentScript==null) {
+                failed=true;
+                error = "Component does not implement the SimpleScript interface";
+                return;
+            }
                 
             componentScript.render();
         } catch (IOException ex) {
-            LOG.error("Unable to read from component code file", ex);
+            failed=true;
+            error = "Unable to read from component code file";
+            LOG.error(error, ex);
         } catch (ScriptException ex) {
+            failed=true;
+            error = "Unable to evaluate script.";
             LOG.error("Unable to evaluate script.", ex);
         }
     }
 
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
-        return new VfsResourceStream(component.getMarkupFile());
+        if(failed) {
+            return new StringResourceStream("<div>Component failed to render: "+error+"</div>");
+        } else {
+            return new VfsResourceStream(component.getMarkupFile());
+        }
     }
 
 
