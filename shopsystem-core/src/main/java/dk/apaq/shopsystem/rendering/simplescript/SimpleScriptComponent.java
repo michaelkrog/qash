@@ -4,6 +4,7 @@ import dk.apaq.shopsystem.context.DataContext;
 import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptContainerWrapper;
 import dk.apaq.shopsystem.rendering.simplescript.SimpleScript;
 import dk.apaq.shopsystem.entity.Component;
+import dk.apaq.shopsystem.entity.ComponentParameter;
 import dk.apaq.shopsystem.rendering.VfsResourceStream;
 import dk.apaq.shopsystem.rendering.WicketApplication;
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.CharBuffer;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.script.Compilable;
@@ -37,7 +39,7 @@ public class SimpleScriptComponent extends Panel implements IMarkupResourceStrea
     
     private final Component component;
     
-    public SimpleScriptComponent(String id, Component component) {
+    public SimpleScriptComponent(String id, Component component, Map<String, ComponentParameter> paramMap) {
         super(id);
         this.component = component;
         try {
@@ -47,6 +49,7 @@ public class SimpleScriptComponent extends Panel implements IMarkupResourceStrea
             Invocable inv = (Invocable) engine;
             engine.put("service", DataContext.getService());
             engine.put("parent", new SimpleScriptContainerWrapper(this));
+            engine.put("parameters", paramMap);
             engine.eval(new InputStreamReader(component.getCodeFile().getInputStream()));
             SimpleScript componentScript = inv.getInterface(SimpleScript.class);
             
