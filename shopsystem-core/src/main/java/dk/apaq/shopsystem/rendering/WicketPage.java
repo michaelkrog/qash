@@ -62,7 +62,7 @@ public class WicketPage extends WebPage implements /*IMarkupCacheKeyProvider,*/ 
                     continue;
                 }
                 
-                SimpleScriptComponent customWicketComponent = new SimpleScriptComponent("placeholder_1", component, info.getParameterMap());
+                SimpleScriptComponent customWicketComponent = new SimpleScriptComponent(availablePlaceHolder, component, info.getParameterMap());
                 add(customWicketComponent);
             }
         }
