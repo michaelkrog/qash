@@ -55,19 +55,19 @@ public class SimpleScriptComponent extends Panel implements IMarkupResourceStrea
             componentScript.render();
         } catch (IOException ex) {
             failed=true;
-            error = "Unable to read from component code file";
+            error = "Unable to read from component code file. " + ex.getMessage();
             LOG.error(error, ex);
         } catch (ScriptException ex) {
             failed=true;
-            error = "Unable to evaluate script.";
-            LOG.error("Unable to evaluate script.", ex);
+            error = "Unable to evaluate script." + ex.getMessage();
+            LOG.error(error, ex);
         }
     }
 
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
         if(failed) {
-            return new StringResourceStream("<div>Component failed to render: "+error+"</div>");
+            return new StringResourceStream("<wicket:panel><div>Component failed to render: "+error+"</div></wicket:panel>");
         } else {
             return new VfsResourceStream(component.getMarkupFile());
         }
