@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.ui.shoppinnet;
 
 
+import dk.apaq.shopsystem.ui.shoppinnet.factory.WebsiteFactory;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Button;
@@ -11,7 +12,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
-import dk.apaq.shopsystem.ui.common.CommonDialog;
+import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.ui.shoppinnet.common.CommonDialog;
 
 
 public class AdminPanel extends CustomComponent {
@@ -21,8 +23,14 @@ public class AdminPanel extends CustomComponent {
     private VerticalLayout content = new VerticalLayout();
     private Accordion accordion = new Accordion();
     
+    private WebsiteFactory websiteFactory = new WebsiteFactory();
     
-    public AdminPanel() {
+    
+    public AdminPanel(OrganisationService orgService) {
+        
+        // Set services in factories
+        this.websiteFactory.setOrgService(orgService);
+        
         
         this.outerLayout.setWidth("100%");
         this.innerLayout.setWidth("100%");
@@ -34,16 +42,17 @@ public class AdminPanel extends CustomComponent {
         
         // Navigation contents
         Panel tab1 = new Panel();
-        tab1.addComponent(OpenInContent("Websites",new WebsiteList(), false));
+        tab1.addComponent(OpenInContent("Websites",this.websiteFactory.GetList(), false));
+        /*tab1.addComponent(OpenInContent("Websites",this.websiteFactory.GetList(), false));
         tab1.addComponent(OpenInContent("Templates",new ThemeList(), false));
         tab1.addComponent(OpenInContent("Modules",new ModuleList(), true));
         
         tab1.addComponent(OpenInContent("Domains",new DomainList(), false));
         tab1.addComponent(OpenInContent("Freights",new WebsiteList(), false));
         tab1.addComponent(OpenInContent("Taxes",new TaxList(), false));
-        tab1.addComponent(OpenInContent("Payment Methods",new PaymentList(), false));
+        tab1.addComponent(OpenInContent("Payment Methods",new PaymentList(), false));*/
         this.accordion.addTab(tab1, "Settings", null);
-        
+        /*
         Panel tab8 = new Panel();
         tab8.addComponent(OpenInContent("Pages",new UserList(), false));
         this.accordion.addTab(tab8, "Pages", null);   
@@ -79,7 +88,7 @@ public class AdminPanel extends CustomComponent {
         Panel tab6 = new Panel();
         //
         this.accordion.addTab(tab6, "Import/Export", null); 
-        
+        */
         
         
         this.innerLayout.addComponent(this.accordion);
@@ -117,7 +126,7 @@ public class AdminPanel extends CustomComponent {
     }
     
     
-    public Button OpenInDialog(final String buttonText, final Component target, Boolean buttonMargin) {
+    /*public Button OpenInDialog(final String buttonText, final Component target, Boolean buttonMargin) {
         
         Button button = new Button(" " + buttonText);
         button.setStyleName(Reindeer.BUTTON_LINK);
@@ -138,7 +147,7 @@ public class AdminPanel extends CustomComponent {
         return button;
         
         
-    }
+    }*/
     
 }
     

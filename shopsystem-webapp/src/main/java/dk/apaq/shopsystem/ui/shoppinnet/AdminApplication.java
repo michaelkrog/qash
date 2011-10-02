@@ -8,6 +8,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.ui.shoppinnet.AdminPanel;
 import dk.apaq.shopsystem.ui.VaadinServiceHolder;
@@ -139,9 +140,9 @@ public class AdminApplication extends Application implements HttpServletRequestL
             getMainWindow().showNotification("Organisation with id "+organisationId+" does not exist.", Window.Notification.TYPE_ERROR_MESSAGE);
             return;
         }
-        
-        VaadinServiceHolder.setService(this, service.getOrganisationService(org));
-        adminPanel = new AdminPanel();
+        OrganisationService orgService = service.getOrganisationService(org);
+        VaadinServiceHolder.setService(this, orgService);
+        adminPanel = new AdminPanel(orgService);
         
         outerLayout.removeAllComponents();
         outerLayout.addComponent(adminPanel);

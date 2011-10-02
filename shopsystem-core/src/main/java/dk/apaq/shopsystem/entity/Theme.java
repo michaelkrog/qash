@@ -153,6 +153,7 @@ public class Theme implements Serializable {
         } catch (ResourceStreamNotFoundException ex) {
             throw new IOException(ex);
         }
+        
         return placeHolders;
     }
 }

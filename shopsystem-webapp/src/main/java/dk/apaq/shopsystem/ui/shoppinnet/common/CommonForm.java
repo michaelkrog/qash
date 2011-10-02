@@ -1,13 +1,16 @@
-package dk.apaq.shopsystem.ui.common;
+package dk.apaq.shopsystem.ui.shoppinnet.common;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +20,7 @@ import java.util.List;
  * @author Martin Christensen
  */
 
-public class CommonForm extends CustomComponent implements Container.Viewer {
+public class CommonForm extends Window {
     
     private Container data;
     private String itemId; 
@@ -42,33 +45,38 @@ public class CommonForm extends CustomComponent implements Container.Viewer {
         this.fieldType.add(type);
     }
 
-    @Override
+    //@Override
     public Container getContainerDataSource() {
         return this.data;
     }
 
-    @Override
+    //@Override
     public void setContainerDataSource(Container data) {
         this.data = data;
-        if (this.itemId == null) {
+        /*if (this.itemId == null) {
             this.itemId = data.addItem().toString();
-        }
-        form.setItemDataSource(data.getItem(this.itemId));
+        }*/
+        this.form.setItemDataSource(this.data.getItem(this.itemId));
     }
     
     
     @Override
     public void attach() {
         
-        this.form.setWidth("250px");
+        setModal(true);
+        setWidth("500px");
+        addComponent(this.content);
         
-        // Enable buffering so that commit() must be called for the form
+        this.content.setMargin(true);
+        this.form.setWidth("250px");
+
+         // Enable buffering so that commit() must be called for the form
          // before input is written to the data. (Form input is not written
          // immediately through to the underlying object.)
          this.form.setWriteThrough(true);
          this.form.setImmediate(true);
         
-        if(this.data.size() == 0) {
+         if(this.data.size() == 0) {
             this.label.setCaption("No data available!");
             this.content.addComponent(label);
         }
@@ -79,29 +87,31 @@ public class CommonForm extends CustomComponent implements Container.Viewer {
                 
                 this.form.addField(this.field.get(i).toString(), new TextField(this.description.get(i).toString()));
                 //Property property = this.form.getItemProperty(this.field.get(i));  
-                
+                //setNullRepresentation("");
+
                 String colfieldType = this.fieldType.get(i).toString();
                 if ("SomeCustomFieldStuffHereIfNeeded".equals(colfieldType)) {
                      //Some custom field stuff can be added here
                 }
             }
             
+            this.form.setVisibleItemProperties(new Object[] {});
+        
+            // Insert form into content
+            this.content.addComponent(this.form);
+            content.setComponentAlignment(this.form, Alignment.MIDDLE_CENTER);
+
+            Button okButton = new Button("Close", this, "okButtonClick");   
+            this.content.addComponent(okButton);
+            this.content.setComponentAlignment(okButton, Alignment.MIDDLE_RIGHT);
 
         }
-        
-        this.form.setVisibleItemProperties(new Object[] {});
-        
-        // Insert form into content
-        this.content.addComponent(this.form);
-        content.setComponentAlignment(form, Alignment.MIDDLE_CENTER);
-
     }
     
-    
-    public CommonForm() {
-        
-        // Define layout root
-        setCompositionRoot(this.content);
+     
+    public void okButtonClick () {
+        this.form.commit();
+        this.close();
     }
-        
+    
 }

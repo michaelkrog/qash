@@ -1,18 +1,19 @@
-package dk.apaq.shopsystem.ui.common;
+package dk.apaq.shopsystem.ui.shoppinnet.common;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
+import dk.apaq.shopsystem.service.OrganisationService;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,20 +26,26 @@ import java.util.logging.Logger;
 public class CommonGrid extends CustomComponent implements Container.Viewer {
     
     private Container data;
+    private String factoryClass = "";
     private Boolean edit = false;
     private String editCaption = "";
     private List header = new ArrayList();
     private List field = new ArrayList();
     private List fieldType = new ArrayList();
     private List button = new ArrayList();
-    private List buttonComponent = new ArrayList();
     private List buttonMethod = new ArrayList();
     private List buttonTarget = new ArrayList();
     
+    final private OrganisationService orgService;
     final private Table table = new Table();
     final VerticalLayout content = new VerticalLayout();
+    final VerticalLayout dummy = new VerticalLayout();
     
     
+    public void setFactoryClass (String factoryClass) {
+        this.factoryClass = factoryClass;
+    }
+        
     public void setEdit (Boolean edit) {
         this.edit = edit;
     }
@@ -56,10 +63,9 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
         this.fieldType.add(fieldType);
     }
     
-    public void addButton(String button, String buttonComponent, String buttonMethod, String buttonTarget) {
+    public void addButton(String button, String buttonMethod, String buttonTarget) {
         
 	this.button.add(button);
-        this.buttonComponent.add(buttonComponent);
         this.buttonMethod.add(buttonMethod);
         this.buttonTarget.add(buttonTarget);
     }
@@ -81,15 +87,17 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
     @Override
     public void attach() {
         
+        this.content.addComponent(this.dummy);
+        
         // Create panel
         for (int i = 0; i < this.button.size(); i++) {
-            this.content.addComponent(createButton(this.button.get(i).toString(),this.buttonComponent.get(i).toString(),this.buttonMethod.get(i).toString(),this.buttonTarget.get(i).toString()));
+            this.content.addComponent(createButton(this.button.get(i).toString(),this.buttonMethod.get(i).toString(),this.buttonTarget.get(i).toString()));
         }
         
         // Create table
         this.table.setWidth("100%");
-        this.table.setHeight("100%");
-        this.table.setPageLength(30);
+        //this.table.setHeight("100%");
+        this.table.setPageLength(20);
         
         if(this.data.size() == 0) {
             this.table.setContainerDataSource(null);
@@ -111,7 +119,7 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
             if (this.edit == true) {
                 this.table.setSelectable(true);
                 this.table.setImmediate(true);
-                //this.table.setNullSelectionAllowed(false); 
+                this.table.setNullSelectionAllowed(false); 
                 this.table.addListener(new Property.ValueChangeListener() {
                     @Override
                     public void valueChange(ValueChangeEvent event) {
@@ -131,9 +139,9 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
     }
     
     
-    public CommonGrid() {
+    public CommonGrid(OrganisationService orgService) {
         
-        // Define layout root
+        this.orgService = orgService;
         setCompositionRoot(this.content);
     }
     
@@ -147,8 +155,8 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
         
     
         
-    private Button createButton(final String buttonText, final String buttonComponent, final String buttonMethod, final String buttonTarget) {
-        
+    private Button createButton(final String buttonText, final String buttonMethod, final String buttonTarget) {
+
         Button button = new Button(buttonText);
         //buttonComponent.get
         //button.setStyleName(Reindeer.BUTTON_LINK);
@@ -157,7 +165,7 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
         button.addListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
-                
+                    
                 if ("dialog".equals(buttonTarget)) {
                     // ?
                     //CommonDialog dialog = new CommonDialog(buttonText, buttonComponent(buttonTarget));
@@ -167,23 +175,32 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
                     // ?
                 }
                 if (!"dialog".equals(buttonTarget) && !"content".equals(buttonTarget)) {
-                  
+
                     try {
                         try {
-                            System.out.println("Creating instance: " +buttonComponent);
-                            Object newInstance = (Object) Class.forName(buttonComponent).newInstance();
-                            
+                            System.out.println("Creating instance: " + factoryClass);
+                            Component newInstance = (Component) Class.forName(factoryClass).newInstance();
+                            dummy.addComponent(newInstance);
+
                             System.out.println("Finding methods...");
                             Method[] allMethods = newInstance.getClass().getDeclaredMethods();
-                            
+
                             for (Method m : allMethods) {
                                 System.out.println("Found: " + m.getName());
                                 if (m.getName().equalsIgnoreCase(buttonMethod)) {
                                     try {
+                                       String tableId = "";
+                                        if (table.getValue() == null) {
+                                            tableId = null;
+                                        } 
+                                        else {
+                                            tableId = table.getValue().toString();
+                                        }
                                         
-                                        Object o = m.invoke(newInstance, new Locale(buttonMethod));
-                                        System.out.println(buttonMethod + ":" + o);
-                                        
+                                        //newInstance.getClass().getDeclaredMethod("setOrgService", orgService);
+                                        Object o = m.invoke(newInstance, orgService, tableId); //new Locale(buttonMethod)
+                                        //System.out.println(buttonMethod + ":" + o);
+
                                     } catch (IllegalArgumentException ex) {
                                         Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
                                     } catch (InvocationTargetException ex) {
@@ -191,7 +208,7 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
                                     }
                                 }
                             }
-                            
+
                         } catch (ClassNotFoundException ex) {
                             Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -200,9 +217,11 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
                     } catch (IllegalAccessException ex) {
                         Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                   
+
                 }
+   
             }
+          
         });
         
         return button;

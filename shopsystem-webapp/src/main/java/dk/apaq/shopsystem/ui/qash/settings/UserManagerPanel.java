@@ -152,7 +152,7 @@ public class UserManagerPanel extends CustomComponent {
         setSizeFull();
 
         userList.addListener(new ListSelectionHandler());
-
+/*
         btnNewUser.addListener(new Button.ClickListener() {
 
             public void buttonClick(ClickEvent event) {
@@ -180,7 +180,7 @@ public class UserManagerPanel extends CustomComponent {
                 });
             }
         });
-
+*/
         btnRemoveUser.addListener(new Button.ClickListener() {
 
             public void buttonClick(ClickEvent event) {
