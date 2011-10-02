@@ -13,18 +13,18 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.service.OrganisationService;
-import dk.apaq.shopsystem.ui.shoppinnet.common.CommonDialog;
 
 
 public class AdminPanel extends CustomComponent {
     
     private HorizontalLayout innerLayout = new HorizontalLayout();
     private VerticalLayout outerLayout = new VerticalLayout();
+    private VerticalLayout leftLayout = new VerticalLayout();
     private VerticalLayout content = new VerticalLayout();
     private Accordion accordion = new Accordion();
     
     private WebsiteFactory websiteFactory = new WebsiteFactory();
-    
+    private Overview overview = new Overview();
     
     public AdminPanel(OrganisationService orgService) {
         
@@ -34,13 +34,24 @@ public class AdminPanel extends CustomComponent {
         
         this.outerLayout.setWidth("100%");
         this.innerLayout.setWidth("100%");
+        this.leftLayout.setWidth("100%");
+        this.leftLayout.setHeight("500px");
         this.content.setWidth("100%");
-        //this.accordion.setSizeFull();
+        //this.leftLayout.setSizeFull();
         
+        this.leftLayout.setMargin(true);
+        this.content.setMargin(true);
+        
+        this.leftLayout.setStyleName("v-layout-left");
         this.accordion.setStyleName("v-accordion-borderless");
         this.accordion.addStyleName("v-navigationpanel");
         
         // Navigation contents
+        Panel tab9 = new Panel();
+        tab9.addComponent(OpenInContent("Overview", this.overview, false));
+        tab9.addComponent(OpenInContent("Graphs", this.websiteFactory.GetList(), false));
+        this.accordion.addTab(tab9, "Overview", null);
+
         Panel tab1 = new Panel();
         tab1.addComponent(OpenInContent("Websites",this.websiteFactory.GetList(), false));
         /*tab1.addComponent(OpenInContent("Websites",this.websiteFactory.GetList(), false));
@@ -52,11 +63,12 @@ public class AdminPanel extends CustomComponent {
         tab1.addComponent(OpenInContent("Taxes",new TaxList(), false));
         tab1.addComponent(OpenInContent("Payment Methods",new PaymentList(), false));*/
         this.accordion.addTab(tab1, "Settings", null);
-        /*
+        
         Panel tab8 = new Panel();
-        tab8.addComponent(OpenInContent("Pages",new UserList(), false));
+        tab8.addComponent(OpenInContent("Pages",this.websiteFactory.GetList(), false));
         this.accordion.addTab(tab8, "Pages", null);   
         
+        /*
         Panel tab5 = new Panel();
         tab5.addComponent(OpenInContent("Products",new ProductList(), false));
         tab5.addComponent(OpenInContent("Product Groups",new ProductCategoryList(), false));
@@ -89,16 +101,18 @@ public class AdminPanel extends CustomComponent {
         //
         this.accordion.addTab(tab6, "Import/Export", null); 
         */
-        
-        
-        this.innerLayout.addComponent(this.accordion);
+
+        this.leftLayout.addComponent(this.accordion);
+        this.innerLayout.addComponent(this.leftLayout);
         
         this.innerLayout.addComponent(content);
         this.innerLayout.getComponent(0).setWidth("200px");
+        this.innerLayout.setExpandRatio(this.leftLayout, 1.0f);
         this.innerLayout.setExpandRatio(this.content, 1.0f);
         
-        this.outerLayout.addComponent(new Header());
+        //this.outerLayout.addComponent(new Header());
         this.outerLayout.addComponent(innerLayout);
+        this.content.addComponent(new Overview());
         
         setCompositionRoot(this.outerLayout);
     }    

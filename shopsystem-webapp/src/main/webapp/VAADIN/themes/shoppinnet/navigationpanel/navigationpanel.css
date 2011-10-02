@@ -1,0 +1,40 @@
+.v-navigationpanel .v-accordion-item-caption .v-caption {
+	padding: 0;
+}
+
+.v-navigationpanel .v-ie .v-accordion-item-caption .v-caption {
+	padding: 0;
+}
+
+.v-navigationpanel .v-accordion-item-caption {
+        font-size: 15px;
+        font-weight: normal;
+        padding: 5px 0 3px 0px;
+        /*
+        background-image: url(../../reindeermods/layout/img/toolbar-invert-bg.png);
+        text-shadow: 0 1px 0 #555555;
+        */
+        background: none;
+        background-color: #F3F4F7;
+        border: 0;
+        border-bottom: 3px solid #EDEDEF;
+        color: #555555;
+        text-shadow: none;
+}
+
+.v-navigationpanel .v-accordion-item-open .v-accordion-item-caption {
+        /*
+        background: #696d73 url(../../reindeermods/layout/img/toolbar-bg.png) repeat-x;
+        */
+        background: none;
+        background-color: #F3F4F7;
+        border: 0;
+        border-bottom: 3px solid #EDEDEF;
+        color: #555555;
+        text-shadow: none;
+}
+
+.v-navigationpanel .v-accordion-button-margin {
+        margin-bottom: 10px;
+}
+
