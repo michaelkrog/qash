@@ -46,7 +46,7 @@ public class DataContextFilter implements Filter {
 
         //Optimize this by putting results in a map and listen for updateevents.
         dk.apaq.filter.Filter filter = new CompareFilter("name", serverName, CompareFilter.CompareType.Equals);
-        List<String> idlist = service.getDomains().listIds(filter, null);
+        List<String> idlist = service.getDomains().listIds(filter, null); 
         
         if (!idlist.isEmpty()) {
             Domain domain = service.getDomains().read(idlist.get(0));
