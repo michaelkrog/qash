@@ -33,6 +33,7 @@ public class CommonForm extends Window {
     private Form form = new Form();
     private VerticalLayout content = new VerticalLayout();
     private Label label = new Label();
+    private String headerText = "";
     
         
     public void setItemId(String value) {
@@ -46,6 +47,10 @@ public class CommonForm extends Window {
     public void addField(String value, String type) {
 	this.field.add(value);
         this.fieldType.add(type);
+    }
+    
+    public void setHeaderText(String value) {
+        this.headerText = value;
     }
 
     //@Override
@@ -67,6 +72,7 @@ public class CommonForm extends Window {
     @Override
     public void attach() {
         
+        setCaption(this.headerText);
         setModal(true);
         setWidth("500px");
         addComponent(this.content);

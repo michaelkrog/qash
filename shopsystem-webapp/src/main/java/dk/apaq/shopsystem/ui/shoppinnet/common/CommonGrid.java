@@ -3,11 +3,14 @@ package dk.apaq.shopsystem.ui.shoppinnet.common;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.service.OrganisationService;
 import java.lang.reflect.InvocationTargetException;
@@ -27,8 +30,9 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
     
     private Container data;
     private String factoryClass = "";
+    private String pageHeader = "";
     private Boolean edit = false;
-    private String editCaption = "";
+    private Boolean search = false;
     private List header = new ArrayList();
     private List field = new ArrayList();
     private List fieldType = new ArrayList();
@@ -39,6 +43,8 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
     final private OrganisationService orgService;
     final private Table table = new Table();
     final VerticalLayout content = new VerticalLayout();
+    final HorizontalLayout panel = new HorizontalLayout();
+    final HorizontalLayout buttonHolder = new HorizontalLayout();
     final VerticalLayout dummy = new VerticalLayout();
     
     
@@ -46,12 +52,16 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
         this.factoryClass = factoryClass;
     }
         
+    public void setPageHeader (String pageHeader) {
+        this.pageHeader = pageHeader;
+    }
+        
     public void setEdit (Boolean edit) {
         this.edit = edit;
     }
     
-    public void setEditCaption (String editCaption) {
-        this.editCaption = editCaption;
+    public void setSearch (Boolean search) {
+        this.search = search;
     }
         
     public void addHeader(String header) {
@@ -87,17 +97,22 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
     @Override
     public void attach() {
         
-        this.content.addComponent(this.dummy);
-        
         // Create panel
-        for (int i = 0; i < this.button.size(); i++) {
-            this.content.addComponent(createButton(this.button.get(i).toString(),this.buttonMethod.get(i).toString(),this.buttonTarget.get(i).toString()));
+        
+        // Create search fields
+        if(this.search == true) {
+            TextField search = new TextField();
+            search.setValue("Search...");
+            this.panel.addComponent(search);
+            this.panel.setComponentAlignment(search, Alignment.MIDDLE_LEFT);
         }
         
-
+        // Create panel buttons
+        for (int i = 0; i < this.button.size(); i++) {
+            this.buttonHolder.addComponent(createButton(this.button.get(i).toString(),this.buttonMethod.get(i).toString(),this.buttonTarget.get(i).toString()));
+        }
+        
         // Create table
-        this.table.setWidth("100%");
-        //this.table.setHeight("100%");
         this.table.setPageLength(20);
         
         /*if(this.data.size() == 0) {
@@ -119,7 +134,7 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
             // Handle selection change, if enabled
             if (this.edit == true) {
                 this.table.setSelectable(true);
-                this.table.setMultiSelect(true);
+                //this.table.setMultiSelect(true);
                 this.table.setColumnReorderingAllowed(true);
                 this.table.setSortDisabled(false);
         //this.table.setRowHeaderMode(Table.ROW_HEADER_MODE_ICON_ONLY);
@@ -138,9 +153,19 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
        // }
         
         // Insert components into content
-        this.content.addComponent(table);
+        this.buttonHolder.setSpacing(true);
+        this.panel.addComponent(this.buttonHolder);
+        this.panel.setComponentAlignment(this.buttonHolder, Alignment.MIDDLE_RIGHT);
+        this.panel.setStyleName("v-table-panel");
+        this.panel.setWidth("100%");
+        this.panel.setSpacing(true);
+        this.table.setWidth("100%");
         
-
+        this.content.setSpacing(true);
+        this.content.addComponent(new PageHeader(this.pageHeader));
+        this.content.addComponent(this.panel);
+        this.content.addComponent(this.table);
+        this.content.addComponent(this.dummy);
     }
     
     

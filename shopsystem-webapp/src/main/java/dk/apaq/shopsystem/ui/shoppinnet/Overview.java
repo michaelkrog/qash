@@ -5,9 +5,11 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import dk.apaq.shopsystem.ui.shoppinnet.common.PageHeader;
 
 public class Overview extends CustomComponent {
     
+    private VerticalLayout pageHolder = new VerticalLayout();
     private HorizontalLayout content = new HorizontalLayout();
     private VerticalLayout contentLeft = new VerticalLayout();
     private VerticalLayout contentRight = new VerticalLayout();
@@ -17,7 +19,12 @@ public class Overview extends CustomComponent {
     @Override
     public void attach() {
 
-        setCompositionRoot(this.content);
+        setCompositionRoot(this.pageHolder);
+        
+        this.pageHolder.addComponent(new PageHeader("Overview"));
+        this.pageHolder.addComponent(this.content);
+        this.pageHolder.setSpacing(true);
+        
         this.content.addComponent(this.contentLeft);
         this.content.addComponent(this.contentRight);
         
@@ -27,7 +34,7 @@ public class Overview extends CustomComponent {
         this.content.setWidth("100%");
         this.contentLeft.setWidth("100%");
         this.contentRight.setWidth("100%");
-                
+        
         // Left content
         
         Panel box1 = new Panel("Test 1");

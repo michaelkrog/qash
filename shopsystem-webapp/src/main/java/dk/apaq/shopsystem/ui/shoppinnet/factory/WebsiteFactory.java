@@ -1,7 +1,5 @@
 package dk.apaq.shopsystem.ui.shoppinnet.factory;
 
-import com.vaadin.data.Container;
-import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonForm;
@@ -11,9 +9,6 @@ import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 public class WebsiteFactory extends AbstractFactory {
 
     
-    private VerticalLayout layout = new VerticalLayout();
-
-   
     public WebsiteFactory() {
         setCompositionRoot(this.layout);
     }
@@ -36,7 +31,8 @@ public class WebsiteFactory extends AbstractFactory {
         grid.setFactoryClass(WebsiteFactory.class.getName()); //
         
         grid.setEdit(true);
-        grid.setEditCaption("Edit Website");
+        grid.setSearch(true);
+        grid.setPageHeader("Websites");
 
         // Add buttons
         grid.addButton("Add","Add","");
@@ -62,7 +58,9 @@ public class WebsiteFactory extends AbstractFactory {
         
         form.setItemId(id);
         form.setContainerDataSource(this.container);
-                
+        
+        form.setHeaderText("Edit website");
+        
         form.addDescription("Name");
         form.addDescription("Created");
        
