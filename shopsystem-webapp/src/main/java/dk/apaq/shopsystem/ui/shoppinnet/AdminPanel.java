@@ -25,7 +25,7 @@ public class AdminPanel extends CustomComponent {
     private Accordion accordion = new Accordion();
     
     private WebsiteFactory websiteFactory = new WebsiteFactory();
-    private OverviewTemp overview = new OverviewTemp();
+    private Overview overview = new Overview();
     
     public AdminPanel(OrganisationService orgService) {
         
@@ -119,7 +119,7 @@ public class AdminPanel extends CustomComponent {
         
         //this.outerLayout.addComponent(new Header());
         this.outerLayout.addComponent(innerLayout);
-        this.content.addComponent(new OverviewTemp());
+        this.content.addComponent(new Overview());
         
         setCompositionRoot(this.outerLayout);
     }    
