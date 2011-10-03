@@ -28,9 +28,8 @@ public class AdminPanel extends CustomComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminPanel.class);
     private final SalesView salesView = new SalesView();
-    //private final ConstructionList constructionList = new ConstructionList();
-    //private final CommonDialog constructionForm = new CommonDialog("",new ConstructionForm("1"));
     private final ProductList stockWidget = new ProductList();
+    private final WebsiteEditor websiteEditor = new WebsiteEditor();
     private final SiteHeader header;
     private final VerticalLayout outerLayout = new VerticalLayout();
     private Panel leftLayout;
@@ -135,6 +134,10 @@ public class AdminPanel extends CustomComponent {
         
         if("STOCK".equals(name)) {
             c = stockWidget;
+        }
+
+        if(name.startsWith("WEBSITE:")) {
+            c = websiteEditor;
         }
         
         //if("CONSTRUCTIONLIST".equals(name)) {

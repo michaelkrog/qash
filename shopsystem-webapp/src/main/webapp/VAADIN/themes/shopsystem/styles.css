@@ -6,6 +6,90 @@
 @import "navigationpanel/navigationpanel.css";
 @import "layout/layout.css";
 
+/* Top gradient in website editor */
+.v-WebsiteEditor{
+    background: white url(img/gradient-bg.png) repeat-x;
+}
+
+/* Title matching top gradient in website editor*/
+.v-WebsiteEditor .title{
+    font-family: "Helvetica Neue", helvetica, arial, sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+    color: #1E2229;
+    letter-spacing: -0.015em;
+    text-shadow: 0 2px 1px #C0C1C2;
+    padding: 7px 0 8px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.v-WebsiteEditor .v-horizontallayout-title {
+    background: transparent url(img/title-border.png) repeat-x 0 41px;
+    padding-bottom: 10px;
+}
+
+.v-WebsiteEditor .v-horizontallayout-title .v-nativebutton {
+    padding-top: 18px;
+    display: block;
+    margin: 0 0 0 10px;
+}
+
+
+/* The black bubble panel */
+.v-panel-bubble {
+    background: #1E2123 url(img/info-bubble-bg.png) repeat-y;
+    color: #B8BBBE;
+    font-family: arial, helvetica, verdana, sans-serif;
+    font-size: 12px;
+    line-height: 19px;
+}
+
+.v-panel-bubble .v-panel-caption {
+    color: white;
+    font-family: "Helvetica Neue", helvetica, arial, verdana, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: normal;
+    text-shadow: 0 1px 0 #272A2B;
+    background: transparent url(img/info-bubble-top.png);
+    margin: 0;
+    padding-bottom: 12px;
+    padding-left: 28px;
+    padding-top: 15px;
+    border: none;
+}
+
+.v-panel-bubble .v-panel-content {
+    background: transparent url(img/info-bubble-top.png) no-repeat 0 -44px;
+    border: none;
+}
+
+.v-panel-bubble .v-panel-deco {
+    height: 28px;
+    background: transparent url(img/info-bubble-bottom.png);
+    margin: 0;
+    border: nonenone;
+}
+
+.v-panel-bubble .v-panel-content > div {
+    background: transparent;
+}
+
+.v-panel-bubble .v-label-section {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 30px;
+    color: white;
+    border: none;
+    text-indent: 0;
+    text-shadow: none;
+    padding: 0;
+    height: auto;
+}
+
 /* CATEGORY LIST */
 .v-categorylist .v-button {
     font-size: 11px;

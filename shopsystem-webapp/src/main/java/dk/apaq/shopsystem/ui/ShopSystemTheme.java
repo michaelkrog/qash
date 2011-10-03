@@ -23,5 +23,7 @@ public class ShopSystemTheme {
 
     public static final String PANEL_INVISIBLE = "invisible";
 
+     public static final String PANEL_BUBBLE = "bubble";
+   
 
 }
