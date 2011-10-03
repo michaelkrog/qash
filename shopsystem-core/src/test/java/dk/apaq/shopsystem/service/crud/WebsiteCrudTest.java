@@ -2,6 +2,7 @@ package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.Page;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.junit.runner.RunWith;
@@ -123,21 +124,31 @@ public class WebsiteCrudTest {
         System.out.println("delete");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Website> crud = service.getOrganisationService(org).getWebsites();
-        Website result = crud.read(crud.create());
+        Crud.Editable<String, Website> websiteCrud = service.getOrganisationService(org).getWebsites();
+        Website website = websiteCrud.read(websiteCrud.create());
+        
+        Crud.Complete<String, Page> pageCrud = service.getOrganisationService(org).getPages(website);
+        Page page = pageCrud.read(pageCrud.create());
+        assertNotNull(page);
+        assertEquals(website.getId(), page.getWebsite().getId());
+        
 
-        assertNotNull(result);
-        assertNotNull(result.getId());
+        assertNotNull(website);
+        assertNotNull(website.getId());
 
-        String id = result.getId();
+        String id = website.getId();
 
-        result = crud.read(id);
-        assertNotNull(result);
+        website = websiteCrud.read(id);
+        assertNotNull(website);
 
-        crud.delete(id);
+        websiteCrud.delete(id);
 
-        result = crud.read(id);
-        assertNull(result);
+        website = websiteCrud.read(id);
+        assertNull(website);
+
+        page = pageCrud.read(page.getId());
+        assertNull(page);
+
     }
 
     @Test

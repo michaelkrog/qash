@@ -1,0 +1,10 @@
+----------------------------------------------------------------
+Fri Sep 30 13:07:48 CEST 2011:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): instance a816c00e-0132-ba04-cacf-000000832db0 
+on database directory D:\data\development\ShopSystem\shopsystem-core\FoundryReportsDB  with class loader sun.misc.Launcher$AppClassLoader@601bb1 
+Loaded from file:/C:/tools/apache/maven/m2repository/org/apache/derby/derby/10.8.1.2/derby-10.8.1.2.jar
+java.vendor=Sun Microsystems Inc.
+java.runtime.version=1.6.0_21-b07
+user.dir=D:\data\development\ShopSystem\shopsystem-core
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

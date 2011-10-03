@@ -19,7 +19,7 @@ public class Tax implements Serializable, ContentEntity {
 
     @Id
     @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     protected String id;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)

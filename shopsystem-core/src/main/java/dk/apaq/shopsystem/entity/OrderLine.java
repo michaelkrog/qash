@@ -25,7 +25,7 @@ public class OrderLine implements Serializable, BasicEntity {
 
     @Id
     @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     protected String id;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)

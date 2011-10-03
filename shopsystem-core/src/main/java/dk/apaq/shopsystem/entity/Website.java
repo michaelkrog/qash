@@ -25,7 +25,7 @@ public class Website implements Serializable, ContentEntity {
 
     @Id
     @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     protected String id;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -33,6 +33,10 @@ public class Website implements Serializable, ContentEntity {
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateChanged = new Date();
+
+    //This is only mapped here to allow cascading upon website removal..
+    @OneToMany(mappedBy = "website", cascade=CascadeType.REMOVE)
+    private List<Page> pages;
 
     @ManyToOne
     private Organisation organisation;

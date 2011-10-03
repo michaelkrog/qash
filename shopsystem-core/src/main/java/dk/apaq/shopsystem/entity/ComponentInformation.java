@@ -19,7 +19,7 @@ public class ComponentInformation implements Serializable {
     
     @Id
     @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     protected String id;
     private String moduleName;
     private String componentName;

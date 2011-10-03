@@ -22,7 +22,7 @@ public class Domain implements Serializable, ContentEntity {
 
     @Id
     @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     protected String id;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateCreated = new Date();
