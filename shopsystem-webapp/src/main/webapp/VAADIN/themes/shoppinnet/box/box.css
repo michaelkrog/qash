@@ -5,10 +5,14 @@
     font-weight: normal;
     color: #ffffff;
     background-color: #C4C5C8;
-    border-bottom: 1px solid #e5e5e5;
-    line-height: 25px; /* accommodate minimum icon size */
+    border-bottom: 0px;
+    line-height: 20px; /* accommodate minimum icon size */
+    padding: 3px 3px 3px 5px;
 }
 
-.v-box .v-panel-content {
+.v-box .v-panel-content > div,
+.v-box .v-ie6 .v-panel-content
+{
     background-color: #EDEDEF;
+
 }

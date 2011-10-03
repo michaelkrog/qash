@@ -1,6 +1,8 @@
 package dk.apaq.shopsystem.ui.shoppinnet.common;
 
+import com.vaadin.data.Buffered;
 import com.vaadin.data.Container;
+import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -23,6 +25,7 @@ import java.util.List;
 public class CommonForm extends Window {
     
     private Container data;
+    private Item item;
     private String itemId; 
     private List description = new ArrayList();
     private List field = new ArrayList();
@@ -56,7 +59,8 @@ public class CommonForm extends Window {
         /*if (this.itemId == null) {
             this.itemId = data.addItem().toString();
         }*/
-        this.form.setItemDataSource(this.data.getItem(this.itemId));
+        this.item = this.data.getItem(this.itemId);
+        this.form.setItemDataSource(this.item);
     }
     
     
@@ -85,9 +89,11 @@ public class CommonForm extends Window {
             // Add fields to form
             for (int i = 0; i < this.description.size(); i++) {
                 
-                this.form.addField(this.field.get(i).toString(), new TextField(this.description.get(i).toString()));
+                TextField textField = new TextField(this.description.get(i).toString());
+                textField.setNullRepresentation(" ");
+                this.form.addField(this.field.get(i).toString(), textField );
+                
                 //Property property = this.form.getItemProperty(this.field.get(i));  
-                //setNullRepresentation("");
 
                 String colfieldType = this.fieldType.get(i).toString();
                 if ("SomeCustomFieldStuffHereIfNeeded".equals(colfieldType)) {
@@ -101,7 +107,7 @@ public class CommonForm extends Window {
             this.content.addComponent(this.form);
             content.setComponentAlignment(this.form, Alignment.MIDDLE_CENTER);
 
-            Button okButton = new Button("Close", this, "okButtonClick");   
+            Button okButton = new Button("Ok", this, "okButtonClick");   
             this.content.addComponent(okButton);
             this.content.setComponentAlignment(okButton, Alignment.MIDDLE_RIGHT);
 
@@ -111,6 +117,10 @@ public class CommonForm extends Window {
      
     public void okButtonClick () {
         this.form.commit();
+        if(item instanceof Buffered) {
+            ((Buffered)item).commit();
+        }
+
         this.close();
     }
     

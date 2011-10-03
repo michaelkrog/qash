@@ -10,11 +10,15 @@ import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
 public class WebsiteFactory extends AbstractFactory {
 
-    private OrganisationService orgService;
-    private Container container;
+    
     private VerticalLayout layout = new VerticalLayout();
 
-        
+   
+    public WebsiteFactory() {
+        setCompositionRoot(this.layout);
+    }
+    
+    
     public void setOrgService(OrganisationService orgService) {
         
         if (this.orgService == null) {
@@ -23,18 +27,11 @@ public class WebsiteFactory extends AbstractFactory {
         }
     }
     
-    
-    public WebsiteFactory() {
-        setCompositionRoot(this.layout);
-    }
-    
-    
-        
-    
+            
     public CommonGrid GetList() {
                 
         CommonGrid grid = new CommonGrid(this.orgService);
-        
+
         grid.setContainerDataSource(this.container);
         grid.setFactoryClass(WebsiteFactory.class.getName()); //
         
@@ -62,7 +59,7 @@ public class WebsiteFactory extends AbstractFactory {
     public void CreateEdit(String id) {
         
         CommonForm form = new CommonForm();
-        //Container c = new CrudContainer(this.orgService.getWebsites(), Website.class);
+        
         form.setItemId(id);
         form.setContainerDataSource(this.container);
                 
@@ -76,7 +73,6 @@ public class WebsiteFactory extends AbstractFactory {
     }
     
     
-    @Override
     public void Add(OrganisationService orgService, String id) {
         
         setOrgService(orgService);

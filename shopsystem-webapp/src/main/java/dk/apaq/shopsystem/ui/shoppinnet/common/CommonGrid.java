@@ -94,17 +94,18 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
             this.content.addComponent(createButton(this.button.get(i).toString(),this.buttonMethod.get(i).toString(),this.buttonTarget.get(i).toString()));
         }
         
+
         // Create table
         this.table.setWidth("100%");
         //this.table.setHeight("100%");
         this.table.setPageLength(20);
         
-        if(this.data.size() == 0) {
+        /*if(this.data.size() == 0) {
             this.table.setContainerDataSource(null);
             this.table.addContainerProperty("", String.class,  null);
             this.table.addItem(new Object[] {"No data available!"}, new Integer(1));
         }
-        else {
+        else {*/
             for (int i = 0; i < this.header.size(); i++) {
                 
                 this.table.setColumnHeader(this.field.get(i), this.header.get(i).toString());
@@ -118,19 +119,23 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
             // Handle selection change, if enabled
             if (this.edit == true) {
                 this.table.setSelectable(true);
-                this.table.setImmediate(true);
+                this.table.setMultiSelect(true);
+                this.table.setColumnReorderingAllowed(true);
+                this.table.setSortDisabled(false);
+        //this.table.setRowHeaderMode(Table.ROW_HEADER_MODE_ICON_ONLY);
+
                 this.table.setNullSelectionAllowed(false); 
-                this.table.addListener(new Property.ValueChangeListener() {
+                /*this.table.addListener(new Property.ValueChangeListener() {
                     @Override
                     public void valueChange(ValueChangeEvent event) {
                         EditItem(table.getValue().toString());
                     }
-                });
+                });*/
             }
      
             // Show only the needed columns, hide the rest
             this.table.setVisibleColumns(this.field.toArray());
-        }
+       // }
         
         // Insert components into content
         this.content.addComponent(table);
@@ -203,10 +208,8 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
 
                                     } catch (IllegalArgumentException ex) {
                                         Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
-                                        throw new UnsupportedOperationException("Cannot invoke method", ex);
                                     } catch (InvocationTargetException ex) {
                                         Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
-                                        throw new UnsupportedOperationException("Cannot invoke method", ex);
                                     }
                                 }
                             }
