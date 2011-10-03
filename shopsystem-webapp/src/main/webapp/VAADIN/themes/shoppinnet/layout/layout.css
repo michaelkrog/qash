@@ -13,6 +13,11 @@
     border-right: 2px solid #e1e2e7;
 }
 
+.v-spacer {
+    width: 3px;
+    height: 3px;
+}
+
 .v-orderedlayout-margin-top,
 .v-horizontallayout-margin-top,
 .v-verticallayout-margin-top {
@@ -21,7 +26,7 @@
 .v-orderedlayout-margin-right,
 .v-horizontallayout-margin-right,
 .v-verticallayout-margin-right {
-	padding-right: 5px;
+	padding-right: 10px;
 }
 .v-orderedlayout-margin-bottom,
 .v-horizontallayout-margin-bottom,

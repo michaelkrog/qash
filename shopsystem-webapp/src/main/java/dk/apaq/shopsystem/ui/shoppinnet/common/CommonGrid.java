@@ -203,8 +203,10 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
 
                                     } catch (IllegalArgumentException ex) {
                                         Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                                        throw new UnsupportedOperationException("Cannot invoke method", ex);
                                     } catch (InvocationTargetException ex) {
                                         Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                                        throw new UnsupportedOperationException("Cannot invoke method", ex);
                                     }
                                 }
                             }

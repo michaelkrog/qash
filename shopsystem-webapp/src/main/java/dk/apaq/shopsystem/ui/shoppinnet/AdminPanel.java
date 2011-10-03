@@ -21,10 +21,11 @@ public class AdminPanel extends CustomComponent {
     private VerticalLayout outerLayout = new VerticalLayout();
     private VerticalLayout leftLayout = new VerticalLayout();
     private VerticalLayout content = new VerticalLayout();
+    private VerticalLayout spacer = new VerticalLayout();
     private Accordion accordion = new Accordion();
     
     private WebsiteFactory websiteFactory = new WebsiteFactory();
-    private OverView overview = new OverView();
+    private Overview overview = new Overview();
     
     public AdminPanel(OrganisationService orgService) {
         
@@ -33,11 +34,14 @@ public class AdminPanel extends CustomComponent {
         
         
         this.outerLayout.setWidth("100%");
+        this.outerLayout.setHeight("100%");
         this.innerLayout.setWidth("100%");
+        this.innerLayout.setHeight("100%");
         this.leftLayout.setWidth("100%");
-        this.leftLayout.setHeight("500px");
-        this.content.setWidth("100%");
+        this.leftLayout.setHeight("100%");
         //this.leftLayout.setSizeFull();
+        this.content.setWidth("100%");
+        this.spacer.setSizeFull();
         
         this.leftLayout.setMargin(true);
         this.content.setMargin(true);
@@ -103,16 +107,19 @@ public class AdminPanel extends CustomComponent {
         */
 
         this.leftLayout.addComponent(this.accordion);
-        this.innerLayout.addComponent(this.leftLayout);
+        this.leftLayout.addComponent(this.spacer);
+        this.leftLayout.setExpandRatio(this.spacer, 1.0f);
         
+        //this.innerLayout.setExpandRatio(this.leftLayout, 1.0f);
+        
+        this.innerLayout.addComponent(this.leftLayout);
         this.innerLayout.addComponent(content);
         this.innerLayout.getComponent(0).setWidth("200px");
-        this.innerLayout.setExpandRatio(this.leftLayout, 1.0f);
         this.innerLayout.setExpandRatio(this.content, 1.0f);
         
         //this.outerLayout.addComponent(new Header());
         this.outerLayout.addComponent(innerLayout);
-        this.content.addComponent(new OverView());
+        this.content.addComponent(new Overview());
         
         setCompositionRoot(this.outerLayout);
     }    
