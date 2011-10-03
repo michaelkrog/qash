@@ -6,7 +6,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
-public class Overview extends CustomComponent {
+public class OverView extends CustomComponent {
     
     private HorizontalLayout content = new HorizontalLayout();
     private VerticalLayout contentLeft = new VerticalLayout();
