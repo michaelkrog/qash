@@ -1,8 +1,8 @@
 package dk.apaq.shopsystem.ui.shoppinnet.common;
 
 import com.vaadin.data.Container;
-import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Item;
+import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -26,9 +26,10 @@ import java.util.logging.Logger;
  * @author Martin Christensen
  */
 
-public class CommonGrid extends CustomComponent implements Container.Viewer {
+public class CommonGrid extends CustomComponent implements Container.Filter { //Container.Viewer
     
     private Container data;
+    //private IndexedContainer data;
     private String factoryClass = "";
     private String pageHeader = "";
     private Boolean edit = false;
@@ -74,22 +75,23 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
     }
     
     public void addButton(String button, String buttonMethod, String buttonTarget) {
-        
+
 	this.button.add(button);
         this.buttonMethod.add(buttonMethod);
         this.buttonTarget.add(buttonTarget);
     }
     
 
-    @Override
+    /*@Override
     public Container getContainerDataSource() {
         return this.data;
-    }
+    }*/
 
     
-    @Override
+    //@Override
     public void setContainerDataSource(Container data) {
         this.data = data;
+        //this.data = (IndexedContainer) data;
         table.setContainerDataSource(data);
     }
     
@@ -200,67 +202,100 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
         button.addListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
-                    
-                if ("dialog".equals(buttonTarget)) {
-                    // ?
-                    //CommonDialog dialog = new CommonDialog(buttonText, buttonComponent(buttonTarget));
-                    //getApplication().getMainWindow().addWindow(dialog);
+                /*
+                String tableId = "";
+                if (table.getValue() == null) {
+                    tableId = null;
+                } 
+                else {
+                    tableId = table.getValue().toString();
                 }
-                if ("content".equals(buttonTarget)) {
-                    // ?
-                }
-                if (!"dialog".equals(buttonTarget) && !"content".equals(buttonTarget)) {
-
-                    try {
-                        try {
-                            System.out.println("Creating instance: " + factoryClass);
-                            Component newInstance = (Component) Class.forName(factoryClass).newInstance();
-                            dummy.addComponent(newInstance);
-
-                            System.out.println("Finding methods...");
-                            Method[] allMethods = newInstance.getClass().getDeclaredMethods();
-
-                            for (Method m : allMethods) {
-                                System.out.println("Found: " + m.getName());
-                                if (m.getName().equalsIgnoreCase(buttonMethod)) {
-                                    try {
-                                       String tableId = "";
-                                        if (table.getValue() == null) {
-                                            tableId = null;
-                                        } 
-                                        else {
-                                            tableId = table.getValue().toString();
-                                        }
                                         
-                                        //newInstance.getClass().getDeclaredMethod("setOrgService", orgService);
-                                        Object o = m.invoke(newInstance, orgService, tableId); //new Locale(buttonMethod)
-                                        //System.out.println(buttonMethod + ":" + o);
-
-                                    } catch (IllegalArgumentException ex) {
-                                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
-                                    } catch (InvocationTargetException ex) {
-                                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-                                }
-                            }
-
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        } catch (InstantiationException ex) {
-                            Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                Component newInstance = null;
+                try {
+                    try {
+                        newInstance = (Component) Class.forName(factoryClass).newInstance();
+                    } catch (InstantiationException ex) {
+                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IllegalAccessException ex) {
                         Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
                 }
-   
+                try {
+                    try {
+                        
+                        Method m = newInstance.getClass().getMethod(buttonMethod, orgService, tableId);
+                        m.invoke(newInstance, orgService, tableId);
+                       */ 
+                               
+                        
+                        
+                        
+                        
+                       
+                            try {
+                                try {
+                                    System.out.println("Creating instance: " + factoryClass);
+                                    Component newInstance = (Component) Class.forName(factoryClass).newInstance();
+                                    dummy.addComponent(newInstance);
+
+                                    System.out.println("Finding methods...");
+                                    Method[] allMethods = newInstance.getClass().getMethods();
+
+                                    for (Method m : allMethods) {
+                                        System.out.println("Found: " + m.getName());
+                                        if (m.getName().equalsIgnoreCase(buttonMethod)) {
+                                            try {
+                                                String tableId = "";
+                                                if (table.getValue() == null) {
+                                                    tableId = null;
+                                                } 
+                                                else {
+                                                    tableId = table.getValue().toString();
+                                                }
+                                                
+                                                //newInstance.getClass().getDeclaredMethod("setOrgService", orgService);
+                                                Object o = m.invoke(newInstance, orgService, tableId); //new Locale(buttonMethod)
+                                               
+
+                                            } catch (IllegalArgumentException ex) {
+                                                Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                                            } catch (InvocationTargetException ex) {
+                                                Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                        }
+                                    }
+
+                                } catch (ClassNotFoundException ex) {
+                                    Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                } catch (InstantiationException ex) {
+                                    Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IllegalAccessException ex) {
+                                Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
+            
+                       
             }
-          
+         
         });
+                 
+        
         
         return button;
         
-        
+    }
+
+    @Override
+    public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean appliesToProperty(Object propertyId) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

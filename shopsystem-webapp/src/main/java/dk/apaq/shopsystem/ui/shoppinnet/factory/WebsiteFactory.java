@@ -1,7 +1,6 @@
 package dk.apaq.shopsystem.ui.shoppinnet.factory;
 
 import dk.apaq.shopsystem.entity.Website;
-import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonForm;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonGrid;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
@@ -9,17 +8,9 @@ import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 public class WebsiteFactory extends AbstractFactory {
 
     
-    public WebsiteFactory() {
-        setCompositionRoot(this.layout);
-    }
-    
-    
-    public void setOrgService(OrganisationService orgService) {
-        
-        if (this.orgService == null) {
-            this.orgService = orgService;
+    @Override
+    public void setCrudContainer() {
             this.container = new CrudContainer(this.orgService.getWebsites(), Website.class);
-        }
     }
     
             
@@ -35,9 +26,9 @@ public class WebsiteFactory extends AbstractFactory {
         grid.setPageHeader("Websites");
 
         // Add buttons
-        grid.addButton("Add","Add","");
-        grid.addButton("Edit","Edit","");
-        grid.addButton("Delete","Delete","");
+        grid.addButton("Add","AddItem","");
+        grid.addButton("Edit","EditItem","");
+        grid.addButton("Delete","DeleteItem","");
         
         // Add grid headers
         grid.addHeader("Name");
@@ -52,6 +43,7 @@ public class WebsiteFactory extends AbstractFactory {
     }
     
     
+    @Override
     public void CreateEdit(String id) {
         
         CommonForm form = new CommonForm();
@@ -68,29 +60,6 @@ public class WebsiteFactory extends AbstractFactory {
         form.addField("dateCreated", "");
         
         getApplication().getMainWindow().addWindow(form);
-    }
-    
-    
-    public void Add(OrganisationService orgService, String id) {
-        
-        setOrgService(orgService);
-        id = this.container.addItem().toString();   
-        CreateEdit(id);
-    }
-    
-    
-    public void Edit(OrganisationService orgService, String id) {
-        
-        setOrgService(orgService);
-        CreateEdit(id);
-    }
-    
-    
-    public void Delete(OrganisationService orgService, String id) {
-        
-        setOrgService(orgService);
-        //this.container.removeItem(id);
-        this.orgService.getWebsites().delete(id);
     }
     
 }
