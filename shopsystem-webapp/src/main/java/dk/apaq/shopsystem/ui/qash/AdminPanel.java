@@ -70,13 +70,8 @@ public class AdminPanel extends CustomComponent {
         categoryList.addItem("Produkter", "STOCK");
         
         categoryList.addCategory("Stores");
-        categoryList.addItem("Aalborg", "STORE:3123123213123");
-        categoryList.addItem("Aarhus", "STORE:3123123213123");
-        categoryList.addItem("København", "STORE:3123123213123");
-        
-        categoryList.addCategory("Websites");
-        categoryList.addItem("Bikez", "WEBSITE:1341312312");
-        categoryList.addItem("Trendy Jewelry", "WEBSITE:141352424");
+        categoryList.addItem("Online", "WEBSITES");
+        categoryList.addItem("Retail", "STORES");
         
         categoryList.setSizeFull();
         categoryList.addListener(listListener);

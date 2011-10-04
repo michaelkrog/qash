@@ -7,12 +7,12 @@
 @import "layout/layout.css";
 
 /* Top gradient in website editor */
-.v-WebsiteEditor{
+/*.v-WebsiteEditor{
     background: white url(img/gradient-bg.png) repeat-x;
-}
+}*/
 
 /* Title matching top gradient in website editor*/
-.v-WebsiteEditor .title{
+/*.v-WebsiteEditor .title{
     font-family: "Helvetica Neue", helvetica, arial, sans-serif;
     font-weight: bold;
     font-size: 24px;
@@ -24,9 +24,9 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-}
+}*/
 
-.v-WebsiteEditor .v-horizontallayout-title {
+/*.v-WebsiteEditor .v-horizontallayout-title {
     background: transparent url(img/title-border.png) repeat-x 0 41px;
     padding-bottom: 10px;
 }
@@ -35,7 +35,7 @@
     padding-top: 18px;
     display: block;
     margin: 0 0 0 10px;
-}
+}*/
 
 
 /* The black bubble panel */
