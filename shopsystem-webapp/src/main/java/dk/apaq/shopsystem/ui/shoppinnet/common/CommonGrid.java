@@ -42,10 +42,10 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
     
     final private OrganisationService orgService;
     final private Table table = new Table();
-    final VerticalLayout content = new VerticalLayout();
-    final HorizontalLayout panel = new HorizontalLayout();
-    final HorizontalLayout buttonHolder = new HorizontalLayout();
-    final VerticalLayout dummy = new VerticalLayout();
+    final private VerticalLayout content = new VerticalLayout();
+    final private HorizontalLayout panel = new HorizontalLayout();
+    final private HorizontalLayout buttonHolder = new HorizontalLayout();
+    final private VerticalLayout dummy = new VerticalLayout();
     
     
     public void setFactoryClass (String factoryClass) {
@@ -96,6 +96,11 @@ public class CommonGrid extends CustomComponent implements Container.Viewer {
     
     @Override
     public void attach() {
+        
+        // Clear all
+        this.content.removeAllComponents();
+        this.panel.removeAllComponents();
+        this.buttonHolder.removeAllComponents();
         
         // Create panel
         

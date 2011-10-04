@@ -21,6 +21,13 @@ public class Overview extends CustomComponent {
 
         setCompositionRoot(this.pageHolder);
         
+        // Clear all
+        this.pageHolder.removeAllComponents();
+        this.content.removeAllComponents();
+        this.contentLeft.removeAllComponents();
+        this.contentRight.removeAllComponents();
+        
+        
         this.pageHolder.addComponent(new PageHeader("Overview"));
         this.pageHolder.addComponent(this.content);
         this.pageHolder.setSpacing(true);
