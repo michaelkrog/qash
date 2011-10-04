@@ -1,0 +1,1 @@
+http://maps.googleapis.com/maps/api/staticmap?center=Støvringparken%2010,%20støvring&zoom=14&size=128x128&maptype=roadmap&markers=color:red|label:Shop|Støvringparken 10, Støvring&sensor=false

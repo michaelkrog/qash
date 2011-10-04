@@ -43,6 +43,8 @@ public class Website implements Serializable, ContentEntity {
 
     private String name;
 
+    private String themeName;
+
     @Override
     public String getId() {
         return id;
@@ -90,5 +92,9 @@ public class Website implements Serializable, ContentEntity {
         this.name = name;
     }
 
+    public String getThemeName() {
+        return themeName;
+    }
 
+    
 }
