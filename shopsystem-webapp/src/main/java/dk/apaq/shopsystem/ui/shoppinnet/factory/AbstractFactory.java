@@ -13,7 +13,7 @@ public abstract class AbstractFactory extends CustomComponent {
     protected VerticalLayout layout = new VerticalLayout();
     
     public abstract void setCrudContainer();
-    public abstract void CreateEdit(String id);
+    public abstract void ShowEdit(String id);
     
     
     public AbstractFactory() {
@@ -34,14 +34,14 @@ public abstract class AbstractFactory extends CustomComponent {
         
         setOrgService(orgService);
         id = this.container.addItem().toString();   
-        CreateEdit(id);
+        ShowEdit(id);
     }
       
       
     public void EditItem(OrganisationService orgService, String id) {
         
         setOrgService(orgService);
-        CreateEdit(id);
+        ShowEdit(id);
     }
      
     

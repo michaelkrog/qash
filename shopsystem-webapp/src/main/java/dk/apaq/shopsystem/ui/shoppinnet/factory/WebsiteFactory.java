@@ -44,7 +44,7 @@ public class WebsiteFactory extends AbstractFactory {
     
     
     @Override
-    public void CreateEdit(String id) {
+    public void ShowEdit(String id) {
         
         CommonForm form = new CommonForm();
         
