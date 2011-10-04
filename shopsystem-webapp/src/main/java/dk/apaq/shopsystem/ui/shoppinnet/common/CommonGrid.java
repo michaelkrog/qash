@@ -3,12 +3,15 @@ package dk.apaq.shopsystem.ui.shoppinnet.common;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -32,7 +35,8 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
     //private IndexedContainer data;
     private String factoryClass = "";
     private String pageHeader = "";
-    private Boolean edit = false;
+    private List description = new ArrayList();
+    private Boolean editAble = false;
     private Boolean search = false;
     private List header = new ArrayList();
     private List field = new ArrayList();
@@ -46,6 +50,7 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
     final private VerticalLayout content = new VerticalLayout();
     final private HorizontalLayout panel = new HorizontalLayout();
     final private HorizontalLayout buttonHolder = new HorizontalLayout();
+    final private Panel descriptionPanel = new Panel();
     final private VerticalLayout dummy = new VerticalLayout();
     
     
@@ -56,9 +61,13 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
     public void setPageHeader (String pageHeader) {
         this.pageHeader = pageHeader;
     }
+    
+    public void addDescription (String description) {
+        this.description.add(description);
+    }
         
-    public void setEdit (Boolean edit) {
-        this.edit = edit;
+    public void setEditAble (Boolean editAble) {
+        this.editAble = editAble;
     }
     
     public void setSearch (Boolean search) {
@@ -104,6 +113,13 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
         this.panel.removeAllComponents();
         this.buttonHolder.removeAllComponents();
         
+        // Create description
+        this.descriptionPanel.setCaption("Information");
+        this.descriptionPanel.setIcon(new ThemeResource("icons/16/attention.png"));
+        for (int i = 0; i < this.description.size(); i++) {
+            this.descriptionPanel.addComponent(new Label(this.description.get(i).toString()));      
+        }
+        
         // Create panel
         
         // Create search fields
@@ -139,7 +155,7 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
             }
             
             // Handle selection change, if enabled
-            if (this.edit == true) {
+            if (this.editAble == true) {
                 this.table.setSelectable(true);
                 //this.table.setMultiSelect(true);
                 this.table.setColumnReorderingAllowed(true);
@@ -170,6 +186,10 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
         
         this.content.setSpacing(true);
         this.content.addComponent(new PageHeader(this.pageHeader));
+        
+        if (this.description.size() != 0) {
+            this.content.addComponent(this.descriptionPanel);
+        }
         this.content.addComponent(this.panel);
         this.content.addComponent(this.table);
         this.content.addComponent(this.dummy);

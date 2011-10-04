@@ -21,10 +21,11 @@ public class WebsiteFactory extends AbstractFactory {
         grid.setContainerDataSource(this.container);
         grid.setFactoryClass(WebsiteFactory.class.getName()); //
         
-        grid.setEdit(true);
-        grid.setSearch(true);
-        grid.setPageHeader("Websites");
-
+        grid.setEditAble(true);
+        grid.setSearch(false);
+        grid.setPageHeader("Online Stores");
+        grid.addDescription("If you have more than one online store, you are able to view those of your product groups in it you want.");
+        
         // Add buttons
         grid.addButton("Add","AddItem","");
         grid.addButton("Edit","EditItem","");
