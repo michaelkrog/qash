@@ -108,7 +108,7 @@ public class DomainCrudTest {
 
         
         //create a thousands organsiations with each there domain, site and subdomain.
-        for(int i=0;i<2000;i++) {
+        for(int i=0;i<200;i++) {
             Organisation tmpOrg = orgcrud.read(orgcrud.create());
             OrganisationService tmpOrgService = service.getOrganisationService(org);
 

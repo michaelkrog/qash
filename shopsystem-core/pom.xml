@@ -169,6 +169,13 @@
             <version>10.8.1.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- IMAGE FILTER -->
+        <dependency>
+            <groupId>com.jhlabs</groupId>
+            <artifactId>filters</artifactId>
+            <version>2.0.235</version>
+        </dependency>
     </dependencies>
 
 </project>
