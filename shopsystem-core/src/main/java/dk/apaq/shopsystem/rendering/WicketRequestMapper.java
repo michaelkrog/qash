@@ -26,15 +26,15 @@ import org.slf4j.LoggerFactory;
 /**
  *
  */
-public class WicketRequestMapper2 extends AbstractBookmarkableMapper {
+public class WicketRequestMapper extends AbstractBookmarkableMapper {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WicketRequestMapper2.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WicketRequestMapper.class);
 
     private final SystemService service;
     public static MetaDataKey<Page> PAGE = new MetaDataKey<Page>() { };
     private IPageParametersEncoder pageParametersEncoder = new PageParametersEncoder();
 
-    public WicketRequestMapper2(SystemService service) {
+    public WicketRequestMapper(SystemService service) {
         this.service = service;
     }
 

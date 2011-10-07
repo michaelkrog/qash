@@ -34,7 +34,7 @@ public class WicketPage extends WebPage implements /*IMarkupCacheKeyProvider,*/ 
     private Theme theme;
     
     public WicketPage(PageParameters pageParameters) {
-        Page page = RequestCycle.get().getMetaData(WicketRequestMapper2.PAGE);
+        Page page = RequestCycle.get().getMetaData(WicketRequestMapper.PAGE);
         
         String themeName = page.getThemeName();
         String templateName = page.getTemplateName();

@@ -18,7 +18,8 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFileSystemPopulator.class);
     
     private String themeInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
-    private String template = "<html><body><div wicket:id=\"placeholder_1\"/></body></html>";
+    private String template = "<html><base wicket:message=\"href:page.base\" /><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" /><body><div wicket:id=\"placeholder_1\"/></body></html>";
+    private String stylesheet = "body { background:yellow;}";
     private String moduleInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
     
     private String componentCode = "/*\n" +
@@ -75,7 +76,12 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
             OutputStreamWriter templateWriter = new OutputStreamWriter(templatefile.getOutputStream());
             templateWriter.write(template);
             templateWriter.close();
-            
+
+            File stylefile = themeDir.getFile("style.css", true);
+            OutputStreamWriter styleWriter = new OutputStreamWriter(stylefile.getOutputStream());
+            styleWriter.write(stylesheet);
+            styleWriter.close();
+
             File moduleInfofile = moduleDir.getFile("module.info", true);
             OutputStreamWriter moduleInfoWriter = new OutputStreamWriter(moduleInfofile.getOutputStream());
             moduleInfoWriter.write(moduleInfo);

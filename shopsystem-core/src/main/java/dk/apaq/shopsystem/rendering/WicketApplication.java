@@ -32,6 +32,6 @@ public class WicketApplication extends WebApplication {
     public void init() {
         super.init();
         // add your configuration here
-        setRootRequestMapper(new WicketRequestMapper2(service));
+        setRootRequestMapper(new WicketRequestMapper(service));
     }
 }
