@@ -61,7 +61,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         
         //start and render the test page
         tester.executeUrl("http://localhost:8080/context/servlet/test");
-        //tester.startPage(WicketPage.class);
+        System.out.println(tester.startPage(WicketPage.class).toString());
 
         //assert rendered page class
         //tester.assertRenderedPage(WicketPage.class);

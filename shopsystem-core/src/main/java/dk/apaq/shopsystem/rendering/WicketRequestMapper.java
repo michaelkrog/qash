@@ -90,6 +90,7 @@ public class WicketRequestMapper extends AbstractBookmarkableMapper {
         // extract the PageParameters from URL if there are any
         PageParameters pageParameters = extractPageParameters(request, 1, pageParametersEncoder);
 
+
         return new UrlInfo(info, WicketPage.class, pageParameters);
 
     }
@@ -98,8 +99,9 @@ public class WicketRequestMapper extends AbstractBookmarkableMapper {
     protected Url buildUrl(UrlInfo info) {
         Url url = new Url();
         Page page = RequestCycle.get().getMetaData(PAGE);
-        
-        url.getSegments().add(page.getName());
+        if(page!=null) {
+            url.getSegments().add(page.getName());
+        }
 
         encodePageComponentInfo(url, info.getPageComponentInfo());
 

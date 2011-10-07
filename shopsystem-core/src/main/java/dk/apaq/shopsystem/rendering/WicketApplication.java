@@ -5,6 +5,9 @@ import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestMapper;
+import org.apache.wicket.util.file.IResourceFinder;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.resource.StringResourceStream;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -33,5 +36,16 @@ public class WicketApplication extends WebApplication {
         super.init();
         // add your configuration here
         setRootRequestMapper(new WicketRequestMapper(service));
+
+        this.getResourceSettings().setResourceFinder(new IResourceFinder() {
+
+            @Override
+            public IResourceStream find(Class<?> clazz, String pathname) {
+                if(clazz == WicketPage.class && pathname.endsWith("properties")) {
+                    return new StringResourceStream("page.base=blablablaqwerty");
+                }
+                return new StringResourceStream("");
+            }
+        });
     }
 }
