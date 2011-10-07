@@ -3,9 +3,11 @@ package dk.apaq.shopsystem.rendering;
 import dk.apaq.crud.Crud;
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.shopsystem.context.DataContext;
+import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.service.SystemService;
 import java.util.List;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.request.Request;
@@ -27,20 +29,40 @@ import org.slf4j.LoggerFactory;
 public class WicketRequestMapper2 extends AbstractBookmarkableMapper {
 
     private static final Logger LOG = LoggerFactory.getLogger(WicketRequestMapper2.class);
-    
+
+    private final SystemService service;
     public static MetaDataKey<Page> PAGE = new MetaDataKey<Page>() { };
     private IPageParametersEncoder pageParametersEncoder = new PageParametersEncoder();
+
+    public WicketRequestMapper2(SystemService service) {
+        this.service = service;
+    }
 
     @Override
     protected UrlInfo parseRequest(Request request) {
         Url url = request.getUrl();
+
+        boolean systemDomain = isSystemDomain(url);
+        if(systemDomain && url.getPath() != null && url.getPath().startsWith("/_sites")) {
+            if(url.getSegments().size()<2) {
+                return null;
+            }
+
+            String siteName = url.getSegments().get(1);
+            Website site = null; //Get site from site name
+            OrganisationService organisationService = null; //Get orgservice from website and service
+            String pageName = null; //
+        } else {
+
+        }
+
         // try to extract page and component information from URL
         PageComponentInfo info = getPageComponentInfo(url);
 
 
         // get page name
         String pageName = url.getSegments().isEmpty() ? null : url.getSegments().get(0);
-        
+
         //Should we read the domains here and add to the RequestCycle instead for det DataContext thingy?
         OrganisationService service = DataContext.getService();
         if(service==null) {
@@ -92,5 +114,12 @@ public class WicketRequestMapper2 extends AbstractBookmarkableMapper {
     @Override
     public int getCompatibilityScore(Request request) {
         return 0;
+    }
+
+    private boolean isSystemDomain(Url url) {
+        //TODO Match against a configureable list
+        return "qash.dk".equals(url.getHost()) ||
+                "www.qash.dk".equals(url.getHost()) ||
+                "localhost".equals(url.getHost());
     }
 }
