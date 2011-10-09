@@ -5,23 +5,15 @@ import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.entity.Template;
 import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.entity.Component;
-import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.context.DataContext;
 import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.service.OrganisationService;
-import dk.apaq.shopsystem.service.crud.ThemeCrud;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.resource.IResourceStream;
 
@@ -32,12 +24,10 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
 
     private final Template template;
     private final Theme theme;
-    private final OrganisationService organisationService;
     private final Page page;
     
     public CmsPage(OrganisationService organisationService, Page page, PageParameters pageParameters) {
         this.page = page;
-        this.organisationService = organisationService;
         
         String themeName = page.getThemeName();
         String templateName = page.getTemplateName();
@@ -84,9 +74,7 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
         return theme;
     }
 
-    public OrganisationService getOrganisationService() {
-        return organisationService;
-    }
+    
 
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {

@@ -1,15 +1,14 @@
 package dk.apaq.shopsystem.entity;
 
 import dk.apaq.vfs.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
 /**
  *
  */
-public class Template {
+public class Template implements Serializable {
 
     private final String name;
     private final File file;
