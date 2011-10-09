@@ -28,7 +28,7 @@ import org.apache.wicket.util.resource.IResourceStream;
 /**
  *
  */
-public class CmsPage extends WebPage implements /*IMarkupCacheKeyProvider,*/ IMarkupResourceStreamProvider{
+public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkupResourceStreamProvider{
 
     private final Template template;
     private final Theme theme;
@@ -91,6 +91,11 @@ public class CmsPage extends WebPage implements /*IMarkupCacheKeyProvider,*/ IMa
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
         return new VfsResourceStream(template.getFile());
+    }
+
+    @Override
+    public String getCacheKey(MarkupContainer container, Class<?> containerClass) {
+        return page.getName();
     }
 
 

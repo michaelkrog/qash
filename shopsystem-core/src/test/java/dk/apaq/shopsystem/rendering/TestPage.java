@@ -69,9 +69,10 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         tester.executeUrl("http://localhost/context/servlet/test");
         String text = tester.getLastResponseAsString();
         System.out.println(text);
-        //System.out.println(tester.startPage(WicketPage.class).toString());
+        
+        tester.executeUrl("http://localhost/context/servlet/_themes/Basic/style.css");
+        text = tester.getLastResponseAsString();
+        System.out.println(text);
 
-        //assert rendered page class
-        //tester.assertRenderedPage(WicketPage.class);
     }
 }

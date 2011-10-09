@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.Markup;
 import org.apache.wicket.markup.MarkupElement;
 import org.apache.wicket.markup.MarkupFactory;
 import org.apache.wicket.markup.MarkupParser;
@@ -32,7 +33,25 @@ public class CmsMarkupParserFactory extends MarkupFactory {
     public static final String WICKET_RELATIVE_PATH_PREFIX_CONTAINER_ID = "_relative_path_prefix_";
     /** List of attribute names considered */
     private static final String attributeNames[] = new String[]{"href", "src", "background"};
-    private static final List<String> tagNames = Arrays.asList(new String[]{"img", "link"});
+    private static final List<String> tagNames = Arrays.asList(new String[]{"img", "link", "script"});
+    
+    private class CmsMarkupParser extends MarkupParser {
+
+        public CmsMarkupParser(MarkupResourceStream resource) {
+            super(resource);
+        }
+
+        @Override
+        protected MarkupFilterList initializeMarkupFilters(Markup markup) {
+            MarkupFilterList list = new MarkupFilterList();
+            list.add(new TemplateResourcePathAppender());
+            list.addAll(super.initializeMarkupFilters(markup));
+            return list;
+        }
+        
+        
+    }
+    
     /**
      * Behavior that adds a prefix to src, href and background attributes to make them
      * context-relative
@@ -104,9 +123,7 @@ public class CmsMarkupParserFactory extends MarkupFactory {
 
     @Override
     public MarkupParser newMarkupParser(MarkupResourceStream resource) {
-        MarkupParser parser = super.newMarkupParser(resource);
-        parser.add(new TemplateResourcePathAppender(), RelativePathPrefixHandler.class);
-
+        MarkupParser parser = new CmsMarkupParser(resource);
         return parser;
     }
 }

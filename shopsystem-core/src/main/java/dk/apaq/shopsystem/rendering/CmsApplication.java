@@ -46,8 +46,15 @@ public class CmsApplication extends WebApplication {
     public void init() {
         super.init();
         
-        setRootRequestMapper(new CmsMapper(service));
+        //Lets all wicket requests go through the CmsMapper
+        //setRootRequestMapper(new CmsMapper(service));
+        mount(new CmsPageMapper(service));
+        mountResource("/_themes/${themename}", new ThemeResourceReference(service));
+        
+        //Removes unneeded wickets tags in renderings output
         getMarkupSettings().setStripWicketTags(true);
+        
+        //Sets a specific MarkupParserFactory that adds needed filter to the markupparser.
         getMarkupSettings().setMarkupFactory(new CmsMarkupParserFactory());
         
 
