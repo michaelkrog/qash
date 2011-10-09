@@ -135,6 +135,12 @@ public class Theme implements Serializable {
         }
         return templateList;
     }
+
+    public Directory getDirectory() {
+        return dir;
+    }
+    
+    
     private List<String> parsePlaceHolders(File file) throws IOException {
         List<String> placeHolders = new ArrayList<String>();
         CustomMarkupParser parser = new CustomMarkupParser(new MarkupResourceStream(new VfsResourceStream(file)));

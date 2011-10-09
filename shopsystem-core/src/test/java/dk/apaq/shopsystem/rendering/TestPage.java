@@ -3,6 +3,7 @@ package dk.apaq.shopsystem.rendering;
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.context.DataContext;
 import dk.apaq.shopsystem.entity.ComponentInformation;
+import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.entity.Website;
@@ -52,6 +53,11 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         page.addComponentInformation(info);
         pageCrud.update(page);
         
+        Domain domain = orgService.getDomains().read(orgService.getDomains().create());
+        domain.setName("localhost");
+        domain.setWebsite(site);
+        orgService.getDomains().update(domain);
+        
         WebApplication app = applicationContext.getBean("wicketApplication", WebApplication.class);
         tester = new WicketTester(app);
     }
@@ -60,8 +66,10 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
     public void homepageRendersSuccessfully() {
         
         //start and render the test page
-        tester.executeUrl("http://localhost:8080/context/servlet/test");
-        System.out.println(tester.startPage(WicketPage.class).toString());
+        tester.executeUrl("http://localhost/context/servlet/test");
+        String text = tester.getLastResponseAsString();
+        System.out.println(text);
+        //System.out.println(tester.startPage(WicketPage.class).toString());
 
         //assert rendered page class
         //tester.assertRenderedPage(WicketPage.class);

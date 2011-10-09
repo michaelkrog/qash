@@ -18,7 +18,7 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFileSystemPopulator.class);
     
     private String themeInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
-    private String template = "<html><base wicket:message=\"href:page.base\" /><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" /><body><div wicket:id=\"placeholder_1\"/></body></html>";
+    private String template = "<html><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" /><body><div wicket:id=\"placeholder_1\"/></body></html>";
     private String stylesheet = "body { background:yellow;}";
     private String moduleInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
     

@@ -1,10 +1,22 @@
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.crud.Crud;
+import dk.apaq.shopsystem.context.DataContext;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.Page;
+import dk.apaq.shopsystem.entity.Template;
+import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
+import dk.apaq.vfs.Directory;
+import dk.apaq.vfs.File;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.wicket.markup.MarkupFactory;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestMapper;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
@@ -13,9 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start class.
  * 
- * @see dk.nykredit.cmstest.Start#main(String[])
  */
-public class WicketApplication extends WebApplication {
+public class CmsApplication extends WebApplication {
 
     @Autowired
     private SystemService service;
@@ -24,8 +35,8 @@ public class WicketApplication extends WebApplication {
      * @see org.apache.wicket.Application#getHomePage()
      */
     @Override
-    public Class<WicketPage> getHomePage() {
-        return WicketPage.class;
+    public Class<CmsPage> getHomePage() {
+        return CmsPage.class;
     }
 
     /**
@@ -34,18 +45,12 @@ public class WicketApplication extends WebApplication {
     @Override
     public void init() {
         super.init();
-        // add your configuration here
-        setRootRequestMapper(new WicketRequestMapper(service));
+        
+        setRootRequestMapper(new CmsMapper(service));
+        getMarkupSettings().setStripWicketTags(true);
+        getMarkupSettings().setMarkupFactory(new CmsMarkupParserFactory());
+        
 
-        this.getResourceSettings().setResourceFinder(new IResourceFinder() {
-
-            @Override
-            public IResourceStream find(Class<?> clazz, String pathname) {
-                if(clazz == WicketPage.class && pathname.endsWith("properties")) {
-                    return new StringResourceStream("page.base=blablablaqwerty");
-                }
-                return new StringResourceStream("");
-            }
-        });
+       
     }
 }

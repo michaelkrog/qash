@@ -28,13 +28,16 @@ import org.apache.wicket.util.resource.IResourceStream;
 /**
  *
  */
-public class WicketPage extends WebPage implements /*IMarkupCacheKeyProvider,*/ IMarkupResourceStreamProvider{
+public class CmsPage extends WebPage implements /*IMarkupCacheKeyProvider,*/ IMarkupResourceStreamProvider{
 
-    private Template template;
-    private Theme theme;
+    private final Template template;
+    private final Theme theme;
+    private final OrganisationService organisationService;
+    private final Page page;
     
-    public WicketPage(PageParameters pageParameters) {
-        Page page = RequestCycle.get().getMetaData(WicketRequestMapper.PAGE);
+    public CmsPage(OrganisationService organisationService, Page page, PageParameters pageParameters) {
+        this.page = page;
+        this.organisationService = organisationService;
         
         String themeName = page.getThemeName();
         String templateName = page.getTemplateName();
@@ -69,10 +72,21 @@ public class WicketPage extends WebPage implements /*IMarkupCacheKeyProvider,*/ 
 
     }
 
-    /*@Override
-    public String getCacheKey(MarkupContainer container, Class<?> containerClass) {
-        return "template:AutoPilot:FrontPage";
-    }*/
+    public Page getPageData() {
+        return page;
+    }
+
+    public Template getTemplate() {
+        return template;
+    }
+
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public OrganisationService getOrganisationService() {
+        return organisationService;
+    }
 
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
