@@ -101,7 +101,8 @@ public class WebsiteEditor extends CustomComponent {
         generalSettingsLayout.addComponent(btnDomains);
 
         setCompositionRoot(layout);
-
+        
+        
     }
 
 
