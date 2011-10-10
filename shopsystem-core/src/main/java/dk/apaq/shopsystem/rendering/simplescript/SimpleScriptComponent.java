@@ -1,9 +1,9 @@
 package dk.apaq.shopsystem.rendering.simplescript;
 
-import dk.apaq.shopsystem.context.DataContext;
 import dk.apaq.shopsystem.entity.Component;
 import dk.apaq.shopsystem.entity.ComponentParameter;
 import dk.apaq.shopsystem.rendering.VfsResourceStream;
+import dk.apaq.shopsystem.service.OrganisationService;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class SimpleScriptComponent extends Panel implements IMarkupResourceStrea
     private boolean failed = false;
     private String error;
     
-    public SimpleScriptComponent(String id, Component component, Map<String, ComponentParameter> paramMap) {
+    public SimpleScriptComponent(OrganisationService organisationService, String id, Component component, Map<String, ComponentParameter> paramMap) {
         super(id);
         this.component = component;
         try {
@@ -40,7 +40,7 @@ public class SimpleScriptComponent extends Panel implements IMarkupResourceStrea
             ScriptEngine engine = mgr.getEngineByName("JavaScript");
             
             Invocable inv = (Invocable) engine;
-            engine.put("service", DataContext.getService());
+            engine.put("service", organisationService);
             engine.put("parent", new SimpleScriptContainerWrapper(this));
             engine.put("parameters", paramMap);
             engine.eval(new InputStreamReader(component.getCodeFile().getInputStream()));

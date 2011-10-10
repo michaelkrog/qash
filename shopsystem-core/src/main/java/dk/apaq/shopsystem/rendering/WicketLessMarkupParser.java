@@ -28,7 +28,7 @@ import org.apache.wicket.markup.parser.filter.WicketTagIdentifier;
  *
  * @author michael
  */
-public class CustomMarkupParser extends AbstractCustomParser
+public class WicketLessMarkupParser extends AbstractCustomParser
 {
 	/** "wicket" */
 	public final static String WICKET = "wicket";
@@ -39,7 +39,7 @@ public class CustomMarkupParser extends AbstractCustomParser
 	 * @param resource
 	 *            The markup resource (file)
 	 */
-	public CustomMarkupParser(final MarkupResourceStream resource)
+	public WicketLessMarkupParser(final MarkupResourceStream resource)
 	{
 		super(resource);
 	}
@@ -50,7 +50,7 @@ public class CustomMarkupParser extends AbstractCustomParser
 	 * @param markup
 	 *            The markup resource.
 	 */
-	public CustomMarkupParser(final String markup)
+	public WicketLessMarkupParser(final String markup)
 	{
 		super(markup);
 	}
@@ -63,7 +63,7 @@ public class CustomMarkupParser extends AbstractCustomParser
 	 * @param resource
 	 *            The markup resource (file)
 	 */
-	public CustomMarkupParser(final IXmlPullParser xmlParser, final MarkupResourceStream resource)
+	public WicketLessMarkupParser(final IXmlPullParser xmlParser, final MarkupResourceStream resource)
 	{
 		super(xmlParser, resource);
 	}

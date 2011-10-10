@@ -5,7 +5,6 @@ import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.entity.Template;
 import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.entity.Component;
-import dk.apaq.shopsystem.context.DataContext;
 import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.service.OrganisationService;
@@ -32,9 +31,7 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
         String themeName = page.getThemeName();
         String templateName = page.getTemplateName();
         
-        OrganisationService service = DataContext.getService();
-        
-        theme = service.getThemes().read(themeName);
+        theme = organisationService.getThemes().read(themeName);
         template = theme.getTemplate(templateName);
         
         for(String availablePlaceHolder : template.getPlaceHolderIds()) {
@@ -45,7 +42,7 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
             }
             
             for(ComponentInformation info : infolist) {
-                Module module = service.getModules().read(info.getModuleName());
+                Module module = organisationService.getModules().read(info.getModuleName());
                 if(module==null) {
                     continue;
                 }
@@ -55,7 +52,7 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
                     continue;
                 }
                 
-                SimpleScriptComponent customWicketComponent = new SimpleScriptComponent(availablePlaceHolder, component, info.getParameterMap());
+                SimpleScriptComponent customWicketComponent = new SimpleScriptComponent(organisationService, availablePlaceHolder, component, info.getParameterMap());
                 add(customWicketComponent);
             }
         }

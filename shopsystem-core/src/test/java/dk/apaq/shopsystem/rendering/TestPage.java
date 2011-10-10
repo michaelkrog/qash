@@ -1,7 +1,6 @@
 package dk.apaq.shopsystem.rendering;
 
 import dk.apaq.crud.Crud;
-import dk.apaq.shopsystem.context.DataContext;
 import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
@@ -35,11 +34,9 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
     public void setUp() {
         String id = service.getOrganisationCrud().create();
         Organisation org = service.getOrganisationCrud().read(id);
-        DataContext.setService(service.getOrganisationService(org));
         
         OrganisationService orgService = service.getOrganisationService(org);
         Website site = orgService.getWebsites().read(orgService.getWebsites().create());
-        DataContext.setWebsite(site);
         
         Crud.Complete<String, Page> pageCrud = orgService.getPages(site);
         Page page = pageCrud.read(pageCrud.create());
