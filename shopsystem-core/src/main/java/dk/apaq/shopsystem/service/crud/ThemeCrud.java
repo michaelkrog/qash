@@ -67,9 +67,28 @@ public class ThemeCrud implements Crud<String, Theme> {
 
         return Collections.unmodifiableList(idlist);
     }
+    
+    @Override
+    public List<Theme> list() {
+        List<String> idlist = listIds();
+        List<Theme> themeList = new ArrayList();
+        
+        for(String id : idlist) {
+            themeList.add(read(id));
+        }
+        
+        return themeList;
+
+    }
+
 
     @Override
     public List<String> listIds(Limit limit) {
         throw new UnsupportedOperationException("listing ids with limit not supported.");
+    }
+    
+    @Override
+    public List<Theme> list(Limit limit) {
+        throw new UnsupportedOperationException("listing with limit not supported.");
     }
 }

@@ -65,8 +65,29 @@ public class ModuleCrud implements Crud<String, Module> {
     }
 
     @Override
-    public List<String> listIds(Limit limit) {
-        throw new UnsupportedOperationException("listing ids with limit not supported.");
+    public List<Module> list() {
+        List<String> idlist = listIds();
+        List<Module> moduleList = new ArrayList();
+        
+        for(String id : idlist) {
+            moduleList.add(read(id));
+        }
+        
+        return moduleList;
+
     }
+
+    
+    @Override
+    public List<String> listIds(Limit limit) {
+        throw new UnsupportedOperationException("listing with limit not supported.");
+    }
+
+    @Override
+    public List<Module> list(Limit limit) {
+        throw new UnsupportedOperationException("listing with limit not supported.");
+    }
+    
+    
 
 }
