@@ -8,11 +8,13 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.service.OrganisationService;
@@ -36,6 +38,7 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
     private String factoryClass = "";
     private String pageHeader = "";
     private List description = new ArrayList();
+    private List descriptionCaption = new ArrayList();
     private Boolean editAble = false;
     private Boolean search = false;
     private List header = new ArrayList();
@@ -51,6 +54,7 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
     final private HorizontalLayout panel = new HorizontalLayout();
     final private HorizontalLayout buttonHolder = new HorizontalLayout();
     final private Panel descriptionPanel = new Panel();
+    final private VerticalLayout descriptionPanelContent = new VerticalLayout();
     final private VerticalLayout dummy = new VerticalLayout();
     
     
@@ -62,8 +66,9 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
         this.pageHeader = pageHeader;
     }
     
-    public void addDescription (String description) {
+    public void addDescription (String descriptionCaption, String description) {
         this.description.add(description);
+        this.descriptionCaption.add(descriptionCaption);
     }
         
     public void setEditAble (Boolean editAble) {
@@ -116,9 +121,18 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
         // Create description
         this.descriptionPanel.setCaption("Information");
         this.descriptionPanel.setIcon(new ThemeResource("icons/16/attention.png"));
+        this.descriptionPanelContent.setSpacing(true);
+        
         for (int i = 0; i < this.description.size(); i++) {
-            this.descriptionPanel.addComponent(new Label(this.description.get(i).toString()));      
+            Label label = new Label(this.description.get(i).toString());
+            if (!"".equals(this.descriptionCaption.get(i).toString())) { 
+                label.setCaption(this.descriptionCaption.get(i).toString());
+            }
+            label.addStyleName("information");
+            this.descriptionPanelContent.addComponent(label);      
         }
+        this.descriptionPanel.addComponent(descriptionPanelContent); 
+        
         
         // Create panel
         
@@ -171,6 +185,10 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
                 });*/
             }
      
+            // Dummy column, due to table problems with 1 column
+            //this.table.addGeneratedColumn("dummy", new CssLayout());
+
+            
             // Show only the needed columns, hide the rest
             this.table.setVisibleColumns(this.field.toArray());
        // }

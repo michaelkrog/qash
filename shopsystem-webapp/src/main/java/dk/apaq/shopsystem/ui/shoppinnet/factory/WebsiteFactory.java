@@ -24,7 +24,8 @@ public class WebsiteFactory extends AbstractFactory {
         grid.setEditAble(true);
         grid.setSearch(false);
         grid.setPageHeader("Online Stores");
-        grid.addDescription("If you have more than one online store, you are able to view those of your product groups in it you want.");
+        grid.addDescription("Multiple stores", "If you have more than one online store, you are able to view those of your product groups in it you want.");
+        grid.addDescription("Product groups", "A specific product group, is able to be shown in multiple online stores, for easy administration across stores. In this way, you can have multiple stores, targeting different groups of people.");
         
         // Add buttons
         grid.addButton("Add","AddItem","");
@@ -52,14 +53,11 @@ public class WebsiteFactory extends AbstractFactory {
         form.setItemId(id);
         form.setContainerDataSource(this.container);
         
-        form.setHeaderText("Edit website");
-        
-        form.addDescription("Name");
-        form.addDescription("Created");
+        form.setHeaderText("Edit online store");
+        form.addDescription("Edit the online store");
        
-        form.addField("name", "");
-        form.addField("dateCreated", "");
-        
+        form.addField("name", "This is not the url, but a descriptional name", "");
+        form.addField("dateCreated", "This is the date of creation", "");
         getApplication().getMainWindow().addWindow(form);
     }
     
