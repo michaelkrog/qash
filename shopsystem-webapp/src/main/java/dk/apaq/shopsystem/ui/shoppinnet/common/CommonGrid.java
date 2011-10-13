@@ -117,6 +117,8 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
         this.content.removeAllComponents();
         this.panel.removeAllComponents();
         this.buttonHolder.removeAllComponents();
+        this.descriptionPanel.removeAllComponents();
+        this.descriptionPanelContent.removeAllComponents();
         
         // Create description
         this.descriptionPanel.setCaption("Information");

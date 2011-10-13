@@ -34,11 +34,9 @@ public class WebsiteFactory extends AbstractFactory {
         
         // Add grid headers
         grid.addHeader("Name");
-        grid.addHeader("Created");
        
         // Add grid fields
         grid.addField("name", "");
-        grid.addField("dateCreated", "");
         
         // Insert grid into layout
         return grid;
@@ -54,10 +52,9 @@ public class WebsiteFactory extends AbstractFactory {
         form.setContainerDataSource(this.container);
         
         form.setHeaderText("Edit online store");
-        form.addDescription("Edit the online store");
        
-        form.addField("name", "This is not the url, but a descriptional name", "");
-        form.addField("dateCreated", "This is the date of creation", "");
+        form.addField("name", "Name test", "This is not the url, but a descriptional name", "");
+        form.addField("dateCreated", "Created test", "", "");
         getApplication().getMainWindow().addWindow(form);
     }
     

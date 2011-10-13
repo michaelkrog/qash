@@ -2,3 +2,18 @@
 {
     font-weight: bold;
 }
+
+.v-label-description
+{
+    font-size: 9px;
+}
+
+.v-label-margin
+{
+    margin-right: 10px;
+}
+
+.v-label-underline
+{
+    border: 0 0 1px 0 solid #555555;
+}
