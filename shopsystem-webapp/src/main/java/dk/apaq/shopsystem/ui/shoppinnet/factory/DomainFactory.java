@@ -1,16 +1,16 @@
 package dk.apaq.shopsystem.ui.shoppinnet.factory;
 
-import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonForm;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonGrid;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
-public class WebsiteFactory extends AbstractFactory {
+public class DomainFactory extends AbstractFactory {
 
     
     @Override
     public void setCrudContainer() {
-            this.container = new CrudContainer(this.orgService.getWebsites(), Website.class);
+            this.container = new CrudContainer(this.orgService.getDomains(), Domain.class);
     }
     
             
@@ -19,13 +19,13 @@ public class WebsiteFactory extends AbstractFactory {
         CommonGrid grid = new CommonGrid(this.orgService);
 
         grid.setContainerDataSource(this.container);
-        grid.setFactoryClass(WebsiteFactory.class.getName()); //
+        grid.setFactoryClass(DomainFactory.class.getName());
         
         grid.setEditAble(true);
         grid.setSearch(false);
-        grid.setPageHeader("Online Stores");
-        grid.addDescription("", "If you have more than one online store, you are able to view those of your product groups in it you want.");
-        grid.addDescription("", "A specific product group, is able to be shown in multiple online stores, for easy administration across stores. In this way, you can have multiple stores, targeting different groups of people while keeping maintainance easy.");
+        grid.setPageHeader("Domains");
+        grid.addDescription("", "If you want to get rid of the Shoppinnet.com extension in the url of your online store, you are able to add your personal domain you have bought anywhere.");
+        grid.addDescription("", "The domain must be setup in the system of the domain provider, and must have a CNAME record pointing to: sites.shoppinnet.com");
         
         // Add buttons
         grid.addButton("Add","AddItem","");
@@ -51,9 +51,9 @@ public class WebsiteFactory extends AbstractFactory {
         form.setItemId(id);
         form.setContainerDataSource(this.container);
         
-        form.setHeaderText("Edit online store");
+        form.setHeaderText("Edit Domain");
        
-        form.addField("name", "Name", "This is not the url, but a descriptional name", "");
+        form.addField("name", "Name", "Domain name including www.", "");
         getApplication().getMainWindow().addWindow(form);
     }
     

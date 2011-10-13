@@ -1,16 +1,16 @@
 package dk.apaq.shopsystem.ui.shoppinnet.factory;
 
-import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonForm;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonGrid;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
-public class WebsiteFactory extends AbstractFactory {
+public class PageFactory extends AbstractFactory {
 
     
     @Override
     public void setCrudContainer() {
-            this.container = new CrudContainer(this.orgService.getWebsites(), Website.class);
+            this.container = new CrudContainer(this.orgService.getPages(this.orgService.getWebsites().read("1")), Page.class);
     }
     
             
@@ -19,13 +19,12 @@ public class WebsiteFactory extends AbstractFactory {
         CommonGrid grid = new CommonGrid(this.orgService);
 
         grid.setContainerDataSource(this.container);
-        grid.setFactoryClass(WebsiteFactory.class.getName()); //
+        grid.setFactoryClass(PageFactory.class.getName()); //
         
         grid.setEditAble(true);
         grid.setSearch(false);
-        grid.setPageHeader("Online Stores");
-        grid.addDescription("", "If you have more than one online store, you are able to view those of your product groups in it you want.");
-        grid.addDescription("", "A specific product group, is able to be shown in multiple online stores, for easy administration across stores. In this way, you can have multiple stores, targeting different groups of people while keeping maintainance easy.");
+        grid.setPageHeader("Pages");
+        grid.addDescription("", "One page can hold multiple modules. A module may contain a view of categories, productdetails, special offers etc.");
         
         // Add buttons
         grid.addButton("Add","AddItem","");
@@ -51,9 +50,12 @@ public class WebsiteFactory extends AbstractFactory {
         form.setItemId(id);
         form.setContainerDataSource(this.container);
         
-        form.setHeaderText("Edit online store");
+        form.setHeaderText("Edit Page");
        
-        form.addField("name", "Name", "This is not the url, but a descriptional name", "");
+        form.addField("name", "Name", "", "");
+        form.addField("title", "Title", "Shown in search engine results and page header", "");
+        form.addField("description", "Description", "Shown in search engine results", "");
+        form.addField("keywords", "Keywords", "Keywords for search engines, must match your website content", "");
         getApplication().getMainWindow().addWindow(form);
     }
     

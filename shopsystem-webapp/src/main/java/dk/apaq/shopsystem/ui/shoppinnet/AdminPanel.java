@@ -2,6 +2,14 @@ package dk.apaq.shopsystem.ui.shoppinnet;
 
 
 import dk.apaq.shopsystem.ui.shoppinnet.factory.WebsiteFactory;
+import dk.apaq.shopsystem.ui.shoppinnet.factory.DomainFactory;
+import dk.apaq.shopsystem.ui.shoppinnet.factory.CategoryFactory;
+import dk.apaq.shopsystem.ui.shoppinnet.factory.ProductFactory;
+import dk.apaq.shopsystem.ui.shoppinnet.factory.PageFactory;
+import dk.apaq.shopsystem.ui.shoppinnet.factory.PaymentFactory;
+import dk.apaq.shopsystem.ui.shoppinnet.factory.ThemeFactory;
+import dk.apaq.shopsystem.ui.shoppinnet.factory.ModuleFactory;
+import dk.apaq.shopsystem.ui.shoppinnet.factory.TaxFactory;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Button;
@@ -24,13 +32,29 @@ public class AdminPanel extends CustomComponent {
     private VerticalLayout spacer = new VerticalLayout();
     private Accordion accordion = new Accordion();
     
-    private WebsiteFactory websiteFactory = new WebsiteFactory();
     private Overview overview = new Overview();
+    private WebsiteFactory websiteFactory = new WebsiteFactory();
+    private DomainFactory domainFactory = new DomainFactory();
+    private CategoryFactory categoryFactory = new CategoryFactory();
+    private ProductFactory productFactory = new ProductFactory();
+    private PageFactory pageFactory = new PageFactory();
+    private PaymentFactory paymentFactory = new PaymentFactory();
+    private ThemeFactory themeFactory = new ThemeFactory();
+    private ModuleFactory moduleFactory = new ModuleFactory();
+    private TaxFactory taxFactory = new TaxFactory();
     
     public AdminPanel(OrganisationService orgService) {
         
         // Set services in factories
         this.websiteFactory.setOrgService(orgService);
+        this.domainFactory.setOrgService(orgService);
+        this.categoryFactory.setOrgService(orgService);
+        this.productFactory.setOrgService(orgService);
+        this.pageFactory.setOrgService(orgService);
+        this.paymentFactory.setOrgService(orgService);
+        this.themeFactory.setOrgService(orgService);
+        this.moduleFactory.setOrgService(orgService);
+        this.taxFactory.setOrgService(orgService);
         
         
         this.outerLayout.setWidth("100%");
@@ -57,28 +81,28 @@ public class AdminPanel extends CustomComponent {
         this.accordion.addTab(tab9, "Overview", null);
 
         Panel tab1 = new Panel();
-        tab1.addComponent(OpenInContent("Websites",this.websiteFactory.GetList(), false));
-        /*tab1.addComponent(OpenInContent("Websites",this.websiteFactory.GetList(), false));
-        tab1.addComponent(OpenInContent("Templates",new ThemeList(), false));
-        tab1.addComponent(OpenInContent("Modules",new ModuleList(), true));
+        tab1.addComponent(OpenInContent("Online Stores", this.websiteFactory.GetList(), false));
+        tab1.addComponent(OpenInContent("Themes", this.themeFactory.GetList(), false));
+        tab1.addComponent(OpenInContent("Modules", this.moduleFactory.GetList(), true));
         
-        tab1.addComponent(OpenInContent("Domains",new DomainList(), false));
-        tab1.addComponent(OpenInContent("Freights",new WebsiteList(), false));
-        tab1.addComponent(OpenInContent("Taxes",new TaxList(), false));
-        tab1.addComponent(OpenInContent("Payment Methods",new PaymentList(), false));*/
+        tab1.addComponent(OpenInContent("Domains", this.domainFactory.GetList(), false));
+        //tab1.addComponent(OpenInContent("Freights", this.freightFactory.GetList(), false));
+        tab1.addComponent(OpenInContent("Taxes", this.taxFactory.GetList(), false));
+        tab1.addComponent(OpenInContent("Payment Methods", this.paymentFactory.GetList(), false));
         this.accordion.addTab(tab1, "Settings", null);
         
         Panel tab8 = new Panel();
-        tab8.addComponent(OpenInContent("Pages",this.websiteFactory.GetList(), false));
-        this.accordion.addTab(tab8, "Pages", null);   
+        tab8.addComponent(OpenInContent("Pages",this.pageFactory.GetList(), false));
+        this.accordion.addTab(tab8, "Pages", null);       
         
-        /*
         Panel tab5 = new Panel();
-        tab5.addComponent(OpenInContent("Products",new ProductList(), false));
-        tab5.addComponent(OpenInContent("Product Groups",new ProductCategoryList(), false));
-        tab5.addComponent(OpenInContent("Price Groups",new UserList(), false));
-        this.accordion.addTab(tab5, "Products", null);   
-        
+        tab5.addComponent(OpenInContent("Categories", this.categoryFactory.GetList(), false));
+        tab5.addComponent(OpenInContent("Products", this.productFactory.GetList(), false));
+        //tab5.addComponent(OpenInContent("Product Groups",new ProductCategoryList(), false));
+        //tab5.addComponent(OpenInContent("Price Groups",new UserList(), false));
+        this.accordion.addTab(tab5, "Products & Categories", null);   
+       
+        /*
         Panel tab4 = new Panel();
         tab4.addComponent(OpenInContent("Users",new UserList(), false));
         tab4.addComponent(OpenInContent("User Groups",new UserList(), false));

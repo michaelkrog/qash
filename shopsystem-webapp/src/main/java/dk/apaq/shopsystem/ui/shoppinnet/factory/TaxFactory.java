@@ -1,16 +1,16 @@
 package dk.apaq.shopsystem.ui.shoppinnet.factory;
 
-import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonForm;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonGrid;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
-public class WebsiteFactory extends AbstractFactory {
+public class TaxFactory extends AbstractFactory {
 
     
     @Override
     public void setCrudContainer() {
-            this.container = new CrudContainer(this.orgService.getWebsites(), Website.class);
+            this.container = new CrudContainer(this.orgService.getTaxes(), Tax.class);
     }
     
             
@@ -19,13 +19,12 @@ public class WebsiteFactory extends AbstractFactory {
         CommonGrid grid = new CommonGrid(this.orgService);
 
         grid.setContainerDataSource(this.container);
-        grid.setFactoryClass(WebsiteFactory.class.getName()); //
+        grid.setFactoryClass(TaxFactory.class.getName());
         
         grid.setEditAble(true);
         grid.setSearch(false);
-        grid.setPageHeader("Online Stores");
-        grid.addDescription("", "If you have more than one online store, you are able to view those of your product groups in it you want.");
-        grid.addDescription("", "A specific product group, is able to be shown in multiple online stores, for easy administration across stores. In this way, you can have multiple stores, targeting different groups of people while keeping maintainance easy.");
+        grid.setPageHeader("Themes");
+        //grid.addDescription("", "");
         
         // Add buttons
         grid.addButton("Add","AddItem","");
@@ -34,9 +33,11 @@ public class WebsiteFactory extends AbstractFactory {
         
         // Add grid headers
         grid.addHeader("Name");
+        grid.addHeader("Rate %");
        
         // Add grid fields
         grid.addField("name", "");
+        grid.addField("rate", "");
         
         // Insert grid into layout
         return grid;
@@ -51,9 +52,10 @@ public class WebsiteFactory extends AbstractFactory {
         form.setItemId(id);
         form.setContainerDataSource(this.container);
         
-        form.setHeaderText("Edit online store");
+        form.setHeaderText("Edit Taxes");
        
-        form.addField("name", "Name", "This is not the url, but a descriptional name", "");
+        form.addField("name", "Name", "", "");
+        form.addField("rate", "Rate %", "", "");
         getApplication().getMainWindow().addWindow(form);
     }
     

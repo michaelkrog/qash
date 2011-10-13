@@ -1,16 +1,16 @@
 package dk.apaq.shopsystem.ui.shoppinnet.factory;
 
-import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonForm;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonGrid;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
-public class WebsiteFactory extends AbstractFactory {
+public class ModuleFactory extends AbstractFactory {
 
     
     @Override
     public void setCrudContainer() {
-            this.container = new CrudContainer(this.orgService.getWebsites(), Website.class);
+            this.container = new CrudContainer(this.orgService.getModules(), Module.class);
     }
     
             
@@ -19,13 +19,12 @@ public class WebsiteFactory extends AbstractFactory {
         CommonGrid grid = new CommonGrid(this.orgService);
 
         grid.setContainerDataSource(this.container);
-        grid.setFactoryClass(WebsiteFactory.class.getName()); //
+        grid.setFactoryClass(ModuleFactory.class.getName());
         
         grid.setEditAble(true);
         grid.setSearch(false);
-        grid.setPageHeader("Online Stores");
-        grid.addDescription("", "If you have more than one online store, you are able to view those of your product groups in it you want.");
-        grid.addDescription("", "A specific product group, is able to be shown in multiple online stores, for easy administration across stores. In this way, you can have multiple stores, targeting different groups of people while keeping maintainance easy.");
+        grid.setPageHeader("Modules");
+        //grid.addDescription("", "");
         
         // Add buttons
         grid.addButton("Add","AddItem","");
@@ -51,9 +50,9 @@ public class WebsiteFactory extends AbstractFactory {
         form.setItemId(id);
         form.setContainerDataSource(this.container);
         
-        form.setHeaderText("Edit online store");
+        form.setHeaderText("Edit Module");
        
-        form.addField("name", "Name", "This is not the url, but a descriptional name", "");
+        form.addField("name", "Name", "", "");
         getApplication().getMainWindow().addWindow(form);
     }
     
