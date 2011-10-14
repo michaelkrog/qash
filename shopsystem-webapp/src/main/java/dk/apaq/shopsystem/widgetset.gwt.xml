@@ -22,4 +22,8 @@
     <inherits name="com.vaadin.terminal.gwt.DefaultWidgetSet" />
 
     <inherits name="org.vaadin.tinymceeditor.widgetset.TinymceeditorWidgetset" />
+
+    <inherits name="dk.apaq.vaadin.addon.printservice.gwt.WidgetSet" />
+
+    <inherits name="org.vaadin.applet.AppletintegrationWidgetset" />
 </module>

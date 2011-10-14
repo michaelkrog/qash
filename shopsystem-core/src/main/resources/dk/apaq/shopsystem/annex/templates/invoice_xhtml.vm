@@ -92,50 +92,50 @@
             <table>
                  <tr>
                     <td></td>
-                    <td class="logo right">$tool.html($shop.getName())</td>
+                    <td class="logo right">$tool.html($organisation.getName())</td>
                 </tr>
                 <tr>
                     <td><!--$customername--></td>
-                    <td class="right">#if($shop.getCvr())$tool.html($resource.getString("vatno")): $tool.html($shop.getCvr())#end</td>
+                    <td class="right">#if($organisation.getCompanyReg())$tool.html($resource.getString("vatno")): $tool.html($organisation.getCompanyReg())#end</td>
                 </tr>
                 <tr>
                     <td><!--$customeraddress--></td>
-                    <td class="right">#if($shop.getRoad())$tool.html($shop.getRoad())#end</td>
+                    <td class="right">#if($organisation.getAddress())$tool.html($organisation.getAddress())#end</td>
                 </tr>
                 <tr>
                     <td><!--$custoemraddress2--></td>
-                    <td class="right">#if($shop.getZipCode())$tool.html($shop.getZipCode())#end #if($shop.getCity())$tool.html($shop.getCity())#end</td>
+                    <td class="right">#if($organisation.getZip())$tool.html($organisation.getZip())#end #if($organisation.getCity())$tool.html($organisation.getCity())#end</td>
                 </tr>
                 <tr>
                     <td><!--$customerzip $customercity--></td>
                     <td class="right"></td>
                 </tr>
 
-                #if($shop.getPhoneNo())
+                #if($organisation.getTelephone())
                 <tr>
                     <td></td>
-                    <td class="right">$tool.html($resource.getString("phone")): $tool.html($shop.getPhoneNo())</td>
+                    <td class="right">$tool.html($resource.getString("phone")): $tool.html($organisation.getTelephone())</td>
                 </tr>
                 #end
 
-                #if($shop.getBankAccount())
+                #if($organisation.getBankAccount())
                 <tr>
                     <td></td>
-                    <td class="right">$tool.html($resource.getString("bank")): $tool.html($shop.getBankAccount())</td>
+                    <td class="right">$tool.html($resource.getString("bank")): $tool.html($organisation.getBankAccount())</td>
                 </tr>
                 #end
 
-                #if($shop.getEmail())
+                #if($organisation.getEmail())
                 <tr>
                     <td></td>
-                    <td class="right">$tool.html($resource.getString("email")): $tool.html($shop.getEmail())</td>
+                    <td class="right">$tool.html($resource.getString("email")): $tool.html($organisation.getEmail())</td>
                 </tr>
                 #end
 
-                #if($shop.getWeb())
+                #if($organisation.getWeb())
                 <tr>
                     <td></td>
-                    <td class="right">$tool.html($resource.getString("web")): $tool.html($shop.getWeb())</td>
+                    <td class="right">$tool.html($resource.getString("web")): $tool.html($organisation.getWeb())</td>
                 </tr>
                 #end
 

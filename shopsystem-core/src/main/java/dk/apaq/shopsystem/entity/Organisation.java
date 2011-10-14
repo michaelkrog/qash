@@ -118,11 +118,11 @@ public class Organisation implements Serializable, BasicEntity {
         this.city = city;
     }
 
-    public String getCompany_reg() {
+    public String getCompanyReg() {
         return company_reg;
     }
 
-    public void setCompany_reg(String company_reg) {
+    public void setCompanyReg(String company_reg) {
         this.company_reg = company_reg;
     }
 

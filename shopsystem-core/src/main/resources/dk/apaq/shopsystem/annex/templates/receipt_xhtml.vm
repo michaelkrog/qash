@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <title>Receipt for $order.getId()</title>
+        <title>Receipt for $order.getNumber()</title>
         <style type="text/css">
                 @page {
                     size: ${pageWidth}mm ${pageHeight}mm;
@@ -70,9 +70,9 @@
     <body>
     
     	<div class="addresslabel">
-    		<div>$tool.html($shop.getName())</div>
-    		<div>$tool.html($shop.getRoad())</div>
-       		<div>$tool.html($shop.getZipCode()) $tool.html($shop.getCity())</div>
+    		<div>$tool.html($organisation.getName())</div>
+    		<div>$tool.html($organisation.getAddress())</div>
+       		<div>$tool.html($organisation.getZip()) $tool.html($organisation.getCity())</div>
         </div>
 
         <table class="header" cellpadding="0" cellspacing="0">
@@ -91,8 +91,8 @@
             </tr>
         #end
         </table>
-        #if($shop.getReceiptNote())
-        <div class="receiptNote">$tool.html($shop.getReceiptNote())</div>
+        #if($organisation.getReceiptNote())
+        <div class="receiptNote">$tool.html($organisation.getReceiptNote())</div>
         #end
     </body>
 </html>

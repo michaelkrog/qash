@@ -11,14 +11,12 @@ import java.util.Locale;
 public class AnnexContext<INTYPE, OUTTYPE>  {
     private final INTYPE input;
     private final Page page;
-    private final int dpi;
     private final Locale locale;
     private final OUTTYPE output;
 
-    public AnnexContext(INTYPE input, OUTTYPE output, Page page, int dpi, Locale locale) {
+    public AnnexContext(INTYPE input, OUTTYPE output, Page page, Locale locale) {
         this.input = input;
         this.page = page;
-        this.dpi = dpi;
         this.locale = locale;
         this.output = output;
     }
@@ -26,7 +24,6 @@ public class AnnexContext<INTYPE, OUTTYPE>  {
     public AnnexContext(AnnexContext<INTYPE,? extends Object> context, OUTTYPE out) {
         this.input = context.input;
         this.page = context.page;
-        this.dpi = context.dpi;
         this.locale = context.locale;
         this.output = out;
     }
@@ -39,10 +36,6 @@ public class AnnexContext<INTYPE, OUTTYPE>  {
 
     public OUTTYPE getOutput() {
         return output;
-    }
-
-    public int getDpi() {
-        return dpi;
     }
 
     public Locale getLocale() {

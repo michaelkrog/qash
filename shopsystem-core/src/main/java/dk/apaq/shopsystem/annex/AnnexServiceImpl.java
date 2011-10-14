@@ -14,10 +14,12 @@ import org.apache.velocity.app.VelocityEngine;
 import dk.apaq.shopsystem.i18n.LocaleUtil;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderLine;
+import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import java.awt.image.BufferedImage;
+import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -74,15 +76,7 @@ public class AnnexServiceImpl implements AnnexService {
     private DateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private NumberFormat usNumberFormat = NumberFormat.getNumberInstance(Locale.US);
 
-    public void printInvoice(AnnexContext<CommercialDocumentContent, PrintService> context) throws Exception {
-        printCommercialDocument(context, invoiceTemplate);
-    }
-
-    public void printReceipt(AnnexContext<CommercialDocumentContent, PrintService> context) throws Exception {
-        printCommercialDocument(context, receiptTemplate);
-    }
-
-
+   
     public void generateReceipt(AnnexContext<CommercialDocumentContent, OutputStream> context, OutputType outputType) throws Exception {
         generateCommercialDocument(context, outputType, receiptTemplate);
     }
@@ -91,46 +85,15 @@ public class AnnexServiceImpl implements AnnexService {
         generateCommercialDocument(context, outputType, invoiceTemplate);
     }
 
-    /**
-     * @deprecated
-     */
-    public void writeReceipt(Store shop, Order order, OutputType outputType, dk.apaq.shopsystem.annex.PageSize pagesize,
-            OutputStream out, Locale locale) throws Exception {
-
-        Page page = new Page(pagesize, 5, 5, 5, 5);
-        CommercialDocumentContent content = new CommercialDocumentContent(shop, order, null);
-        AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, 300, locale);
-        generateReceipt(context, outputType);
+    public Printable generatePrintableReceipt(AnnexContext<CommercialDocumentContent, Void> context) throws Exception {
+        return printCommercialDocument(context, receiptTemplate);
+    }
+    
+    public Printable generatePrintableInvoice(AnnexContext<CommercialDocumentContent, Void> context) throws Exception {
+        return printCommercialDocument(context, invoiceTemplate);
     }
 
-    /**
-     * @deprecated
-     */
-    public void writeInvoice(Store shop, Order order, OutputType outputType,
-            PageSize pageSize, OutputStream out, Locale locale
-            ) throws Exception {
 
-        Page page = new Page(pageSize);
-        CommercialDocumentContent content = new CommercialDocumentContent(shop, order, null);
-        AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, 300, locale);
-        generateCommercialDocument(context, outputType, invoiceTemplate);
-    }
-
-    /**
-     * @deprecated
-     */
-    public void writeOrder(Store shop, Order order, OutputStream out,
-            OutputType outputType, Locale locale) throws Exception {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * @deprecated
-     */
-    public void writeOrderList(Store shop, List<Order> orderlist, OutputStream out,
-            OutputType outputType, Locale locale) throws Exception {
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * @deprecated
@@ -165,12 +128,12 @@ public class AnnexServiceImpl implements AnnexService {
     }
 
     private void generateCommercialDocument(AnnexContext<CommercialDocumentContent, OutputStream> context, OutputType outputType, Template template) throws Exception {
-        Store shop = context.getInput().getSeller();
+        Organisation organisation = context.getInput().getSeller();
         Order order = context.getInput().getOrder();
         Page page = context.getPage();
 
         if(LOG.isDebugEnabled()) {
-            LOG.debug("Creating document [shop="+shop.getId()+"; order="+order.getNumber()+"; format="+outputType+"]");
+            LOG.debug("Creating document [shop="+organisation.getId()+"; order="+order.getNumber()+"; format="+outputType+"]");
         }
 
         OutputStream orgOut = context.getOutput();
@@ -233,15 +196,15 @@ public class AnnexServiceImpl implements AnnexService {
         }
 
         if(LOG.isDebugEnabled()) {
-            LOG.debug("Document created. [shop="+shop.getId()+"]");
+            LOG.debug("Document created. [shop="+organisation.getId()+"]");
         }
     }
-    private void printCommercialDocument(AnnexContext<CommercialDocumentContent, PrintService> context, Template template) throws Exception {
+    private Printable printCommercialDocument(AnnexContext<CommercialDocumentContent, Void> context, Template template) throws Exception {
         Order order = context.getInput().getOrder();
-        Store shop = context.getInput().getSeller();
+        Organisation organisation = context.getInput().getSeller();
 
         if(LOG.isDebugEnabled()) {
-            LOG.debug("Printing document [shop="+shop.getId()+"; order="+order.getNumber()+"]");
+            LOG.debug("Printing document [shop="+organisation.getId()+"; order="+order.getNumber()+"]");
         }
 
         Page page = context.getPage();
@@ -253,17 +216,19 @@ public class AnnexServiceImpl implements AnnexService {
         DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         panel.setDocument(new ByteArrayInputStream(baos.toByteArray()), "");
 
-        XHTMLPrintable printable = new ExtendedXHtmlPrintable(panel);
+        /*XHTMLPrintable printable = new ExtendedXHtmlPrintable(panel);
 
         PrinterJob printerJob = PrinterJob.getPrinterJob();
         printerJob.setPrintable(printable);
         printerJob.setPrintService(context.getOutput());
         printerJob.print();
 
-
+*/
         if(LOG.isDebugEnabled()) {
-            LOG.debug("Document created. [shop="+shop.getId()+"]");
+            LOG.debug("Document created. [organisation="+organisation.getId()+"]");
         }
+        
+        return new XHTMLPrintable(panel);
 
     }
 
@@ -271,7 +236,7 @@ public class AnnexServiceImpl implements AnnexService {
 
         Order order = annexcontext.getInput().getOrder();
         List<Payment> payments = annexcontext.getInput().getPaymentList();
-        Store shop = annexcontext.getInput().getSeller();
+        Organisation organisation = annexcontext.getInput().getSeller();
         Page page = annexcontext.getPage();
 
         Locale locale = annexcontext.getLocale();
@@ -302,7 +267,7 @@ public class AnnexServiceImpl implements AnnexService {
         context.put("orderlines", orderlineList);
         context.put("payment", payments);
 
-        context.put("shop", shop);
+        context.put("organisation", organisation);
         context.put("nf", nf);
         context.put("cf", cf);
         context.put("cf2", cf2);

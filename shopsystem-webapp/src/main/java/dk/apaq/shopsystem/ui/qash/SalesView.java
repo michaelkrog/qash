@@ -1,6 +1,5 @@
 package dk.apaq.shopsystem.ui.qash;
 
-import dk.apaq.shopsystem.ui.qash.print.PrintDocGenerator;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -12,6 +11,7 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
 import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.crud.Crud;
+import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.Product;
@@ -24,7 +24,6 @@ import dk.apaq.vaadin.addon.crudcontainer.SortableCrudContainer;
  */
 public class SalesView extends CustomComponent {
 
-    private PrintDocGenerator printDocGenerator;
     private final TabSheet tabSheet = new TabSheet();
     private final OrderList orderList = new OrderList();
     private Container productContainer;
@@ -33,6 +32,7 @@ public class SalesView extends CustomComponent {
     private Crud.Complete<String, Product> productCrud;
     private Crud.Editable<String, Payment> paymentCrud;
     private OrderEditor chosenEditor = null;
+    private AnnexService annexService;
     
     public SalesView() {
         
@@ -101,11 +101,11 @@ public class SalesView extends CustomComponent {
         OrderEditor editor = new OrderEditor();
         editor.setSizeFull();
         editor.setPaymentDatasource(new CrudContainer(paymentCrud, Payment.class));
-        editor.setPrintDocGenerator(printDocGenerator);
         editor.setTaxDataSource(taxContainer);
         editor.setProductDatasource(productContainer);
         editor.setItemDataSource(item);
         editor.setProductCrud(productCrud);
+        editor.setAnnexService(annexService);
         return editor;
     }
 
@@ -160,6 +160,10 @@ public class SalesView extends CustomComponent {
         }
     }
 
+    public void setAnnexService(AnnexService annexService) {
+        this.annexService = annexService;
+    }
+    
     public void setOrderCrud(Crud.Complete<String, Order> orderCrud) {
         initOrderListView();
         this.orderContainer = new SortableCrudContainer(orderCrud, Order.class);
@@ -179,7 +183,4 @@ public class SalesView extends CustomComponent {
         this.paymentCrud = paymentCrud;
     }
 
-    public void setPrintDocGenerator(PrintDocGenerator printDocGenerator) {
-        this.printDocGenerator = printDocGenerator;
-    }
 }

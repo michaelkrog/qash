@@ -5,10 +5,12 @@ import java.util.List;
 
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderStatus;
+import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
@@ -19,15 +21,15 @@ public class AnnexServiceTest extends TestCase {
 
     private AnnexService annexService = new AnnexServiceImpl();
 
-    private Store getShop(){
-        Store shop = new Store();
-        shop.setName("Apaq");
-        shop.setPhoneNo("51923192");
-        shop.setEmail("mail@gmail.com");
-        shop.setRoad("Stoevringparken");
-        shop.setZipCode("9530");
-        shop.setCity("Stoevring");
-        return shop;
+    private Organisation getOrganisation(){
+        Organisation org = new Organisation();
+        org.setName("Apaq");
+        org.setTelephone("51923192");
+        org.setEmail("mail@gmail.com");
+        org.setAddress("Stoevringparken 10");
+        org.setZip("9530");
+        org.setCity("Stoevring");
+        return org;
     }
 
     private Order getOrder(int orderlinecount){
@@ -89,6 +91,38 @@ public class AnnexServiceTest extends TestCase {
         return taxlist;
 
     }
+    
+    public void testGenerateReceiptHtml() throws Exception {
+        Organisation org = getOrganisation();
+        Order order = getOrder(1);
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        
+        CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
+        Page page = new Page(PageSize.Receipt);
+        AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
+        annexService.generateReceipt(context, OutputType.Html);
+        
+        String value = new String(out.toByteArray());
+        assertNotSame(0, value.length());
+        System.out.println(value);
+    }
+    
+    public void testGenerateInvoiceHtml() throws Exception {
+        Organisation org = getOrganisation();
+        Order order = getOrder(1);
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        
+        CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
+        Page page = new Page(PageSize.A4);
+        AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
+        annexService.generateInvoice(context, OutputType.Html);
+        
+        String value = new String(out.toByteArray());
+        assertNotSame(0, value.length());
+        System.out.println(value);
+    }
 
     /*public void testPrintReceiptHtml() throws Exception {
         Shop shop = getShop();
@@ -101,6 +135,8 @@ public class AnnexServiceTest extends TestCase {
         assertNotSame(0, value.length());
         System.out.println(value);
     }*/
+    
+    /*
 
     public void testPrintPostingsCSV() throws Exception {
         Store shop = getShop();
@@ -377,7 +413,7 @@ public class AnnexServiceTest extends TestCase {
         out.close();
 
     }
-
+*/
 
 
 

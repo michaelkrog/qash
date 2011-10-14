@@ -16,7 +16,6 @@ import dk.apaq.shopsystem.ui.SiteHeader;
 import dk.apaq.shopsystem.ui.VaadinServiceHolder;
 import dk.apaq.shopsystem.ui.common.CategoryList;
 import dk.apaq.shopsystem.ui.common.CategoryList.SelectEvent;
-import dk.apaq.shopsystem.ui.qash.print.PrintDocGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,7 +109,7 @@ public class AdminPanel extends CustomComponent {
         salesView.setPaymentCrud(orgService.getPayments());
         salesView.setProductCrud(orgService.getProducts());
         salesView.setTaxCrud(orgService.getTaxes());
-        salesView.setPrintDocGenerator(new PrintDocGeneratorImpl(annexService, org));
+        salesView.setAnnexService(annexService);
 
         leftLayout.setCaption(org.getName());
 

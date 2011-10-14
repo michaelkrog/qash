@@ -1,8 +1,8 @@
 package dk.apaq.shopsystem.ui.qash;
 
+import dk.apaq.printing.core.PrinterEvent;
 import dk.apaq.shopsystem.ui.common.SearchField;
 import dk.apaq.shopsystem.ui.common.CommonDialog;
-import dk.apaq.shopsystem.ui.qash.print.PrintDocGenerator;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.vaadin.data.Container.ItemSetChangeEvent;
 import com.vaadin.data.Item.PropertySetChangeEvent;
@@ -46,12 +46,25 @@ import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.sort.Sorter;
 
 
+import dk.apaq.printing.core.Paper;
+import dk.apaq.printing.core.Printer;
+import dk.apaq.printing.core.PrinterJob;
+import dk.apaq.printing.core.PrinterListChangeListener;
+import dk.apaq.printing.core.PrinterManager;
+import dk.apaq.shopsystem.annex.AnnexContext;
+import dk.apaq.shopsystem.annex.AnnexService;
+import dk.apaq.shopsystem.annex.CommercialDocumentContent;
+import dk.apaq.shopsystem.annex.Page;
+import dk.apaq.shopsystem.annex.PageSize;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderLineTax;
 import dk.apaq.shopsystem.entity.OrderStatus;
+import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.entity.Product;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.ui.ShopSystemTheme;
+import dk.apaq.shopsystem.ui.VaadinServiceHolder;
 import dk.apaq.shopsystem.ui.qash.data.ContainerFormattingWrapper;
 import dk.apaq.shopsystem.ui.qash.data.OrderLineContainer;
 import dk.apaq.shopsystem.ui.qash.data.util.CurrencyAmountFormatter;
@@ -64,6 +77,7 @@ import dk.apaq.shopsystem.ui.common.ProductFilterGenerator;
 import dk.apaq.shopsystem.ui.common.SystemSettings;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
 import dk.apaq.vaadin.addon.crudcontainer.HasBean;
+import java.awt.print.Printable;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Currency;
@@ -71,10 +85,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.print.PrintService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  *
@@ -88,7 +100,6 @@ public class OrderEditor extends CustomComponent implements
     private final OrderFooter footer = new OrderFooter();
     private final VerticalLayout layout = new VerticalLayout();
     private final Table table = new Table();
-    private PrintDocGenerator printDocGenerator;
     private OrderLineContainer orderlineContainer = new OrderLineContainer();
     private ContainerFormattingWrapper containerFormattingWrapper = new ContainerFormattingWrapper.WithIndexed(orderlineContainer);
     private Container productContainer;
@@ -118,13 +129,13 @@ public class OrderEditor extends CustomComponent implements
     private SystemSettings settings;
     private final PaymentChangeListener paymentChangeListener = new PaymentChangeListener();
     private final OrderChangeListener orderChangeListener = new OrderChangeListener();
-
+    private AnnexService annexService;
+    
     private class OrderChangeListener implements Item.PropertySetChangeListener {
 
         public void itemPropertySetChange(PropertySetChangeEvent event) {
             update();
         }
-
     }
 
     private class PaymentChangeListener implements Container.ItemSetChangeListener {
@@ -249,7 +260,6 @@ public class OrderEditor extends CustomComponent implements
         }
     }
 
-    
     public class OrderHeader extends CustomComponent {
 
         private final VerticalLayout outerLayout = new VerticalLayout();
@@ -402,8 +412,7 @@ public class OrderEditor extends CustomComponent implements
         private final Button btn_freight = new Button();
         private final Button btn_discount = new Button();
         private final Select printerList = new Select();
-        //private RemotePrintServiceManager printServiceManager;
-        private final BeanContainer<String, PrintService> printServiceContainer = new BeanContainer<String, PrintService>(PrintService.class);
+        private final BeanContainer<String, Printer> printServiceContainer = new BeanContainer<String, Printer>(Printer.class);
         private com.vaadin.data.Item dataSource;
 
         public OrderFooter() {
@@ -450,45 +459,43 @@ public class OrderEditor extends CustomComponent implements
         @Override
         public void attach() {
             super.attach();
+            PrintFacade.getManager(getApplication()).addListener(new PrinterListChangeListener() {
 
-            /*if (printServiceManager == null) {
-                //printServiceManager = RemotePrintServiceManager.getInstance(getApplication());
-                //printServiceManager = RemotePrintServiceHelper.getPrintServiceManager(getApplication());
-                /*printServiceManager.addListener(new PrintServiceListChangedListener() {
+                @Override
+                public void onPrinterListChange(PrinterEvent pe) {
+                    updatePrinterList();
+                }
+            });
+            updatePrinterList();
 
-                    public void onPrintServiceListChanged(PrintServiceListChangedEvent event) {
-                        updatePrinterList();
-                    }
-                });
-                updatePrinterList();
-            }*/
             update();
         }
 
-        /*private void updatePrinterList() {
-            List<? extends PrintService> list = printServiceManager.getPrintServices(null, null);
+        private void updatePrinterList() {
+            PrinterManager pm = PrintFacade.getManager(getApplication());
+            List<Printer> list = pm.getPrinters();
             printServiceContainer.removeAllItems();
-            for (PrintService service : list) {
-                printServiceContainer.addBean(service);
+            for (Printer printer : list) {
+                printServiceContainer.addBean(printer);
             }
 
-            PrintService defPs = printServiceManager.getDefaultPrintService();
+            Printer defPs = pm.getDefaultPrinter();
             if (defPs != null) {
                 printerList.setValue(defPs.getName());
             }
-        }*/
+        }
 
         @Override
         public com.vaadin.data.Item getItemDataSource() {
             return this.dataSource;
         }
 
-        public PrintService getSelectedPrintService() {
+        public Printer getSelectedPrinter() {
             Object id = printerList.getValue();
             if (id == null) {
                 return null;
             }
-            BeanItem<PrintService> item = printServiceContainer.getItem(id);
+            BeanItem<Printer> item = printServiceContainer.getItem(id);
             return item.getBean();
         }
 
@@ -685,6 +692,10 @@ public class OrderEditor extends CustomComponent implements
         //this.header.getSearchField().setContainerDataSource(container);
     }
 
+    public void setAnnexService(AnnexService annexService) {
+        this.annexService = annexService;
+    }
+    
     public void setProductDatasource(Container container) {
         this.productContainer = container;
         if (this.productContainer instanceof FilterableContainer) {
@@ -699,8 +710,8 @@ public class OrderEditor extends CustomComponent implements
 
     public void setItemDataSource(com.vaadin.data.Item newDataSource) {
 
-        if(this.dataSource!=null && (this.dataSource instanceof Item.PropertySetChangeNotifier)) {
-            ((Item.PropertySetChangeNotifier)this.dataSource).removeListener(orderChangeListener);
+        if (this.dataSource != null && (this.dataSource instanceof Item.PropertySetChangeNotifier)) {
+            ((Item.PropertySetChangeNotifier) this.dataSource).removeListener(orderChangeListener);
         }
 
         this.dataSource = newDataSource;
@@ -711,8 +722,8 @@ public class OrderEditor extends CustomComponent implements
             numberFormat.setCurrency(currency);
         }
 
-        if(this.dataSource!=null && (this.dataSource instanceof Item.PropertySetChangeNotifier)) {
-            ((Item.PropertySetChangeNotifier)this.dataSource).addListener(orderChangeListener);
+        if (this.dataSource != null && (this.dataSource instanceof Item.PropertySetChangeNotifier)) {
+            ((Item.PropertySetChangeNotifier) this.dataSource).addListener(orderChangeListener);
         }
 
         Order order = ((HasBean<Order>) this.dataSource).getBean();
@@ -721,10 +732,6 @@ public class OrderEditor extends CustomComponent implements
         this.orderlineContainer.setDatasource(newDataSource);
         footer.setItemDataSource(this.dataSource);
         this.update();
-    }
-
-    public void setPrintDocGenerator(PrintDocGenerator printDocGenerator) {
-        this.printDocGenerator = printDocGenerator;
     }
 
     public com.vaadin.data.Item getItemDataSource() {
@@ -930,50 +937,34 @@ public class OrderEditor extends CustomComponent implements
     }
 
     private void doPrint() {
-        if (printDocGenerator == null) {
-            getApplication().getMainWindow().showNotification("PrintDocGenerator not available.", Window.Notification.TYPE_ERROR_MESSAGE);
+        if (annexService == null) {
+            getApplication().getMainWindow().showNotification("AnnexService not available.", Window.Notification.TYPE_ERROR_MESSAGE);
             return;
         }
-
         try {
 
-            PrintService ps = footer.getSelectedPrintService();
-            if (ps == null) {
+            Printer printer = footer.getSelectedPrinter();
+            if (printer == null) {
                 getApplication().getMainWindow().showNotification("No printer available.", Window.Notification.TYPE_TRAY_NOTIFICATION);
                 return;
             }
-            
-            /*
 
-            String printTypeSettingKey = PrinterUtil.generatePrintTypeSettingKey(ps);
-            String strPrintType = settings.get(printTypeSettingKey);
-            PrintType printType = strPrintType == null ? PrintType.Receipt : PrintType.valueOf(strPrintType);
-
+            OrganisationService organisationService = VaadinServiceHolder.getService(getApplication());
             Order order = (Order) ((HasBean<Order>) dataSource).getBean();
-
-            switch (printType) {
-                case Invoice:
-                    printDocGenerator.printInvoice(order, ps);
-                    break;
-                default:
-                    //doc = printDocGenerator.generateReceipt(order, PageSize.Receipt);
-                    break;
-            }
-            */
-            /*
-            Doc doc;
-
-            switch (printType) {
-                case Invoice:
-                    doc = printDocGenerator.generateInvoice(order, PageSize.A4);
-                    break;
-                default:
-                    doc = printDocGenerator.generateReceipt(order, PageSize.Receipt);
-                    break;
-            }
-
-            ps.createPrintJob().print(doc, null);
-            */
+            
+            List<Payment> payments = organisationService.getPayments().list(new CompareFilter("orderId", order.getId(), CompareFilter.CompareType.Equals), null);
+            
+            //Generate document
+            CommercialDocumentContent cdc = new CommercialDocumentContent(organisationService.readOrganisation(), order, payments);
+            AnnexContext<CommercialDocumentContent, Void> annexContext = new AnnexContext<CommercialDocumentContent, Void>(cdc, null, new Page(PageSize.A4), Locale.getDefault());
+            Printable printable = annexService.generatePrintableInvoice(annexContext);
+            
+            //Print the generated document
+            PrinterJob pj = PrinterJob.getBuilder(printer, printable).setPaper(Paper.A4).setName("Order_"+order.getNumber()).build();
+            PrintFacade.getManager(getApplication()).print(pj);
+            
+            
+             
         } catch (Exception ex) {
             LOG.error("Error printing invoice or receipt.", ex);
             getApplication().getMainWindow().showNotification(ex.getMessage(), Window.Notification.TYPE_ERROR_MESSAGE);
@@ -988,7 +979,7 @@ public class OrderEditor extends CustomComponent implements
         commit();
         update();
 
-        if(openPayDialog) {
+        if (openPayDialog) {
             doPay();
         }
 
@@ -1027,7 +1018,7 @@ public class OrderEditor extends CustomComponent implements
                         /*String cookieVal = settings.get(PrinterUtil.PRINT_ON_COMPLETE_SETTING);
                         boolean print = "true".equalsIgnoreCase(cookieVal);
                         if (print) {
-                            doPrint();
+                        doPrint();
                         }*/
                     }
                 }

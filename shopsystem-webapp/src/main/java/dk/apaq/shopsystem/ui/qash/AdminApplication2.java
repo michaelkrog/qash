@@ -12,6 +12,7 @@ import dk.apaq.shopsystem.ui.SiteHeader;
 import dk.apaq.shopsystem.ui.VaadinServiceHolder;
 import dk.apaq.shopsystem.ui.VaadinSpringHelper;
 import dk.apaq.shopsystem.ui.shoppinnet.AdminApplication;
+import dk.apaq.vaadin.addon.printservice.VaadinPrintPdfPlugin;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -103,6 +104,7 @@ public class AdminApplication2 extends Application implements HttpServletRequest
         Window mainWindow = new Window();
         setMainWindow(mainWindow);
 
+        PrintFacade.getManager(this).addPlugin(new VaadinPrintPdfPlugin(this));
         
         
         outerLayout.setMargin(false);
