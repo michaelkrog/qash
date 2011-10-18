@@ -7,11 +7,13 @@ import dk.apaq.shopsystem.service.OrganisationService;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.UndeclaredThrowableException;
+import java.security.PrivilegedActionException;
 import java.util.Map;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
@@ -65,7 +67,16 @@ public class SimpleScriptComponent extends Panel implements IMarkupCacheKeyProvi
             LOG.error(error, ex);
         } catch (UndeclaredThrowableException ex) {
             failed=true;
-            error = "Unknown error in script." + ex.getUndeclaredThrowable().getMessage();
+            Throwable t = ex.getUndeclaredThrowable();
+            
+            
+            if(t instanceof PrivilegedActionException) {
+                PrivilegedActionException pae = (PrivilegedActionException) t;
+                Exception ex2 = pae.getException();
+                error = ex2.getMessage();
+            } else {
+                error = "Unknown error in script. " ;
+            }
             LOG.error(error, ex);
         }
     }
@@ -73,7 +84,7 @@ public class SimpleScriptComponent extends Panel implements IMarkupCacheKeyProvi
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
         if(failed) {
-            return new StringResourceStream("<wicket:panel><div>Component failed to render: "+error+"</div></wicket:panel>");
+            return new StringResourceStream("<wicket:panel><div>Component failed to render: "+StringEscapeUtils.escapeHtml(error)+"</div></wicket:panel>");
         } else {
             return new VfsResourceStream(component.getMarkupFile());
         }

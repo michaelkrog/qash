@@ -145,7 +145,11 @@ public class Theme implements Serializable {
                 MarkupElement me = it.next();
                 if(me instanceof ComponentTag) {
                     ComponentTag ct = (ComponentTag)me;
-                    if(!ct.isClose() && !ct.hasBehaviors() && !ct.isAutoComponentTag()) {
+                    if(!ct.isClose() && 
+                        !ct.hasBehaviors() && 
+                        !ct.isAutoComponentTag() && 
+                        "wicket".equals(ct.getNamespace()) &&
+                        "container".equals(ct.getName())) {
                         placeHolders.add(ct.getId());
                     }
                 }

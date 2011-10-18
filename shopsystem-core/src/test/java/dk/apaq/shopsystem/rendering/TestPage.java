@@ -56,6 +56,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         page.setName("test");
         page.setThemeName("Basic");
         page.setTemplateName("Simple");
+        
         ComponentInformation info = new ComponentInformation();
         info.setModuleName("Standard");
         info.setComponentName("Label");
@@ -65,6 +66,17 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         cp.setString("Hallooo!");
         info.getParameterMap().put("text", cp);
         page.addComponentInformation(info);
+        
+        info = new ComponentInformation();
+        info.setModuleName("Standard");
+        info.setComponentName("Image");
+        info.setPlaceholderName("placeholder_1");
+
+        cp = new ComponentParameter();
+        cp.setString("/Content/monologo.png");
+        info.getParameterMap().put("path", cp);
+        page.addComponentInformation(info);
+        
         pageCrud.update(page);
 
         Domain domain = orgService.getDomains().read(orgService.getDomains().create());

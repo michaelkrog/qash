@@ -20,7 +20,7 @@ public class ContentResourceReference extends ResourceReference {
     
     @Override
     public IResource getResource() {
-        return new ContentResource(service);
+        return new ResolvingContentResource(service);
     }
     
 }

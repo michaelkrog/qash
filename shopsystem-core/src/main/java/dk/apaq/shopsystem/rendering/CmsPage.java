@@ -1,64 +1,79 @@
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.shopsystem.entity.Component;
 import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptComponent;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.entity.Template;
 import dk.apaq.shopsystem.entity.Module;
-import dk.apaq.shopsystem.entity.Component;
 import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.service.OrganisationService;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.resource.IResourceStream;
 
 /**
  *
  */
-public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkupResourceStreamProvider{
+public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkupResourceStreamProvider {
 
     private final Template template;
     private final Theme theme;
     private final Page page;
-    
+
     public CmsPage(OrganisationService organisationService, Page page, PageParameters pageParameters) {
         this.page = page;
-        
+
         String themeName = page.getThemeName();
         String templateName = page.getTemplateName();
-        
+
         theme = organisationService.getThemes().read(themeName);
         template = theme.getTemplate(templateName);
-        
-        for(String availablePlaceHolder : template.getPlaceHolderIds()) {
+
+        for (String availablePlaceHolder : template.getPlaceHolderIds()) {
             List<ComponentInformation> infolist = page.getComponentInformations(availablePlaceHolder);
-            
-            if(infolist==null || infolist.isEmpty()) {
+
+            if (infolist == null || infolist.isEmpty()) {
                 //Add a dummy component
                 Label lbl = new Label(availablePlaceHolder, "Missing component");
                 add(lbl);
                 continue;
             }
-            
-            for(ComponentInformation info : infolist) {
+
+            //Compile list of custom components
+            List<SimpleScriptComponent> components = new ArrayList<SimpleScriptComponent>();
+            for (ComponentInformation info : infolist) {
                 Module module = organisationService.getModules().read(info.getModuleName());
-                if(module==null) {
+                if (module == null) {
                     continue;
                 }
-                
+
                 Component component = module.getComponent(info.getComponentName());
-                if(component==null) {
+                if (component == null) {
                     continue;
                 }
-                
-                SimpleScriptComponent customWicketComponent = new SimpleScriptComponent(organisationService, availablePlaceHolder, component, info.getParameterMap());
-                add(customWicketComponent);
+
+                SimpleScriptComponent customWicketComponent = new SimpleScriptComponent(organisationService, "placeholder", component, info.getParameterMap());
+                components.add(customWicketComponent);
             }
+            
+            //Add list of components to placeholder
+            add(new ListView<SimpleScriptComponent>(availablePlaceHolder, components) {
+
+                @Override
+                protected void populateItem(ListItem<SimpleScriptComponent> item) {
+                    item.add(item.getModelObject());
+                }
+            });
+
         }
 
     }
@@ -75,8 +90,6 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
         return theme;
     }
 
-    
-
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
         return new VfsResourceStream(template.getFile());
@@ -86,9 +99,4 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
     public String getCacheKey(MarkupContainer container, Class<?> containerClass) {
         return page.getName();
     }
-
-
-
-
-
 }

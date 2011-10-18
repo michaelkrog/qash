@@ -19,7 +19,7 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFileSystemPopulator.class);
     private String themeInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
-    private String template = "<html><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" /><body><div wicket:id=\"placeholder_1\"/></body></html>";
+    private String template = "<html><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" /><body><wicket:container wicket:id=\"placeholder_1\"><div wicket:id=\"placeholder\"/></wicket:container></body></html>";
     private String stylesheet = "body { background:yellow;}";
     private String moduleInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
     private String imageComponentCode = "/*\n"
@@ -27,8 +27,13 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
             + "*@Parameter(name=\"path\",type=\"String\",optionalText=\"The filesystem path for the image\")\n"
             + "*/\n"
             + "function render(){\n"
-            + "var gui = new JavaImporter(org.apache.wicket.markup.html.image);\n"
-            + "with(gui) {parent.addComponent(new Image(\"image\");};\n"
+            + "   var gui = new JavaImporter(Packages.org.apache.wicket.markup.html.image, Packages.dk.apaq.vfs, Packages.dk.apaq.shopsystem.rendering.resources);\n"
+            + "   with(gui) {\n"
+            + "      var node = service.getFileSystem().getNode(parameters.get(\"path\").getString());\n"
+            + "      var resource = new ContentResource(node);\n"
+            + "      parent.addComponent(new Image(\"image\", resource));\n"
+            + "      \n"
+            + "   }\n"
             + "}\n";
     private String imageComponentMarkup = "<wicket:panel><img wicket:id=\"image\" /></wicket:panel>";
     private String labelComponentCode = "/*\n"
@@ -37,7 +42,7 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
             + "*/\n"
             + "function render(){\n"
             + "var gui = new JavaImporter(org.apache.wicket.markup.html.basic);\n"
-            + "with(gui) {parent.addComponent(new Label(\"text\", parameters.get(\"text\").getString()));};\n"
+            + "with(gui) {parent.addComponent(new Label(\"text\", parameters.get(\"text\").getString()));}\n"
             + "}\n";
     private String labelComponentMarkup = "<wicket:panel><span wicket:id=\"text\" /></wicket:panel>";
     private String imageData = "iVBORw0KGgoAAAANSUhEUgAAAF0AAABwCAYAAAB8Q3wrAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI"
