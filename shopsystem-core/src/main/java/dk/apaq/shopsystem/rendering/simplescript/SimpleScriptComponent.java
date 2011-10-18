@@ -13,6 +13,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.util.resource.IResourceStream;
@@ -25,7 +26,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author michael
  */
-public class SimpleScriptComponent extends Panel implements IMarkupResourceStreamProvider {
+public class SimpleScriptComponent extends Panel implements IMarkupCacheKeyProvider, IMarkupResourceStreamProvider {
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(SimpleScriptComponent.class);
     
@@ -64,7 +65,7 @@ public class SimpleScriptComponent extends Panel implements IMarkupResourceStrea
             LOG.error(error, ex);
         } catch (UndeclaredThrowableException ex) {
             failed=true;
-            error = "Unknown error in script." + ex.getMessage();
+            error = "Unknown error in script." + ex.getUndeclaredThrowable().getMessage();
             LOG.error(error, ex);
         }
     }
@@ -76,6 +77,11 @@ public class SimpleScriptComponent extends Panel implements IMarkupResourceStrea
         } else {
             return new VfsResourceStream(component.getMarkupFile());
         }
+    }
+
+    @Override
+    public String getCacheKey(MarkupContainer container, Class<?> containerClass) {
+        return component.getCodeFile().getPath().toString();
     }
 
 

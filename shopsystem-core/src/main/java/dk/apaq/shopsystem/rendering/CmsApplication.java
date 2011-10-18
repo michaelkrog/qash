@@ -1,5 +1,7 @@
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.shopsystem.rendering.resources.ContentResourceReference;
+import dk.apaq.shopsystem.rendering.resources.ThemeResourceReference;
 import dk.apaq.shopsystem.service.SystemService;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,9 @@ public class CmsApplication extends WebApplication {
     @Autowired
     private SystemService service;
 
+    private ThemeResourceReference themeResourceReference;
+    private ContentResourceReference contentResourceReference;
+    
     /**
      * @see org.apache.wicket.Application#getHomePage()
      */
@@ -28,11 +33,16 @@ public class CmsApplication extends WebApplication {
     public void init() {
         super.init();
         
-        //Lets all wicket requests go through the CmsMapper
-        //setRootRequestMapper(new CmsMapper(service));
+        themeResourceReference = new ThemeResourceReference(service);
+        contentResourceReference = new ContentResourceReference(service);
+        
         mount(new CmsPageMapper(service));
-        mountResource("/_/themes/${themename}", new ThemeResourceReference(service));
-        mountResource("/_api/${orgid}/sites/${siteid}/themes/${themename}", new ThemeResourceReference(service));
+        
+        mountResource("/_/themes/${themename}", themeResourceReference);
+        mountResource("/_api/${orgid}/sites/${siteid}/themes/${themename}", themeResourceReference);
+        
+        mountResource("/_/content", contentResourceReference);
+        mountResource("/_api/${orgid}/sites/${siteid}/content", contentResourceReference);
         
         //Removes unneeded wickets tags in renderings output
         getMarkupSettings().setStripWicketTags(true);

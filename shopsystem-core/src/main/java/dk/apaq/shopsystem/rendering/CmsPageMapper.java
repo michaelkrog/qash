@@ -35,7 +35,7 @@ public class CmsPageMapper implements IRequestMapper {
         String name = null;
         
         if (CmsUtil.isSystemRequest(request)) {
-            name = url.getSegments().size()==4 ? "ROOT" : url.getSegments().get(4);
+            name = url.getSegments().size()<=4 ? "ROOT" : url.getSegments().get(4);
         } else {
             name = url.getSegments().isEmpty() ? "ROOT" : url.getSegments().get(0);
         }

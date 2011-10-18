@@ -1,7 +1,8 @@
-package dk.apaq.shopsystem.rendering;
+package dk.apaq.shopsystem.rendering.resources;
 
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.rendering.CmsUtil;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.util.StreamUtils;
@@ -10,10 +11,7 @@ import dk.apaq.vfs.File;
 import dk.apaq.vfs.Node;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Arrays;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.util.time.Time;
 
@@ -24,56 +22,6 @@ import org.apache.wicket.util.time.Time;
 public class ThemeResource extends AbstractResource {
 
     private final SystemService service;
-    
-    private class ResponseOutputStream extends OutputStream {
-    
-        private final Response response;
-
-        public ResponseOutputStream(Response response) {
-            this.response = response;
-        }
-
-        @Override
-        public void write(int i) throws IOException {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public void write(byte[] bytes) throws IOException {
-            response.write(bytes);
-        }
-
-        @Override
-        public void write(byte[] bytes, int i, int i1) throws IOException {
-            write(Arrays.copyOfRange(bytes, i, i1));
-        }
-        
-        
-        
-        
-        
-        
-    }
-    
-    private class ThemeResourceWriter extends WriteCallback {
-
-        private final File file;
-
-        public ThemeResourceWriter(File file) {
-            this.file = file;
-        }
-        
-        
-        @Override
-        public void writeData(Attributes attributes) {
-            try {
-                StreamUtils.copy(file.getInputStream(), new ResponseOutputStream(attributes.getResponse()));
-            } catch (IOException ex) {
-                throw new WicketRuntimeException(ex);
-            }
-        }
-    
-    }
 
     public ThemeResource(SystemService service) {
         this.service = service;
@@ -128,7 +76,7 @@ public class ThemeResource extends AbstractResource {
             rr.setContentLength(file.getLength());
             rr.setFileName(file.getName());
             rr.setLastModified(Time.valueOf(file.getLastModified()));
-            rr.setWriteCallback(new ThemeResourceWriter(file));
+            rr.setWriteCallback(new ResourceWriter(file));
         } catch (IOException ex) {
             throw new WicketRuntimeException(ex);
         }

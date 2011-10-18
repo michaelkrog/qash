@@ -9,6 +9,15 @@ import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
+import dk.apaq.shopsystem.util.StreamUtils;
+import dk.apaq.vfs.File;
+import dk.apaq.vfs.FileSystem;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import javax.imageio.ImageIO;
+import junit.framework.Assert;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
@@ -34,7 +43,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
     private Website site;
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         String id = service.getOrganisationCrud().create();
         org = service.getOrganisationCrud().read(id);
 
@@ -63,6 +72,11 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         domain.setWebsite(site);
         orgService.getDomains().update(domain);
         
+        File sourceImageFile = (File) service.getFileSystem().getNode("/System/Content/monologo.png");
+        FileSystem fs = orgService.getFileSystem();
+        File targetImageFile = fs.getRoot().getDirectory("Content", true).getFile("monologo.png", true);
+        StreamUtils.copy(sourceImageFile.getInputStream(), targetImageFile.getOutputStream());
+                
         WebApplication app = applicationContext.getBean("wicketApplication", WebApplication.class);
         tester = new WicketTester(app);
 
@@ -84,10 +98,17 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
     public void retrieveStylesheetSuccessfully() {
 
         tester.executeUrl("http://coolbiks.dk/context/servlet/_/themes/Basic/style.css");
-        String text = tester.getLastResponseAsString();
-        System.out.println(text);
+        tester.assertContains("yellow");
     }
 
+    @Test
+    public void retrieveFileSuccessfully() throws IOException {
+
+        tester.executeUrl("http://coolbiks.dk/context/servlet/_/content/monologo.png");
+        byte[] bytes = tester.getLastResponse().getDocument().getBytes();
+        BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+    }
+    
     @Test
     public void renderSystemPageSuccessfully() {
 
@@ -104,4 +125,13 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         String text = tester.getLastResponseAsString();
         System.out.println(text);
     }
+        
+            @Test
+    public void retrieveSystemFileSuccessfully() throws IOException {
+
+        tester.executeUrl("http://localhost/context/servlet/_api/" + org.getId() + "/sites/" + site.getId()+"/content/monologo.png");
+        byte[] bytes = tester.getLastResponse().getDocument().getBytes();
+        BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+    }
+    
 }
