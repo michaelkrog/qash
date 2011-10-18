@@ -32,6 +32,10 @@ public class CmsPageMapper implements IRequestMapper {
         Url url = request.getUrl();
         
         site = CmsUtil.getWebsite(service, request);
+        if(site==null) {
+            return null;
+        }
+        
         String name = null;
         
         if (CmsUtil.isSystemRequest(request)) {

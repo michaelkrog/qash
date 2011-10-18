@@ -46,7 +46,7 @@ public class ContentResource extends AbstractResource {
             for (int i = 0; i < attributes.getParameters().getIndexedCount(); i++) {
                 String nextSegment = attributes.getParameters().get(i).toString();
                 if (!dir.hasChild(nextSegment)) {
-                    return null;
+                    break;
                 }
                 Node node = dir.getChild(nextSegment);
                 if (node.isFile()) {
@@ -59,7 +59,8 @@ public class ContentResource extends AbstractResource {
             }
 
             if (file == null) {
-                return null;
+                rr.setError(404);
+                return rr;
             }
 
             rr.setContentType(MimeType.retrieve(file));

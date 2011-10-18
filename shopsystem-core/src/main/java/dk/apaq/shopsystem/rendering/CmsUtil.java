@@ -73,6 +73,18 @@ public class CmsUtil {
     }
 
     public static Page getPage(SystemService service, Website site, String pageName) {
+        if(service==null) {
+            throw new NullPointerException("Service was null.");
+        }
+        
+        if(site==null){
+            throw new NullPointerException("Website was null");
+        }
+        
+        if(pageName==null){
+            throw new NullPointerException("pageName was null");
+        }
+        
         OrganisationService orgService = service.getOrganisationService(site.getOrganisation());
 
         Crud.Complete<String, Page> pages = orgService.getPages(site);

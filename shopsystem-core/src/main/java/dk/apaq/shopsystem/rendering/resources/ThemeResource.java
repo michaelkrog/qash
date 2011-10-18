@@ -31,6 +31,7 @@ public class ThemeResource extends AbstractResource {
     @Override
     protected ResourceResponse newResourceResponse(Attributes attributes) {
         File file = null;
+        ResourceResponse rr = new ResourceResponse();
         Website site = CmsUtil.getWebsite(service, attributes.getRequest());
         if(site==null) {
             return null;
@@ -42,7 +43,8 @@ public class ThemeResource extends AbstractResource {
         
         Theme theme = organisationService.getThemes().read(themeName);
         if(theme == null) {
-            return null;
+            rr.setError(404, "Theme '"+themeName+"' not found.");
+            return rr;
         }
         
         Directory dir = theme.getDirectory();
@@ -67,11 +69,12 @@ public class ThemeResource extends AbstractResource {
         }
         
         if(file == null) {
-            return null;
+            rr.setError(404, "File not found.");
+            return rr;
+            
         }
         
         //  http://www.apaq.dk/_themes/Basic/style.css
-        ResourceResponse rr = new ResourceResponse();
         try {
             rr.setContentLength(file.getLength());
             rr.setFileName(file.getName());
