@@ -8,23 +8,17 @@ import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;
 import dk.apaq.vfs.Node;
 import dk.apaq.vfs.NodeFilter;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.Markup;
 import org.apache.wicket.markup.MarkupElement;
-import org.apache.wicket.markup.MarkupParser;
 import org.apache.wicket.markup.MarkupResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.slf4j.LoggerFactory;
@@ -151,7 +145,7 @@ public class Theme implements Serializable {
                 MarkupElement me = it.next();
                 if(me instanceof ComponentTag) {
                     ComponentTag ct = (ComponentTag)me;
-                    if(!ct.isClose()) {
+                    if(!ct.isClose() && !ct.hasBehaviors() && !ct.isAutoComponentTag()) {
                         placeHolders.add(ct.getId());
                     }
                 }

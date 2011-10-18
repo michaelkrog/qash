@@ -13,6 +13,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.resource.IResourceStream;
 
@@ -37,7 +38,10 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
         for(String availablePlaceHolder : template.getPlaceHolderIds()) {
             List<ComponentInformation> infolist = page.getComponentInformations(availablePlaceHolder);
             
-            if(infolist==null) {
+            if(infolist==null || infolist.isEmpty()) {
+                //Add a dummy component
+                Label lbl = new Label(availablePlaceHolder, "Missing component");
+                add(lbl);
                 continue;
             }
             

@@ -2,6 +2,7 @@ package dk.apaq.shopsystem.rendering;
 
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.ComponentInformation;
+import dk.apaq.shopsystem.entity.ComponentParameter;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Page;
@@ -26,50 +27,81 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class TestPage extends AbstractJUnit4SpringContextTests {
 
     private WicketTester tester;
-    
     @Autowired
     private SystemService service;
+    private Page page;
+    private Organisation org;
+    private Website site;
 
     @Before
     public void setUp() {
         String id = service.getOrganisationCrud().create();
-        Organisation org = service.getOrganisationCrud().read(id);
-        
+        org = service.getOrganisationCrud().read(id);
+
         OrganisationService orgService = service.getOrganisationService(org);
-        Website site = orgService.getWebsites().read(orgService.getWebsites().create());
+        site = orgService.getWebsites().read(orgService.getWebsites().create());
         
+
         Crud.Complete<String, Page> pageCrud = orgService.getPages(site);
-        Page page = pageCrud.read(pageCrud.create());
+        page = pageCrud.read(pageCrud.create());
         page.setName("test");
         page.setThemeName("Basic");
         page.setTemplateName("Simple");
         ComponentInformation info = new ComponentInformation();
-        info.setComponentName("SingleImage");
-        info.setModuleName("Image");
+        info.setModuleName("Standard");
+        info.setComponentName("Label");
         info.setPlaceholderName("placeholder_1");
+
+        ComponentParameter cp = new ComponentParameter();
+        cp.setString("Hallooo!");
+        info.getParameterMap().put("text", cp);
         page.addComponentInformation(info);
         pageCrud.update(page);
-        
+
         Domain domain = orgService.getDomains().read(orgService.getDomains().create());
-        domain.setName("localhost");
+        domain.setName("coolbiks.dk");
         domain.setWebsite(site);
         orgService.getDomains().update(domain);
         
         WebApplication app = applicationContext.getBean("wicketApplication", WebApplication.class);
         tester = new WicketTester(app);
+
     }
 
     @Test
     public void homepageRendersSuccessfully() {
-        
+
         //start and render the test page
-        tester.executeUrl("http://localhost/context/servlet/test");
+        String url = "http://coolbiks.dk/context/servlet/" + page.getName();
+        tester.executeUrl(url);
+        
         String text = tester.getLastResponseAsString();
         System.out.println(text);
         
-        tester.executeUrl("http://localhost/context/servlet/_themes/Basic/style.css");
-        text = tester.getLastResponseAsString();
+    }
+
+    @Test
+    public void retrieveStylesheetSuccessfully() {
+
+        tester.executeUrl("http://coolbiks.dk/context/servlet/_/themes/Basic/style.css");
+        String text = tester.getLastResponseAsString();
+        System.out.println(text);
+    }
+
+    @Test
+    public void renderSystemPageSuccessfully() {
+
+        tester.executeUrl("http://localhost/context/servlet/_api/" + org.getId() + "/sites/" + site.getId() + "/" + page.getName());
+        String text = tester.getLastResponseAsString();
         System.out.println(text);
 
+    }
+    
+        @Test
+    public void retrieveSystemStylesheetSuccessfully() {
+
+        tester.executeUrl("http://localhost/context/servlet/_api/" + org.getId() + "/sites/" + site.getId()+"/themes/Basic/style.css");
+        String text = tester.getLastResponseAsString();
+        System.out.println(text);
     }
 }

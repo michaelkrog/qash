@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.entity;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * @author michael
  */
 @Entity
-public class ComponentParameter {
+public class ComponentParameter implements Serializable {
     private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final Logger LOG = LoggerFactory.getLogger(ComponentParameter.class);
     

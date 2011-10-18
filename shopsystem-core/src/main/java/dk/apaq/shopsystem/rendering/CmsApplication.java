@@ -31,7 +31,8 @@ public class CmsApplication extends WebApplication {
         //Lets all wicket requests go through the CmsMapper
         //setRootRequestMapper(new CmsMapper(service));
         mount(new CmsPageMapper(service));
-        mountResource("/_themes/${themename}", new ThemeResourceReference(service));
+        mountResource("/_/themes/${themename}", new ThemeResourceReference(service));
+        mountResource("/_api/${orgid}/sites/${siteid}/themes/${themename}", new ThemeResourceReference(service));
         
         //Removes unneeded wickets tags in renderings output
         getMarkupSettings().setStripWicketTags(true);

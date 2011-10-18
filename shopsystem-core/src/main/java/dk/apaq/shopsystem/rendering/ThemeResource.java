@@ -12,12 +12,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.velocity.texen.util.FileUtil;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.request.Url;
 import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.util.time.Time;
 

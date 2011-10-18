@@ -66,7 +66,7 @@
 
     <bean id="filesystem" class="dk.apaq.vfs.impl.ram.RamFilesystem"/>
     
-    <bean id="wicketApplication" class="dk.apaq.shopsystem.rendering.CmsApplication"/>
+    <bean id="wicketApplication" class="dk.apaq.shopsystem.rendering.CmsApplication" scope="prototype"/>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="ShopSystem"/>

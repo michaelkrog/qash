@@ -40,7 +40,7 @@ public class ModuleTest {
     @Before
     public void setUp() throws IOException {
         FileSystem fs =  service.getFileSystem();
-        themeDir = fs.getRoot().getDirectory("System", true).getDirectory("Modules", true).getDirectory("Standard", true).getDirectory("Image.module", true);
+        themeDir = fs.getRoot().getDirectory("System", true).getDirectory("Modules", true).getDirectory("Standard", true).getDirectory("Standard.module", true);
 
 
     }
@@ -65,7 +65,7 @@ public class ModuleTest {
         assertEquals("qwerty", instance.getSellerInfo().getId());
         assertEquals("Apaq", instance.getSellerInfo().getName());
         assertEquals("mic@apaq.dk", instance.getSellerInfo().getEmail());
-        assertEquals(1, instance.listComponents().size());
+        assertEquals(2, instance.listComponents().size());
         
         //SimpleScript script = new SimpleScriptComponent(null, null)
 

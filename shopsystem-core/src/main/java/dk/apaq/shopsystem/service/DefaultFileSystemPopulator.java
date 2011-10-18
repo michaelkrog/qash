@@ -22,14 +22,25 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
     private String stylesheet = "body { background:yellow;}";
     private String moduleInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
     
-    private String componentCode = "/*\n" +
-                                    "*@Description(value=\"A simple module\")\n"+
+    private String imageComponentCode = "/*\n" +
+                                    "*@Description(value=\"A simple image component\")\n"+
                                     "*@Parameter(name=\"path\",type=\"String\",optionalText=\"The filesystem path for the image\")\n"+
-                                    "*@Parameter(name=\"title\",type=\"String\",optionalText=\"The title of the image\")\n"+
-                                    "*@Parameter(name=\"styleclass\",type=\"String\",optionalText=\"Special styleclass to append to the image\")\n"+
                                     "*/\n"+
-                                    "function render(){}\n";
-    private String componentMarkup = "<wicket:panel><div>This is from a component</div></wicket:panel>";
+                                    "function render(){\n" +
+                                    "var gui = new JavaImporter(org.apache.wicket.markup.html.image);\n" +
+                                    "with(gui) {parent.addComponent(new Image(\"image\");};\n"+
+                                    "}\n";
+    private String imageComponentMarkup = "<wicket:panel><img wicket:id=\"image\" /></wicket:panel>";
+    
+    private String labelComponentCode = "/*\n" +
+                                    "*@Description(value=\"A simple label component\")\n"+
+                                    "*@Parameter(name=\"text\",type=\"String\",optionalText=\"The text for the label\")\n"+
+                                    "*/\n"+
+                                    "function render(){\n" +
+                                    "var gui = new JavaImporter(org.apache.wicket.markup.html.basic);\n" +
+                                    "with(gui) {parent.addComponent(new Label(\"text\", parameters.get(\"text\").getString()));};\n"+
+                                    "}\n";
+    private String labelComponentMarkup = "<wicket:panel><span wicket:id=\"text\" /></wicket:panel>";
     
     @Override
     public void populate(FileSystem fileSystem) {
@@ -65,7 +76,7 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
                     getDirectory("System", true).
                     getDirectory("Modules", true).
                     getDirectory("Standard", true).
-                    getDirectory("Image.module", true);
+                    getDirectory("Standard.module", true);
             
             File infofile = themeDir.getFile("theme.info", true);
             OutputStreamWriter infoWriter = new OutputStreamWriter(infofile.getOutputStream());
@@ -87,15 +98,25 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
             moduleInfoWriter.write(moduleInfo);
             moduleInfoWriter.close();
             
-            File componentCodeFile = moduleDir.getFile("SingleImage.code", true);
-            OutputStreamWriter componentCodeWriter = new OutputStreamWriter(componentCodeFile.getOutputStream());
-            componentCodeWriter.write(componentCode);
-            componentCodeWriter.close();
+            File imageComponentCodeFile = moduleDir.getFile("Image.code", true);
+            OutputStreamWriter imageComponentCodeWriter = new OutputStreamWriter(imageComponentCodeFile.getOutputStream());
+            imageComponentCodeWriter.write(imageComponentCode);
+            imageComponentCodeWriter.close();
             
-            File componentMarkupFile = moduleDir.getFile("SingleImage.html", true);
-            OutputStreamWriter componentMarkupWriter = new OutputStreamWriter(componentMarkupFile.getOutputStream());
-            componentMarkupWriter.write(componentMarkup);
-            componentMarkupWriter.close();
+            File imageComponentMarkupFile = moduleDir.getFile("Image.html", true);
+            OutputStreamWriter imageComponentMarkupWriter = new OutputStreamWriter(imageComponentMarkupFile.getOutputStream());
+            imageComponentMarkupWriter.write(imageComponentMarkup);
+            imageComponentMarkupWriter.close();
+            
+            File labelComponentCodeFile = moduleDir.getFile("Label.code", true);
+            OutputStreamWriter labelComponentCodeWriter = new OutputStreamWriter(labelComponentCodeFile.getOutputStream());
+            labelComponentCodeWriter.write(labelComponentCode);
+            labelComponentCodeWriter.close();
+            
+            File labelComponentMarkupFile = moduleDir.getFile("Label.html", true);
+            OutputStreamWriter labelComponentMarkupWriter = new OutputStreamWriter(labelComponentMarkupFile.getOutputStream());
+            labelComponentMarkupWriter.write(labelComponentMarkup);
+            labelComponentMarkupWriter.close();
             
             
         } catch (IOException ex) {

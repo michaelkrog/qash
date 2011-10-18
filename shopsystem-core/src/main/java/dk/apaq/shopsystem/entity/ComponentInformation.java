@@ -3,11 +3,13 @@ package dk.apaq.shopsystem.entity;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -25,7 +27,7 @@ public class ComponentInformation implements Serializable {
     private String componentName;
     private String placeholderName;
     
-    @ElementCollection(fetch= FetchType.EAGER)
+    @OneToMany(cascade= CascadeType.ALL, fetch= FetchType.EAGER)
     private Map<String, ComponentParameter> parameterMap = new HashMap<String, ComponentParameter>();
 
     public String getId() {

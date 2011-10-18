@@ -15,6 +15,7 @@ import org.apache.wicket.markup.MarkupResourceStream;
 import org.apache.wicket.markup.WicketTag;
 import org.apache.wicket.markup.parser.AbstractMarkupFilter;
 import org.apache.wicket.markup.parser.filter.RelativePathPrefixHandler;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -82,7 +83,21 @@ public class CmsMarkupParserFactory extends MarkupFactory {
                     themeName = ((CmsPage)page).getTheme().getName();
                 }
             }
-            return rc.getRequest().getContextPath() + rc.getRequest().getFilterPath() + "/_themes/" + themeName + "/" + orgUrl;
+            
+            Request request = rc.getRequest();
+            Url url = new Url(request.getUrl());
+            url.resolveRelative(Url.parse("./"));
+                    
+            StringBuilder sb = new StringBuilder();
+            sb.append(request.getContextPath());
+            sb.append(request.getFilterPath());
+            sb.append("/");
+            sb.append(url.toString());
+            sb.append("_themes/");
+            sb.append(themeName);
+            sb.append("/");
+            sb.append(orgUrl);
+            return sb.toString();
         }
     };
 

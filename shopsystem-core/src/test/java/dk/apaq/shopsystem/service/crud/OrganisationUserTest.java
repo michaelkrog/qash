@@ -1,15 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dk.apaq.shopsystem.service.crud;
 
-import dk.apaq.crud.Crud;
-import dk.apaq.crud.Crud.Complete;
-import dk.apaq.crud.Crud.Editable;
 import dk.apaq.filter.Filter;
 import dk.apaq.filter.core.CompareFilter;
-import dk.apaq.filter.core.ContainsFilter;
 import dk.apaq.filter.core.LikeFilter;
 import dk.apaq.shopsystem.entity.BaseUser;
 import dk.apaq.shopsystem.entity.Organisation;
@@ -81,7 +73,7 @@ public class OrganisationUserTest {
         System.out.println("create");
         UserCrud crud = orgService.getUsers();
 
-        User result = crud.read(crud.createSystemUser());
+        BaseUser result = crud.read(crud.createSystemUser());
         assertNotNull(result);
         assertNotNull(result.getId());
     }

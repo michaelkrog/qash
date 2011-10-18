@@ -6,6 +6,7 @@ import dk.apaq.shopsystem.rendering.VfsResourceStream;
 import dk.apaq.shopsystem.service.OrganisationService;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Map;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -60,6 +61,10 @@ public class SimpleScriptComponent extends Panel implements IMarkupResourceStrea
         } catch (ScriptException ex) {
             failed=true;
             error = "Unable to evaluate script." + ex.getMessage();
+            LOG.error(error, ex);
+        } catch (UndeclaredThrowableException ex) {
+            failed=true;
+            error = "Unknown error in script." + ex.getMessage();
             LOG.error(error, ex);
         }
     }

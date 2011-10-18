@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.OrganisationService;
@@ -26,18 +27,26 @@ public class CmsPageMapper implements IRequestMapper {
 
     @Override
     public IRequestHandler mapRequest(Request request) {
-        Website site = CmsUtil.getWebsite(service, request);
-        if(site==null) {
-            return null;
+        Page page = null;
+        Website site = null;
+        Url url = request.getUrl();
+        
+        site = CmsUtil.getWebsite(service, request);
+        String name = null;
+        
+        if (CmsUtil.isSystemRequest(request)) {
+            name = url.getSegments().size()==4 ? "ROOT" : url.getSegments().get(4);
+        } else {
+            name = url.getSegments().isEmpty() ? "ROOT" : url.getSegments().get(0);
         }
         
+        page = CmsUtil.getPage(service, site, name);
+
+        if (page == null) {
+            return null;
+        }
+
         OrganisationService organisationService = service.getOrganisationService(site.getOrganisation());
-        
-        Page page = CmsUtil.getPage(service, site, request);
-        if(page==null) {
-            return null;
-        }
-        
         CmsPage wp = new CmsPage(organisationService, page, null);
         return new RenderPageRequestHandler(new PageProvider(wp));
     }
@@ -49,10 +58,10 @@ public class CmsPageMapper implements IRequestMapper {
 
     @Override
     public Url mapHandler(IRequestHandler requestHandler) {
-        if(requestHandler instanceof RenderPageRequestHandler) {
-            IRequestablePage page = ((RenderPageRequestHandler)requestHandler).getPage();
-            if(page instanceof CmsPage) {
-                Page pageData = ((CmsPage)page).getPageData();
+        if (requestHandler instanceof RenderPageRequestHandler) {
+            IRequestablePage page = ((RenderPageRequestHandler) requestHandler).getPage();
+            if (page instanceof CmsPage) {
+                Page pageData = ((CmsPage) page).getPageData();
                 Url url = new Url();
                 url.getSegments().add(pageData.getName());
                 return url;
@@ -60,7 +69,5 @@ public class CmsPageMapper implements IRequestMapper {
         }
         return null;
     }
-
-    
 
 }
