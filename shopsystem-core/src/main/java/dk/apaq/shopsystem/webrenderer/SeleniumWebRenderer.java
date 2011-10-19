@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.util;
+package dk.apaq.shopsystem.webrenderer;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
@@ -30,12 +31,28 @@ public class SeleniumWebRenderer implements WebRenderer {
         .usingChromeDriverExecutable(new File(chromeDriverPath))
         .usingAnyFreePort()
         .build();
-        service.start();
+        init();
     }
     
-    private SeleniumWebRenderer() throws IOException{
+    public SeleniumWebRenderer() throws IOException{
         service = ChromeDriverService.createDefaultService();
+        init();
+    }
+    
+    private void init() throws IOException {
         service.start();
+        setupShutdownHook();
+    }
+    
+    private void setupShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+
+            @Override
+            public void run() {
+                service.stop();
+            }
+            
+        });
     }
   
     @Override
@@ -49,7 +66,9 @@ public class SeleniumWebRenderer implements WebRenderer {
         try {
             long start = System.currentTimeMillis();
       
-            driver = new RemoteWebDriver(service.getUrl(), DesiredCapabilities.chrome());
+            DesiredCapabilities caps = DesiredCapabilities.chrome();
+            caps.setCapability("chrome.verbose", true);
+            driver = new RemoteWebDriver(service.getUrl(), caps);
             driver = new Augmenter().augment(driver); 
             driver.get(url);
             
@@ -65,7 +84,9 @@ public class SeleniumWebRenderer implements WebRenderer {
             LOG.info("Unable to render image from webpage.", ex);
             return null;
         } finally {
-            driver.close();
+            if(driver!=null) {
+                driver.close();
+            }
         }
     }
     

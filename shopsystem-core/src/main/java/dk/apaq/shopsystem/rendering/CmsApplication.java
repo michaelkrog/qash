@@ -39,10 +39,10 @@ public class CmsApplication extends WebApplication {
         mount(new CmsPageMapper(service));
         
         mountResource("/_/themes/${themename}", themeResourceReference);
-        mountResource("/_api/${orgid}/sites/${siteid}/themes/${themename}", themeResourceReference);
+        mountResource("/_api/${orgid}/sites/${siteid}/_/themes/${themename}", themeResourceReference);
         
         mountResource("/_/content", contentResourceReference);
-        mountResource("/_api/${orgid}/sites/${siteid}/content", contentResourceReference);
+        mountResource("/_api/${orgid}/sites/${siteid}/_/content", contentResourceReference);
         
         //Removes unneeded wickets tags in renderings output
         getMarkupSettings().setStripWicketTags(true);

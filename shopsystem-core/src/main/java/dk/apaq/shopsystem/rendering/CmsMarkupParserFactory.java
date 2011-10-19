@@ -93,7 +93,7 @@ public class CmsMarkupParserFactory extends MarkupFactory {
             sb.append(request.getFilterPath());
             sb.append("/");
             sb.append(url.toString());
-            sb.append("_themes/");
+            sb.append("_/themes/");
             sb.append(themeName);
             sb.append("/");
             sb.append(orgUrl);

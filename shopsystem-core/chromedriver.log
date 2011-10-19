@@ -1,0 +1,44 @@
+[1019/231729:INFO:webdriver_automation.cc(231)] Using Chrome binary at: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+[1019/231731:INFO:webdriver_automation.cc(282)] Chrome launched successfully. Version: 14.0.835.202
+[1019/231731:INFO:automation_json_requests.cc(31)] Sending 'GetChromeDriverAutomationVersion' command.
+[1019/231731:INFO:automation_json_requests.cc(31)] Sending 'GetTabIds' command.
+[1019/231731:INFO:create_session.cc(226)] Created session 806b745eef3b659c6aa2eb1fea7376c2
+[1019/231731:INFO:webdriver_dispatch.h(83)] Sent command response, url: /session
+[1019/231731:INFO:webdriver_dispatch.h(72)] Received command, url: /session/806b745eef3b659c6aa2eb1fea7376c2, method: GET, postd data: 
+[1019/231731:INFO:webdriver_session.cc(115)] Waiting for the page to stop loading
+[1019/231731:INFO:automation_json_requests.cc(31)] Sending 'WaitForAllTabsToStopLoading' command.
+[1019/231731:INFO:webdriver_session.cc(117)] Done waiting for the page to stop loading
+[1019/231731:INFO:webdriver_session.cc(115)] Waiting for the page to stop loading
+[1019/231731:INFO:automation_json_requests.cc(31)] Sending 'WaitForAllTabsToStopLoading' command.
+[1019/231731:INFO:webdriver_session.cc(117)] Done waiting for the page to stop loading
+[1019/231731:INFO:webdriver_dispatch.h(83)] Sent command response, url: /session/806b745eef3b659c6aa2eb1fea7376c2
+[1019/231731:INFO:webdriver_dispatch.h(72)] Received command, url: /session/806b745eef3b659c6aa2eb1fea7376c2/url, method: POST, postd data: {"url":"http://www.google.com"}
+[1019/231731:INFO:webdriver_session.cc(115)] Waiting for the page to stop loading
+[1019/231731:INFO:automation_json_requests.cc(31)] Sending 'WaitForAllTabsToStopLoading' command.
+[1019/231731:INFO:webdriver_session.cc(117)] Done waiting for the page to stop loading
+[1019/231731:INFO:automation_json_requests.cc(31)] Sending 'GetIndicesFromTab' command.
+[1019/231731:INFO:automation_json_requests.cc(31)] Sending 'NavigateToURL' command.
+[1019/231732:INFO:webdriver_session.cc(115)] Waiting for the page to stop loading
+[1019/231732:INFO:automation_json_requests.cc(31)] Sending 'WaitForAllTabsToStopLoading' command.
+[1019/231732:INFO:webdriver_session.cc(117)] Done waiting for the page to stop loading
+[1019/231732:INFO:webdriver_dispatch.h(83)] Sent command response, url: /session/806b745eef3b659c6aa2eb1fea7376c2/url
+[1019/231732:INFO:webdriver_dispatch.h(72)] Received command, url: /session/806b745eef3b659c6aa2eb1fea7376c2/screenshot, method: GET, postd data: 
+[1019/231732:INFO:webdriver_session.cc(115)] Waiting for the page to stop loading
+[1019/231732:INFO:automation_json_requests.cc(31)] Sending 'WaitForAllTabsToStopLoading' command.
+[1019/231732:INFO:webdriver_session.cc(117)] Done waiting for the page to stop loading
+[1019/231732:INFO:automation_json_requests.cc(31)] Sending 'GetIndicesFromTab' command.
+[1019/231732:INFO:automation_json_requests.cc(31)] Sending 'CaptureEntirePage' command.
+[1019/231732:INFO:webdriver_session.cc(115)] Waiting for the page to stop loading
+[1019/231732:INFO:automation_json_requests.cc(31)] Sending 'WaitForAllTabsToStopLoading' command.
+[1019/231732:INFO:webdriver_session.cc(117)] Done waiting for the page to stop loading
+[1019/231732:INFO:webdriver_dispatch.h(83)] Sent command response, url: /session/806b745eef3b659c6aa2eb1fea7376c2/screenshot
+[1019/231732:INFO:webdriver_dispatch.h(72)] Received command, url: /session/806b745eef3b659c6aa2eb1fea7376c2/window, method: DELETE, postd data: 
+[1019/231732:INFO:webdriver_session.cc(115)] Waiting for the page to stop loading
+[1019/231732:INFO:automation_json_requests.cc(31)] Sending 'WaitForAllTabsToStopLoading' command.
+[1019/231732:INFO:webdriver_session.cc(117)] Done waiting for the page to stop loading
+[1019/231732:INFO:automation_json_requests.cc(31)] Sending 'GetIndicesFromTab' command.
+[1019/231732:INFO:automation_json_requests.cc(31)] Sending 'CloseTab' command.
+[1019/231732:INFO:automation_json_requests.cc(31)] Sending 'GetTabIds' command.
+[1019/231732:INFO:webdriver_session.cc(115)] Waiting for the page to stop loading
+[1019/231732:INFO:webdriver_session.cc(117)] Done waiting for the page to stop loading
+[1019/231732:INFO:webdriver_dispatch.h(83)] Sent command response, url: /session/806b745eef3b659c6aa2eb1fea7376c2/window

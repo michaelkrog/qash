@@ -37,8 +37,9 @@ public class CmsPageMapper implements IRequestMapper {
         }
         
         String name = null;
+        boolean systemRequest = CmsUtil.isSystemRequest(request);
         
-        if (CmsUtil.isSystemRequest(request)) {
+        if (systemRequest) {
             name = url.getSegments().size()<=4 ? "ROOT" : url.getSegments().get(4);
         } else {
             name = url.getSegments().isEmpty() ? "ROOT" : url.getSegments().get(0);
@@ -52,7 +53,7 @@ public class CmsPageMapper implements IRequestMapper {
 
         OrganisationService organisationService = service.getOrganisationService(site.getOrganisation());
         CmsPage wp = new CmsPage(organisationService, page, null);
-        return new RenderPageRequestHandler(new PageProvider(wp));
+        return new CmsRenderPageRequestHandler(site, page, systemRequest, new PageProvider(wp));
     }
 
     @Override
@@ -62,14 +63,24 @@ public class CmsPageMapper implements IRequestMapper {
 
     @Override
     public Url mapHandler(IRequestHandler requestHandler) {
-        if (requestHandler instanceof RenderPageRequestHandler) {
-            IRequestablePage page = ((RenderPageRequestHandler) requestHandler).getPage();
-            if (page instanceof CmsPage) {
-                Page pageData = ((CmsPage) page).getPageData();
-                Url url = new Url();
-                url.getSegments().add(pageData.getName());
-                return url;
+        if (requestHandler instanceof CmsRenderPageRequestHandler) {
+            CmsRenderPageRequestHandler cmsPageHandler = (CmsRenderPageRequestHandler) requestHandler;
+            Website site = cmsPageHandler.getWebsite();
+            Page pageData = cmsPageHandler.getPageData();
+            Url url = new Url();
+            
+            if(cmsPageHandler.isRenderedViaApi()) {
+                url.getSegments().add("_api");
+                url.getSegments().add(site.getOrganisation().getId());
+                url.getSegments().add("sites");
+                url.getSegments().add(site.getId());
+                
             }
+                
+            url.getSegments().add(pageData.getName());
+            
+            return url;
+
         }
         return null;
     }

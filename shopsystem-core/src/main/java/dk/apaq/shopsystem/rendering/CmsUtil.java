@@ -19,7 +19,8 @@ import org.apache.wicket.request.Url;
  */
 public class CmsUtil {
 
-    private static List<String> systemHosts = Arrays.asList(new String[]{"localhost"});
+    //TODO Change this
+    private static List<String> systemHosts = Arrays.asList(new String[]{"localhost","79.125.119.30"});
 
     /*public static Website getWebsite(SystemService service, String orgId, String siteId) {
     

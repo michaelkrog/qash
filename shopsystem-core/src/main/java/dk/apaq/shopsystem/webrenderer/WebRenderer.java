@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.util;
+package dk.apaq.shopsystem.webrenderer;
 
 import java.awt.image.BufferedImage;
 

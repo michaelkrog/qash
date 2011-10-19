@@ -68,7 +68,7 @@
     
     <bean id="wicketApplication" class="dk.apaq.shopsystem.rendering.CmsApplication" scope="prototype"/>
     
-    <bean id="webrenderer" class="dk.apaq.shopsystem.util.SeleniumWebRenderer" />
+    <bean id="webrenderer" class="dk.apaq.shopsystem.webrenderer.SeleniumWebRenderer" />
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="ShopSystem"/>
