@@ -1,14 +1,13 @@
 package dk.apaq.shopsystem.util;
 
 import java.awt.image.BufferedImage;
-import org.w3c.tidy.Tidy;
-import org.xhtmlrenderer.swing.Java2DRenderer;
 
 /**
  *
  * @author krog
  */
-public class WebRenderer {
+public interface WebRenderer {
+    
     public interface Device {
         int getScreenWidth();
         int getScreenHeight();
@@ -29,12 +28,18 @@ public class WebRenderer {
         
     }
     
-    public static BufferedImage renderWebpageToImage(String url) {
-        return WebRenderer.renderWebpageToImage(new PcDevice(), url);
-    }
+    /**
+     * Renders an image of a webpage retrieved by the given url.
+     * @param url The url to retrieve the webpage to render from.
+     * @return The rendered image or null if unable to render. 
+     */
+    public BufferedImage renderWebpageToImage(String url);
     
-    public static BufferedImage renderWebpageToImage(Device device, String url) {
-        Java2DRenderer java2DRenderer = new Java2DRenderer(url, device.getScreenWidth());
-        return java2DRenderer.getImage();
-    }
+    /**
+     * Renders an image of a webpage retrieved by the given url.
+     * @param url The url to retrieve the webpage to render from.
+     * @param device Information about the device which the image
+     * @return The rendered image or null if unable to render. 
+     */
+    public BufferedImage renderWebpageToImage(Device device, String url) ;
 }
