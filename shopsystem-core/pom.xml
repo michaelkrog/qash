@@ -176,6 +176,13 @@
             <artifactId>filters</artifactId>
             <version>2.0.235</version>
         </dependency>
+        
+        <!-- JTidy -->
+        <dependency>
+            <groupId>net.sf.jtidy</groupId>
+            <artifactId>jtidy</artifactId>
+            <version>r938</version>
+        </dependency>
     </dependencies>
 
 </project>
