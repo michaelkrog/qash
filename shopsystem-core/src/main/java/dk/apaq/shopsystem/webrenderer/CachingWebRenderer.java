@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
  */
 public class CachingWebRenderer extends AbstractWebRenderer {
 
-    private static final long DEFAULT_TTL = 3600000; //1 hour
+    private static final long DEFAULT_TTL = 60000; //1 minute
     private final WebRenderer wrappedRenderer;
     private final Directory cacheDir;
     private final long ttl;

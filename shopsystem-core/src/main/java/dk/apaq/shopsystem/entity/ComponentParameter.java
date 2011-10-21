@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.entity;
 
+import dk.apaq.vfs.Path;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -57,6 +58,10 @@ public class ComponentParameter implements Serializable {
         if("Boolean".equals(type)) {
             return Boolean.class;
         }
+        
+        if("Path".equals(type)) {
+            return Path.class;
+        }
     
         return null;
     }
@@ -71,6 +76,13 @@ public class ComponentParameter implements Serializable {
             LOG.debug("Unable to parse date.", ex);
             return null;
         }
+    }
+    
+    public Path getPath() {
+        if(value==null) {
+            return null;
+        }
+        return new Path(value);
     }
     
     public String getString() {
@@ -101,6 +113,11 @@ public class ComponentParameter implements Serializable {
     public void setDate(Date date) {
         value = df.format(date);
         type = "Date";
+    }
+    
+    public void setPath(Path path) {
+        this.value = path.toString();
+        this.type = "Path";
     }
     
     public void setString(String value) {

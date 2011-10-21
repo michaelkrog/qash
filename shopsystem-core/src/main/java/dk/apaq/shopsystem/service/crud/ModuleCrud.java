@@ -50,14 +50,14 @@ public class ModuleCrud implements Crud<String, Module> {
 
         for (Directory subdir : standardDir.getDirectories()) {
             if (subdir.isBundle() && "module".equals(subdir.getSuffix())) {
-                idlist.add(subdir.getName());
+                idlist.add(subdir.getBaseName());
             }
         }
 
         for (Directory subdir : orgDir.getDirectories()) {
-            String name = subdir.getName();
-            if (subdir.isBundle() && "module".equals(subdir.getSuffix()) && !idlist.contains(name)) {
-                idlist.add(name);
+            String id = subdir.getBaseName();
+            if (subdir.isBundle() && "module".equals(subdir.getSuffix()) && !idlist.contains(id)) {
+                idlist.add(id);
             }
         }
 

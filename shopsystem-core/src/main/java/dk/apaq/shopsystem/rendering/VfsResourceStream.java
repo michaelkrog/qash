@@ -5,17 +5,15 @@ import dk.apaq.vfs.mime.MimeType;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.time.Time;
 
 /**
  *
  */
-public class VfsResourceStream implements IResourceStream {
+public class VfsResourceStream extends AbstractResourceStream {
 
     private final File file;
 
@@ -51,36 +49,7 @@ public class VfsResourceStream implements IResourceStream {
 
     }
 
-    @Override
-    public Locale getLocale() {
-        return Locale.getDefault();
-    }
-
-    @Override
-    public void setLocale(Locale locale) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getStyle() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setStyle(String style) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getVariation() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setVariation(String variation) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
+    
     @Override
     public Time lastModifiedTime() {
         return Time.valueOf(file.getLastModified());

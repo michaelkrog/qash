@@ -53,6 +53,7 @@ public class OrganisationServiceImpl implements OrganisationService, Application
 
     private UserCrud userCrud = null;
     private final Map<Class, Complete<String, Order>> crudMap = new WeakHashMap<Class, Complete<String, Order>>();
+    private final Map<String, Map<Class, Complete>> webcontentCrudMap = new WeakHashMap<String, Map<Class, Complete>>();
     private ApplicationContext context;
     private String orgId;
     private FileSystem fs;
@@ -136,12 +137,17 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
     
     private <T> Complete<String, T> getWebContentCrud(Website website, Class<T> clazz) {
+        Map<Class, Complete> crudMap = webcontentCrudMap.get(website.getId());
+        if(crudMap==null) {
+            crudMap = new WeakHashMap<Class, Complete>();
+            webcontentCrudMap.put(website.getId(), crudMap);
+        }
         Complete crud = crudMap.get(clazz);
-        //if(crud==null) {
+        if(crud==null) {
             crud = (Crud.Complete<String, T>) context.getBean("webContentCrud", em, website, clazz);
             //((CrudNotifier)crud).addListener(new SecurityHandler.ContentSecurity(organisation));
-        //    crudMap.put(clazz, crud);
-        //}
+            crudMap.put(clazz, crud);
+        }
         return crud;
     }
 

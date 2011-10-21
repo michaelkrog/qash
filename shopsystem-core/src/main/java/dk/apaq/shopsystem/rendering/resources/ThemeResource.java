@@ -80,6 +80,7 @@ public class ThemeResource extends AbstractResource {
             rr.setFileName(file.getName());
             rr.setLastModified(Time.valueOf(file.getLastModified()));
             rr.setWriteCallback(new ResourceWriter(file));
+            
         } catch (IOException ex) {
             throw new WicketRuntimeException(ex);
         }

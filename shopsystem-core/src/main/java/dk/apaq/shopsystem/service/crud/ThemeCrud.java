@@ -54,14 +54,14 @@ public class ThemeCrud implements Crud<String, Theme> {
 
         for (Directory subdir : standardDir.getDirectories()) {
             if (subdir.isBundle() && "theme".equals(subdir.getSuffix())) {
-                idlist.add(subdir.getName());
+                idlist.add(subdir.getBaseName());
             }
         }
 
         for (Directory subdir : orgDir.getDirectories()) {
-            String name = subdir.getName();
-            if (subdir.isBundle() && "theme".equals(subdir.getSuffix()) && !idlist.contains(name)) {
-                idlist.add(name);
+            String id = subdir.getBaseName();
+            if (subdir.isBundle() && "theme".equals(subdir.getSuffix()) && !idlist.contains(id)) {
+                idlist.add(id);
             }
         }
 
