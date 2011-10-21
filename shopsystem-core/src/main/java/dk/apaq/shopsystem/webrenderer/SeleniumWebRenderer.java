@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author michael
  */
-public class SeleniumWebRenderer implements WebRenderer {
+public class SeleniumWebRenderer extends AbstractWebRenderer {
 
     private static final Logger LOG = LoggerFactory.getLogger(SeleniumWebRenderer.class);
     
@@ -53,11 +53,6 @@ public class SeleniumWebRenderer implements WebRenderer {
             }
             
         });
-    }
-  
-    @Override
-    public BufferedImage renderWebpageToImage(String url) {
-        return this.renderWebpageToImage(new PcDevice(), url);
     }
 
     @Override

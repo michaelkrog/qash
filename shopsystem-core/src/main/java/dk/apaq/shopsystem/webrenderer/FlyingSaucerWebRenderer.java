@@ -7,13 +7,7 @@ import org.xhtmlrenderer.swing.Java2DRenderer;
  *
  * @author michael
  */
-public class FlyingSaucerWebRenderer implements WebRenderer
-{
-
-    @Override
-    public BufferedImage renderWebpageToImage(String url) {
-        return this.renderWebpageToImage(new PcDevice(), url);
-    }
+public class FlyingSaucerWebRenderer extends AbstractWebRenderer{
 
     @Override
     public BufferedImage renderWebpageToImage(Device device, String url) {
