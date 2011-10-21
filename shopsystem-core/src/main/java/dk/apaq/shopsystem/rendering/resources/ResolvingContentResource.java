@@ -63,7 +63,7 @@ public class ResolvingContentResource extends AbstractResource {
                 return rr;
             }
 
-            rr.setContentType(MimeType.retrieve(file));
+            //rr.setContentType(MimeType.retrieve(file));
             rr.setContentLength(file.getLength());
             rr.setFileName(file.getName());
             rr.setLastModified(Time.valueOf(file.getLastModified()));
