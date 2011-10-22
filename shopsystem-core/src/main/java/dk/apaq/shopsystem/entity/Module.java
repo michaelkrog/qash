@@ -1,18 +1,12 @@
 package dk.apaq.shopsystem.entity;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import dk.apaq.shopsystem.util.ScriptAnnotation;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;
-import dk.apaq.vfs.Node;
-import dk.apaq.vfs.NodeFilter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,71 +16,15 @@ import org.slf4j.LoggerFactory;
 /**
  * Specifies a module for a web page.
  */
-public class Module implements Serializable {
+public class Module extends AbstractModule implements Serializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(Module.class);
-    private final Directory dir;
-    private final File infoFile;
-    private ModuleInfo info;
     private List<Component> componentList;
-    //private ClassDeserializer classDeserializer = new ClassDeserializer();
-    private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-    private CodeNodeFilter codeNodeFilter = new CodeNodeFilter();
-
-    
-    private class CodeNodeFilter implements NodeFilter {
-
-        @Override
-        public boolean accept(Node node) {
-            return "code".equals(node.getSuffix());
-        }
-        
-    }
-    
-    private static class ModuleInfo {
-
-        private String version;
-        private Date releaseDate;
-        private SellerInfo seller;
-        
-        public String getVersion() {
-            return version;
-        }
-
-        public Date getReleaseDate() {
-            return releaseDate;
-        }
-
-        public SellerInfo getSellerInfo() {
-            return seller;
-        }
-
-    }
+    private SuffixNodeFilter nodeFilter = new SuffixNodeFilter("code");
+   
 
     public Module(Directory dir) throws IOException {
-        if (!dir.isBundle() || !"module".equals(dir.getSuffix())) {
-            throw new IllegalArgumentException("The directory is not a module bundle.");
-        }
-        this.dir = dir;
-        this.infoFile = dir.getFile("module.info");
-
-        info = gson.fromJson(new InputStreamReader(infoFile.getInputStream()), ModuleInfo.class);
-    }
-
-public String getVersion() {
-        return info.getVersion();
-    }
-
-    public Date getReleaseDate() {
-        return info.getReleaseDate();
-    }
-
-    public SellerInfo getSellerInfo() {
-        return info.getSellerInfo();
-    }
-
-    public String getName() {
-        return dir.getBaseName();
+        super(dir);
     }
 
     public Component getComponent(String name) {
@@ -101,7 +39,7 @@ public String getVersion() {
     public List<Component> listComponents() {
         if (componentList == null) {
             List<Component> newList = new ArrayList<Component>();
-            for(File codeFile : dir.getFiles(codeNodeFilter)) {
+            for(File codeFile : dir.getFiles(nodeFilter)) {
                 String name = codeFile.getBaseName();
                 try {
                     String description = null;
@@ -135,6 +73,11 @@ public String getVersion() {
             componentList = Collections.unmodifiableList(newList);
         }
         return componentList;
+    }
+
+    @Override
+    protected String getBundleSuffix() {
+        return "module";
     }
 
     

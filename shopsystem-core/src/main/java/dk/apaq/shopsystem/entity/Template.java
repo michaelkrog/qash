@@ -11,21 +11,35 @@ import java.util.List;
 public class Template implements Serializable {
 
     private final String name;
-    private final File file;
     private final List<String> placeHolderIds;
-
-    public Template(String name, File file, List<String> placeHolderIds) {
+    private final File markupFile;
+    private final File codeFile;
+    
+    public Template(String name, List<String> placeHolderIds, File markupFile) {
         this.name = name;
-        this.file = file;
+        this.markupFile = markupFile;
         this.placeHolderIds = placeHolderIds;
+        this.codeFile = null;
     }
+
+    public Template(String name, List<String> placeHolderIds, File markupFile, File codeFile) {
+        this.name = name;
+        this.placeHolderIds = placeHolderIds;
+        this.markupFile = markupFile;
+        this.codeFile = codeFile;
+    }
+    
 
     public String getName() {
         return name;
     }
 
-    public File getFile() {
-        return file;
+    public File getMarkupFile() {
+        return markupFile;
+    }
+
+    public File getCodeFile() {
+        return codeFile;
     }
 
     public List<String> getPlaceHolderIds() {

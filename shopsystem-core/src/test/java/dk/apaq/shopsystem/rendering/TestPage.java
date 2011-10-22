@@ -15,9 +15,7 @@ import dk.apaq.vfs.FileSystem;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import javax.imageio.ImageIO;
-import junit.framework.Assert;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
@@ -100,10 +98,33 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         //start and render the test page
         String url = "http://coolbiks.dk/context/servlet/" + page.getName();
         tester.executeUrl(url);
+        tester.assertContains("Basic/style.css");
         
-        String text = tester.getLastResponseAsString();
-        System.out.println(text);
+        tester.assertContains("style_small.css");
         
+    }
+    
+    @Test
+    public void homepageRendersSuccessfullyLarge() {
+
+        //start and render the test page
+        String url = "http://coolbiks.dk/context/servlet/" + page.getName() + "?device.device-width=1000";
+        tester.executeUrl(url);
+        String response = tester.getLastResponseAsString();
+        tester.assertContains("style.css");
+        
+        tester.assertContainsNot("style_small.css");
+    }
+    
+    @Test
+    public void homepageRendersSuccessfullySmall() {
+
+        //start and render the test page
+        String url = "http://coolbiks.dk/context/servlet/" + page.getName() + "?device.device-width=400";
+        tester.executeUrl(url);
+        tester.assertContains("style.css");
+        
+        tester.assertContains("style_small.css");
     }
 
     @Test

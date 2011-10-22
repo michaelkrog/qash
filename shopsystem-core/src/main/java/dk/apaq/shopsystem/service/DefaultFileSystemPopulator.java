@@ -19,7 +19,10 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFileSystemPopulator.class);
     private String themeInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
-    private String template = "<html><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" /><body><wicket:container wicket:id=\"placeholder_1\"><div wicket:id=\"placeholder\"/></wicket:container></body></html>";
+    private String templateCode = "function renderHead(response){\n"
+            + "response.renderCSSReference(\"style.css\");"
+            + "}\n";
+    private String templateMarkup = "<html><link rel=\"stylesheet\" media=\"all\" href=\"style.css\" /><link rel=\"stylesheet\" media=\"all and (max-device-width:400)\" href=\"style_small.css\" /><body><wicket:container wicket:id=\"placeholder_1\"><div wicket:id=\"placeholder\"/></wicket:container></body></html>";
     private String stylesheet = "body { background:yellow;}";
     private String moduleInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
     private String imageComponentCode = "/*\n"
@@ -258,22 +261,27 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
                     getDirectory("Content", true);
 
 
-            File infofile = themeDir.getFile("theme.info", true);
+            File infofile = themeDir.getFile("bundle.info", true);
             OutputStreamWriter infoWriter = new OutputStreamWriter(infofile.getOutputStream());
             infoWriter.write(themeInfo);
             infoWriter.close();
 
-            File templatefile = themeDir.getFile("Simple.html", true);
-            OutputStreamWriter templateWriter = new OutputStreamWriter(templatefile.getOutputStream());
-            templateWriter.write(template);
-            templateWriter.close();
+            File templateMarkupFile = themeDir.getFile("Simple.html", true);
+            OutputStreamWriter templateMarkupWriter = new OutputStreamWriter(templateMarkupFile.getOutputStream());
+            templateMarkupWriter.write(templateMarkup);
+            templateMarkupWriter.close();
+
+            File templateCodeFile = themeDir.getFile("Simple.code", true);
+            OutputStreamWriter templateCodeWriter = new OutputStreamWriter(templateCodeFile.getOutputStream());
+            templateCodeWriter.write(templateCode);
+            templateCodeWriter.close();
 
             File stylefile = themeDir.getFile("style.css", true);
             OutputStreamWriter styleWriter = new OutputStreamWriter(stylefile.getOutputStream());
             styleWriter.write(stylesheet);
             styleWriter.close();
 
-            File moduleInfofile = moduleDir.getFile("module.info", true);
+            File moduleInfofile = moduleDir.getFile("bundle.info", true);
             OutputStreamWriter moduleInfoWriter = new OutputStreamWriter(moduleInfofile.getOutputStream());
             moduleInfoWriter.write(moduleInfo);
             moduleInfoWriter.close();

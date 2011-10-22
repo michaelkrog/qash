@@ -1,16 +1,12 @@
 package dk.apaq.shopsystem.rendering.resources;
 
-import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.rendering.CmsUtil;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
-import dk.apaq.shopsystem.util.StreamUtils;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;
 import dk.apaq.vfs.Node;
-import dk.apaq.vfs.mime.MimeType;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.request.resource.AbstractResource;

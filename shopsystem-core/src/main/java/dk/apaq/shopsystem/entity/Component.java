@@ -3,13 +3,14 @@ package dk.apaq.shopsystem.entity;
 import dk.apaq.vfs.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 
 /**
  *
  */
-public class Component {
+public class Component implements Serializable {
 
     private final String name;
     private final String description;

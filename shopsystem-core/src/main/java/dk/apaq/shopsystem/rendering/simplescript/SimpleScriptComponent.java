@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.security.PrivilegedActionException;
+import java.util.HashMap;
 import java.util.Map;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -40,16 +41,13 @@ public class SimpleScriptComponent extends Panel implements IMarkupCacheKeyProvi
         super(id);
         this.component = component;
         try {
-            ScriptEngineManager mgr = new ScriptEngineManager();
-            ScriptEngine engine = mgr.getEngineByName("JavaScript");
-            
-            Invocable inv = (Invocable) engine;
-            engine.put("service", organisationService);
-            engine.put("parent", new SimpleScriptContainerWrapper(this));
-            engine.put("parameters", paramMap);
-            engine.eval(new InputStreamReader(component.getCodeFile().getInputStream()));
-            SimpleScript componentScript = inv.getInterface(SimpleScript.class);
-            
+            Map<String, Object> scriptParams = new HashMap<String, Object>();
+            scriptParams.put("service", organisationService);
+            scriptParams.put("parent", new SimpleScriptContainerWrapper(this));
+            scriptParams.put("parameters", paramMap);
+            SimpleScriptComponentRenderer componentScript = SimpleScriptInvoker.invoke(SimpleScriptComponentRenderer.class, 
+                                                                                        scriptParams, 
+                                                                                        component.getCodeFile().getInputStream());
             if(componentScript==null) {
                 failed=true;
                 error = "Component does not implement the SimpleScript interface";
