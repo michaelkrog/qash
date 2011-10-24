@@ -49,13 +49,13 @@ public class TaxFactory extends AbstractFactory {
         
         CommonForm form = new CommonForm();
         
-        form.setItemId(id);
-        form.setContainerDataSource(this.container);
+        form.addItemId(id);
+        form.addContainerDataSource(this.container);
         
-        form.setHeaderText("Edit Taxes");
+        form.setHeaderText("Edit Tax");
        
-        form.addField("name", "Name", "", "");
-        form.addField("rate", "Rate %", "", "");
+        form.addField("name", "Name", "tester", "");
+        form.addField("rate", "Rate %", "test", "");
         getApplication().getMainWindow().addWindow(form);
     }
     

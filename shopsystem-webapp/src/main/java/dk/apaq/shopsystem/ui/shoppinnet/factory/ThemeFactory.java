@@ -47,8 +47,8 @@ public class ThemeFactory extends AbstractFactory {
         
         CommonForm form = new CommonForm();
         
-        form.setItemId(id);
-        form.setContainerDataSource(this.container);
+        form.addItemId(id);
+        form.addContainerDataSource(this.container);
         
         form.setHeaderText("Edit Theme");
        

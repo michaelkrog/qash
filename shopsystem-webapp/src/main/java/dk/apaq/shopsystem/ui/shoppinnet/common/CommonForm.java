@@ -13,6 +13,7 @@ import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import java.util.ArrayList;
@@ -26,9 +27,10 @@ import java.util.List;
 
 public class CommonForm extends Window {
     
-    private Container data;
+    private List<Container> data = new ArrayList<Container>();
     private Item item;
-    private String itemId; 
+    private List<Form> formList = new ArrayList<Form>();
+    private List itemId = new ArrayList();
     private String description = "";
     private List field = new ArrayList();
     private List fieldName = new ArrayList();
@@ -36,27 +38,33 @@ public class CommonForm extends Window {
     private List fieldType = new ArrayList();
     private VerticalLayout content = new VerticalLayout();
     private String headerText = "";
+    private VerticalLayout formHolder = new VerticalLayout();
     private GridLayout formLayout = new GridLayout(2, 1);
-    private Integer arrayCount = -1;
-    
+    private TabSheet tabSheet = new TabSheet();
+
+    private Integer fieldCount = -1;
+    private Integer formCount = -1;
         
     //private Form form = new Form();
+    
+    //private List<Form> form = new ArrayList<Form>() {
+    //this.formList.add(new form());
     private Form form = new Form() {
    
         @Override
         protected void attachField(Object propertyId, Field f) {
           
             if (field.contains(propertyId)) {
-                arrayCount ++;
+                fieldCount ++;
                 
-                Label lName = new Label(fieldName.get(arrayCount).toString());
+                Label lName = new Label(fieldName.get(fieldCount).toString());
                 lName.addStyleName("margin");
                 formLayout.addComponent(lName);
                 super.attachField(propertyId, f);
                 
-                String fDescription = fieldDescription.get(arrayCount).toString();
+                String fDescription = fieldDescription.get(fieldCount).toString();
                 if (!fDescription.equals("")) {
-                    // Add empty label in the field name area, prior to adding description into 2nd grid field
+                    // Add empty label in the field caption area, prior to adding description into 2nd grid field
                     formLayout.addComponent(new Label());
                     
                     Label lDescription = new Label(fDescription);
@@ -87,8 +95,8 @@ public class CommonForm extends Window {
     
     
     
-    public void setItemId(String value) {
-        this.itemId = value;
+    public void addItemId(String value) {
+        this.itemId.add(value);
     }
         
     
@@ -96,6 +104,12 @@ public class CommonForm extends Window {
         this.description = description;
     }
 
+    
+    public void addForm(String form) {
+        this.formList.add(new Form());
+        this.formCount ++;
+    }
+    
     
     public void addField(String field, String fieldName, String fieldDescription, String type) {
 	this.field.add(field);
@@ -110,14 +124,14 @@ public class CommonForm extends Window {
     }
 
     
-    public Container getContainerDataSource() {
-        return this.data;
-    }
+    //public Container getContainerDataSource() {
+    //    return this.data;
+    //}
 
     
-    public void setContainerDataSource(Container data) {
-        this.data = data;
-        this.item = this.data.getItem(this.itemId);
+    public void addContainerDataSource(Container data) {
+        this.data.add(data);
+        this.item = this.data.get(this.formCount).getItem(this.itemId.get(this.formCount));
         this.form.setItemDataSource(this.item);
     }
     
@@ -129,16 +143,18 @@ public class CommonForm extends Window {
         setModal(true);
         setWidth("500px");
         addComponent(this.content);
-        
-        this.content.setMargin(true);
+
+        this.tabSheet.addStyleName("minimal");
                
-         if(this.data.size() == 0) {
+        if(this.data.isEmpty()) {
             Label label = new Label();
             label.setCaption("No data available!");
             this.content.addComponent(label);
         }
         else {
-            
+
+            //this.formArray[0] = new Form();
+
             this.form.setWidth("250px");
 
             this.form.setLayout(this.formLayout);
@@ -150,6 +166,8 @@ public class CommonForm extends Window {
              this.form.setWriteThrough(false);
              this.form.setImmediate(false);
 
+             
+             
              this.form.setVisibleItemProperties(new Object[] {"name", "dateCreated"});
         
             // Insert overall description
@@ -160,9 +178,14 @@ public class CommonForm extends Window {
              }
              
             // Insert form into content
-            this.content.addComponent(this.form);
-            content.setComponentAlignment(this.form, Alignment.MIDDLE_CENTER);
+            this.tabSheet.addTab(this.formHolder, "General", null);
+            this.formHolder.addComponent(this.form);
+            this.formHolder.setComponentAlignment(this.form, Alignment.MIDDLE_CENTER);
+            this.formLayout.setMargin(true);
+            this.content.addComponent(this.tabSheet);
 
+            
+            
             Button okButton = new Button("Ok", this, "okButtonClick");   
             this.content.addComponent(okButton);
             this.content.setComponentAlignment(okButton, Alignment.MIDDLE_RIGHT);
@@ -176,6 +199,7 @@ public class CommonForm extends Window {
         if(item instanceof Buffered) {
             ((Buffered)item).commit();
         }
+
 
         this.close();
     }

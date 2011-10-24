@@ -47,13 +47,24 @@ public class WebsiteFactory extends AbstractFactory {
     public void ShowEdit(String id) {
         
         CommonForm form = new CommonForm();
-        
-        form.setItemId(id);
-        form.setContainerDataSource(this.container);
-        
         form.setHeaderText("Edit online store");
-       
+        
+        form.addForm("General");
+        form.addItemId(id);
+        form.addContainerDataSource(this.container);
         form.addField("name", "Name", "This is not the url, but a descriptional name", "");
+        
+        /*form.addForm("Stock");
+        form.addItemId(id);
+        form.addContainerDataSource(this.container);
+        form.addField("name", "2 Name", "2 This is not the url, but a descriptional name", "");
+        
+        form.addForm("Images");
+        form.addItemId(id);
+        form.addContainerDataSource(this.container);
+        form.addField("name", "3 Name", "3 This is not the url, but a descriptional name", "");
+        */
+        
         getApplication().getMainWindow().addWindow(form);
     }
     
