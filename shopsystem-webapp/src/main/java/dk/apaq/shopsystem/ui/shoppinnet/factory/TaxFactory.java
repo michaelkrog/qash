@@ -23,7 +23,7 @@ public class TaxFactory extends AbstractFactory {
         
         grid.setEditAble(true);
         grid.setSearch(false);
-        grid.setPageHeader("Themes");
+        grid.setPageHeader("Taxes");
         //grid.addDescription("", "");
         
         // Add buttons
@@ -48,14 +48,14 @@ public class TaxFactory extends AbstractFactory {
     public void ShowEdit(String id) {
         
         CommonForm form = new CommonForm();
+        form.setHeaderText("Edit Tax");
         
+        form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
+        form.addField("name", "Name", "", "");
+        form.addField("rate", "Rate %", "", "");
         
-        form.setHeaderText("Edit Tax");
-       
-        form.addField("name", "Name", "tester", "");
-        form.addField("rate", "Rate %", "test", "");
         getApplication().getMainWindow().addWindow(form);
     }
     

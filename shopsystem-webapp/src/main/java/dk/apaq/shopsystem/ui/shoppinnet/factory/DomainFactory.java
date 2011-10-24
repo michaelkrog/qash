@@ -34,9 +34,11 @@ public class DomainFactory extends AbstractFactory {
         
         // Add grid headers
         grid.addHeader("Name");
+        grid.addHeader("Verified");
        
         // Add grid fields
         grid.addField("name", "");
+        grid.addField("verified", "");
         
         // Insert grid into layout
         return grid;
@@ -47,13 +49,15 @@ public class DomainFactory extends AbstractFactory {
     public void ShowEdit(String id) {
         
         CommonForm form = new CommonForm();
+        form.setHeaderText("Edit Domain");
         
+        form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
-        
-        form.setHeaderText("Edit Domain");
-       
         form.addField("name", "Name", "Domain name including www.", "");
+        form.addField("verified", "Verified", "", "");
+        form.addField("dateCreated", "Created", "", "");
+        
         getApplication().getMainWindow().addWindow(form);
     }
     

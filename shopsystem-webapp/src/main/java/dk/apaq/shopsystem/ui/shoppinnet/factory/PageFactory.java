@@ -46,16 +46,16 @@ public class PageFactory extends AbstractFactory {
     public void ShowEdit(String id) {
         
         CommonForm form = new CommonForm();
+        form.setHeaderText("Edit Page");
         
+        form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
-        
-        form.setHeaderText("Edit Page");
-       
         form.addField("name", "Name", "", "");
         form.addField("title", "Title", "Shown in search engine results and page header", "");
         form.addField("description", "Description", "Shown in search engine results", "");
         form.addField("keywords", "Keywords", "Keywords for search engines, must match your website content", "");
+        
         getApplication().getMainWindow().addWindow(form);
     }
     

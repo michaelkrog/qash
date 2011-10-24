@@ -24,8 +24,7 @@ public class ProductFactory extends AbstractFactory {
         grid.setEditAble(true);
         grid.setSearch(false);
         grid.setPageHeader("Products");
-        grid.addDescription("", "If you want to get rid of the Shoppinnet.com extension in the url of your online store, you are able to add your personal domain you have bought anywhere.");
-        grid.addDescription("", "The domain must be setup in the system of your domain provider, and must have a CNAME record pointing to: sites.shoppinnet.com");
+        //grid.addDescription("", "");
         
         // Add buttons
         grid.addButton("Add","AddItem","");
@@ -34,9 +33,15 @@ public class ProductFactory extends AbstractFactory {
         
         // Add grid headers
         grid.addHeader("Name");
+        grid.addHeader("Item Number");
+        grid.addHeader("Price");
+        grid.addHeader("In Stock");
        
         // Add grid fields
         grid.addField("name", "");
+        grid.addField("itemNo", "");
+        grid.addField("price", "");
+        grid.addField("quantityInStock", "");
         
         // Insert grid into layout
         return grid;
@@ -47,13 +52,17 @@ public class ProductFactory extends AbstractFactory {
     public void ShowEdit(String id) {
         
         CommonForm form = new CommonForm();
+        form.setHeaderText("Edit Product");
         
+        form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
-        
-        form.setHeaderText("Edit Product");
-       
         form.addField("name", "Name", "", "");
+        form.addField("itemNo", "Item Number", "", "");
+        form.addField("price", "Price", "", "");
+        form.addField("quantityInStock", "Quantity In Stock", "", "");
+        form.addField("stockProduct", "Stock Product", "If not, product is never in stock", "");
+                
         getApplication().getMainWindow().addWindow(form);
     }
     
