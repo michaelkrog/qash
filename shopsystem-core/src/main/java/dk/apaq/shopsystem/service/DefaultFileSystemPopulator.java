@@ -22,7 +22,7 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
     private String templateCode = "function renderHead(response){\n"
             + "response.renderCSSReference(\"style.css\");"
             + "}\n";
-    private String templateMarkup = "<html><link rel=\"stylesheet\" media=\"all\" href=\"style.css\" /><link rel=\"stylesheet\" media=\"all and (max-device-width:400)\" href=\"style_small.css\" /><body><wicket:container wicket:id=\"placeholder_1\"><div wicket:id=\"placeholder\"/></wicket:container></body></html>";
+    private String templateMarkup = "<html><head><link rel=\"stylesheet\" media=\"all\" href=\"style.css\" /><link rel=\"stylesheet\" media=\"all and (max-device-width:400)\" href=\"style_small.css\" /></head><body><wicket:container wicket:id=\"placeholder_1\"><div wicket:id=\"placeholder\"/></wicket:container></body></html>";
     private String stylesheet = "body { background:yellow;}";
     private String moduleInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
     private String imageComponentCode = "/*\n"
@@ -38,7 +38,7 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
             + "      \n"
             + "   }\n"
             + "}\n";
-    private String imageComponentMarkup = "<wicket:panel><img wicket:id=\"image\" /></wicket:panel>";
+    private String imageComponentMarkup = "<wicket:panel><img class=\"cms-image\" wicket:id=\"image\" /></wicket:panel>";
     private String labelComponentCode = "/*\n"
             + "*@Description(value=\"A simple label component\")\n"
             + "*@Parameter(name=\"text\",type=\"String\",optionalText=\"The text for the label\")\n"
@@ -47,7 +47,7 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
             + "var gui = new JavaImporter(org.apache.wicket.markup.html.basic);\n"
             + "with(gui) {parent.addComponent(new Label(\"text\", parameters.get(\"text\").getString()));}\n"
             + "}\n";
-    private String labelComponentMarkup = "<wicket:panel><span wicket:id=\"text\" /></wicket:panel>";
+    private String labelComponentMarkup = "<wicket:panel><span class=\"cms-label\" wicket:id=\"text\" /></wicket:panel>";
     private String imageData = "iVBORw0KGgoAAAANSUhEUgAAAF0AAABwCAYAAAB8Q3wrAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI"
             + "WXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH1QgeFDky0+2bxwAAIABJREFUeNrtfXmYHFW59+891d3T"
             + "07OQZSb7JDMJ2YOGgKzKGuLCE1AQ7/X66adXFPQDRRFwufcJ8aoPuOCGHwgqopd79YPrihAWCWFJ"

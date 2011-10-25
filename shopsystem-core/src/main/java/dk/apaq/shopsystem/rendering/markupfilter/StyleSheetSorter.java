@@ -22,10 +22,9 @@ import org.apache.wicket.request.cycle.RequestCycle;
  */
 public class StyleSheetSorter extends AbstractMarkupFilter {
 
-    private static final String WICKET_STYLESHEET_SORTER_PREFIX_CONTAINER_ID = "_stylesheet_sorting_prefix_";
     private static final List<String> tagNames = Arrays.asList(new String[]{"link"});
     private final DeviceInfo deviceInfo;
-
+    
     public StyleSheetSorter() {
         deviceInfo = new DeviceInfo();
         Request request = RequestCycle.get().getRequest();
@@ -59,6 +58,8 @@ public class StyleSheetSorter extends AbstractMarkupFilter {
             Filter filter = FilterTranslatorForCssMedia.translate(media);
             if (!filter.passesFilter(deviceInfo)) {
                 tag.setIgnore(true);
+            } else {
+                tag.getAttributes().put("media", "all");
             }
         }
 

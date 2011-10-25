@@ -122,9 +122,11 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         //start and render the test page
         String url = "http://coolbiks.dk/context/servlet/" + page.getName() + "?device.device-width=400";
         tester.executeUrl(url);
+        String response = tester.getLastResponseAsString();
         tester.assertContains("style.css");
         
         tester.assertContains("style_small.css");
+        tester.assertContainsNot("max-device-width:400");
     }
 
     @Test

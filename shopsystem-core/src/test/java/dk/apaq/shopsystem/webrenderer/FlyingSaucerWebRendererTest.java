@@ -21,27 +21,13 @@ public class FlyingSaucerWebRendererTest {
     public FlyingSaucerWebRendererTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
     
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
 
     /**
      * Test of renderWebpageToImage method, of class FlyingSaucerWebRenderer.
      */
     @Test
-    public void testRenderWebpageToImage_WebRendererDevice_String() throws IOException {
+    public void testRenderWebpageToImage() throws IOException {
         System.out.println("renderWebpageToImage");
         Device device = new Device() {
 
@@ -73,6 +59,40 @@ public class FlyingSaucerWebRendererTest {
         comparer = new ImageComparer(stonehenge, result);
         comparer.compare();
         assertFalse(comparer.match());
+        
+    }
+    
+    @Test
+    public void testRenderWebpageWithSvgToImage() throws IOException {
+        System.out.println("renderWebpageToImage");
+        Device device = new Device() {
+
+            @Override
+            public int getScreenWidth() {
+                return 595;
+            }
+
+            @Override
+            public int getScreenHeight() {
+                return 842;
+            }
+        };
+        
+        BufferedImage breakfeast = ImageIO.read(getClass().getResourceAsStream("/rendertest_breakfeast.png"));
+        
+        
+        File file = new File("./src/test/resources/rendertestwithsvg.html");
+        String url = file.toURL().toString();
+        FlyingSaucerWebRenderer instance = new FlyingSaucerWebRenderer();
+        BufferedImage result = instance.renderWebpageToImage(device, url);
+        
+        ImageIO.write(result, "png", new File("rendertest_svg.png"));
+        
+        //It should look like the breakfeasts.
+        ImageComparer comparer = new ImageComparer(result, breakfeast);
+        comparer.compare();
+        assertTrue(comparer.match());
+        
         
     }
 }
