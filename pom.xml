@@ -47,6 +47,12 @@
             <id>sonatype-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
+        
+         <repository>
+            <id>bitbucket.org</id>
+            <name>Internal Maven2 Repository</name>
+            <url>https://bitbucket.org/W1M0/maven/raw/tip/2/</url>
+        </repository>
     </repositories>
 
     <reporting>
