@@ -24,7 +24,7 @@ public class PageFactory extends AbstractFactory {
         grid.setEditAble(true);
         grid.setSearch(false);
         grid.setPageHeader("Pages");
-        grid.addDescription("", "One page can hold multiple modules. A module may contain a view of categories, productdetails, special offers etc.");
+        grid.addDescription("", "One page can hold multiple modules. A module may contain a text block, a view of categories, productdetails, special offers etc.");
         
         // Add buttons
         grid.addButton("Add","AddItem","");

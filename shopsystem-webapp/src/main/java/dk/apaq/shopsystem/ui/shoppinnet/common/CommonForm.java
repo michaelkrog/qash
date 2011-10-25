@@ -57,6 +57,12 @@ public class CommonForm extends Window {
             if (field.contains(propertyId)) {
                 fieldCount ++;
                 
+                // Reset curser in grid layout
+                if (fieldCount == 0) {
+                    formLayout.setCursorX(0);
+                    formLayout.setCursorY(0);
+                }
+                
                 Label lName = new Label(fieldName.get(fieldCount).toString());
                 lName.addStyleName("margin");
                 formLayout.addComponent(lName);
@@ -64,8 +70,9 @@ public class CommonForm extends Window {
                 
                 String fDescription = fieldDescription.get(fieldCount).toString();
                 if (!fDescription.equals("")) {
-                    // Add empty label in the field caption area, prior to adding description into 2nd grid field
-                    formLayout.addComponent(new Label());
+                    
+                    // Add empty label in the 1st grid field, prior to adding description into 2nd grid field
+                    formLayout.addComponent(new Label(""));
                     
                     Label lDescription = new Label(fDescription);
                     lDescription.setWidth("250px");
@@ -82,9 +89,9 @@ public class CommonForm extends Window {
                 }
                 
                 // Add spacing to the next field to the 2 column grid
-                Label spacer1 = new Label();
+                Label spacer1 = new Label("");
                 spacer1.setHeight("10px");
-                Label spacer2 = new Label();
+                Label spacer2 = new Label("");
                 spacer2.setHeight("10px");
                 formLayout.addComponent(spacer1);
                 formLayout.addComponent(spacer2);
@@ -156,8 +163,10 @@ public class CommonForm extends Window {
             //this.formArray[0] = new Form();
 
             this.form.setWidth("250px");
+            //this.tabSheet.setHeight("500px");
 
             this.form.setLayout(this.formLayout);
+            
             this.form.setFormFieldFactory(new CommonFieldFactory());
 
              // Enable buffering so that commit() must be called for the form
@@ -168,8 +177,8 @@ public class CommonForm extends Window {
 
              
              
-             this.form.setVisibleItemProperties(new Object[] {"name", "dateCreated"});
-        
+             this.form.setVisibleItemProperties(this.field.toArray());
+       
             // Insert overall description
              if (!this.description.equals("")) {
                  Label label = new Label(this.description);
