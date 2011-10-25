@@ -1,11 +1,8 @@
 package dk.apaq.shopsystem.webrenderer;
 
 import javax.swing.*;
-import java.io.*;
-import java.util.*;
 import java.awt.*;
 import java.awt.image.*;
-import com.sun.image.codec.jpeg.*;
 
  public class ImageComparer {
 
@@ -19,29 +16,7 @@ import com.sun.image.codec.jpeg.*;
 	protected boolean match = false;
 	protected int debugMode = 0; // 1: textual indication of change, 2: difference of factors
 
-	/* create a runable demo thing. */
-	public static void main(String[] args) {
-		// Create a compare object specifying the 2 images for comparison.
-		ImageComparer ic = new ImageComparer("c:\\test1.jpg", "c:\\test2.jpg");
-		// Set the comparison parameters. 
-		//   (num vertical regions, num horizontal regions, sensitivity, stabilizer)
-		ic.setParameters(8, 6, 5, 10);
-		// Display some indication of the differences in the image.
-		ic.setDebugMode(2);
-		// Compare.
-		ic.compare();
-		// Display if these images are considered a match according to our parameters.
-		System.out.println("Match: " + ic.match());
-		// If its not a match then write a file to show changed regions.
-		if (!ic.match()) {
-			saveJPG(ic.getChangeIndicator(), "c:\\changes.jpg");
-		}
-	}
 	
-	// constructor 1. use filenames
-	public ImageComparer(String file1, String file2) {
-		this(loadJPG(file1), loadJPG(file2));
-	}
  
 	// constructor 2. use awt images.
 	public ImageComparer(Image img1, Image img2) {
@@ -140,44 +115,6 @@ import com.sun.image.codec.jpeg.*;
 		return bi;
 	}
 	
-	// write a buffered image to a jpeg file.
-	protected static void saveJPG(Image img, String filename) {
-		BufferedImage bi = imageToBufferedImage(img);
-		FileOutputStream out = null;
-		try { 
-			out = new FileOutputStream(filename);
-		} catch (java.io.FileNotFoundException io) { 
-			System.out.println("File Not Found"); 
-		}
-		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-		JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(bi);
-		param.setQuality(0.8f,false);
-		encoder.setJPEGEncodeParam(param);
-		try { 
-			encoder.encode(bi); 
-			out.close(); 
-		} catch (java.io.IOException io) {
-			System.out.println("IOException"); 
-		}
-	}
 	
-	// read a jpeg file into a buffered image
-	protected static Image loadJPG(String filename) {
-		FileInputStream in = null;
-		try { 
-			in = new FileInputStream(filename);
-		} catch (java.io.FileNotFoundException io) { 
-			System.out.println("File Not Found"); 
-		}
-		JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(in);
-		BufferedImage bi = null;
-		try { 
-			bi = decoder.decodeAsBufferedImage(); 
-			in.close(); 
-		} catch (java.io.IOException io) {
-			System.out.println("IOException");
-		}
-		return bi;
-	}
 	
 }
