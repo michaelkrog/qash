@@ -34,11 +34,9 @@ public class WebsiteFactory extends AbstractFactory {
         
         // Add grid headers
         grid.addHeader("Name");
-        grid.addHeader("Changed");
        
         // Add grid fields
         grid.addField("name", "");
-        grid.addField("dateChanged", "");
         
         // Insert grid into layout
         return grid;
@@ -55,9 +53,6 @@ public class WebsiteFactory extends AbstractFactory {
         form.addItemId(id);
         form.addContainerDataSource(this.container);
         form.addField("name", "Name1", "This is not the url, but a descriptional name", "");
-        //form.addField("name", "Name2", "This is not the url, but a descriptional name", "");
-        form.addField("dateCreated", "fghjk", "Test 1", "");
-        form.addField("themeName", "theme", "Test 2", "");
         /*form.addField("themeName", "Theme Name", "This is not the url, but a descriptional name", "");
         */
         /*form.addForm("Stock");
