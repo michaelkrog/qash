@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
  *
  * @author krog
  */
-public interface WebRenderer {
+public interface ImageRenderer {
     
     public interface Device {
         int getScreenWidth();

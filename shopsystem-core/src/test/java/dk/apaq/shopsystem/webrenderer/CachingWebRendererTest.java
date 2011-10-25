@@ -1,7 +1,7 @@
 package dk.apaq.shopsystem.webrenderer;
 
-import dk.apaq.shopsystem.webrenderer.CachingWebRenderer;
-import dk.apaq.shopsystem.webrenderer.WebRenderer.Device;
+import dk.apaq.shopsystem.webrenderer.CachingImageRenderer;
+import dk.apaq.shopsystem.webrenderer.ImageRenderer.Device;
 import dk.apaq.vfs.impl.ram.RamFilesystem;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
@@ -42,7 +42,7 @@ public class CachingWebRendererTest {
         
         String url = "";
         MockWebRenderer mockWebRenderer = new MockWebRenderer();
-        CachingWebRenderer instance = new CachingWebRenderer(mockWebRenderer, fs.getRoot(), 500);
+        CachingImageRenderer instance = new CachingImageRenderer(mockWebRenderer, fs.getRoot(), 500);
         BufferedImage result = instance.renderWebpageToImage(url);
         
         assertEquals(1, fs.getRoot().getChildren().size());

@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author michael
  */
-public class SeleniumWebRenderer extends AbstractWebRenderer {
+public class SeleniumWebRenderer extends AbstractImageRenderer {
 
     private static final Logger LOG = LoggerFactory.getLogger(SeleniumWebRenderer.class);
     

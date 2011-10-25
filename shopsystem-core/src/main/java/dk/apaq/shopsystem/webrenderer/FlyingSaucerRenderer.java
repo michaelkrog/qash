@@ -1,16 +1,29 @@
 package dk.apaq.shopsystem.webrenderer;
 
 import com.kitfox.svg.app.beans.SVGPanel;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfImportedPage;
+import com.lowagie.text.pdf.PdfReader;
+import com.lowagie.text.pdf.PdfWriter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,7 +44,7 @@ import org.xhtmlrenderer.util.XRLog;
  *
  * @author michael
  */
-public class FlyingSaucerWebRenderer extends AbstractWebRenderer {
+public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRenderer {
 
     private class ChainedReplacedElementFactory implements ReplacedElementFactory {
 
@@ -95,7 +108,7 @@ public class FlyingSaucerWebRenderer extends AbstractWebRenderer {
                 }
 
                 panel = new SVGPanel();
-                
+
 
                 // HACK: the easiest way to integrate with Salamander is to have it read
                 // our SVG from a file--so, push the content to a temporary file, yuck!
@@ -111,11 +124,11 @@ public class FlyingSaucerWebRenderer extends AbstractWebRenderer {
 
                 int width = panel.getSVGWidth();
                 int height = panel.getSVGHeight();
-                float ratio = (float)height / (float)width;
+                float ratio = (float) height / (float) width;
 
                 if (cssWidth > 0) {
                     width = cssWidth;
-                    height = (int)(cssWidth * ratio);
+                    height = (int) (cssWidth * ratio);
                 }
 
                 if (cssHeight > 0) {
@@ -200,8 +213,102 @@ public class FlyingSaucerWebRenderer extends AbstractWebRenderer {
 
         ChainedReplacedElementFactory cref = new ChainedReplacedElementFactory();
         cref.addFactory(new SwingReplacedElementFactory());
-        cref.addFactory(new SVGSalamanderReplacedElementFactory());        
+        cref.addFactory(new SVGSalamanderReplacedElementFactory());
         renderer.getSharedContext().setReplacedElementFactory(cref);
         return renderer.getImage();
+    }
+
+    @Override
+    public void renderWebpageToPdf(OutputStream os, String... url) {
+
+        if (url.length == 0) {
+            return;
+        }
+
+        if (url.length == 1) {
+            renderWebpageToPdf(os, url[0]);
+        }
+
+        try {
+            List<File> pdfFiles = new ArrayList<File>();
+            for (String currentUrl : url) {
+
+                File tmp = File.createTempFile("renderedWebpage", ".pdf");
+                pdfFiles.add(tmp);
+                tmp.deleteOnExit();
+                OutputStream fos = new FileOutputStream(tmp);
+                renderWebpageToPdf(fos, currentUrl);
+            }
+
+            concatPDFs(pdfFiles, os);
+
+        } catch (DocumentException ex) {
+            throw new RuntimeException("Unable to render PDF.", ex);
+        } catch (IOException ex) {
+            throw new RuntimeException("Unable to render PDF.", ex);
+        }
+
+    }
+
+    private void renderWebpageToPdf(OutputStream os, String url) {
+    }
+
+    public static void concatPDFs(List<File> files, OutputStream outputStream) throws IOException, DocumentException {
+
+        Document document = new Document();
+        try {
+            List<PdfReader> readers = new ArrayList<PdfReader>();
+            int totalPages = 0;
+            Iterator<File> iteratorPDFs = files.iterator();
+
+            // Create Readers for the pdfs.
+            while (iteratorPDFs.hasNext()) {
+                InputStream pdf = new FileInputStream(iteratorPDFs.next());
+                PdfReader pdfReader = new PdfReader(pdf);
+                readers.add(pdfReader);
+                totalPages += pdfReader.getNumberOfPages();
+            }
+            // Create a writer for the outputstream
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+
+            document.open();
+            //BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            PdfContentByte cb = writer.getDirectContent(); // Holds the PDF
+            // data
+
+            PdfImportedPage page;
+            int currentPageNumber = 0;
+            int pageOfCurrentReaderPDF = 0;
+            Iterator<PdfReader> iteratorPDFReader = readers.iterator();
+
+            // Loop through the PDF files and add to the output.
+            while (iteratorPDFReader.hasNext()) {
+                PdfReader pdfReader = iteratorPDFReader.next();
+
+                // Create a new page in the target for each source page.
+                while (pageOfCurrentReaderPDF < pdfReader.getNumberOfPages()) {
+                    document.newPage();
+                    pageOfCurrentReaderPDF++;
+                    currentPageNumber++;
+                    page = writer.getImportedPage(pdfReader, pageOfCurrentReaderPDF);
+                    cb.addTemplate(page, 0, 0);
+                }
+                pageOfCurrentReaderPDF = 0;
+            }
+            outputStream.flush();
+            document.close();
+            outputStream.close();
+        } finally {
+            if (document.isOpen()) {
+                document.close();
+            }
+            try {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
     }
 }

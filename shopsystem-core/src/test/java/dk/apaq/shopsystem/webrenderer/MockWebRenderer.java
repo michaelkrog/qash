@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
  *
  * @author michael
  */
-public class MockWebRenderer extends AbstractWebRenderer {
+public class MockWebRenderer extends AbstractImageRenderer {
 
     private int calls;
     

@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
  *
  * @author michael
  */
-public abstract class AbstractWebRenderer implements WebRenderer {
+public abstract class AbstractImageRenderer implements ImageRenderer {
 
     @Override
     public BufferedImage renderWebpageToImage(String url) {

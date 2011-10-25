@@ -10,10 +10,10 @@ import javax.imageio.ImageIO;
  *
  * @author michael
  */
-public class CachingWebRenderer extends AbstractWebRenderer {
+public class CachingImageRenderer extends AbstractImageRenderer {
 
     private static final long DEFAULT_TTL = 60000; //1 minute
-    private final WebRenderer wrappedRenderer;
+    private final ImageRenderer wrappedRenderer;
     private final Directory cacheDir;
     private final long ttl;
     private int hits;
@@ -21,13 +21,13 @@ public class CachingWebRenderer extends AbstractWebRenderer {
     private int expireds;
     
 
-    public CachingWebRenderer(WebRenderer wrappedRenderer, Directory cacheDir) {
+    public CachingImageRenderer(ImageRenderer wrappedRenderer, Directory cacheDir) {
         this.wrappedRenderer = wrappedRenderer;
         this.cacheDir = cacheDir;
         this.ttl = DEFAULT_TTL;
     }
 
-    public CachingWebRenderer(WebRenderer wrappedRenderer, Directory cacheDir, long ttl) {
+    public CachingImageRenderer(ImageRenderer wrappedRenderer, Directory cacheDir, long ttl) {
         this.wrappedRenderer = wrappedRenderer;
         this.cacheDir = cacheDir;
         this.ttl = ttl;
