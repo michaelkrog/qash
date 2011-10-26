@@ -106,7 +106,7 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
     public void setContainerDataSource(Container data) {
         this.data = data;
         //this.data = (IndexedContainer) data;
-        table.setContainerDataSource(data);
+        this.table.setContainerDataSource(data);
     }
     
     

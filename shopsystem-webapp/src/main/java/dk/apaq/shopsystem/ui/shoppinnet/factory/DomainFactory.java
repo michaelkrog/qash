@@ -29,7 +29,7 @@ public class DomainFactory extends AbstractFactory {
         
         // Add buttons
         grid.addButton("Add","AddItem","");
-        grid.addButton("Edit","EditItem","");
+        //grid.addButton("Edit","EditItem","");
         grid.addButton("Delete","DeleteItem","");
         
         // Add grid headers
@@ -55,8 +55,6 @@ public class DomainFactory extends AbstractFactory {
         form.addItemId(id);
         form.addContainerDataSource(this.container);
         form.addField("name", "Name", "Domain name including www.", "");
-        form.addField("verified", "Verified", "", "");
-        form.addField("dateCreated", "Created", "", "");
         
         getApplication().getMainWindow().addWindow(form);
     }

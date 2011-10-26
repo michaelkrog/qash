@@ -33,9 +33,11 @@ public class PageFactory extends AbstractFactory {
         
         // Add grid headers
         grid.addHeader("Name");
+        grid.addHeader("Title");
        
         // Add grid fields
         grid.addField("name", "");
+        grid.addField("title", "");
         
         // Insert grid into layout
         return grid;
