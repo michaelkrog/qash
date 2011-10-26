@@ -151,7 +151,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
         //adminPanel.setSizeFull();
         adminPanel.setWidth("1000px");
         adminPanel.setHeight("100%");
-        adminPanel.setStyleName("v-layout-inner");
+        //adminPanel.setStyleName("v-layout-inner");
 
         
 

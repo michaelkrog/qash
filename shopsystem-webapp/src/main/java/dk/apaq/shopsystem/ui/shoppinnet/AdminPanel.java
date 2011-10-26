@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.ui.shoppinnet;
 
 
+import com.vaadin.terminal.Resource;
 import dk.apaq.shopsystem.ui.shoppinnet.factory.WebsiteFactory;
 import dk.apaq.shopsystem.ui.shoppinnet.factory.DomainFactory;
 import dk.apaq.shopsystem.ui.shoppinnet.factory.CategoryFactory;
@@ -12,10 +13,12 @@ import dk.apaq.shopsystem.ui.shoppinnet.factory.ModuleFactory;
 import dk.apaq.shopsystem.ui.shoppinnet.factory.TaxFactory;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Accordion;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Embedded;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
@@ -26,6 +29,7 @@ import dk.apaq.shopsystem.service.OrganisationService;
 public class AdminPanel extends CustomComponent {
     
     private HorizontalLayout innerLayout = new HorizontalLayout();
+    private VerticalLayout layoutHolder = new VerticalLayout();
     private VerticalLayout outerLayout = new VerticalLayout();
     private VerticalLayout leftLayout = new VerticalLayout();
     private VerticalLayout content = new VerticalLayout();
@@ -57,13 +61,19 @@ public class AdminPanel extends CustomComponent {
         this.taxFactory.setOrgService(orgService);
         
         
+        this.layoutHolder.setWidth("100%");
+        this.layoutHolder.setHeight("100%");
+        
         this.outerLayout.setWidth("100%");
         this.outerLayout.setHeight("100%");
+        this.outerLayout.setStyleName("v-layout-inner");
+        
         this.innerLayout.setWidth("100%");
         this.innerLayout.setHeight("100%");
+        
         this.leftLayout.setWidth("100%");
         this.leftLayout.setHeight("100%");
-        //this.leftLayout.setSizeFull();
+
         this.content.setWidth("100%");
         this.spacer.setSizeFull();
         
@@ -100,7 +110,7 @@ public class AdminPanel extends CustomComponent {
         tab5.addComponent(OpenInContent("Products", this.productFactory.GetList(), false));
         //tab5.addComponent(OpenInContent("Product Groups",new ProductCategoryList(), false));
         //tab5.addComponent(OpenInContent("Price Groups",new UserList(), false));
-        this.accordion.addTab(tab5, "Products & Categories", null);   
+        this.accordion.addTab(tab5, "Products", null);   
        
         /*
         Panel tab4 = new Panel();
@@ -142,10 +152,20 @@ public class AdminPanel extends CustomComponent {
         this.innerLayout.setExpandRatio(this.content, 1.0f);
         
         //this.outerLayout.addComponent(new Header());
+        
         this.outerLayout.addComponent(innerLayout);
         this.content.addComponent(new Overview());
         
-        setCompositionRoot(this.outerLayout);
+        Resource logoResource = new ThemeResource("layout/img/logo.png");
+        Embedded logo  = new Embedded(null, logoResource);
+        logo.setStyleName("v-logo");
+        this.layoutHolder.addComponent(logo);
+        this.layoutHolder.setComponentAlignment(logo, Alignment.MIDDLE_RIGHT);
+        //this.layoutHolder.getComponent(0).setHeight("36px");
+        this.layoutHolder.addComponent(this.outerLayout);
+        this.layoutHolder.setExpandRatio(this.outerLayout, 1.0f);
+        
+        setCompositionRoot(this.layoutHolder);
     }    
     
 
