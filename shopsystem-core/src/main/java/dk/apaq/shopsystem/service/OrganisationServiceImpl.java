@@ -137,6 +137,9 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
     
     private <T> Complete<String, T> getWebContentCrud(Website website, Class<T> clazz) {
+        if(website == null) {
+            throw new NullPointerException("Website is null.");
+        }
         Map<Class, Complete> crudMap = webcontentCrudMap.get(website.getId());
         if(crudMap==null) {
             crudMap = new WeakHashMap<Class, Complete>();
