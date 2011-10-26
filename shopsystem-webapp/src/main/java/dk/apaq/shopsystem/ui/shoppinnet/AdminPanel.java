@@ -11,6 +11,8 @@ import dk.apaq.shopsystem.ui.shoppinnet.factory.PaymentFactory;
 import dk.apaq.shopsystem.ui.shoppinnet.factory.ThemeFactory;
 import dk.apaq.shopsystem.ui.shoppinnet.factory.ModuleFactory;
 import dk.apaq.shopsystem.ui.shoppinnet.factory.TaxFactory;
+import dk.apaq.shopsystem.ui.shoppinnet.factory.UserFactory;
+import dk.apaq.shopsystem.ui.shoppinnet.factory.OrderFactory;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Alignment;
@@ -46,6 +48,8 @@ public class AdminPanel extends CustomComponent {
     private ThemeFactory themeFactory = new ThemeFactory();
     private ModuleFactory moduleFactory = new ModuleFactory();
     private TaxFactory taxFactory = new TaxFactory();
+    private UserFactory userFactory = new UserFactory();
+    private OrderFactory orderFactory = new OrderFactory();
     
     public AdminPanel(OrganisationService orgService) {
         
@@ -59,6 +63,8 @@ public class AdminPanel extends CustomComponent {
         this.themeFactory.setOrgService(orgService);
         this.moduleFactory.setOrgService(orgService);
         this.taxFactory.setOrgService(orgService);
+        this.userFactory.setOrgService(orgService);
+        this.orderFactory.setOrgService(orgService);
         
         
         this.layoutHolder.setWidth("100%");
@@ -91,10 +97,11 @@ public class AdminPanel extends CustomComponent {
         this.accordion.addTab(tab9, "Overview", null);
 
         Panel tab1 = new Panel();
-        tab1.addComponent(OpenInContent("Online Stores", this.websiteFactory.GetList(), false));
-        tab1.addComponent(OpenInContent("Themes", this.themeFactory.GetList(), false));
-        tab1.addComponent(OpenInContent("Modules", this.moduleFactory.GetList(), true));
+        tab1.addComponent(OpenInContent("Users", this.userFactory.GetList(), true));
         
+        tab1.addComponent(OpenInContent("Online Stores", this.websiteFactory.GetList(), false));
+        tab1.addComponent(OpenInContent("Themes", this.themeFactory.GetList(), true));
+                
         tab1.addComponent(OpenInContent("Domains", this.domainFactory.GetList(), false));
         //tab1.addComponent(OpenInContent("Freights", this.freightFactory.GetList(), false));
         tab1.addComponent(OpenInContent("Taxes", this.taxFactory.GetList(), false));
@@ -103,6 +110,7 @@ public class AdminPanel extends CustomComponent {
         
         Panel tab8 = new Panel();
         tab8.addComponent(OpenInContent("Pages",this.pageFactory.GetList(), false));
+        tab8.addComponent(OpenInContent("Modules", this.moduleFactory.GetList(), false));
         this.accordion.addTab(tab8, "Pages", null);       
         
         Panel tab5 = new Panel();
@@ -112,14 +120,15 @@ public class AdminPanel extends CustomComponent {
         //tab5.addComponent(OpenInContent("Price Groups",new UserList(), false));
         this.accordion.addTab(tab5, "Products", null);   
        
-        /*
+        
         Panel tab4 = new Panel();
-        tab4.addComponent(OpenInContent("Users",new UserList(), false));
-        tab4.addComponent(OpenInContent("User Groups",new UserList(), false));
-        tab4.addComponent(OpenInContent("Discount Codes",new UserList(), false));
-        tab4.addComponent(OpenInContent("Newsletters",new UserList(), false));
+        tab4.addComponent(OpenInContent("Orders", this.orderFactory.GetList(), false));
+        //tab4.addComponent(OpenInContent("User Groups", this.userGroupFactory.GetList(), false));
+        //tab4.addComponent(OpenInContent("Discount Codes", this.couponFactory.GetList(), false));
+        //tab4.addComponent(OpenInContent("Newsletters", this.newsletterFactory.GetList(), false));
         this.accordion.addTab(tab4, "Customers", null);     
         
+        /*
         Panel tab7 = new Panel();
         tab7.addComponent(OpenInContent("Orders",new OrderList(), false));
         tab7.addComponent(OpenInContent("ePay Administration",new UserList(), false));
