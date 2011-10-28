@@ -7,6 +7,7 @@ import dk.apaq.shopsystem.entity.Template;
 import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.Page;
+import dk.apaq.shopsystem.entity.Placeholder;
 import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptInvoker;
 import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptPageRenderer;
 import dk.apaq.shopsystem.service.OrganisationService;
@@ -65,12 +66,12 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
         }
         
         
-        for (String availablePlaceHolder : template.getPlaceHolderIds()) {
-            List<ComponentInformation> infolist = page.getComponentInformations(availablePlaceHolder);
+        for (Placeholder availablePlaceHolder : template.getPlaceHolders()) {
+            List<ComponentInformation> infolist = page.getComponentInformations(availablePlaceHolder.getId());
             
             if (infolist == null || infolist.isEmpty()) {
                 //Add a dummy component
-                Label lbl = new Label(availablePlaceHolder, "Missing component");
+                Label lbl = new Label(availablePlaceHolder.getId(), "Missing component");
                 add(lbl);
                 continue;
             }
@@ -93,7 +94,7 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
             }
 
             //Add list of components to placeholder
-            add(new ListView<SimpleScriptComponent>(availablePlaceHolder, components) {
+            add(new ListView<SimpleScriptComponent>(availablePlaceHolder.getId(), components) {
                 
                 @Override
                 protected void populateItem(ListItem<SimpleScriptComponent> item) {

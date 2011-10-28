@@ -50,7 +50,7 @@ public class Theme extends AbstractModule implements Serializable {
                 String codeFileName = name + ".code";
                 File codeFile = null;
                 try {
-                    List<String> placeholders = parsePlaceHolders(markupFile);
+                    List<Placeholder> placeholders = parsePlaceHolders(markupFile);
                     
                     if(dir.hasFile(codeFileName)) {
                         codeFile = dir.getFile(codeFileName);
@@ -71,22 +71,30 @@ public class Theme extends AbstractModule implements Serializable {
     
     
     
-    private List<String> parsePlaceHolders(File file) throws IOException {
-        List<String> placeHolders = new ArrayList<String>();
+    private List<Placeholder> parsePlaceHolders(File file) throws IOException {
+        List<Placeholder> placeHolders = new ArrayList<Placeholder>();
         WicketLessMarkupParser parser = new WicketLessMarkupParser(new MarkupResourceStream(new VfsResourceStream(file)));
         try {
             Markup m = parser.parse();
+            boolean inContainer = false;
             Iterator<MarkupElement> it =  m.iterator();
             while(it.hasNext()) {
                 MarkupElement me = it.next();
                 if(me instanceof ComponentTag) {
                     ComponentTag ct = (ComponentTag)me;
-                    if(!ct.isClose() && 
-                        !ct.hasBehaviors() && 
-                        !ct.isAutoComponentTag() && 
-                        "wicket".equals(ct.getNamespace()) &&
-                        "container".equals(ct.getName())) {
-                        placeHolders.add(ct.getId());
+                    
+                    if(ct.isClose() && isContainerTag(ct) && inContainer) {
+                        inContainer = false;
+                        continue;
+                    }
+                    
+                    if(!ct.isClose() && !ct.hasBehaviors() && !ct.isAutoComponentTag() && !inContainer) {
+                        if(isContainerTag(ct)) {
+                            placeHolders.add(new Placeholder(ct.getId(), true));
+                            inContainer = true;
+                        } else {
+                            placeHolders.add(new Placeholder(ct.getId(), false));
+                        }
                     }
                 }
             }
@@ -102,5 +110,8 @@ public class Theme extends AbstractModule implements Serializable {
         return "theme";
     }
     
+    private boolean isContainerTag(ComponentTag ct) {
+        return "wicket".equals(ct.getNamespace()) && "container".equals(ct.getName());
+    }
     
 }

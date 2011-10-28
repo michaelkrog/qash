@@ -11,20 +11,20 @@ import java.util.List;
 public class Template implements Serializable {
 
     private final String name;
-    private final List<String> placeHolderIds;
+    private final List<Placeholder> placeHolders;
     private final File markupFile;
     private final File codeFile;
     
-    public Template(String name, List<String> placeHolderIds, File markupFile) {
+    public Template(String name, List<Placeholder> placeHolders, File markupFile) {
         this.name = name;
         this.markupFile = markupFile;
-        this.placeHolderIds = placeHolderIds;
+        this.placeHolders = placeHolders;
         this.codeFile = null;
     }
 
-    public Template(String name, List<String> placeHolderIds, File markupFile, File codeFile) {
+    public Template(String name, List<Placeholder> placeHolders, File markupFile, File codeFile) {
         this.name = name;
-        this.placeHolderIds = placeHolderIds;
+        this.placeHolders = placeHolders;
         this.markupFile = markupFile;
         this.codeFile = codeFile;
     }
@@ -42,8 +42,8 @@ public class Template implements Serializable {
         return codeFile;
     }
 
-    public List<String> getPlaceHolderIds() {
-        return Collections.unmodifiableList(placeHolderIds);
+    public List<Placeholder> getPlaceHolders() {
+        return Collections.unmodifiableList(placeHolders);
     }
 
     
