@@ -26,9 +26,10 @@ public class OrderFactory extends AbstractFactory {
         grid.setPageHeader("Orders");
         
         // Add buttons
-        grid.addButton("Add","AddItem","");
+        grid.addButton("View","ShowInvoice","");
+        //grid.addButton("Add","AddItem","");
         grid.addButton("Edit","EditItem","");
-        grid.addButton("Delete","DeleteItem","");
+        //grid.addButton("Delete","DeleteItem","");
         
         // Add grid headers
         grid.addHeader("Invoice");
@@ -59,4 +60,8 @@ public class OrderFactory extends AbstractFactory {
         getApplication().getMainWindow().addWindow(form);
     }
     
+    
+     public void ShowInvoice(String id) {
+        System.out.println("ShowInvoice...");
+    }
 }
