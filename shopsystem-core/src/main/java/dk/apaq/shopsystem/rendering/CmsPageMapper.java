@@ -84,7 +84,7 @@ public class CmsPageMapper extends AbstractMapper implements IRequestMapper {
             Url url = new Url();
 
             if (cmsPageHandler.isRenderedViaApi()) {
-                url.getSegments().add("_api");
+                url.getSegments().add(CmsApplication.SYSTEMSITE_PREFIX);
                 url.getSegments().add(site.getOrganisation().getId());
                 url.getSegments().add("sites");
                 url.getSegments().add(site.getId());

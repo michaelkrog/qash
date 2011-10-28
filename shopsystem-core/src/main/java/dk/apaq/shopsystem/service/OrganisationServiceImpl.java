@@ -72,6 +72,7 @@ public class OrganisationServiceImpl implements OrganisationService, Application
             InventoryManager im = (InventoryManager) context.getBean("inventoryManager", getProducts());
             crud = (Crud.Complete<String, Payment>) context.getBean("orderCrud", em, organisation, im);
             ((CrudNotifier)crud).addListener(new SecurityHandler.ContentSecurity(organisation));
+            crudMap.put(Order.class, crud);
         }
         return crud;
     }

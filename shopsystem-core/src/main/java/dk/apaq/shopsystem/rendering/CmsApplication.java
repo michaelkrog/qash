@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class CmsApplication extends WebApplication {
 
-    public static final String SYSTEMSITE_PREFIX = "/_render";
+    public static final String SYSTEMSITE_PREFIX = "_render";
     
     @Autowired
     private SystemService service;
@@ -41,10 +41,10 @@ public class CmsApplication extends WebApplication {
         mount(new CmsPageMapper(service));
         
         mountResource("/_/themes/${themename}", themeResourceReference);
-        mountResource(SYSTEMSITE_PREFIX + "/${orgid}/sites/${siteid}/_/themes/${themename}", themeResourceReference);
+        mountResource("/" + SYSTEMSITE_PREFIX + "/${orgid}/sites/${siteid}/_/themes/${themename}", themeResourceReference);
         
         mountResource("/_/content", contentResourceReference);
-        mountResource(SYSTEMSITE_PREFIX + "/_render/${orgid}/sites/${siteid}/_/content", contentResourceReference);
+        mountResource("/" + SYSTEMSITE_PREFIX + "/${orgid}/sites/${siteid}/_/content", contentResourceReference);
         
         //Removes unneeded wickets tags in renderings output
         getMarkupSettings().setStripWicketTags(true);

@@ -1,15 +1,21 @@
 package dk.apaq.shopsystem.webrenderer;
 
+import com.kitfox.svg.SVGDiagram;
+import com.kitfox.svg.SVGException;
+import com.kitfox.svg.SVGUniverse;
 import com.kitfox.svg.app.beans.SVGPanel;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfImportedPage;
 import com.lowagie.text.pdf.PdfReader;
+import com.lowagie.text.pdf.PdfTemplate;
 import com.lowagie.text.pdf.PdfWriter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,11 +36,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.w3c.dom.Element;
 
+import org.xhtmlrenderer.css.style.CalculatedStyle;
 import org.xhtmlrenderer.extend.ReplacedElement;
 import org.xhtmlrenderer.extend.ReplacedElementFactory;
 import org.xhtmlrenderer.extend.UserAgentCallback;
 import org.xhtmlrenderer.layout.LayoutContext;
+import org.xhtmlrenderer.pdf.ITextOutputDevice;
+import org.xhtmlrenderer.pdf.ITextRenderer;
+import org.xhtmlrenderer.pdf.ITextReplacedElement;
+import org.xhtmlrenderer.pdf.ITextReplacedElementFactory;
 import org.xhtmlrenderer.render.BlockBox;
+import org.xhtmlrenderer.render.PageBox;
+import org.xhtmlrenderer.render.RenderingContext;
 import org.xhtmlrenderer.simple.extend.FormSubmissionListener;
 import org.xhtmlrenderer.swing.Java2DRenderer;
 import org.xhtmlrenderer.swing.SwingReplacedElement;
@@ -46,6 +60,8 @@ import org.xhtmlrenderer.util.XRLog;
  */
 public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRenderer {
 
+    private final ChainedReplacedElementFactory chainedReplacedElementFactoryForImage;
+    
     private class ChainedReplacedElementFactory implements ReplacedElementFactory {
 
         private List factoryList;
@@ -89,7 +105,138 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
         }
     }
 
-    private class SVGSalamanderReplacedElementFactory implements ReplacedElementFactory {
+    public class SVGITextReplacedElement implements ITextReplacedElement {
+
+        private Point location = new Point(0, 0);
+        private SVGDiagram diagram;
+        private int cssWidth;
+        private int cssHeight;
+
+        public SVGITextReplacedElement(URI svgFileUrl, int cssWidth, int cssHeight) throws Exception {
+            this.cssWidth = cssWidth;
+            this.cssHeight = cssHeight;
+            this.diagram = loadDiagram(svgFileUrl);
+        }
+
+        private SVGDiagram loadDiagram(URI svgFileUrl) throws Exception {
+            SVGUniverse svgUniverse = new SVGUniverse();
+            URI svgFileUri = svgUniverse.loadSVG(svgFileUrl.toURL());
+            SVGDiagram diagram = svgUniverse.getDiagram(svgFileUri);
+            diagram.setIgnoringClipHeuristic(true);
+            return diagram;
+        }
+
+        @Override
+        public void detach(LayoutContext c) {
+        }
+
+        @Override
+        public int getBaseline() {
+            return 0;
+        }
+
+        @Override
+        public int getIntrinsicWidth() {
+            return (int) diagram.getWidth();
+        }
+
+        @Override
+        public int getIntrinsicHeight() {
+            return (int) diagram.getHeight();
+        }
+
+        @Override
+        public boolean hasBaseline() {
+            return false;
+        }
+
+        @Override
+        public boolean isRequiresInteractivePaint() {
+            return false;
+        }
+
+        @Override
+        public Point getLocation() {
+            return location;
+        }
+
+        @Override
+        public void setLocation(int x, int y) {
+            this.location.x = x;
+            this.location.y = y;
+        }
+
+        @Override
+        public void paint(RenderingContext renderingContext,
+                ITextOutputDevice outputDevice, BlockBox blockBox) {
+            PdfContentByte pdfContentByte = outputDevice.getWriter().getDirectContent();
+            
+            float width = diagram.getWidth();
+            float height = diagram.getHeight();
+            float ratio = height / width;
+            
+            float widthInPoints = (float) (cssWidth / outputDevice.getDotsPerPoint());
+            float heightInPoints = (float) (cssHeight / outputDevice.getDotsPerPoint());
+
+            if(heightInPoints<=0) {
+                heightInPoints = widthInPoints * ratio;
+                cssHeight = (int)(cssWidth * ratio);
+            }
+            
+            PdfTemplate pdfTemplate =  pdfContentByte.createTemplate(widthInPoints, heightInPoints);
+            Graphics2D graphics2d =  pdfTemplate.createGraphics(pdfTemplate.getWidth(), pdfTemplate.getHeight());
+            try {
+                graphics2d.scale(widthInPoints / diagram.getWidth(), heightInPoints / diagram.getHeight());
+                diagram.render(graphics2d);
+            } catch (SVGException e) {
+                e.printStackTrace();
+                return;
+            } finally {
+                graphics2d.dispose();
+            }
+            PageBox page = renderingContext.getPage();
+            float x = blockBox.getAbsX() + page.getMarginBorderPadding(renderingContext, CalculatedStyle.LEFT);
+            float y = (page.getBottom() - (blockBox.getAbsY()  + cssHeight)) + page.getMarginBorderPadding(renderingContext, CalculatedStyle.BOTTOM);
+            x /= outputDevice.getDotsPerPoint();
+            y /= outputDevice.getDotsPerPoint();
+            pdfContentByte.addTemplate(pdfTemplate, x, y);
+        }
+    }
+    
+    private class SvgSalamanderITextReplacedElementFactory implements ReplacedElementFactory {
+
+        @Override
+        public ReplacedElement createReplacedElement(LayoutContext c, BlockBox box, UserAgentCallback uac, int cssWidth, int cssHeight) {
+            try {
+                Element elem = box.getElement();
+                if (elem == null || !isSVGEmbedded(elem)) {
+                    return null;
+                }
+
+                String path = elem.getAttribute("data");
+                
+                return new SVGITextReplacedElement(new URI(uac.resolveURI(path)), cssWidth, cssHeight);
+            } catch (Exception ex) {
+                Logger.getLogger(FlyingSaucerRenderer.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+        }
+
+        @Override
+        public void reset() {}
+
+        @Override
+        public void remove(Element e) {}
+
+        @Override
+        public void setFormSubmissionListener(FormSubmissionListener listener) {}
+        
+        private boolean isSVGEmbedded(Element elem) {
+            return elem.getNodeName().equals("object") && elem.getAttribute("type").equals("image/svg+xml");
+        }
+    }
+
+    private class SVGSalamanderSwingReplacedElementFactory implements ReplacedElementFactory {
 
         @Override
         public ReplacedElement createReplacedElement(
@@ -207,14 +354,18 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
         }
     }
 
+    public FlyingSaucerRenderer() {
+        chainedReplacedElementFactoryForImage = new ChainedReplacedElementFactory();
+        chainedReplacedElementFactoryForImage.addFactory(new SwingReplacedElementFactory());
+        chainedReplacedElementFactoryForImage.addFactory(new SVGSalamanderSwingReplacedElementFactory());
+
+    }
+
     @Override
     public BufferedImage renderWebpageToImage(Device device, String url) {
         Java2DRenderer renderer = new Java2DRenderer(url, device.getScreenWidth());
 
-        ChainedReplacedElementFactory cref = new ChainedReplacedElementFactory();
-        cref.addFactory(new SwingReplacedElementFactory());
-        cref.addFactory(new SVGSalamanderReplacedElementFactory());
-        renderer.getSharedContext().setReplacedElementFactory(cref);
+        renderer.getSharedContext().setReplacedElementFactory(chainedReplacedElementFactoryForImage);
         return renderer.getImage();
     }
 
@@ -225,11 +376,12 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
             return;
         }
 
-        if (url.length == 1) {
-            renderWebpageToPdf(os, url[0]);
-        }
-
         try {
+
+            if (url.length == 1) {
+                renderWebpageToPdf(os, url[0]);
+            }
+
             List<File> pdfFiles = new ArrayList<File>();
             for (String currentUrl : url) {
 
@@ -250,7 +402,18 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
 
     }
 
-    private void renderWebpageToPdf(OutputStream os, String url) {
+    private void renderWebpageToPdf(OutputStream os, String url) throws DocumentException, IOException {
+        ITextRenderer renderer = new ITextRenderer();
+        ChainedReplacedElementFactory cref = new ChainedReplacedElementFactory();
+        cref.addFactory(new ITextReplacedElementFactory(renderer.getOutputDevice()));
+        cref.addFactory(new SvgSalamanderITextReplacedElementFactory());
+        
+        renderer.getSharedContext().setReplacedElementFactory(cref);
+        renderer.setDocument(url);
+        renderer.layout();
+        renderer.createPDF(os);
+
+        os.close();
     }
 
     public static void concatPDFs(List<File> files, OutputStream outputStream) throws IOException, DocumentException {

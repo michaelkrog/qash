@@ -39,14 +39,14 @@ public class CmsUtil {
 
             if (isSystemRequest(request)) {
                 Url url = request.getUrl();
-                // /_api/<id>/sites/<id>
+                // /_render/<id>/sites/<id>
                 if (url.getSegments().size() < 4) {
                     return null;
                 }
 
                 String section1 = url.getSegments().get(0);
                 String section2 = url.getSegments().get(2);
-                if (!"_api".equals(section1) || !"sites".equals(section2)) {
+                if (!CmsApplication.SYSTEMSITE_PREFIX.equals(section1) || !"sites".equals(section2)) {
                     return null;
                 }
 

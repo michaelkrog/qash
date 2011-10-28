@@ -147,7 +147,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
     @Test
     public void renderSystemPageSuccessfully() {
 
-        tester.executeUrl("http://localhost/context/servlet/_api/" + org.getId() + "/sites/" + site.getId() + "/" + page.getName());
+        tester.executeUrl("http://localhost/context/servlet/_render/" + org.getId() + "/sites/" + site.getId() + "/" + page.getName());
         String text = tester.getLastResponseAsString();
         System.out.println(text);
 
@@ -156,7 +156,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         @Test
     public void retrieveSystemStylesheetSuccessfully() {
 
-        tester.executeUrl("http://localhost/context/servlet/_api/" + org.getId() + "/sites/" + site.getId()+"/_/themes/Basic/style.css");
+        tester.executeUrl("http://localhost/context/servlet/_render/" + org.getId() + "/sites/" + site.getId()+"/_/themes/Basic/style.css");
         String text = tester.getLastResponseAsString();
         System.out.println(text);
     }
@@ -164,7 +164,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
             @Test
     public void retrieveSystemFileSuccessfully() throws IOException {
 
-        tester.executeUrl("http://localhost/context/servlet/_api/" + org.getId() + "/sites/" + site.getId()+"/_/content/monologo.png");
+        tester.executeUrl("http://localhost/context/servlet/_render/" + org.getId() + "/sites/" + site.getId()+"/_/content/monologo.png");
         byte[] bytes = tester.getLastResponse().getDocument().getBytes();
         BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
     }
