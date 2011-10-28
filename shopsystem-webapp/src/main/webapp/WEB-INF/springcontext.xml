@@ -66,7 +66,7 @@
     <bean id="annexService" class="dk.apaq.shopsystem.annex.AnnexServiceImpl"/>
 
     <bean id="filesystem" class="dk.apaq.vfs.impl.nativefs.NativeFileSystem">
-    	<constructor-arg type="java.io.File" value="file:${user.home}/filesystem"/>
+        <constructor-arg type="java.io.File" value="file:${user.home}/filesystem"/>
     </bean>
 
     <bean id="wicketApplication" class="dk.apaq.shopsystem.rendering.CmsApplication"/>
@@ -84,7 +84,16 @@
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
     
-    <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter">
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jsonConverter" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+        <!--property name="supportedMediaTypes" value="application/json" /-->
     </bean>
 
 
@@ -93,7 +102,7 @@
     
     <!-- Scans within the base package of the application for @Components to configure as beans -->
     <!-- @Controller, @Service, @Configuration, etc. -->
-    <context:component-scan base-package="dk.apaq.shopsystem.controller,dk.apaq.shopsystem.ui" />
+    <context:component-scan base-package="dk.apaq.shopsystem.api" />
    
    <!-- Enables the Spring MVC @Controller programming model -->
     <mvc:annotation-driven />
