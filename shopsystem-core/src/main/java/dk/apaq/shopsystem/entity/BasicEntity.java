@@ -1,13 +1,14 @@
 package dk.apaq.shopsystem.entity;
 
 import dk.apaq.crud.HasId;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author krog
  */
-public interface BasicEntity extends HasId<String> {
+public interface BasicEntity extends HasId<String>, Serializable {
 
     Date getDateChanged();
 

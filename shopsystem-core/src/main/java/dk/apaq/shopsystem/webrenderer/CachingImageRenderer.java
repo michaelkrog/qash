@@ -34,12 +34,18 @@ public class CachingImageRenderer extends AbstractImageRenderer {
     }
 
     @Override
-    public BufferedImage renderWebpageToImage(Device device, String url) {
+    public BufferedImage renderWebpageToImage(String url) {
+        return super.renderWebpageToImage(url);
+    }
+
+    
+    @Override
+    public BufferedImage renderWebpageToImage(Device device, String url, boolean useCache) {
         try {
             String filename = getCacheId(device, url) + ".png";
             if (cacheDir.hasFile(filename)) {
                 File file = cacheDir.getFile(filename);
-                if(!isExpired(file)) {
+                if(!isExpired(file) && useCache) {
                     hits++;
                     return ImageIO.read(file.getInputStream());
                 } else {

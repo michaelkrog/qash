@@ -56,7 +56,7 @@ public class SeleniumWebRenderer extends AbstractImageRenderer {
     }
 
     @Override
-    public BufferedImage renderWebpageToImage(Device device, String url) {
+    public BufferedImage renderWebpageToImage(Device device, String url, boolean useCache) {
         WebDriver driver = null;
         try {
             long start = System.currentTimeMillis();

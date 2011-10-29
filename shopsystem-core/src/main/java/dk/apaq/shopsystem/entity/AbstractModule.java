@@ -2,6 +2,8 @@ package dk.apaq.shopsystem.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dk.apaq.shopsystem.rendering.BundleInfo;
+import dk.apaq.shopsystem.rendering.BundleInfoIO;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;
 import dk.apaq.vfs.Node;
@@ -25,29 +27,7 @@ public abstract class AbstractModule implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractModule.class);
     protected final Directory dir;
     private final File infoFile;
-    private ModuleInfo info;
-    //private ClassDeserializer classDeserializer = new ClassDeserializer();
-    private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-    
-    private static class ModuleInfo {
-
-        private String version;
-        private Date releaseDate;
-        private SellerInfo seller;
-        
-        public String getVersion() {
-            return version;
-        }
-
-        public Date getReleaseDate() {
-            return releaseDate;
-        }
-
-        public SellerInfo getSellerInfo() {
-            return seller;
-        }
-
-    }
+    private BundleInfo info;
     
      protected class SuffixNodeFilter implements NodeFilter {
 
@@ -72,7 +52,7 @@ public abstract class AbstractModule implements Serializable {
         this.dir = dir;
         this.infoFile = dir.getFile("bundle.info");
 
-        info = gson.fromJson(new InputStreamReader(infoFile.getInputStream()), ModuleInfo.class);
+        info = BundleInfoIO.read(this.infoFile.getInputStream());
     }
 
     public String getName() {

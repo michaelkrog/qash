@@ -15,12 +15,13 @@ import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.crud.UserCrud;
 import dk.apaq.vfs.FileSystem;
+import java.io.Serializable;
 
 /**
  *
  * @author krog
  */
-public interface OrganisationService {
+public interface OrganisationService extends Serializable {
 
     public Organisation readOrganisation();
     public void updateOrganisation(Organisation organisation);

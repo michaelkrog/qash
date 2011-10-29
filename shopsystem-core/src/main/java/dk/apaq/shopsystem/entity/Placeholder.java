@@ -1,10 +1,12 @@
 package dk.apaq.shopsystem.entity;
 
+import java.io.Serializable;
+
 /**
  *
  * @author krog
  */
-public class Placeholder {
+public class Placeholder implements Serializable {
     
     private final String id;
     private final boolean container;

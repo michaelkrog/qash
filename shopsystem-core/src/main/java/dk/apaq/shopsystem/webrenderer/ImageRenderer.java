@@ -29,7 +29,7 @@ public interface ImageRenderer {
     }
     
     /**
-     * Renders an image of a webpage retrieved by the given url.
+     * Renders an image of a webpage retrieved by the given url. Will use cache if available.
      * @param url The url to retrieve the webpage to render from.
      * @return The rendered image or null if unable to render. 
      */
@@ -38,8 +38,25 @@ public interface ImageRenderer {
     /**
      * Renders an image of a webpage retrieved by the given url.
      * @param url The url to retrieve the webpage to render from.
+     * @param useCache Wether to use cache if available.
+     * @return The rendered image or null if unable to render. 
+     */
+    public BufferedImage renderWebpageToImage(String url, boolean useCache);
+    
+    /**
+     * Renders an image of a webpage retrieved by the given url. Will use cache if available.
      * @param device Information about the device which the image
+     * @param url The url to retrieve the webpage to render from.
      * @return The rendered image or null if unable to render. 
      */
     public BufferedImage renderWebpageToImage(Device device, String url) ;
+    
+    /**
+     * Renders an image of a webpage retrieved by the given url.
+     * @param device Information about the device which the image
+     * @param url The url to retrieve the webpage to render from.
+     * @param useCache Wether to use cache if available.
+     * @return The rendered image or null if unable to render. 
+     */
+    public BufferedImage renderWebpageToImage(Device device, String url, boolean useCache) ;
 }

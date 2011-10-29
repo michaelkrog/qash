@@ -1,12 +1,13 @@
 package dk.apaq.shopsystem.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author michael
  */
-public interface Discount {
+public interface Discount extends Serializable {
 
     double getAmount();
 

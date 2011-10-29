@@ -60,7 +60,6 @@ import org.xhtmlrenderer.util.XRLog;
  */
 public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRenderer {
 
-    private final ChainedReplacedElementFactory chainedReplacedElementFactoryForImage;
     
     private class ChainedReplacedElementFactory implements ReplacedElementFactory {
 
@@ -355,15 +354,20 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
     }
 
     public FlyingSaucerRenderer() {
-        chainedReplacedElementFactoryForImage = new ChainedReplacedElementFactory();
-        chainedReplacedElementFactoryForImage.addFactory(new SwingReplacedElementFactory());
-        chainedReplacedElementFactoryForImage.addFactory(new SVGSalamanderSwingReplacedElementFactory());
-
+        
     }
 
+    /**
+     * {@inheritDoc}
+     * This methods is syncronized because SvgSalamanders SvgPanel is not thread safe.
+     */
     @Override
-    public BufferedImage renderWebpageToImage(Device device, String url) {
+    public synchronized BufferedImage renderWebpageToImage(Device device, String url, boolean useCache) {
         Java2DRenderer renderer = new Java2DRenderer(url, device.getScreenWidth());
+
+        ChainedReplacedElementFactory chainedReplacedElementFactoryForImage = new ChainedReplacedElementFactory();
+        chainedReplacedElementFactoryForImage.addFactory(new SwingReplacedElementFactory());
+        chainedReplacedElementFactoryForImage.addFactory(new SVGSalamanderSwingReplacedElementFactory());
 
         renderer.getSharedContext().setReplacedElementFactory(chainedReplacedElementFactoryForImage);
         return renderer.getImage();
@@ -380,6 +384,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
 
             if (url.length == 1) {
                 renderWebpageToPdf(os, url[0]);
+                return;
             }
 
             List<File> pdfFiles = new ArrayList<File>();
@@ -416,7 +421,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
         os.close();
     }
 
-    public static void concatPDFs(List<File> files, OutputStream outputStream) throws IOException, DocumentException {
+    private void concatPDFs(List<File> files, OutputStream outputStream) throws IOException, DocumentException {
 
         Document document = new Document();
         try {

@@ -1,21 +1,13 @@
 package dk.apaq.shopsystem.entity;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import org.hibernate.annotations.GenericGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author michael
  */
-public class ParameterDefinition {
+public class ParameterDefinition implements Serializable {
     
     private final Object defaultValue;
     private final Class type;

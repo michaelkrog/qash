@@ -1,9 +1,11 @@
 package dk.apaq.shopsystem.entity;
 
+import java.io.Serializable;
+
 /**
  *
  */
-public class SellerInfo {
+public class SellerInfo implements Serializable {
 
     private final String id;
     private final String name;

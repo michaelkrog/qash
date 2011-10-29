@@ -15,7 +15,7 @@ public class MockWebRenderer extends AbstractImageRenderer {
     private int calls;
     
     @Override
-    public BufferedImage renderWebpageToImage(Device device, String url) {
+    public BufferedImage renderWebpageToImage(Device device, String url, boolean useCache) {
         try {
             calls++;
             BufferedImage image = ImageIO.read(getClass().getResourceAsStream("/dk/apaq/shopsystem/webrenderer/testimage.jpg"));
