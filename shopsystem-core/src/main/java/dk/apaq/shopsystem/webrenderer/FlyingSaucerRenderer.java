@@ -29,11 +29,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
 import org.xhtmlrenderer.css.style.CalculatedStyle;
@@ -60,6 +60,7 @@ import org.xhtmlrenderer.util.XRLog;
  */
 public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRenderer {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FlyingSaucerRenderer.class);
     
     private class ChainedReplacedElementFactory implements ReplacedElementFactory {
 
@@ -216,7 +217,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
                 
                 return new SVGITextReplacedElement(new URI(uac.resolveURI(path)), cssWidth, cssHeight);
             } catch (Exception ex) {
-                Logger.getLogger(FlyingSaucerRenderer.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.warn("Error replcaing SVG for PDF.", ex);
                 return null;
             }
         }
@@ -261,8 +262,8 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
                 content = getSVGElementContent(elem);
 
                 String path = elem.getAttribute("data");
-                XRLog.general(Level.FINE, "Rendering embedded SVG via object tag from: " + path);
-                XRLog.general(Level.FINE, "Content is: " + content);
+                LOG.debug("Rendering embedded SVG via object tag from: {}", path);
+                LOG.debug("Content is: {}", content);
                 panel.setAntiAlias(true);
                 panel.setSvgURI(new URI(uac.resolveURI(path)));
                 panel.setBackground(Color.white);
@@ -299,7 +300,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
             + " in SVG renderer. Skipping and using blank JPanel.", e);
             cc = getDefaultJComponent(content, cssWidth, cssHeight);
             }*/ catch (URISyntaxException e) {
-                XRLog.general(Level.WARNING, "Could not replace SVG element; rendering failed"
+                LOG.warn("Could not replace SVG element; rendering failed"
                         + " in SVG renderer. Skipping and using blank JPanel.", e);
                 cc = getDefaultJComponent(content, cssWidth, cssHeight);
             }
@@ -363,6 +364,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
      */
     @Override
     public synchronized BufferedImage renderWebpageToImage(Device device, String url, boolean useCache) {
+        LOG.debug("Rendering image from url [device={}; url={}; useCache= {}]", new Object[]{device.getScreenWidth()+"x"+device.getScreenHeight(), url, useCache});
         Java2DRenderer renderer = new Java2DRenderer(url, device.getScreenWidth());
 
         ChainedReplacedElementFactory chainedReplacedElementFactoryForImage = new ChainedReplacedElementFactory();

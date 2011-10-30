@@ -55,6 +55,8 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
         String themeName = page.getThemeName();
         String templateName = page.getTemplateName();
         
+        LOG.debug("Initializing page. [pageid={}, theme={};template{}]", new Object[]{page.getId(), themeName, templateName});
+        
         theme = organisationService.getThemes().read(themeName);
         if (theme == null) {
             throw new WicketRuntimeException("Theme not found.[id=" + themeName + "]");
@@ -67,9 +69,13 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
         
         
         for (Placeholder availablePlaceHolder : template.getPlaceHolders()) {
+            LOG.debug("Loading ComponentInformations for placeholder [placeholder={}]", availablePlaceHolder);
             List<ComponentInformation> infolist = page.getComponentInformations(availablePlaceHolder.getId());
             
             if (infolist == null || infolist.isEmpty()) {
+                
+                LOG.debug("No ComponentInformation found for placeholder [placeholder={}]", availablePlaceHolder);
+                
                 //Add a dummy component
                 Label lbl = new Label(availablePlaceHolder.getId(), "Missing component");
                 add(lbl);
@@ -79,13 +85,16 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
             //Compile list of custom components
             List<SimpleScriptComponent> components = new ArrayList<SimpleScriptComponent>();
             for (ComponentInformation info : infolist) {
+                LOG.debug("Retrieving module and component for ComponentInformation [moduleName={};componentname={}]", new Object[]{info.getModuleName(), info.getComponentName()});
                 Module module = organisationService.getModules().read(info.getModuleName());
                 if (module == null) {
+                    LOG.debug("Module not found. [moduleName={}]", info.getModuleName());
                     continue;
                 }
                 
                 Component component = module.getComponent(info.getComponentName());
                 if (component == null) {
+                    LOG.debug("Component not found. [componentName={}]", info.getComponentName());
                     continue;
                 }
                 
@@ -93,6 +102,8 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
                 components.add(customWicketComponent);
             }
 
+            LOG.debug("Adding components to placeholder. [placeholder={};noOfComponents={}]", new Object[]{availablePlaceHolder, components.size()});
+            
             //Add list of components to placeholder
             add(new ListView<SimpleScriptComponent>(availablePlaceHolder.getId(), components) {
                 

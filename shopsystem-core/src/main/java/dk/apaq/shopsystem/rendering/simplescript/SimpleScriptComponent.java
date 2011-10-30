@@ -21,6 +21,7 @@ import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
@@ -31,7 +32,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SimpleScriptComponent extends Panel implements IMarkupCacheKeyProvider, IMarkupResourceStreamProvider {
 
-    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(SimpleScriptComponent.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleScriptComponent.class);
     
     private final Component component;
     private boolean failed = false;
@@ -82,8 +83,10 @@ public class SimpleScriptComponent extends Panel implements IMarkupCacheKeyProvi
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
         if(failed) {
+            LOG.warn("Component failed. Return markup for failure. [componentname={}]", new Object[]{component.getName()});
             return new StringResourceStream("<wicket:panel><div>Component failed to render: "+StringEscapeUtils.escapeHtml(error)+"</div></wicket:panel>");
         } else {
+            LOG.debug("Creating resource for component [componentname={}]", new Object[]{component.getName()});
             return new VfsResourceStream(component.getMarkupFile());
         }
     }
