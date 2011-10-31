@@ -22,7 +22,20 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
     private String templateCode = "function renderHead(response){\n"
             + "response.renderCSSReference(\"style.css\");"
             + "}\n";
-    private String templateMarkup = "<html><head><link rel=\"stylesheet\" media=\"all\" href=\"style.css\" /><link rel=\"stylesheet\" media=\"all and (max-device-width:400)\" href=\"style_small.css\" /></head><body><wicket:container wicket:id=\"placeholder_1\"><div wicket:id=\"placeholder\"/></wicket:container></body></html>";
+    private String templateMarkup = "<html>\n"+
+                                    "   <head>\n"+
+                                    "       <link rel=\"stylesheet\" media=\"all\" href=\"style.css\" />\n"+
+                                    "       <link rel=\"stylesheet\" media=\"all and (max-device-width:400)\" href=\"style_small.css\" />\n"+
+                                    "   </head>\n"+
+                                    "   <body>\n"+
+                                    "       <wicket:container wicket:id=\"placeholder_1\">\n"+
+                                    "           <div wicket:id=\"placeholder\"/>\n"+
+                                    "           <cms:component module=\"Standard\" component=\"Label\">\n"+
+                                    "               <cms:parameter name=\"text\" value=\"Test\"/>"+
+                                    "           </cms:component>"+
+                                    "       </wicket:container>\n"+
+                                    "   </body>\n"+
+                                    "</html>\n";
     private String stylesheet = "body { background:yellow;}";
     private String moduleInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
     private String imageComponentCode = "/*\n"

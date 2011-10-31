@@ -1,28 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package dk.apaq.shopsystem.rendering;
 
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.vfs.Directory;
-import dk.apaq.vfs.File;
 import dk.apaq.vfs.FileSystem;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import org.apache.wicket.Page;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import java.util.Date;
-import java.util.List;
-import org.apache.wicket.Application;
-import org.apache.wicket.ThreadContext;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -81,6 +66,10 @@ public class ThemeTest {
         assertEquals("Apaq", instance.getSellerInfo().getName());
         assertEquals("mic@apaq.dk", instance.getSellerInfo().getEmail());
         assertEquals(1, instance.listTemplates().size());
+        
+        assertEquals("Simple", instance.listTemplates().get(0).getName());
+        assertEquals(1, instance.listTemplates().get(0).getDefaultComponentInformationCount());
+        
 
     }
 
