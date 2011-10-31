@@ -33,8 +33,8 @@ public class TaxTool {
      * @param taxList The list of taxes to use for tax calculations.
      * @return The value of the calculated txax.
      */
-    public static double getAddableTaxValue(double value, List<Tax> taxList) {
-        double[] values = getAddableTaxValues(value, taxList);
+    public static double getAddableTaxValue(double value, List<Tax> taxList, boolean cascade) {
+        double[] values = getAddableTaxValues(value, taxList, cascade);
         double valueTax = 0;
 
         for (int i = 0; i < values.length; i++) {
@@ -52,16 +52,16 @@ public class TaxTool {
      * @param taxList The list of taxes to use for tax calculations.
      * @return The array of taxvalues.
      */
-    public static double[] getAddableTaxValues(double value, List<Tax> taxList) {
+    public static double[] getAddableTaxValues(double value, List<Tax> taxList, boolean cascade) {
         double[] values = new double[taxList.size()];
 
         for (int i = 0; i < taxList.size(); i++) {
             Tax currentTax = taxList.get(i);
-            //if(currentTax.getTaxType()==TaxType.Percentage)
             values[i] = (currentTax.getRate() / 100) * value;
-            //else
-            //	throw new UnsupportedOperationException("Only TaxType.Percentage is supported.");
-            value += values[i];
+            
+            if(cascade) {
+                value += values[i];
+            }
         }
         return values;
     }
@@ -86,8 +86,8 @@ public class TaxTool {
      * @param taxList The list of taxes to use for tax calculations.
      * @return The value of the calculated txax.
      */
-    public static double getWithdrawableTaxValue(double value, List<Tax> taxList) {
-        double[] values = getWithdrawableTaxValues(value, taxList);
+    public static double getWithdrawableTaxValue(double value, List<Tax> taxList, boolean cascade) {
+        double[] values = getWithdrawableTaxValues(value, taxList, cascade);
         double valueTax = 0;
 
         for (int i = 0; i < values.length; i++) {
@@ -105,16 +105,20 @@ public class TaxTool {
      * @param taxList The list of taxes to use for tax calculations.
      * @return The array of taxvalues.
      */
-    public static double[] getWithdrawableTaxValues(double value, List<Tax> taxList) {
+    public static double[] getWithdrawableTaxValues(double value, List<Tax> taxList, boolean cascade) {
         double[] values = new double[taxList.size()];
 
+        if(!cascade) {
+            double totalRate = 0;
+            for(Tax tax : taxList) {
+                totalRate +=tax.getRate();
+            }
+            value = value -= getWithdrawableTaxValue(value, new Tax("", totalRate));
+        }
+        
         for (int i = taxList.size() - 1; i >= 0; i--) {
             Tax currentTax = taxList.get(i);
-            //if(currentTax.getTaxType()==TaxType.Percentage)
-            values[i] = value - ((value / (currentTax.getRate() + 100.0)) * 100.0);
-            //else
-            //	throw new UnsupportedOperationException("Only TaxType.Percentage is supported.");
-            value -= values[i];
+            values[i] = cascade ? getWithdrawableTaxValue(value, currentTax) : getAddableTaxValue(value, currentTax);
         }
         return values;
     }
