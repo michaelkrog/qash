@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Autopilot</title>
+<link rel="shortcut icon" href="favicon.ico"/>
+<meta name="Description" content="" />
+<meta name="Keywords" content="" />
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/layout.css"/>
+<link rel="stylesheet" type="text/css" href="css/lightbox.css"/>
+
+<!--[if IE 6]>
+<link rel="stylesheet" type="text/css" href="css/ie6.css" />
+<![endif]-->
+<!--[if IE 7]>
+<link rel="stylesheet" type="text/css" href="css/ie7.css" />
+<![endif]-->
+
+<script type="text/javascript" src="lib/jquery-core.js"></script>
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/jquery-pngfix.js"></script>
+<script type="text/javascript" src="lib/jquery-config-ie6.js"></script>
+<![endif]-->
+<script type="text/javascript" src="lib/jquery-cufon.js"></script>
+<script type="text/javascript" src="lib/font-mentone.js"></script>
+<script type="text/javascript" src="lib/jquery-cycle.js"></script>
+<script type="text/javascript" src="lib/jquery-form.js"></script>
+<script type="text/javascript" src="lib/jquery-lightbox.js"></script>
+<script type="text/javascript" src="lib/jquery-config.js"></script>
+</head>
+
+<body>
+<!-- splash -->
+<div id="in-splash-container">
+  <div class="in-splash">
+    <div class="in-splash-content">
+        <div class="in-splash-left" wicket:id="placeholder_1">
+		  <!-- splash text -->
+          <h1 wicket:id="placeholder_1">This text is a title text for the landing page. Please insert your own eye catcher to get the customers attention.
+                <cms:component module="Standard" component="Label">
+                    <parameter name="text" value="This text is a title text for the landing page. Please insert your own eye catcher to get the customers attention."/>
+                </cms:component>
+            </h1>
+		  <ul>
+			<wicket:container wicket:id="placeholder_1">
+				<li wicket:id="placeholder">One of several small teaser texts</li>
+                <cms:component module="Standard" component="Label">
+                    <parameter name="text" value="This is teaser 1."/>
+                </cms:component>
+                <cms:component module="Standard" component="Label">
+                    <parameter name="text" value="This is teaser 2."/>
+                </cms:component>
+                <cms:component module="Standard" component="Label">
+                    <parameter name="text" value="This is teaser 3."/>
+                </cms:component>
+                <cms:component module="Standard" component="Label">
+                    <parameter name="text" value="This is teaser 4."/>
+                </cms:component>
+                <cms:component module="Standard" component="Label">
+                    <parameter name="text" value="This is teaser 5."/>
+                </cms:component>
+                <cms:component module="Standard" component="Label">
+                    <parameter name="text" value="This is teaser 6."/>
+                </cms:component>
+                
+			</wicket:container>
+
+          </ul>
+          <!-- /splash text -->
+		</div>
+		
+        <!-- splash image -->
+    	<span class="in-splash-right" wicket:id="placeholder_2"><img src="images/in-splash.jpg" alt="example" width="460" height="283" />
+            <cms:component module="Standard" component="Image">
+                <parameter name="path" value="Theme:images/in-splash.jpg"/>
+            </cms:component>
+        </span>
+        <!-- /splash image -->
+        <!-- splash buttons -->
+        <span class="in-splash-buttons" wicket:id="placeholder_3">
+            <span class="splash-button"><a href="#">Buy Now</a></span>
+            <span class="splash-link"><a href="#">Take a Tour</a></span>
+        </span>
+        <!-- /splash buttons -->
+    </div>
+  </div>
+</div>
+<!-- /splash -->
+
+<!-- header -->
+<div id="ge-header-container">
+  <div class="ge-header">
+  	<!-- logo -->
+    <div class="ge-logo" wicket:id="placeholder_4"><img src="images/ge-logo.png" alt="Autopilot" width="153" height="35" /></div>
+	<!-- /logo -->
+    <!-- phone -->
+    <div class="ge-phone" wicket:id="placeholder_5">Contact text</div>
+    <!-- /phone -->
+  </div>
+</div>
+<!-- /header -->
+
+<!-- benefits -->
+<div id="in-benefits-container">
+  <div class="in-benefits">
+  <ul>
+	<wicket:container wicket:id="placeholder_6">
+	<!-- benefit item -->
+      
+		<li wicket:id="placeholder">
+		<span class="benefits-icon"><img src="images/benefits/benefits-001.gif" alt="example" width="70" height="70" /></span>
+        <div class="benefits-text">
+      	  <h2>Benefit inforer</h2>
+          <p>One of several gadgets that inform about the systems benefits.</p>
+          <ul class="in-more">
+          	<li class="morestart"><a href="#">Learn More</a></li>
+			<li><a href="#">Preview</a></li>
+          </ul>
+        </div>
+		</li>
+      <!-- /benefit item -->
+	</wicket:container>
+
+  </ul>
+    
+    <div class="clear"></div>
+  </div>
+</div>
+<!-- /benefits -->
+
+<!-- testimonials -->
+<div id="in-testimonials-container">
+  	<ul class="in-testimonials">
+      <wicket:container wicket:id="placeholder_7">
+		<!-- testimonial item -->
+		<li wicket:id="placeholder">
+		<span class="testimonial-logo"><img src="images/testimonials/logo-001.gif" alt="example" width="138" height="52" /></span> 
+        <span class="testimonial-text">
+        This is a testimonial from a satisfied user.<br />New customers really like this.
+        </span>
+		</li>
+		<!-- /testimonial item -->
+	</wicket:container>
+
+  </ul>
+
+</div>
+<!-- /testimonials -->
+
+<!-- quote -->
+<div id="in-quote-container">
+  <div class="in-quote">
+    <div class="quote"> 
+      <div class="quote-text" wicket:id="placeholder_8">
+        <!-- contact details -->
+        <h2>Request a Quote</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc bibendum turpis ut est lacinia id molestie mauris fermentum.<br /><br />
+          <strong>Phone:</strong> 1300 000 000<br /><br />
+          <strong>Address:</strong> <br />
+          29 Bourke Street, Melbourne<br />
+          Victoria, Australia, 3000</p>
+        <!-- /contact details -->
+      </div> 
+        <div class="quote-form" wicket:id="placeholder_9">
+        <!-- contact form -->
+        <form action="process.php" method="post" id="in-quote-form">
+        <fieldset>
+          <div class="form-left">
+            <label for="fullname">Full Name <span>*</span></label>
+            <input id="fullname" name="fullname" type="text" />
+          </div> 
+          <div class="form-right">
+            <label for="emailaddress">Email <span>*</span></label>
+            <input id="emailaddress" name="emailaddress" type="text" />
+          </div>
+          <label for="message">Message <span>*</span></label>
+          <textarea id="message" name="message" cols="10" rows="5"></textarea>
+          <button type="submit">Send</button>
+        </fieldset>
+        </form>
+        <!-- /contact form -->
+      </div> 
+    </div>
+    <div class="screenshots" wicket:id="placeholder_10">
+      <!-- screenshots -->
+      <ul class="gallery">
+        <!-- screenshot item -->
+        <li> 
+          <span class="in-screenshots-view"><img src="images/in-screenshot-view.png" alt="view" width="19" height="19" /></span> 
+          <a href="images/screenshots/screenshot-001.jpg" rel="prettyPhoto[gallery]"><img src="images/screenshots/thumbnail-001.jpg" alt="example" width="138" height="76" /></a> 
+        </li>
+        <!-- /screenshot item -->
+        <li class="endscreenshot"> 
+          <span class="in-screenshots-view"><img src="images/in-screenshot-view.png" alt="view" width="19" height="19" /></span> 
+          <a href="images/screenshots/screenshot-002.jpg" rel="prettyPhoto[gallery]"><img src="images/screenshots/thumbnail-002.jpg" alt="example" width="138" height="76" /></a> 
+        </li>
+        <li> 
+          <span class="in-screenshots-view"><img src="images/in-screenshot-view.png" alt="view" width="19" height="19" /></span> 
+          <a href="images/screenshots/screenshot-003.jpg" rel="prettyPhoto[gallery]"><img src="images/screenshots/thumbnail-003.jpg" alt="example" width="138" height="76" /></a> 
+        </li>
+        <li class="endscreenshot"> 
+          <span class="in-screenshots-view"><img src="images/in-screenshot-view.png" alt="view" width="19" height="19" /></span> 
+          <a href="images/screenshots/screenshot-004.jpg" rel="prettyPhoto[gallery]"><img src="images/screenshots/thumbnail-004.jpg" alt="example" width="138" height="76" /></a> 
+        </li>
+        <li> 
+          <span class="in-screenshots-view"><img src="images/in-screenshot-view.png" alt="view" width="19" height="19" /></span> 
+          <a href="images/screenshots/screenshot-005.jpg" rel="prettyPhoto[gallery]"><img src="images/screenshots/thumbnail-005.jpg" alt="example" width="138" height="76" /></a> 
+        </li>
+        <li class="endscreenshot"> 
+          <span class="in-screenshots-view"><img src="images/in-screenshot-view.png" alt="view" width="19" height="19" /></span> 
+          <a href="images/screenshots/screenshot-006.jpg" rel="prettyPhoto[gallery]"><img src="images/screenshots/thumbnail-006.jpg" alt="example" width="138" height="76" /></a> 
+        </li>
+      </ul>
+      <!-- /screenshots -->
+    </div>
+  </div>
+</div>
+<!-- /quote -->
+
+<!-- clients -->
+<div id="in-clients-container">
+  <div class="in-clients">
+    <h3 wicket:id="placeholder_11">This text is a header for the following logos from companies that has used the system.</h3>
+    <!-- client logos -->
+	<ul class="in-testimonials">
+      <wicket:container wicket:id="placeholder_12">
+		<li wicket:id="placeholder"><img src="images/clients/logo-001.gif" alt="example" width="116" height="64" /></li>
+	  </wicket:container>
+    </ul>
+    <!-- /client logos -->
+  </div>
+</div>
+<!-- /clients -->
+
+<!-- footer -->
+<div id="ge-footer-container">
+  <div class="ge-footer"> 
+    <div class="ge-calltoaction">
+      <!-- call to action -->
+      <h4 wicket:id="placeholder_13">Insert a teaser text here</h4>
+      <p wicket:id="placeholder_14">.....and explain what the teasing is all about - what you wanna sell etc., etc.</p>
+      <!-- /call to action -->
+    </div> 
+    <!-- call to action button -->
+    <span class="ge-calltoaction-button" wicket:id="placeholder_15"><a href="#">Buy Now</a></span>
+    <!-- /call to action button -->
+    <div class="clear"></div>
+    <div class="ge-copyright"> 
+      <!-- copyright -->
+      <ul class="copyright">
+	    <wicket:container wicket:id="placeholder_15">
+        <li wicket:id="placeholder" class="copyrightstart">&copy; 2010 Autopilot. All rights reserved</li>
+		</wicket:container>
+      </ul>
+      <!-- /copyright -->
+      <!-- social -->
+      <ul class="socialmedia"> 
+	     <wicket:container wicket:id="placeholder_16">
+        <li><a href="#"><img src="images/social/icon-digg.png" alt="Digg" width="16" height="16" /></a></li>
+		</wicket:container>
+      </ul>
+      <!-- /social -->
+    </div> 
+  </div>
+</div>
+<!-- /footer -->
+
+<script type="text/javascript"> Cufon.now(); </script> 
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function(){
+	$(".gallery a[rel^='prettyPhoto']").prettyPhoto({animationSpeed:'fast',slideshow:10000, theme: 'autopilot'});
+});
+</script>
+</body>
+</html>
