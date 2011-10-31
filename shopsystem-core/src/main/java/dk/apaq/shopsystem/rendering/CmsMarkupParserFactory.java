@@ -23,6 +23,7 @@ public class CmsMarkupParserFactory extends MarkupFactory {
         @Override
         protected MarkupFilterList initializeMarkupFilters(Markup markup) {
             MarkupFilterList list = new MarkupFilterList();
+            list.add(new CmsTagIgnoreHandler());
             list.add(new StyleSheetSorter());
             list.add(new TemplateResourcePathAppender());
             

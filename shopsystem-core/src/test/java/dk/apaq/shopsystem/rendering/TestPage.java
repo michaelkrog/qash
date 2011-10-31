@@ -6,6 +6,8 @@ import dk.apaq.shopsystem.entity.ComponentParameter;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Page;
+import dk.apaq.shopsystem.entity.Template;
+import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
@@ -42,38 +44,27 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
 
     @Before
     public void setUp() throws IOException {
+        WebApplication app = applicationContext.getBean("wicketApplication", WebApplication.class);
+        tester = new WicketTester(app);
+        
         String id = service.getOrganisationCrud().create();
         org = service.getOrganisationCrud().read(id);
 
         OrganisationService orgService = service.getOrganisationService(org);
         site = orgService.getWebsites().read(orgService.getWebsites().create());
         
+        Theme theme = orgService.getThemes().read("Basic");
+        Template template = theme.getTemplate("Simple");
 
         Crud.Complete<String, Page> pageCrud = orgService.getPages(site);
         page = pageCrud.read(pageCrud.create());
         page.setName("test");
-        page.setThemeName("Basic");
-        page.setTemplateName("Simple");
+        page.setThemeName(theme.getName());
+        page.setTemplateName(template.getName());
         
-        ComponentInformation info = new ComponentInformation();
-        info.setModuleName("Standard");
-        info.setComponentName("Label");
-        info.setPlaceholderName("placeholder_1");
-
-        ComponentParameter cp = new ComponentParameter();
-        cp.setString("Hallooo!");
-        info.getParameterMap().put("text", cp);
-        page.addComponentInformation(info);
-        
-        info = new ComponentInformation();
-        info.setModuleName("Standard");
-        info.setComponentName("Image");
-        info.setPlaceholderName("placeholder_1");
-
-        cp = new ComponentParameter();
-        cp.setString("/Content/monologo.png");
-        info.getParameterMap().put("path", cp);
-        page.addComponentInformation(info);
+        for(ComponentInformation ci : template.getDefaultComponentInformations()) {
+            page.addComponentInformation(ci);
+        }
         
         pageCrud.update(page);
 
@@ -87,8 +78,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         File targetImageFile = fs.getRoot().getDirectory("Content", true).getFile("monologo.png", true);
         StreamUtils.copy(sourceImageFile.getInputStream(), targetImageFile.getOutputStream());
                 
-        WebApplication app = applicationContext.getBean("wicketApplication", WebApplication.class);
-        tester = new WicketTester(app);
+   
 
     }
 
@@ -112,8 +102,9 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         tester.executeUrl(url);
         String response = tester.getLastResponseAsString();
         tester.assertContains("style.css");
-        
         tester.assertContainsNot("style_small.css");
+        tester.assertContainsNot("<cms:component");
+        tester.assertContainsNot("</cms:component");
     }
     
     @Test
