@@ -7,6 +7,7 @@ import dk.apaq.shopsystem.rendering.CmsTag;
 import dk.apaq.shopsystem.rendering.CmsTagIdentifier;
 import dk.apaq.shopsystem.rendering.VfsResourceStream;
 import dk.apaq.vfs.File;
+import dk.apaq.vfs.Path;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -120,9 +121,12 @@ public class TemplateInformationExtractor {
                     if(!ct.isClose() && ct.isParameterTag() && inCmsComponentTag) {
                         String name = ct.getAttribute("name");
                         String value = ct.getAttribute("value");
-                        ComponentParameter componentParameter = new ComponentParameter();
-                        componentParameter.setString(value);
-                        componentInformation.getParameterMap().put(name, componentParameter);
+                        String type = ct.getAttribute("type");
+                        
+                        //type is optional - default it to string
+                        type = type == null ? "String" : type;
+                        
+                        ComponentParameter componentParameter = createComponentParameter(file, value, type);
                         continue;
                     }
                     
@@ -153,5 +157,27 @@ public class TemplateInformationExtractor {
         }
         
         return templateInfo;
+    }
+    
+    private ComponentParameter createComponentParameter(File templatFile, String value, String type) {
+        ComponentParameter cp = new ComponentParameter();
+        if("Path".equalsIgnoreCase(type)) {
+            Path path = null;
+            if(!value.startsWith("/")) {
+                path = templatFile.getPath();
+                Path relativePath = new Path(value);
+                for(int i=0;i<relativePath.getLevels();i++) {
+                    path.addLevel(relativePath.getLevel(i));
+                }
+            } else {
+                path = new Path(value);
+            }
+            
+            cp.setPath(path);
+        } else {
+            cp.setString(value);
+        }
+        
+        return cp;
     }
 }

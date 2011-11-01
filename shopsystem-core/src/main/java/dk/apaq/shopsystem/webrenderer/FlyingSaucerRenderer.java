@@ -217,7 +217,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
                 
                 return new SVGITextReplacedElement(new URI(uac.resolveURI(path)), cssWidth, cssHeight);
             } catch (Exception ex) {
-                LOG.warn("Error replcaing SVG for PDF.", ex);
+                LOG.warn("Error replacing SVG for PDF.", ex);
                 return null;
             }
         }
