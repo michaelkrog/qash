@@ -17,7 +17,7 @@ public class AbstractController {
     
     protected OrganisationService GetOrgService(String orgInfo) {
         
-        // TODO: orgInfo should be a secret string. Should it be possible to grant access to different parties?
+        // @TODO: orgInfo should be a secret string. Should it be possible to grant access to different parties?
         this.org = service.getOrganisationCrud().read(orgInfo);
         if (this.org == null) {
             
