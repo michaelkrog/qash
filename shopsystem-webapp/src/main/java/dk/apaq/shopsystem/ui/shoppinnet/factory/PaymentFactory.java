@@ -52,7 +52,7 @@ public class PaymentFactory extends AbstractFactory {
         
         form.setHeaderText("Edit Payment");
        
-        form.addField("name", "Name", "", "");
+        form.addField("name", "Name", "", "", null);
         getApplication().getMainWindow().addWindow(form);
     }
     

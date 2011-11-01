@@ -57,11 +57,11 @@ public class ProductFactory extends AbstractFactory {
         form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
-        form.addField("name", "Name", "", "");
-        form.addField("itemNo", "Item Number", "", "");
-        form.addField("price", "Price", "", "");
-        form.addField("quantityInStock", "Quantity In Stock", "", "");
-        form.addField("stockProduct", "Stock Product", "If not, product is never in stock but may be ordered anyway", "");
+        form.addField("name", "Name", "", "", null);
+        form.addField("itemNo", "Item Number", "", "", null);
+        form.addField("price", "Price", "", "", null);
+        form.addField("quantityInStock", "Quantity In Stock", "", "", null);
+        form.addField("stockProduct", "Stock Product", "If not, product is never in stock but may be ordered anyway", "", null);
                 
         getApplication().getMainWindow().addWindow(form);
     }

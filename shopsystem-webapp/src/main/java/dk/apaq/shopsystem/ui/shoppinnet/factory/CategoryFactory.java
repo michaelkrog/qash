@@ -52,7 +52,7 @@ public class CategoryFactory extends AbstractFactory {
         
         form.setHeaderText("Edit Category");
        
-        form.addField("name", "Name", "", "");
+        form.addField("name", "Name", "", "", null);
         getApplication().getMainWindow().addWindow(form);
     }
     

@@ -13,6 +13,7 @@ import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Select;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -33,9 +34,10 @@ public class CommonForm extends Window {
     private List itemId = new ArrayList();
     private String description = "";
     private List field = new ArrayList();
-    private List fieldName = new ArrayList();
-    private List fieldDescription = new ArrayList();
-    private List fieldType = new ArrayList();
+    private List<String> fieldName = new ArrayList();
+    private List<String> fieldDescription = new ArrayList();
+    private List<String> fieldType = new ArrayList(); // Auto if empty "" // "select"
+    private List<Container> fieldData = new ArrayList();
     private VerticalLayout content = new VerticalLayout();
     private String headerText = "";
     private VerticalLayout formHolder = new VerticalLayout();
@@ -52,7 +54,7 @@ public class CommonForm extends Window {
     private Form form = new Form() {
    
         @Override
-        protected void attachField(Object propertyId, Field f) {
+        public void attachField(Object propertyId, Field f) {
           
             if (field.contains(propertyId)) {
                 fieldCount ++;
@@ -66,7 +68,23 @@ public class CommonForm extends Window {
                 Label lName = new Label(fieldName.get(fieldCount).toString());
                 lName.addStyleName("margin");
                 formLayout.addComponent(lName);
-                super.attachField(propertyId, f);
+                
+                // Build the needed field: automated or select
+                String thisFieldType = fieldType.get(fieldCount).toString();
+                // Automated
+                if("".equals(thisFieldType)) {
+                    super.attachField(propertyId, f);
+                }
+                // Select box
+                if("select".equals(thisFieldType)) {
+                    Select select = new Select();
+                    //select.setContainerDataSource(fieldData.get(fieldCount).getContainerProperty("id", "name"));
+                    select.setPropertyDataSource(fieldData.get(fieldCount).getContainerProperty("id", "name"));
+                    select.setNullSelectionAllowed(false);
+                    super.attachField(propertyId, select);
+                }
+                
+               
                 
                 String fDescription = fieldDescription.get(fieldCount).toString();
                 if (!fDescription.equals("")) {
@@ -118,11 +136,12 @@ public class CommonForm extends Window {
     }
     
     
-    public void addField(String field, String fieldName, String fieldDescription, String type) {
+    public void addField(String field, String fieldName, String fieldDescription, String fieldType, Container fieldData) {
 	this.field.add(field);
         this.fieldName.add(fieldName);
         this.fieldDescription.add(fieldDescription);
-        this.fieldType.add(type);
+        this.fieldType.add(fieldType);
+        this.fieldData.add(fieldData);
     }
     
     

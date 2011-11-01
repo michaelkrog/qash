@@ -54,7 +54,7 @@ public class DomainFactory extends AbstractFactory {
         form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
-        form.addField("name", "Name", "Domain name including www.", "");
+        form.addField("name", "Name", "Domain name including www.", "", null);
         
         getApplication().getMainWindow().addWindow(form);
     }

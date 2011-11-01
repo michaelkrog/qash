@@ -2,19 +2,18 @@ package dk.apaq.shopsystem.ui.shoppinnet.common;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
-import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.data.Property;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.Select;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.service.OrganisationService;
@@ -33,7 +32,7 @@ import java.util.logging.Logger;
 
 public class CommonGrid extends CustomComponent implements Container.Filter { //Container.Viewer
     
-    private Container data;
+    //private Container data;
     //private IndexedContainer data;
     private String factoryClass = "";
     private String pageHeader = "";
@@ -47,6 +46,9 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
     private List button = new ArrayList();
     private List buttonMethod = new ArrayList();
     private List buttonTarget = new ArrayList();
+    private List filter = new ArrayList();
+    private List filterName = new ArrayList();
+    private List<Property> filterData = new ArrayList();
     
     final private OrganisationService orgService;
     final private Table table = new Table();
@@ -89,10 +91,15 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
     }
     
     public void addButton(String button, String buttonMethod, String buttonTarget) {
-
 	this.button.add(button);
         this.buttonMethod.add(buttonMethod);
         this.buttonTarget.add(buttonTarget);
+    }
+    
+    public void addFilter(String filter, String filterName, Property filterData) {
+	this.filter.add(filter);
+        this.filterName.add(filterName);
+        this.filterData.add(filterData);
     }
     
 
@@ -104,7 +111,7 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
     
     //@Override
     public void setContainerDataSource(Container data) {
-        this.data = data;
+        //this.data = data;
         //this.data = (IndexedContainer) data;
         this.table.setContainerDataSource(data);
     }
@@ -149,6 +156,13 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
         // Create panel buttons
         for (int i = 0; i < this.button.size(); i++) {
             this.buttonHolder.addComponent(createButton(this.button.get(i).toString(),this.buttonMethod.get(i).toString(),this.buttonTarget.get(i).toString()));
+        }
+        
+        // Create panel filters
+        for (int i = 0; i < this.filter.size(); i++) {
+            Select select = new Select();
+            select.setPropertyDataSource(this.filterData.get(i));
+            this.buttonHolder.addComponent(select);
         }
         
         // Create table

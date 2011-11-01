@@ -52,7 +52,7 @@ public class ModuleFactory extends AbstractFactory {
         
         form.setHeaderText("Edit Module");
        
-        form.addField("name", "Name", "", "");
+        form.addField("name", "Name", "", "", null);
         getApplication().getMainWindow().addWindow(form);
     }
     

@@ -52,7 +52,7 @@ public class WebsiteFactory extends AbstractFactory {
         form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
-        form.addField("name", "Name1", "This is not the url, but a descriptional name", "");
+        form.addField("name", "Name1", "This is not the url, but a descriptional name", "", null);
         /*form.addField("themeName", "Theme Name", "This is not the url, but a descriptional name", "");
         */
         /*form.addForm("Stock");

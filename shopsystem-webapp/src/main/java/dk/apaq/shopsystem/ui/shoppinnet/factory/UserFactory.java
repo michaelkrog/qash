@@ -50,7 +50,7 @@ public class UserFactory extends AbstractFactory {
         form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
-        form.addField("name", "Name", "", "");
+        form.addField("name", "Name", "", "", null);
         
         getApplication().getMainWindow().addWindow(form);
     }

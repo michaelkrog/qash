@@ -52,7 +52,7 @@ public class ThemeFactory extends AbstractFactory {
         
         form.setHeaderText("Edit Theme");
        
-        form.addField("name", "Name", "", "");
+        form.addField("name", "Name", "", "", null);
         getApplication().getMainWindow().addWindow(form);
     }
     

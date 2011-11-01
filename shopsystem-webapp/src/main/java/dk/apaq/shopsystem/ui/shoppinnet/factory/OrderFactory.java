@@ -55,7 +55,7 @@ public class OrderFactory extends AbstractFactory {
         form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
-        form.addField("invoiceNumber", "Invoice", "", "");
+        form.addField("invoiceNumber", "Invoice", "", "", null);
         
         getApplication().getMainWindow().addWindow(form);
     }

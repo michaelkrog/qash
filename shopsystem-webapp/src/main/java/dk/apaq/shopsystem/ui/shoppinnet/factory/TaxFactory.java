@@ -53,8 +53,8 @@ public class TaxFactory extends AbstractFactory {
         form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
-        form.addField("name", "Name", "", "");
-        form.addField("rate", "Rate %", "", "");
+        form.addField("name", "Name", "", "", null);
+        form.addField("rate", "Rate %", "", "", null);
         
         getApplication().getMainWindow().addWindow(form);
     }

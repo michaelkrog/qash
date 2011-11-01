@@ -1,16 +1,24 @@
 package dk.apaq.shopsystem.ui.shoppinnet.factory;
 
+import com.vaadin.data.Container;
 import dk.apaq.shopsystem.entity.Page;
+import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonForm;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonGrid;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
+import java.util.List;
+
 
 public class PageFactory extends AbstractFactory {
 
+    private Container websiteContainer;
     
     @Override
     public void setCrudContainer() {
-            this.container = new CrudContainer(this.orgService.getPages(this.orgService.getWebsites().read("4028818832fd94b60132fd9706190002")), Page.class);
+        
+            this.websiteContainer = new CrudContainer(this.orgService.getWebsites(), Website.class);
+            List websites = this.orgService.getWebsites().listIds(); 
+            this.container = new CrudContainer(this.orgService.getPages(this.orgService.getWebsites().read(websites.get(0).toString())), Page.class);   
     }
     
             
@@ -25,6 +33,9 @@ public class PageFactory extends AbstractFactory {
         grid.setSearch(false);
         grid.setPageHeader("Pages");
         grid.addDescription("", "One page can hold multiple modules. A module may contain a text block, a view of categories, productdetails, special offers etc.");
+        
+        // Add dropdown
+        grid.addFilter("website", "Website", this.websiteContainer.getContainerProperty("id", "name"));
         
         // Add buttons
         grid.addButton("Add","AddItem","");
@@ -53,10 +64,11 @@ public class PageFactory extends AbstractFactory {
         form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
-        form.addField("name", "Name", "", "");
-        form.addField("title", "Title", "Shown in search engine results and page header", "");
-        form.addField("description", "Description", "Shown in search engine results", "");
-        form.addField("keywords", "Keywords", "Keywords for search engines, must match your website content", "");
+        form.addField("name", "Name", "", "", null);
+        form.addField("title", "Title", "Shown in search engine results and page header", "", null);
+        form.addField("description", "Description", "Shown in search engine results", "", null);
+        form.addField("keywords", "Keywords", "Keywords for search engines", "", null);
+        //form.addField("website", "Website", "", "select", this.websiteContainer);
         
         getApplication().getMainWindow().addWindow(form);
     }
