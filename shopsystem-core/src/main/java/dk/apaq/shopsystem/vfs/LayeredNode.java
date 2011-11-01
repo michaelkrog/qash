@@ -15,12 +15,14 @@ import java.util.Date;
  */
 public abstract class LayeredNode implements Node {
 
-    private final FileSystem fileSystem;
-    private final Node wrappedNode;
+    protected final LayeredFileSystem fileSystem;
+    protected final LayeredDirectory parent;
+    protected final Node wrappedNode;
 
-    public LayeredNode(FileSystem fileSystem, Node wrappedNode) {
+    public LayeredNode(LayeredFileSystem fileSystem, LayeredDirectory parent, Node wrappedNode) {
         this.fileSystem = fileSystem;
         this.wrappedNode = wrappedNode;
+        this.parent = parent;
     }
     
     @Override
@@ -35,67 +37,67 @@ public abstract class LayeredNode implements Node {
 
     @Override
     public void setName(String name) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        wrappedNode.setName(name);
     }
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wrappedNode.getName();
     }
 
     @Override
     public String getBaseName() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wrappedNode.getBaseName();
     }
 
     @Override
     public String getSuffix() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wrappedNode.getSuffix();
     }
 
     @Override
     public Directory getParent() throws FileNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return parent;
     }
 
     @Override
     public FileSystem getFileSystem() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return fileSystem;
     }
 
     @Override
     public boolean isDirectory() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wrappedNode.isDirectory();
     }
 
     @Override
     public boolean isFile() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wrappedNode.isFile();
     }
 
     @Override
     public boolean isHidden() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wrappedNode.isHidden();
     }
 
     @Override
     public Date getLastModified() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wrappedNode.getLastModified();
     }
 
     @Override
     public void setLastModified(Date date) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        wrappedNode.setLastModified(date);
     }
 
     @Override
     public int compareTo(Node node) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wrappedNode.compareTo(node);
     }
 
     @Override
     public void delete() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        wrappedNode.delete();
     }
 
     @Override
@@ -105,27 +107,40 @@ public abstract class LayeredNode implements Node {
 
     @Override
     public boolean equals(Node node) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wrappedNode.equals(node);
     }
 
     @Override
     public Path getPath() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Path path = new Path();
+
+        Node node = this;
+        while(!node.isDirectory() || !((Directory)node).isRoot()){
+            path.addLevel(0, node.getName());
+            try{
+                node=node.getParent();
+            } catch(FileNotFoundException ex){
+                //if this happens, the parent directy has been removed.
+                //Actually - this file does not exist anymote.
+                throw new RuntimeException("Cannot retrieve parent directory.");
+            }
+        }
+        return path;
     }
 
     @Override
     public boolean canRead() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wrappedNode.canRead();
     }
 
     @Override
     public boolean canWrite() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wrappedNode.canWrite();
     }
 
     @Override
     public int compareTo(Object t) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wrappedNode.compareTo(t);
     }
     
 }

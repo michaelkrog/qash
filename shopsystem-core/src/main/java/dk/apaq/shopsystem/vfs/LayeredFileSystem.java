@@ -6,6 +6,8 @@ import dk.apaq.vfs.Node;
 import dk.apaq.vfs.Path;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,67 +16,87 @@ import java.util.Map;
  */
 public class LayeredFileSystem implements FileSystem {
 
-    private final FileSystem primaryFilesystem;
-    private final FileSystem secondaryFilesystem;
+    private final FileSystem layerForFilesystem;
+    private final List<LayerEntry> entries = new ArrayList<LayerEntry>();
     
     private class LayerEntry {
-        private final Path primaryPath;
-        private final Path secondaryPath;
+        private final Path path;
+        private final Directory directory;
 
-        public LayerEntry(Path primaryPath, Path secondaryPath) {
-            this.primaryPath = primaryPath;
-            this.secondaryPath = secondaryPath;
+        public LayerEntry(Path path, Directory directory) {
+            this.path = path;
+            this.directory = directory;
         }
 
-        public Path getPrimaryPath() {
-            return primaryPath;
+        public Directory getDirectory() {
+            return directory;
         }
 
-        public Path getSecondaryPath() {
-            return secondaryPath;
+        public Path getPath() {
+            return path;
         }
-        
     }
 
-    public LayeredFileSystem(FileSystem primaryFilesystem, FileSystem secondaryFilesystem) {
-        this.primaryFilesystem = primaryFilesystem;
-        this.secondaryFilesystem = secondaryFilesystem;
+    public LayeredFileSystem(FileSystem layerForFilesystem) {
+        this.layerForFilesystem = layerForFilesystem;
+    }
+    
+    public void addLayer(Path injectPath, Directory directory) {
+        entries.add(new LayerEntry(injectPath, directory));
+    }
+    
+    protected List<Directory> getLayers(Path path) {
+        List<Directory> dirs = new ArrayList<Directory>();
+        for(LayerEntry entry : entries) {
+            if(path.toString().equals(entry.path.toString())) {
+                dirs.add(entry.directory);
+            }
+        }
+        return dirs;
     }
     
     @Override
     public String getName() {
-        return "Layered filesystem between primary["+primaryFilesystem.getName()+"] and secondary["+secondaryFilesystem.getName()+"] filesystems.";
+        return "Layered filesystem between for "+layerForFilesystem.getName();
     }
 
     @Override
     public Map getInfo() {
-        return primaryFilesystem.getInfo();
+        return layerForFilesystem.getInfo();
     }
 
     @Override
     public Directory getRoot() throws FileNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new LayeredDirectory(this, null, layerForFilesystem.getRoot());
     }
 
     @Override
     public long getSize() {
-        return primaryFilesystem.getSize();
+        return layerForFilesystem.getSize();
     }
 
     @Override
     public long getFreeSpace() {
-        return primaryFilesystem.getFreeSpace();
+        return layerForFilesystem.getFreeSpace();
     }
 
     @Override
     public Node getNode(String path) throws FileNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Path pathObject = new Path(path);
+        Node currentNode = getRoot();
+
+        for(int i=0;i<pathObject.getLevels();i++){
+            if(currentNode.isDirectory()){
+                currentNode = ((Directory)currentNode).getChild(pathObject.getLevel(i));
+            } else
+                throw new FileNotFoundException("The path '"+path+"' does not exist.");
+        }
+        return currentNode;
     }
 
     @Override
     public void close() throws IOException {
-        primaryFilesystem.close();
-        secondaryFilesystem.close();
+        layerForFilesystem.close();
     }
     
 }
