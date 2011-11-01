@@ -23,6 +23,8 @@ import dk.apaq.shopsystem.service.crud.ThemeCrud;
 import dk.apaq.shopsystem.service.crud.UserCrud;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.FileSystem;
+import dk.apaq.vfs.Path;
+import dk.apaq.vfs.impl.layered.LayeredFileSystem;
 import dk.apaq.vfs.impl.subfs.SubFs;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -202,13 +204,21 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     public FileSystem getFileSystem() {
         if(fs==null) {
             try {
-                //Must create a filesystem for this organisation using Commons VFS and a local File Folder.
+                //Must create a filesystem for this organisation
                 FileSystem systemFs = service.getFileSystem();
                 Directory orgsDir = systemFs.getRoot().getDirectory("Organisations");
                 if(!orgsDir.hasDirectory(orgId)) orgsDir.createDirectory(orgId);
 
                 Directory orgDir = orgsDir.getDirectory(orgId);
                 fs = new SubFs(systemFs, orgDir);
+                fs = new LayeredFileSystem(fs);
+                
+                Path injectedThemesPath = new Path("/Themes");
+                Directory injectedThemesDirectory = systemFs.getRoot().
+                                                        getDirectory("System", true).
+                                                        getDirectory("Themes",true).
+                                                        getDirectory("Standard", true);
+                ((LayeredFileSystem)fs).addLayer(injectedThemesPath, injectedThemesDirectory);
 
                 Directory root = fs.getRoot();
 

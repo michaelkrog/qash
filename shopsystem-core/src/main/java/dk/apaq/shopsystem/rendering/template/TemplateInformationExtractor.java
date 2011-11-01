@@ -127,6 +127,7 @@ public class TemplateInformationExtractor {
                         type = type == null ? "String" : type;
                         
                         ComponentParameter componentParameter = createComponentParameter(file, value, type);
+                        componentInformation.getParameterMap().put(name, componentParameter);
                         continue;
                     }
                     

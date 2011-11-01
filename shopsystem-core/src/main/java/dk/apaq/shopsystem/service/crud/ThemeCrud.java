@@ -36,10 +36,6 @@ public class ThemeCrud implements Crud<String, Theme> {
                 return new Theme(orgDir.getDirectory(dirName));
             }
 
-            if (standardDir.hasDirectory(dirName)) {
-                return new Theme(standardDir.getDirectory(dirName));
-            }
-
         } catch (IOException ex) {
             LOG.error("Could not read Theme.", ex);
         }
@@ -55,13 +51,6 @@ public class ThemeCrud implements Crud<String, Theme> {
         for (Directory subdir : standardDir.getDirectories()) {
             if (subdir.isBundle() && "theme".equals(subdir.getSuffix())) {
                 idlist.add(subdir.getBaseName());
-            }
-        }
-
-        for (Directory subdir : orgDir.getDirectories()) {
-            String id = subdir.getBaseName();
-            if (subdir.isBundle() && "theme".equals(subdir.getSuffix()) && !idlist.contains(id)) {
-                idlist.add(id);
             }
         }
 
