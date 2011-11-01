@@ -1,6 +1,6 @@
 package dk.apaq.shopsystem.api;
 
-import dk.apaq.shopsystem.entity.Tax;
+import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.filter.limit.Limit;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -12,23 +12,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-public class TaxController extends AbstractController { 
+public class ProductController extends AbstractController { 
 
 
-    @RequestMapping(value = "/{orgInfo}/taxes", method = RequestMethod.GET)
-    public @ResponseBody List<String> getTaxList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit) {
+    @RequestMapping(value = "/{orgInfo}/products", method = RequestMethod.GET)
+    public @ResponseBody List<String> getProductList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit) {
   
         orgService = GetOrgService(orgInfo);
         Limit l = new Limit(ValidateLimit(limit));
-        return orgService.getTaxes().listIds(l);
+        return orgService.getProducts().listIds(l);
     }
     
     
-    @RequestMapping(value = "/{orgInfo}/taxes/{id}", method = RequestMethod.GET)
-    public @ResponseBody Tax getTax(@PathVariable String orgInfo, @PathVariable String id) {
+    @RequestMapping(value = "/{orgInfo}/products/{id}", method = RequestMethod.GET)
+    public @ResponseBody Product getProduct(@PathVariable String orgInfo, @PathVariable String id) {
         
         orgService = GetOrgService(orgInfo);
-        return orgService.getTaxes().read(id);
+        return orgService.getProducts().read(id);
     }
 
 }
