@@ -13,7 +13,7 @@ import java.util.Date;
  *
  * @author michael
  */
-public class LayeredNode implements Node {
+public abstract class LayeredNode implements Node {
 
     private final FileSystem fileSystem;
     private final Node wrappedNode;
