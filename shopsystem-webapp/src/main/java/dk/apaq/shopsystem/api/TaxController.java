@@ -16,11 +16,17 @@ public class TaxController extends AbstractController {
 
 
     @RequestMapping(value = "/{orgInfo}/taxes", method = RequestMethod.GET)
-    public @ResponseBody List<String> getTaxList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit) {
+    public @ResponseBody List getTaxList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit, @RequestParam(value = "full", required=false) String full) {
   
         orgService = GetOrgService(orgInfo);
         Limit l = new Limit(ValidateLimit(limit));
-        return orgService.getTaxes().listIds(l);
+        
+        if ("true".equals(full)) {
+            return orgService.getTaxes().list(l);
+        }
+        else {
+            return orgService.getTaxes().listIds(l);
+        }
     }
     
     

@@ -16,11 +16,18 @@ public class OrderController extends AbstractController {
 
 
     @RequestMapping(value = "/{orgInfo}/orders", method = RequestMethod.GET)
-    public @ResponseBody List<String> getOrderList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit) {
+    public @ResponseBody List getOrderList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit, @RequestParam(value = "full", required=false) String full) {
   
         orgService = GetOrgService(orgInfo);
         Limit l = new Limit(ValidateLimit(limit));
-        return orgService.getOrders().listIds(l);
+        
+        if ("true".equals(full)) {
+            return orgService.getProducts().list(l);
+        }
+        else {
+            return orgService.getProducts().listIds(l);
+        }
+        
     }
     
     

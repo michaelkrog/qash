@@ -16,11 +16,17 @@ public class PaymentController extends AbstractController {
 
 
     @RequestMapping(value = "/{orgInfo}/payments", method = RequestMethod.GET)
-    public @ResponseBody List<String> getPaymentList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit) {
+    public @ResponseBody List getPaymentList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit, @RequestParam(value = "full", required=false) String full) {
   
         orgService = GetOrgService(orgInfo);
         Limit l = new Limit(ValidateLimit(limit));
-        return orgService.getPayments().listIds(l);
+        
+        if ("true".equals(full)) {
+            return orgService.getProducts().list(l);
+        }
+        else {
+            return orgService.getProducts().listIds(l);
+        }
     }
     
     
