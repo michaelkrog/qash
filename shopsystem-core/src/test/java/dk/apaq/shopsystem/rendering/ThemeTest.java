@@ -68,7 +68,7 @@ public class ThemeTest {
         assertEquals(1, instance.listTemplates().size());
         
         assertEquals("Simple", instance.listTemplates().get(0).getName());
-        assertEquals(1, instance.listTemplates().get(0).getDefaultComponentInformationCount());
+        assertEquals(2, instance.listTemplates().get(0).getDefaultComponentInformationCount());
         
 
     }

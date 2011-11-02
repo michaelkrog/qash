@@ -33,6 +33,9 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
                                     "           <cms:component module=\"Standard\" component=\"Label\">\n"+
                                     "               <cms:parameter name=\"text\" value=\"Test\"/>"+
                                     "           </cms:component>"+
+                                    "           <cms:component module=\"Standard\" component=\"Image\">\n"+
+                                    "               <cms:parameter name=\"path\" value=\"image.png\" type=\"Path\"/>"+
+                                    "           </cms:component>"+
                                     "       </wicket:container>\n"+
                                     "   </body>\n"+
                                     "</html>\n";
@@ -288,6 +291,11 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
             OutputStreamWriter templateCodeWriter = new OutputStreamWriter(templateCodeFile.getOutputStream());
             templateCodeWriter.write(templateCode);
             templateCodeWriter.close();
+            
+            File templateImageFile = themeDir.getFile("image.png", true);
+            OutputStream templateImageOs = templateImageFile.getOutputStream();
+            templateImageOs.write(Base64.decodeBase64(imageData));
+            templateImageOs.close();
 
             File stylefile = themeDir.getFile("style.css", true);
             OutputStreamWriter styleWriter = new OutputStreamWriter(stylefile.getOutputStream());

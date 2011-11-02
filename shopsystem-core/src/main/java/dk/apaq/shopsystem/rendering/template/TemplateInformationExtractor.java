@@ -8,6 +8,7 @@ import dk.apaq.shopsystem.rendering.CmsTagIdentifier;
 import dk.apaq.shopsystem.rendering.VfsResourceStream;
 import dk.apaq.vfs.File;
 import dk.apaq.vfs.Path;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,6 +22,8 @@ import org.apache.wicket.markup.parser.IMarkupFilter;
 import org.apache.wicket.markup.parser.filter.WicketLinkTagHandler;
 import org.apache.wicket.markup.parser.filter.WicketRemoveTagHandler;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -29,6 +32,7 @@ import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 public class TemplateInformationExtractor {
     
     private static final Class[] IGNORED_CLASSES = {WicketRemoveTagHandler.class,WicketLinkTagHandler.class};
+    private static final Logger LOG = LoggerFactory.getLogger(TemplateInformationExtractor.class);
 
     private class TemplateMarkupParser extends MarkupParser {
 
@@ -165,10 +169,14 @@ public class TemplateInformationExtractor {
         if("Path".equalsIgnoreCase(type)) {
             Path path = null;
             if(!value.startsWith("/")) {
-                path = templatFile.getPath();
-                Path relativePath = new Path(value);
-                for(int i=0;i<relativePath.getLevels();i++) {
-                    path.addLevel(relativePath.getLevel(i));
+                try {
+                    path = templatFile.getParent().getPath();
+                    Path relativePath = new Path(value);
+                    for(int i=0;i<relativePath.getLevels();i++) {
+                        path.addLevel(relativePath.getLevel(i));
+                    }
+                } catch (FileNotFoundException ex) {
+                    LOG.error("Unknown error occured.", ex);
                 }
             } else {
                 path = new Path(value);
