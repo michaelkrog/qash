@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.rendering;
 
+import com.mchange.util.AssertException;
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.ComponentParameter;
@@ -18,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import junit.framework.Assert;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
@@ -89,8 +91,9 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         String url = "http://coolbiks.dk/context/servlet/" + page.getName();
         tester.executeUrl(url);
         tester.assertContains("Basic/style.css");
-        
+        tester.assertContains("<img class=\"cms-image\"");
         tester.assertContains("style_small.css");
+        
         
     }
     
@@ -112,12 +115,17 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
 
         //start and render the test page
         String url = "http://coolbiks.dk/context/servlet/" + page.getName() + "?device.device-width=400";
+        long start = System.currentTimeMillis();
         tester.executeUrl(url);
+        long duration = System.currentTimeMillis() - start;
+        
         String response = tester.getLastResponseAsString();
         tester.assertContains("style.css");
         
         tester.assertContains("style_small.css");
         tester.assertContainsNot("max-device-width:400");
+        
+        //Assert.assertTrue("Rendering takes more than 300 milliseconds. It really should'nt. (It took "+duration+"ms)", duration<300);
     }
 
     @Test
@@ -140,8 +148,11 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
 
         tester.executeUrl("http://localhost/context/servlet/_render/" + org.getId() + "/sites/" + site.getId() + "/" + page.getName());
         String text = tester.getLastResponseAsString();
-        System.out.println(text);
-
+        tester.assertContains("style.css");
+        tester.assertContains("style_small.css");
+        tester.assertContains("<img class=\"cms-image\"");
+        tester.assertContainsNot("<cms:component");
+        tester.assertContainsNot("</cms:component");
     }
     
         @Test
