@@ -33,11 +33,8 @@ public class ModuleCrud implements Crud<String, Module> {
                 return new Module(orgDir.getDirectory(name));
             }
 
-            if (standardDir.hasDirectory(name)) {
-                return new Module(standardDir.getDirectory(name));
-            }
-
         } catch (IOException ex) {
+            LOG.warn("Error reading module.", ex);
         }
 
         return null;
@@ -51,13 +48,6 @@ public class ModuleCrud implements Crud<String, Module> {
         for (Directory subdir : standardDir.getDirectories()) {
             if (subdir.isBundle() && "module".equals(subdir.getSuffix())) {
                 idlist.add(subdir.getBaseName());
-            }
-        }
-
-        for (Directory subdir : orgDir.getDirectories()) {
-            String id = subdir.getBaseName();
-            if (subdir.isBundle() && "module".equals(subdir.getSuffix()) && !idlist.contains(id)) {
-                idlist.add(id);
             }
         }
 

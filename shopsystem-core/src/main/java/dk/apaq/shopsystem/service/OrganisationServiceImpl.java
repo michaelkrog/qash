@@ -213,12 +213,20 @@ public class OrganisationServiceImpl implements OrganisationService, Application
                 fs = new SubFs(systemFs, orgDir);
                 fs = new LayeredFileSystem(fs);
                 
+                //Inject content of /System/Themes/Standard at /Themes
                 Path injectedThemesPath = new Path("/Themes");
                 Directory injectedThemesDirectory = systemFs.getRoot().
                                                         getDirectory("System", true).
                                                         getDirectory("Themes",true).
                                                         getDirectory("Standard", true);
                 ((LayeredFileSystem)fs).addLayer(injectedThemesPath, injectedThemesDirectory);
+                
+                Path injectedModulesPath = new Path("/Modules");
+                Directory injectedModulesDirectory = systemFs.getRoot().
+                                                        getDirectory("System", true).
+                                                        getDirectory("Modules",true).
+                                                        getDirectory("Standard", true);
+                ((LayeredFileSystem)fs).addLayer(injectedModulesPath, injectedModulesDirectory);
 
                 Directory root = fs.getRoot();
 
