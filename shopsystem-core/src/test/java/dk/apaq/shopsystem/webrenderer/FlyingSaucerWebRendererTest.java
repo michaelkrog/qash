@@ -64,7 +64,7 @@ public class FlyingSaucerWebRendererTest {
     
     @Test
     public void testRenderWebpageWithSvgToImage() throws IOException {
-        /*System.out.println("renderWebpageToImage");
+        System.out.println("renderWebpageToImage");
         Device device = new Device() {
 
             @Override
@@ -91,6 +91,6 @@ public class FlyingSaucerWebRendererTest {
         comparer.compare();
         assertTrue(comparer.match());
         
-        */
+        
     }
 }
