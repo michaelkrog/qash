@@ -105,7 +105,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
         }
     }
 
-    public class SVGITextReplacedElement implements ITextReplacedElement {
+    public class SVGITextReplacedElement implements ITextReplacedElement, ReplacedElement {
 
         private Point location = new Point(0, 0);
         private SVGDiagram diagram;
@@ -178,13 +178,39 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
             float widthInPoints = (float) (cssWidth / outputDevice.getDotsPerPoint());
             float heightInPoints = (float) (cssHeight / outputDevice.getDotsPerPoint());
 
+            heightInPoints = adjustHeightInPoints(widthInPoints, heightInPoints, ratio);
+            
+            PdfTemplate pdfTemplate =  pdfContentByte.createTemplate(widthInPoints, heightInPoints);
+            Graphics2D graphics2d =  pdfTemplate.createGraphics(pdfTemplate.getWidth(), pdfTemplate.getHeight());
+            
+            paint(graphics2d, widthInPoints, heightInPoints);
+            
+            PageBox page = renderingContext.getPage();
+            float x = blockBox.getAbsX() + page.getMarginBorderPadding(renderingContext, CalculatedStyle.LEFT);
+            float y = (page.getBottom() - (blockBox.getAbsY()  + cssHeight)) + page.getMarginBorderPadding(renderingContext, CalculatedStyle.BOTTOM);
+            x /= outputDevice.getDotsPerPoint();
+            y /= outputDevice.getDotsPerPoint();
+            pdfContentByte.addTemplate(pdfTemplate, x, y);
+        }
+        
+        public void paint(LayoutContext c, BlockBox box) {
+            
+        }
+        
+        private float adjustHeightInPoints(float widthInPoints, float heightInPoints, float ratio) {
             if(heightInPoints<=0) {
                 heightInPoints = widthInPoints * ratio;
                 cssHeight = (int)(cssWidth * ratio);
             }
+            return heightInPoints;
+        }
+        
+        private void paint(Graphics2D graphics2d, float widthInPoints, float heightInPoints) {
+            float width = diagram.getWidth();
+            float height = diagram.getHeight();
+            float ratio = height / width;
+
             
-            PdfTemplate pdfTemplate =  pdfContentByte.createTemplate(widthInPoints, heightInPoints);
-            Graphics2D graphics2d =  pdfTemplate.createGraphics(pdfTemplate.getWidth(), pdfTemplate.getHeight());
             try {
                 graphics2d.scale(widthInPoints / diagram.getWidth(), heightInPoints / diagram.getHeight());
                 diagram.render(graphics2d);
@@ -194,12 +220,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
             } finally {
                 graphics2d.dispose();
             }
-            PageBox page = renderingContext.getPage();
-            float x = blockBox.getAbsX() + page.getMarginBorderPadding(renderingContext, CalculatedStyle.LEFT);
-            float y = (page.getBottom() - (blockBox.getAbsY()  + cssHeight)) + page.getMarginBorderPadding(renderingContext, CalculatedStyle.BOTTOM);
-            x /= outputDevice.getDotsPerPoint();
-            y /= outputDevice.getDotsPerPoint();
-            pdfContentByte.addTemplate(pdfTemplate, x, y);
+
         }
     }
     
@@ -232,7 +253,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
         public void setFormSubmissionListener(FormSubmissionListener listener) {}
         
         private boolean isSVGEmbedded(Element elem) {
-            return elem.getNodeName().equals("object") && elem.getAttribute("type").equals("image/svg+xml");
+            return elem.getNodeName().equals("img");// && elem.getAttribute("type").equals("image/svg+xml");
         }
     }
 
@@ -254,14 +275,13 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
                     return null;
                 }
 
+                String path = elem.getAttribute("src");
+                
                 panel = new SVGPanel();
 
 
-                // HACK: the easiest way to integrate with Salamander is to have it read
-                // our SVG from a file--so, push the content to a temporary file, yuck!
                 content = getSVGElementContent(elem);
 
-                String path = elem.getAttribute("data");
                 LOG.debug("Rendering embedded SVG via object tag from: {}", path);
                 LOG.debug("Content is: {}", content);
                 panel.setAntiAlias(true);
@@ -300,9 +320,9 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
             + " in SVG renderer. Skipping and using blank JPanel.", e);
             cc = getDefaultJComponent(content, cssWidth, cssHeight);
             }*/ catch (URISyntaxException e) {
-                LOG.warn("Could not replace SVG element; rendering failed"
+                LOG.debug("Could not replace SVG element; rendering failed"
                         + " in SVG renderer. Skipping and using blank JPanel.", e);
-                cc = getDefaultJComponent(content, cssWidth, cssHeight);
+                //cc = getDefaultJComponent(content, cssWidth, cssHeight);
             }
             if (cc == null) {
                 return null;
@@ -368,9 +388,9 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
         Java2DRenderer renderer = new Java2DRenderer(url, device.getScreenWidth());
 
         ChainedReplacedElementFactory chainedReplacedElementFactoryForImage = new ChainedReplacedElementFactory();
-        chainedReplacedElementFactoryForImage.addFactory(new SwingReplacedElementFactory());
         chainedReplacedElementFactoryForImage.addFactory(new SVGSalamanderSwingReplacedElementFactory());
-
+        chainedReplacedElementFactoryForImage.addFactory(new SwingReplacedElementFactory());
+        
         renderer.getSharedContext().setReplacedElementFactory(chainedReplacedElementFactoryForImage);
         return renderer.getImage();
     }
@@ -412,8 +432,8 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
     private void renderWebpageToPdf(OutputStream os, String url) throws DocumentException, IOException {
         ITextRenderer renderer = new ITextRenderer();
         ChainedReplacedElementFactory cref = new ChainedReplacedElementFactory();
-        cref.addFactory(new ITextReplacedElementFactory(renderer.getOutputDevice()));
         cref.addFactory(new SvgSalamanderITextReplacedElementFactory());
+        cref.addFactory(new ITextReplacedElementFactory(renderer.getOutputDevice()));
         
         renderer.getSharedContext().setReplacedElementFactory(cref);
         renderer.setDocument(url);
