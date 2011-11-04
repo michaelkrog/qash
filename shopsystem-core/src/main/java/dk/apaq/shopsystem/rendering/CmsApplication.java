@@ -48,6 +48,7 @@ public class CmsApplication extends WebApplication {
         
         //Removes unneeded wickets tags in renderings output
         getMarkupSettings().setStripWicketTags(true);
+        getMarkupSettings().setCompressWhitespace(true);
         
         //Sets a specific MarkupParserFactory that adds needed filter to the markupparser.
         getMarkupSettings().setMarkupFactory(new CmsMarkupParserFactory());

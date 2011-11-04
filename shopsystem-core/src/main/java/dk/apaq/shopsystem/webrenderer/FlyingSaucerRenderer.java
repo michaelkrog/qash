@@ -276,17 +276,27 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
         }
     }
 
-    public class SVGITextReplacedElement implements ITextReplacedElement {
+        public class SVGITextReplacedElement implements ITextReplacedElement {
 
         private Point location = new Point(0, 0);
         private SVGDiagram diagram;
         private int cssWidth;
         private int cssHeight;
+        private float ratio;
 
         public SVGITextReplacedElement(URI svgFileUrl, int cssWidth, int cssHeight) throws Exception {
             this.cssWidth = cssWidth;
             this.cssHeight = cssHeight;
             this.diagram = loadDiagram(svgFileUrl);
+            this.ratio = diagram.getHeight() / diagram.getWidth();
+        }
+
+        private SVGDiagram loadDiagram(URI svgFileUrl) throws Exception {
+            SVGUniverse svgUniverse = new SVGUniverse();
+            URI svgFileUri = svgUniverse.loadSVG(svgFileUrl.toURL());
+            SVGDiagram diagram = svgUniverse.getDiagram(svgFileUri);
+            diagram.setIgnoringClipHeuristic(true);
+            return diagram;
         }
 
         @Override
@@ -300,12 +310,12 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
 
         @Override
         public int getIntrinsicWidth() {
-            return (int) diagram.getWidth();
+            return cssWidth;// (int) diagram.getWidth();
         }
 
         @Override
         public int getIntrinsicHeight() {
-            return (int) diagram.getHeight();
+            return cssHeight>0?cssHeight: (int)(cssWidth * ratio); //(int) diagram.getHeight();
         }
 
         @Override
@@ -333,35 +343,36 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
         public void paint(RenderingContext renderingContext,
                 ITextOutputDevice outputDevice, BlockBox blockBox) {
             PdfContentByte pdfContentByte = outputDevice.getWriter().getDirectContent();
-
+            
             float width = diagram.getWidth();
             float height = diagram.getHeight();
             float ratio = height / width;
-
+            
             float widthInPoints = (float) (cssWidth / outputDevice.getDotsPerPoint());
             float heightInPoints = (float) (cssHeight / outputDevice.getDotsPerPoint());
 
-            heightInPoints = adjustHeightInPoints(widthInPoints, heightInPoints, ratio);
-
-            PdfTemplate pdfTemplate = pdfContentByte.createTemplate(widthInPoints, heightInPoints);
-            Graphics2D graphics2d = pdfTemplate.createGraphics(pdfTemplate.getWidth(), pdfTemplate.getHeight());
-
-            FlyingSaucerRenderer.paintSvg(graphics2d, diagram, widthInPoints, heightInPoints);
-
+            if(heightInPoints<=0) {
+                heightInPoints = widthInPoints * ratio;
+                cssHeight = (int)(cssWidth * ratio);
+            }
+            
+            PdfTemplate pdfTemplate =  pdfContentByte.createTemplate(widthInPoints, heightInPoints);
+            Graphics2D graphics2d =  pdfTemplate.createGraphics(pdfTemplate.getWidth(), pdfTemplate.getHeight());
+            try {
+                graphics2d.scale(widthInPoints / diagram.getWidth(), heightInPoints / diagram.getHeight());
+                diagram.render(graphics2d);
+            } catch (SVGException e) {
+                e.printStackTrace();
+                return;
+            } finally {
+                graphics2d.dispose();
+            }
             PageBox page = renderingContext.getPage();
             float x = blockBox.getAbsX() + page.getMarginBorderPadding(renderingContext, CalculatedStyle.LEFT);
-            float y = (page.getBottom() - (blockBox.getAbsY() + cssHeight)) + page.getMarginBorderPadding(renderingContext, CalculatedStyle.BOTTOM);
+            float y = (page.getBottom() - (blockBox.getAbsY()  + cssHeight)) + page.getMarginBorderPadding(renderingContext, CalculatedStyle.BOTTOM);
             x /= outputDevice.getDotsPerPoint();
             y /= outputDevice.getDotsPerPoint();
             pdfContentByte.addTemplate(pdfTemplate, x, y);
-        }
-
-        private float adjustHeightInPoints(float widthInPoints, float heightInPoints, float ratio) {
-            if (heightInPoints <= 0) {
-                heightInPoints = widthInPoints * ratio;
-                cssHeight = (int) (cssWidth * ratio);
-            }
-            return heightInPoints;
         }
     }
 
@@ -375,7 +386,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
                     return null;
                 }
 
-                String path = elem.getAttribute("data");
+                String path = elem.getAttribute("src");
 
                 return new SVGITextReplacedElement(new URI(uac.resolveURI(path)), cssWidth, cssHeight);
             } catch (Exception ex) {
@@ -516,9 +527,9 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
     private void renderWebpageToPdf(OutputStream os, String url) throws DocumentException, IOException {
         ITextRenderer renderer = new ITextRenderer();
         ChainedReplacedElementFactory cref = new ChainedReplacedElementFactory();
-        cref.addFactory(new SvgSalamanderITextReplacedElementFactory());
         cref.addFactory(new ITextReplacedElementFactory(renderer.getOutputDevice()));
-
+        cref.addFactory(new SvgSalamanderITextReplacedElementFactory());
+        
         renderer.getSharedContext().setReplacedElementFactory(cref);
         renderer.setDocument(url);
         renderer.layout();
