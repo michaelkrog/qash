@@ -3,12 +3,15 @@ package dk.apaq.shopsystem.ui.shoppinnet.common;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
@@ -30,7 +33,7 @@ import java.util.logging.Logger;
  * @author Martin Christensen
  */
 
-public class CommonGrid extends CustomComponent implements Container.Filter { //Container.Viewer
+public class CommonGrid extends CustomComponent { //Container.Viewer
     
     //private Container data;
     //private IndexedContainer data;
@@ -46,15 +49,17 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
     private List button = new ArrayList();
     private List buttonMethod = new ArrayList();
     private List buttonTarget = new ArrayList();
-    private List filter = new ArrayList();
-    private List filterName = new ArrayList();
-    private List<Property> filterData = new ArrayList();
+    private String selector = "";
+    private String selectorName = "";
+    private String selectorDefault = "";
+    private Container selectorData;
     
     final private OrganisationService orgService;
     final private Table table = new Table();
     final private VerticalLayout content = new VerticalLayout();
     final private HorizontalLayout panel = new HorizontalLayout();
     final private HorizontalLayout buttonHolder = new HorizontalLayout();
+    final private GridLayout filterHolder = new GridLayout(2,1);
     final private Panel descriptionPanel = new Panel();
     final private VerticalLayout descriptionPanelContent = new VerticalLayout();
     final private VerticalLayout dummy = new VerticalLayout();
@@ -96,10 +101,11 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
         this.buttonTarget.add(buttonTarget);
     }
     
-    public void addFilter(String filter, String filterName, Property filterData) {
-	this.filter.add(filter);
-        this.filterName.add(filterName);
-        this.filterData.add(filterData);
+    public void setSelector(String selector, String selectorName, String selectorDefault, Container selectorData) {
+	this.selector = selector;
+        this.selectorName = selectorName;
+        this.selectorDefault = selectorDefault;
+        this.selectorData = selectorData;
     }
     
 
@@ -124,6 +130,7 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
         this.content.removeAllComponents();
         this.panel.removeAllComponents();
         this.buttonHolder.removeAllComponents();
+        this.filterHolder.removeAllComponents();
         this.descriptionPanel.removeAllComponents();
         this.descriptionPanelContent.removeAllComponents();
         
@@ -143,7 +150,7 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
         this.descriptionPanel.addComponent(descriptionPanelContent); 
         
         
-        // Create panel
+        // *** Create panel ***
         
         // Create search fields
         if(this.search == true) {
@@ -158,61 +165,93 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
             this.buttonHolder.addComponent(createButton(this.button.get(i).toString(),this.buttonMethod.get(i).toString(),this.buttonTarget.get(i).toString()));
         }
         
-        // Create panel filters
-        for (int i = 0; i < this.filter.size(); i++) {
-            Select select = new Select();
-            select.setPropertyDataSource(this.filterData.get(i));
-            this.buttonHolder.addComponent(select);
+        // Create panel selector
+        if (!"".equals(this.selector)) {
+            final Select select = new Select();
+            select.setContainerDataSource(this.selectorData);
+            select.setValue(this.selectorDefault);
+            select.setItemCaptionPropertyId(this.selector);
+            select.setNullSelectionAllowed(false);
+            select.setImmediate(true);
+            
+            select.addListener(new ValueChangeListener() {
+                public void valueChange(ValueChangeEvent event) {
+                    try {
+                        try {
+                            Component newInstance = (Component) Class.forName(factoryClass).newInstance();
+                            Method[] allMethods = newInstance.getClass().getMethods();
+                            for (Method m : allMethods) {
+                                System.out.println("Found: " + m.getName());
+                                if (m.getName().equalsIgnoreCase("getSelectorContainer")) {
+                                    try {
+                                        try {
+                                            selectorDefault = select.getValue().toString();
+                                            Object o = m.invoke(newInstance, orgService, select.getValue().toString());
+                                            setContainerDataSource((Container) o);
+                                            
+                                        } catch (InvocationTargetException ex) {
+                                            Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                    } catch (IllegalArgumentException ex) {
+                                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                                    } 
+                                }
+                            }
+
+                        } catch (InstantiationException ex) {
+                            Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IllegalAccessException ex) {
+                            Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    // Recreate grid
+                    attach();         
+                }
+            });
+            
+            this.filterHolder.addComponent(select);
         }
+        // *** Panel end ***
+        
         
         // Create table
         this.table.setPageLength(20);
-        
-        /*if(this.data.size() == 0) {
-            this.table.setContainerDataSource(null);
-            this.table.addContainerProperty("", String.class,  null);
-            this.table.addItem(new Object[] {"No data available!"}, new Integer(1));
+
+        for (int i = 0; i < this.header.size(); i++) {
+
+            this.table.setColumnHeader(this.field.get(i), this.header.get(i).toString());
+
+            String colfieldType = this.fieldType.get(i).toString();
+            if ("SomeCustomFieldStuffHereIfNeeded".equals(colfieldType)) {
+                 //Some custom field stuff can be added here
+            }
         }
-        else {*/
-            for (int i = 0; i < this.header.size(); i++) {
-                
-                this.table.setColumnHeader(this.field.get(i), this.header.get(i).toString());
-                
-                String colfieldType = this.fieldType.get(i).toString();
-                if ("SomeCustomFieldStuffHereIfNeeded".equals(colfieldType)) {
-                     //Some custom field stuff can be added here
-                }
-            }
-            
-            // Handle selection change, if enabled
-            if (this.editAble == true) {
-                this.table.setSelectable(true);
-                //this.table.setMultiSelect(true);
-                this.table.setColumnReorderingAllowed(true);
-                this.table.setSortDisabled(false);
-        //this.table.setRowHeaderMode(Table.ROW_HEADER_MODE_ICON_ONLY);
 
-                this.table.setNullSelectionAllowed(false); 
-                /*this.table.addListener(new Property.ValueChangeListener() {
-                    @Override
-                    public void valueChange(ValueChangeEvent event) {
-                        EditItem(table.getValue().toString());
-                    }
-                });*/
-            }
-     
-            // Dummy column, due to table problems with 1 column
-            //this.table.addGeneratedColumn("dummy", new CssLayout());
+        // Handle table selection change, if enabled
+        if (this.editAble == true) {
+            this.table.setSelectable(true);
+            this.table.setColumnReorderingAllowed(true);
+            this.table.setSortDisabled(false);
+            this.table.setNullSelectionAllowed(false); 
+        }
 
-            
-            // Show only the needed columns, hide the rest
-            this.table.setVisibleColumns(this.field.toArray());
-       // }
+        // Show only the needed columns, hide the rest
+        this.table.setVisibleColumns(this.field.toArray());
+       
         
-        // Insert components into content
+        // Insert components into content'        
+        this.filterHolder.setSpacing(true);
+        this.panel.addComponent(this.filterHolder);
+        this.panel.setComponentAlignment(this.filterHolder, Alignment.TOP_LEFT);
+        
         this.buttonHolder.setSpacing(true);
         this.panel.addComponent(this.buttonHolder);
-        this.panel.setComponentAlignment(this.buttonHolder, Alignment.MIDDLE_RIGHT);
+        this.panel.setComponentAlignment(this.buttonHolder, Alignment.TOP_RIGHT);
+        
         this.panel.setStyleName("v-table-panel");
         this.panel.setWidth("100%");
         this.panel.setSpacing(true);
@@ -237,99 +276,53 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
     }
     
     
-    public void EditItem(String itemId) {
-        
-        // Edit the item, using the common form
-        //CommonDialog dialog = new CommonDialog(this.editCaption, new ConstructionForm(itemId));
-        //getApplication().getMainWindow().addWindow(dialog);
-    }
-        
-    
-        
     private Button createButton(final String buttonText, final String buttonMethod, final String buttonTarget) {
 
         Button button = new Button(buttonText);
-        //buttonComponent.get
-        //button.setStyleName(Reindeer.BUTTON_LINK);
-        //button.addStyleName("v-accordion-button");
-        //button.setIcon(new ThemeResource("../shopsystem/icons/7/dot.png"));
         button.addListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
-                /*
-                String tableId = "";
-                if (table.getValue() == null) {
-                    tableId = null;
-                } 
-                else {
-                    tableId = table.getValue().toString();
-                }
-                                        
-                Component newInstance = null;
                 try {
                     try {
-                        newInstance = (Component) Class.forName(factoryClass).newInstance();
-                    } catch (InstantiationException ex) {
-                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalAccessException ex) {
-                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                try {
-                    try {
-                        
-                        Method m = newInstance.getClass().getMethod(buttonMethod, orgService, tableId);
-                        m.invoke(newInstance, orgService, tableId);
-                       */ 
-                               
-                        
-                        
-                        
-                        
-                       
-                            try {
+                        System.out.println("Creating instance: " + factoryClass);
+                        Component newInstance = (Component) Class.forName(factoryClass).newInstance();
+                        dummy.addComponent(newInstance);
+
+                        System.out.println("Finding methods...");
+                        Method[] allMethods = newInstance.getClass().getMethods();
+
+                        for (Method m : allMethods) {
+                            System.out.println("Found: " + m.getName());
+                            if (m.getName().equalsIgnoreCase(buttonMethod)) {
                                 try {
-                                    System.out.println("Creating instance: " + factoryClass);
-                                    Component newInstance = (Component) Class.forName(factoryClass).newInstance();
-                                    dummy.addComponent(newInstance);
-
-                                    System.out.println("Finding methods...");
-                                    Method[] allMethods = newInstance.getClass().getMethods();
-
-                                    for (Method m : allMethods) {
-                                        System.out.println("Found: " + m.getName());
-                                        if (m.getName().equalsIgnoreCase(buttonMethod)) {
-                                            try {
-                                                String tableId = "";
-                                                if (table.getValue() == null) {
-                                                    tableId = null;
-                                                } 
-                                                else {
-                                                    tableId = table.getValue().toString();
-                                                }
-                                                
-                                                //newInstance.getClass().getDeclaredMethod("setOrgService", orgService);
-                                                Object o = m.invoke(newInstance, orgService, tableId); //new Locale(buttonMethod)
-                                               
-
-                                            } catch (IllegalArgumentException ex) {
-                                                Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
-                                            } catch (InvocationTargetException ex) {
-                                                Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
-                                            }
-                                        }
+                                    String tableId = "";
+                                    if (table.getValue() == null) {
+                                        tableId = null;
+                                    } 
+                                    else {
+                                        tableId = table.getValue().toString();
                                     }
 
-                                } catch (ClassNotFoundException ex) {
+                                    //newInstance.getClass().getDeclaredMethod("setOrgService", orgService);
+                                    Object o = m.invoke(newInstance, orgService, tableId); //new Locale(buttonMethod)
+
+
+                                } catch (IllegalArgumentException ex) {
+                                    Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (InvocationTargetException ex) {
                                     Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                                } catch (InstantiationException ex) {
-                                    Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (IllegalAccessException ex) {
-                                Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
                             }
+                        }
+
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    } catch (InstantiationException ex) {
+                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             
                        
@@ -337,19 +330,9 @@ public class CommonGrid extends CustomComponent implements Container.Filter { //
          
         });
                  
-        
-        
+          
         return button;
         
     }
 
-    @Override
-    public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean appliesToProperty(Object propertyId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

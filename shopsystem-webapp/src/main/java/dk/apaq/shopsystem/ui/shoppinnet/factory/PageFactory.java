@@ -1,8 +1,12 @@
 package dk.apaq.shopsystem.ui.shoppinnet.factory;
 
 import com.vaadin.data.Container;
+import com.vaadin.data.Property;
+import dk.apaq.crud.Crud;
+import dk.apaq.crud.Crud.Complete;
 import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonForm;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonGrid;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
@@ -12,16 +16,32 @@ import java.util.List;
 public class PageFactory extends AbstractFactory {
 
     private Container websiteContainer;
+    private List websiteList;
+    private String selectorId = "";
+    
     
     @Override
     public void setCrudContainer() {
-        
-            this.websiteContainer = new CrudContainer(this.orgService.getWebsites(), Website.class);
-            List websites = this.orgService.getWebsites().listIds(); 
-            this.container = new CrudContainer(this.orgService.getPages(this.orgService.getWebsites().read(websites.get(0).toString())), Page.class);   
+        this.websiteList = this.orgService.getWebsites().listIds(); 
+        // Do not override selector id, if already set
+        if ("".equals(this.selectorId)) {
+            this.selectorId = this.websiteList.get(0).toString();
+        }
+        this.container = getContainer();   
+        this.websiteContainer = new CrudContainer(this.orgService.getWebsites(), Website.class);       
     }
     
+    public Container getSelectorContainer(OrganisationService orgService, String id) {
+        setOrgService(orgService);
+        this.selectorId = id;
+        return getContainer();
+    }
+    
+    public Container getContainer() {
+        return new CrudContainer(this.orgService.getPages(this.orgService.getWebsites().read(this.selectorId)), Page.class);       
+    }
             
+    
     public CommonGrid GetList() {
                 
         CommonGrid grid = new CommonGrid(this.orgService);
@@ -33,9 +53,7 @@ public class PageFactory extends AbstractFactory {
         grid.setSearch(false);
         grid.setPageHeader("Pages");
         grid.addDescription("", "One page can hold multiple modules. A module may contain a text block, a view of categories, productdetails, special offers etc.");
-        
-        // Add dropdown
-        grid.addFilter("website", "Website", this.websiteContainer.getContainerProperty("id", "name"));
+        grid.setSelector("name", "Website", this.selectorId, new CrudContainer(this.orgService.getWebsites(), Website.class));
         
         // Add buttons
         grid.addButton("Add","AddItem","");

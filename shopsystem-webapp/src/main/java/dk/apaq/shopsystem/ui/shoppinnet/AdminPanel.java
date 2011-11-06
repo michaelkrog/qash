@@ -38,6 +38,7 @@ public class AdminPanel extends CustomComponent {
     private VerticalLayout spacer = new VerticalLayout();
     private Accordion accordion = new Accordion();
     
+    private OrganisationService orgService;
     private Overview overview = new Overview();
     private WebsiteFactory websiteFactory = new WebsiteFactory();
     private DomainFactory domainFactory = new DomainFactory();
@@ -51,20 +52,28 @@ public class AdminPanel extends CustomComponent {
     private UserFactory userFactory = new UserFactory();
     private OrderFactory orderFactory = new OrderFactory();
     
+    
     public AdminPanel(OrganisationService orgService) {
-        
+        this.orgService = orgService;
+        setCompositionRoot(this.layoutHolder);
+    }
+    
+    
+    @Override
+    public void attach() {
+     
         // Set services in factories
-        this.websiteFactory.setOrgService(orgService);
-        this.domainFactory.setOrgService(orgService);
-        this.categoryFactory.setOrgService(orgService);
-        this.productFactory.setOrgService(orgService);
-        this.pageFactory.setOrgService(orgService);
-        this.paymentFactory.setOrgService(orgService);
-        this.themeFactory.setOrgService(orgService);
-        this.moduleFactory.setOrgService(orgService);
-        this.taxFactory.setOrgService(orgService);
-        this.userFactory.setOrgService(orgService);
-        this.orderFactory.setOrgService(orgService);
+        this.websiteFactory.setOrgService(this.orgService);
+        this.domainFactory.setOrgService(this.orgService);
+        this.categoryFactory.setOrgService(this.orgService);
+        this.productFactory.setOrgService(this.orgService);
+        this.pageFactory.setOrgService(this.orgService);
+        this.paymentFactory.setOrgService(this.orgService);
+        this.themeFactory.setOrgService(this.orgService);
+        this.moduleFactory.setOrgService(this.orgService);
+        this.taxFactory.setOrgService(this.orgService);
+        this.userFactory.setOrgService(this.orgService);
+        this.orderFactory.setOrgService(this.orgService);
         
         
         this.layoutHolder.setWidth("100%");
@@ -174,7 +183,7 @@ public class AdminPanel extends CustomComponent {
         this.layoutHolder.addComponent(this.outerLayout);
         this.layoutHolder.setExpandRatio(this.outerLayout, 1.0f);
         
-        setCompositionRoot(this.layoutHolder);
+        
     }    
     
 
@@ -187,8 +196,7 @@ public class AdminPanel extends CustomComponent {
         button.addListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
-                    content.removeAllComponents();
-                    content.addComponent(target);
+                    setContent(target);
             }
         });
         
@@ -199,6 +207,11 @@ public class AdminPanel extends CustomComponent {
         return button;
     }
     
+    
+    public void setContent(Component target) {
+        content.removeAllComponents();
+        content.addComponent(target);
+    }
     
     /*public Button OpenInDialog(final String buttonText, final Component target, Boolean buttonMargin) {
         

@@ -79,7 +79,9 @@ public class CommonForm extends Window {
                 if("select".equals(thisFieldType)) {
                     Select select = new Select();
                     //select.setContainerDataSource(fieldData.get(fieldCount).getContainerProperty("id", "name"));
-                    select.setPropertyDataSource(fieldData.get(fieldCount).getContainerProperty("id", "name"));
+                    select.setContainerDataSource(fieldData.get(fieldCount));
+                    select.setValue("1");
+                    select.setItemCaptionPropertyId("name");
                     select.setNullSelectionAllowed(false);
                     super.attachField(propertyId, select);
                 }
@@ -212,8 +214,6 @@ public class CommonForm extends Window {
             this.formLayout.setMargin(true);
             this.content.addComponent(this.tabSheet);
 
-            
-            
             Button okButton = new Button("Ok", this, "okButtonClick");   
             this.content.addComponent(okButton);
             this.content.setComponentAlignment(okButton, Alignment.MIDDLE_RIGHT);
