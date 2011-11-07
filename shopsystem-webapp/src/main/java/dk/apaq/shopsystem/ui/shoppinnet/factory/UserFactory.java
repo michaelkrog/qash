@@ -44,7 +44,7 @@ public class UserFactory extends AbstractFactory {
     @Override
     public void ShowEdit(String id) {
         
-        CommonForm form = new CommonForm();
+        CommonForm form = new CommonForm(this.orgService);
         form.setHeaderText("Edit User");
         
         form.addForm("General");

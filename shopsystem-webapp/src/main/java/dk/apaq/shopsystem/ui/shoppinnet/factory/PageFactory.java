@@ -76,7 +76,7 @@ public class PageFactory extends AbstractFactory {
     @Override
     public void ShowEdit(String id) {
         
-        CommonForm form = new CommonForm();
+        CommonForm form = new CommonForm(this.orgService);
         form.setHeaderText("Edit Page");
         
         form.addForm("General");
@@ -91,4 +91,34 @@ public class PageFactory extends AbstractFactory {
         getApplication().getMainWindow().addWindow(form);
     }
     
+    
+    public CommonGrid GetModuleList() {
+                
+        CommonGrid grid = new CommonGrid(this.orgService);
+
+        grid.setContainerDataSource(new CrudContainer(this.orgService.getModules(), Website.class));
+        grid.setFactoryClass(PageFactory.class.getName()); //
+        
+        grid.setEditAble(true);
+        grid.setSearch(false);
+        grid.setPageHeader("Pages");
+        grid.addDescription("", "One page can hold multiple modules. A module may contain a text block, a view of categories, productdetails, special offers etc.");
+        grid.setSelector("name", "Website", this.selectorId, new CrudContainer(this.orgService.getWebsites(), Website.class));
+        
+        // Add buttons
+        grid.addButton("Add","AddItem","");
+        grid.addButton("Edit","EditItem","");
+        grid.addButton("Delete","DeleteItem","");
+        
+        // Add grid headers
+        grid.addHeader("Name");
+        grid.addHeader("Title");
+       
+        // Add grid fields
+        grid.addField("name", "");
+        grid.addField("title", "");
+        
+        // Insert grid into layout
+        return grid;
+    }
 }

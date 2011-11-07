@@ -4,7 +4,7 @@ package dk.apaq.shopsystem.ui.shoppinnet;
 import com.vaadin.terminal.Resource;
 import dk.apaq.shopsystem.ui.shoppinnet.factory.WebsiteFactory;
 import dk.apaq.shopsystem.ui.shoppinnet.factory.DomainFactory;
-import dk.apaq.shopsystem.ui.shoppinnet.factory.CategoryFactory;
+//import dk.apaq.shopsystem.ui.shoppinnet.factory.CategoryFactory;
 import dk.apaq.shopsystem.ui.shoppinnet.factory.ProductFactory;
 import dk.apaq.shopsystem.ui.shoppinnet.factory.PageFactory;
 import dk.apaq.shopsystem.ui.shoppinnet.factory.PaymentFactory;
@@ -42,7 +42,7 @@ public class AdminPanel extends CustomComponent {
     private Overview overview = new Overview();
     private WebsiteFactory websiteFactory = new WebsiteFactory();
     private DomainFactory domainFactory = new DomainFactory();
-    private CategoryFactory categoryFactory = new CategoryFactory();
+    //private CategoryFactory categoryFactory = new CategoryFactory();
     private ProductFactory productFactory = new ProductFactory();
     private PageFactory pageFactory = new PageFactory();
     private PaymentFactory paymentFactory = new PaymentFactory();
@@ -65,7 +65,7 @@ public class AdminPanel extends CustomComponent {
         // Set services in factories
         this.websiteFactory.setOrgService(this.orgService);
         this.domainFactory.setOrgService(this.orgService);
-        this.categoryFactory.setOrgService(this.orgService);
+        //this.categoryFactory.setOrgService(this.orgService);
         this.productFactory.setOrgService(this.orgService);
         this.pageFactory.setOrgService(this.orgService);
         this.paymentFactory.setOrgService(this.orgService);
@@ -123,7 +123,7 @@ public class AdminPanel extends CustomComponent {
         this.accordion.addTab(tab8, "Pages", null);       
         
         Panel tab5 = new Panel();
-        tab5.addComponent(OpenInContent("Categories", this.categoryFactory.GetList(), false));
+        //tab5.addComponent(OpenInContent("Categories", this.categoryFactory.GetList(), false));
         tab5.addComponent(OpenInContent("Products", this.productFactory.GetList(), false));
         //tab5.addComponent(OpenInContent("Product Groups",new ProductCategoryList(), false));
         //tab5.addComponent(OpenInContent("Price Groups",new UserList(), false));

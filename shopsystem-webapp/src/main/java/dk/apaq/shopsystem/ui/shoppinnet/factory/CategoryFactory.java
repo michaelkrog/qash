@@ -23,12 +23,12 @@ public class CategoryFactory extends AbstractFactory {
         
         grid.setEditAble(true);
         grid.setSearch(false);
-        grid.setPageHeader("Product Categories");
-        grid.addDescription("", "One product category may be shown in multiple online stores.");
+        //grid.setPageHeader("Product Categories");
+        //grid.addDescription("", "A product category may be shown in multiple online stores.");
         
         // Add buttons
         grid.addButton("Add","AddItem","");
-        grid.addButton("Edit","EditItem","");
+        //grid.addButton("Edit","EditItem","");
         grid.addButton("Delete","DeleteItem","");
         
         // Add grid headers
@@ -45,7 +45,7 @@ public class CategoryFactory extends AbstractFactory {
     @Override
     public void ShowEdit(String id) {
         
-        CommonForm form = new CommonForm();
+        CommonForm form = new CommonForm(this.orgService);
         
         form.addItemId(id);
         form.addContainerDataSource(this.container);

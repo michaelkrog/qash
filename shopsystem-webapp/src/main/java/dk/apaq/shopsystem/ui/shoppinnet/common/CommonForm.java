@@ -3,22 +3,33 @@ package dk.apaq.shopsystem.ui.shoppinnet.common;
 import com.vaadin.data.Buffered;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
+import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.Resource;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Link;
+import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.Select;
 import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import dk.apaq.shopsystem.service.OrganisationService;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Creates a form combined with common functionality for editing various data
@@ -28,6 +39,8 @@ import java.util.List;
 
 public class CommonForm extends Window {
     
+    private OrganisationService orgService;
+    private String factoryClass = "";
     private List<Container> data = new ArrayList<Container>();
     private Item item;
     private List<Form> formList = new ArrayList<Form>();
@@ -39,6 +52,8 @@ public class CommonForm extends Window {
     private List<String> fieldType = new ArrayList(); // Auto if empty "" // "select"
     private List<Container> fieldData = new ArrayList();
     private VerticalLayout content = new VerticalLayout();
+    private List<Component> tabContent = new ArrayList();
+    private List<String> tabName = new ArrayList();
     private String headerText = "";
     private VerticalLayout formHolder = new VerticalLayout();
     private GridLayout formLayout = new GridLayout(2, 1);
@@ -47,80 +62,12 @@ public class CommonForm extends Window {
     private Integer fieldCount = -1;
     private Integer formCount = -1;
         
-    //private Form form = new Form();
     
-    //private List<Form> form = new ArrayList<Form>() {
-    //this.formList.add(new form());
-    private Form form = new Form() {
-   
-        @Override
-        public void attachField(Object propertyId, Field f) {
-          
-            if (field.contains(propertyId)) {
-                fieldCount ++;
-                
-                // Reset curser in grid layout
-                if (fieldCount == 0) {
-                    formLayout.setCursorX(0);
-                    formLayout.setCursorY(0);
-                }
-                
-                Label lName = new Label(fieldName.get(fieldCount).toString());
-                lName.addStyleName("margin");
-                formLayout.addComponent(lName);
-                
-                // Build the needed field: automated or select
-                String thisFieldType = fieldType.get(fieldCount).toString();
-                // Automated
-                if("".equals(thisFieldType)) {
-                    super.attachField(propertyId, f);
-                }
-                // Select box
-                if("select".equals(thisFieldType)) {
-                    Select select = new Select();
-                    //select.setContainerDataSource(fieldData.get(fieldCount).getContainerProperty("id", "name"));
-                    select.setContainerDataSource(fieldData.get(fieldCount));
-                    select.setValue("1");
-                    select.setItemCaptionPropertyId("name");
-                    select.setNullSelectionAllowed(false);
-                    super.attachField(propertyId, select);
-                }
-                
-               
-                
-                String fDescription = fieldDescription.get(fieldCount).toString();
-                if (!fDescription.equals("")) {
-                    
-                    // Add empty label in the 1st grid field, prior to adding description into 2nd grid field
-                    formLayout.addComponent(new Label(""));
-                    
-                    Label lDescription = new Label(fDescription);
-                    lDescription.setWidth("250px");
-                    lDescription.addStyleName("description");
-                    
-                    Resource fieldDescriptionIconResource = new ThemeResource("icons/16/arrow-up.png");
-                    Embedded fieldDescriptionIcon  = new Embedded(null, fieldDescriptionIconResource);
-    
-                    HorizontalLayout fieldDescriptionHolder = new HorizontalLayout();
-                    fieldDescriptionHolder.addComponent(fieldDescriptionIcon);
-                    fieldDescriptionHolder.addComponent(lDescription);
-                    
-                    formLayout.addComponent(fieldDescriptionHolder);
-                }
-                
-                // Add spacing to the next field to the 2 column grid
-                Label spacer1 = new Label("");
-                spacer1.setHeight("10px");
-                Label spacer2 = new Label("");
-                spacer2.setHeight("10px");
-                formLayout.addComponent(spacer1);
-                formLayout.addComponent(spacer2);
-            }
-        }
+    public CommonForm(OrganisationService orgService) {
+        this.orgService = orgService;
+        //setCompositionRoot(this.content);
+    }
         
-    };
-    
-    
     
     public void addItemId(String value) {
         this.itemId.add(value);
@@ -152,16 +99,101 @@ public class CommonForm extends Window {
     }
 
     
-    //public Container getContainerDataSource() {
-    //    return this.data;
-    //}
-
-    
     public void addContainerDataSource(Container data) {
         this.data.add(data);
         this.item = this.data.get(this.formCount).getItem(this.itemId.get(this.formCount));
         this.form.setItemDataSource(this.item);
     }
+    
+    
+    public void addTab(String name, Component component) {
+        this.tabName.add(name);
+        this.tabContent.add(component);
+    }
+    
+    
+    private Form form = new Form() {
+   
+        @Override
+        public void attachField(Object propertyId, Field f) {
+          
+            if (field.contains(propertyId)) {
+                fieldCount ++;
+                
+                // Reset curser in grid layout
+                if (fieldCount == 0) {
+                    formLayout.setCursorX(0);
+                    formLayout.setCursorY(0);
+                }
+                
+                Label lName = new Label(fieldName.get(fieldCount).toString());
+                lName.addStyleName("margin");
+                formLayout.addComponent(lName);
+                
+                // *** Build the needed field type
+                String thisFieldType = fieldType.get(fieldCount).toString();
+
+                // Select box
+                if("select".equals(thisFieldType)) {
+                    Select select = new Select();
+                    select.setContainerDataSource(fieldData.get(fieldCount));
+                    //select.setValue("1");
+                    select.setItemCaptionPropertyId("name");
+                    select.setNullSelectionAllowed(false);
+                    super.attachField(propertyId, select);
+                }
+                
+                // External selection. Field is visual, not bound to form
+                else if("external_select".equals(thisFieldType)) {
+                    ListSelect select = new ListSelect();
+                    select.setContainerDataSource(fieldData.get(fieldCount));
+                    select.setReadOnly(true);
+                    select.setRows(3);
+                    select.setWidth("150px");
+                    select.setItemCaptionPropertyId("name");
+                    select.setNullSelectionAllowed(false);
+                    formLayout.addComponent(select);
+                    }
+                
+                // Automated field type
+                else {
+                    super.attachField(propertyId, f);
+                }
+                
+               
+                
+                String fDescription = fieldDescription.get(fieldCount).toString();
+                if (!fDescription.equals("")) {
+                    
+                    // Add empty label in the 1st grid field, prior to adding description into 2nd grid field
+                    formLayout.addComponent(new Label(""));
+                    
+                    Label lDescription = new Label(fDescription);
+                    lDescription.setWidth("240px");
+                    lDescription.addStyleName("description");
+                    
+                    Resource fieldDescriptionIconResource = new ThemeResource("icons/16/arrow-up.png");
+                    Embedded fieldDescriptionIcon  = new Embedded(null, fieldDescriptionIconResource);
+    
+                    HorizontalLayout fieldDescriptionHolder = new HorizontalLayout();
+                    fieldDescriptionHolder.addComponent(fieldDescriptionIcon);
+                    fieldDescriptionHolder.addComponent(lDescription);
+                    
+                    formLayout.addComponent(fieldDescriptionHolder);
+                }
+                
+                // Add spacing to the next field to the 2 column grid
+                Label spacer1 = new Label("");
+                spacer1.setHeight("10px");
+                Label spacer2 = new Label("");
+                spacer2.setHeight("10px");
+                formLayout.addComponent(spacer1);
+                formLayout.addComponent(spacer2);
+            }
+        }
+        
+    };
+    
     
     
     @Override
@@ -209,6 +241,12 @@ public class CommonForm extends Window {
              
             // Insert form into content
             this.tabSheet.addTab(this.formHolder, "General", null);
+            
+            for (int i = 0; i < this.tabName.size(); i++) {
+                this.tabSheet.addTab(this.tabContent.get(i), this.tabName.get(i), null);
+            }
+            
+            
             this.formHolder.addComponent(this.form);
             this.formHolder.setComponentAlignment(this.form, Alignment.MIDDLE_CENTER);
             this.formLayout.setMargin(true);
@@ -233,4 +271,52 @@ public class CommonForm extends Window {
     }
     
    
+    private Button createButton(final String buttonText, final String buttonMethod, final String buttonTarget) {
+
+        Button button = new Button(buttonText);
+        button.addListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                try {
+                    try {
+                        System.out.println("Creating instance: " + factoryClass);
+                        Component newInstance = (Component) Class.forName(factoryClass).newInstance();
+                        //dummy.addComponent(newInstance);
+
+                        System.out.println("Finding methods...");
+                        Method[] allMethods = newInstance.getClass().getMethods();
+
+                        for (Method m : allMethods) {
+                            System.out.println("Found: " + m.getName());
+                            if (m.getName().equalsIgnoreCase(buttonMethod)) {
+                                try {
+                                    Object o = m.invoke(newInstance, orgService, itemId.get(formCount));
+
+                                } catch (IllegalArgumentException ex) {
+                                    Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (InvocationTargetException ex) {
+                                    Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        }
+
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    } catch (InstantiationException ex) {
+                        Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            
+                       
+            }
+         
+        });
+                 
+          
+        return button;
+        
+    }
 }

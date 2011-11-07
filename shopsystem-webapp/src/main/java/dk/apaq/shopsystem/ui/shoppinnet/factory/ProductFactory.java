@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.ui.shoppinnet.factory;
 
+import dk.apaq.shopsystem.entity.Category;
 import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonForm;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonGrid;
@@ -22,7 +23,7 @@ public class ProductFactory extends AbstractFactory {
         grid.setFactoryClass(ProductFactory.class.getName()); //
         
         grid.setEditAble(true);
-        grid.setSearch(false);
+        grid.setSearch(true);
         grid.setPageHeader("Products");
         //grid.addDescription("", "");
         
@@ -51,18 +52,24 @@ public class ProductFactory extends AbstractFactory {
     @Override
     public void ShowEdit(String id) {
         
-        CommonForm form = new CommonForm();
+        CommonForm form = new CommonForm(this.orgService);
         form.setHeaderText("Edit Product");
         
         form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
+        //form.addField("category", "Categories", "", "external_select", new CrudContainer(this.orgService.getCategories(), Category.class));
         form.addField("name", "Name", "", "", null);
         form.addField("itemNo", "Item Number", "", "", null);
         form.addField("price", "Price", "", "", null);
         form.addField("quantityInStock", "Quantity In Stock", "", "", null);
         form.addField("stockProduct", "Stock Product", "If not, product is never in stock but may be ordered anyway", "", null);
-                
+        
+        // Add category grid
+        CategoryFactory categoryFactory = new CategoryFactory();
+        categoryFactory.setOrgService(orgService);
+        form.addTab("Categories", categoryFactory.GetList());
+        
         getApplication().getMainWindow().addWindow(form);
     }
     

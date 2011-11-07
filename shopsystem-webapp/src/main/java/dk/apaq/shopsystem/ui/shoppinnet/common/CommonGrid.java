@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  * Creates a grid combined with common functionality for listing various data
  * 
@@ -152,12 +153,12 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
         
         // *** Create panel ***
         
-        // Create search fields
+        // Create search field
         if(this.search == true) {
             TextField search = new TextField();
             search.setValue("Search...");
-            this.panel.addComponent(search);
-            this.panel.setComponentAlignment(search, Alignment.MIDDLE_LEFT);
+            this.buttonHolder.addComponent(search);
+            //this.panel.setComponentAlignment(search, Alignment.MIDDLE_LEFT);
         }
         
         // Create panel buttons
@@ -219,7 +220,7 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
         
         
         // Create table
-        this.table.setPageLength(20);
+        this.table.setPageLength(10);
 
         for (int i = 0; i < this.header.size(); i++) {
 
@@ -258,8 +259,9 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
         this.table.setWidth("100%");
         
         this.content.setSpacing(true);
-        this.content.addComponent(new PageHeader(this.pageHeader));
-        
+        if (!"".equals(this.pageHeader)) {
+            this.content.addComponent(new PageHeader(this.pageHeader));
+        }
         if (this.description.size() != 0) {
             this.content.addComponent(this.descriptionPanel);
         }

@@ -45,7 +45,7 @@ public class ThemeFactory extends AbstractFactory {
     @Override
     public void ShowEdit(String id) {
         
-        CommonForm form = new CommonForm();
+        CommonForm form = new CommonForm(this.orgService);
         
         form.addItemId(id);
         form.addContainerDataSource(this.container);
