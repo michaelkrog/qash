@@ -1,6 +1,6 @@
 package dk.apaq.shopsystem.ui.shoppinnet.factory;
 
-import dk.apaq.shopsystem.entity.Category;
+import dk.apaq.shopsystem.entity.ProductGroup;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonForm;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonGrid;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
@@ -10,7 +10,7 @@ public class CategoryFactory extends AbstractFactory {
     
     @Override
     public void setCrudContainer() {
-            this.container = new CrudContainer(this.orgService.getCategories(), Category.class);
+            this.container = new CrudContainer(this.orgService.getCategories(), ProductGroup.class);
     }
     
             

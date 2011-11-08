@@ -1,6 +1,6 @@
 package dk.apaq.shopsystem.ui.shoppinnet.factory;
 
-import dk.apaq.shopsystem.entity.Category;
+import dk.apaq.shopsystem.entity.ProductGroup;
 import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonForm;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonGrid;
@@ -58,7 +58,7 @@ public class ProductFactory extends AbstractFactory {
         form.addForm("General");
         form.addItemId(id);
         form.addContainerDataSource(this.container);
-        //form.addField("category", "Categories", "", "external_select", new CrudContainer(this.orgService.getCategories(), Category.class));
+        //form.addField("category", "Categories", "", "external_select", new CrudContainer(this.orgService.getCategories(), ProductGroup.class));
         form.addField("name", "Name", "", "", null);
         form.addField("itemNo", "Item Number", "", "", null);
         form.addField("price", "Price", "", "", null);
