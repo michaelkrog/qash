@@ -12,6 +12,7 @@ import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.entity.Page;
+import dk.apaq.shopsystem.entity.ProductCategory;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.crud.UserCrud;
 import dk.apaq.vfs.FileSystem;
@@ -29,7 +30,8 @@ public interface OrganisationService extends Serializable {
     UserCrud getUsers();
 
     Crud.Editable<String, Store> getStores();
-    Crud.Complete<String, ProductGroup> getCategories();
+    Crud.Complete<String, ProductGroup> getProductGroups();
+    Crud.Complete<String, ProductCategory> getProductCategories();
     Crud.Complete<String, Order> getOrders();
     Crud.Complete<String, Product> getProducts();
     Crud.Editable<String, Tax> getTaxes();

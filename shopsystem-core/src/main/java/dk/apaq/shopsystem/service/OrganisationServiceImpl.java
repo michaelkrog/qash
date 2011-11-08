@@ -15,6 +15,7 @@ import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.entity.Module;
+import dk.apaq.shopsystem.entity.ProductCategory;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.crud.InventoryManager;
 import dk.apaq.shopsystem.service.crud.ModuleCrud;
@@ -102,8 +103,13 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
 
     @Override
-    public Complete<String, ProductGroup> getCategories() {
+    public Complete<String, ProductGroup> getProductGroups() {
         return getGenericContentCrud(ProductGroup.class);
+    }
+    
+    @Override
+    public Complete<String, ProductCategory> getProductCategories() {
+        return getGenericContentCrud(ProductCategory.class);
     }
 
     @Override
