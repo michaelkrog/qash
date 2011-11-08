@@ -29,6 +29,8 @@ public class ProductCategory implements Serializable, ContentEntity {
 
     @ManyToOne
     private Organisation organisation;
+    @ManyToOne
+    private ProductCategory productCategoryParent;
     
     private String name;
     private String description;
@@ -65,6 +67,14 @@ public class ProductCategory implements Serializable, ContentEntity {
 
     public void setOrganisation(Organisation organisation) {
         this.organisation = organisation;
+    }
+    
+    public ProductCategory getproductCategoryParent() {
+        return productCategoryParent;
+    }
+
+    public void setproductCategoryParent(ProductCategory productCategoryParent) {
+        this.productCategoryParent = productCategoryParent;
     }
 
     public String getName() {
