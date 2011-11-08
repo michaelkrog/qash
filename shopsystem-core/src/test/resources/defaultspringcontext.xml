@@ -68,10 +68,13 @@
     
     <bean id="wicketApplication" class="dk.apaq.shopsystem.rendering.CmsApplication" scope="prototype"/>
     
+<!--
+    <bean id="webrenderer" class="dk.apaq.shopsystem.webrenderer.SeleniumWebRenderer" />
+-->
     <bean id="imagerenderer" class="dk.apaq.shopsystem.webrenderer.FlyingSaucerRenderer" />
-
     <bean id="pdfrenderer"  class="dk.apaq.shopsystem.webrenderer.FlyingSaucerRenderer" />
 
+    
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="ShopSystem"/>
         <property name="jpaVendorAdapter">

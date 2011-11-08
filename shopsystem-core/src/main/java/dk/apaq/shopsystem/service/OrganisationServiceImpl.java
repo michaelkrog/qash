@@ -4,7 +4,7 @@ import dk.apaq.crud.Crud;
 import dk.apaq.crud.Crud.Complete;
 import dk.apaq.crud.Crud.Editable;
 import dk.apaq.crud.CrudNotifier;
-import dk.apaq.shopsystem.entity.Category;
+import dk.apaq.shopsystem.entity.ProductGroup;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Organisation;
@@ -102,8 +102,8 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
 
     @Override
-    public Complete<String, Category> getCategories() {
-        return getGenericContentCrud(Category.class);
+    public Complete<String, ProductGroup> getCategories() {
+        return getGenericContentCrud(ProductGroup.class);
     }
 
     @Override

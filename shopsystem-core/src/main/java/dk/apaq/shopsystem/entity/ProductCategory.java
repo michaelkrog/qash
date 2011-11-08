@@ -14,7 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
  * Specifies a category for a product.
  */
 @Entity
-public class Category implements Serializable{
+public class ProductCategory implements Serializable, ContentEntity {
 
     @Id
     @GeneratedValue(generator="system-uuid")
@@ -29,7 +29,7 @@ public class Category implements Serializable{
 
     @ManyToOne
     private Organisation organisation;
-
+    
     private String name;
     private String description;
 

@@ -7,8 +7,10 @@ import javax.persistence.ManyToOne;
 
 import dk.apaq.shopsystem.util.TaxTool;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -40,7 +42,9 @@ public class Product implements Serializable, ContentEntity {
     private double quantityInStock = 0;
     private boolean stockProduct = false;
     @ManyToOne
-    private Category category;
+    private ProductGroup productGroup;
+    @ManyToMany
+    private List<ProductCategory> productCategories;
     @ManyToOne
     private Tax tax = null;
 
@@ -80,12 +84,16 @@ public class Product implements Serializable, ContentEntity {
         this.organisation = organisation;
     }
     
-    public Category getCategory() {
-        return category;
+    public ProductGroup getProductGroup() {
+        return productGroup;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setproductGroup(ProductGroup productGroup) {
+        this.productGroup = productGroup;
+    }
+
+    public List getproductCategories() {
+        return productCategories;
     }
 
     public Tax getTax() {
