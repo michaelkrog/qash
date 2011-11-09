@@ -15,5 +15,5 @@ public interface PdfRenderer {
      * @param os
      * @param url 
      */
-    public void renderWebpageToPdf(OutputStream os, String... url);
+    public void renderWebpageToPdf(OutputStream os, String ... url);
 }

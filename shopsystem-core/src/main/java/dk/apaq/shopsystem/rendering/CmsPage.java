@@ -98,7 +98,8 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
                     continue;
                 }
                 
-                SimpleScriptComponent customWicketComponent = new SimpleScriptComponent(organisationService, "placeholder", component, info.getParameterMap());
+                
+                SimpleScriptComponent customWicketComponent = new SimpleScriptComponent(organisationService, "placeholder", component, info);
                 components.add(customWicketComponent);
             }
 

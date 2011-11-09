@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.rendering.simplescript;
 
 import dk.apaq.shopsystem.entity.Component;
+import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.ComponentParameter;
 import dk.apaq.shopsystem.rendering.VfsResourceStream;
 import dk.apaq.shopsystem.service.OrganisationService;
@@ -16,6 +17,8 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -35,17 +38,35 @@ public class SimpleScriptComponent extends Panel implements IMarkupCacheKeyProvi
     private static final Logger LOG = LoggerFactory.getLogger(SimpleScriptComponent.class);
     
     private final Component component;
+    private final ComponentInformation componentInformation;
     private boolean failed = false;
     private String error;
+    private final LocationStamper locationStamper = new LocationStamper();
     
-    public SimpleScriptComponent(OrganisationService organisationService, String id, Component component, Map<String, ComponentParameter> paramMap) {
+    private class LocationStamper extends Behavior {
+
+        @Override
+        public void onComponentTag(org.apache.wicket.Component component, ComponentTag tag) {
+            super.onComponentTag(component, tag);
+            
+            if(component instanceof SimpleScriptComponent) {
+                SimpleScriptComponent ssc = (SimpleScriptComponent) component;
+                tag.put("location", ssc.componentInformation.getId());
+            }
+        }
+        
+    }
+    
+    public SimpleScriptComponent(OrganisationService organisationService, String id, Component component, ComponentInformation componentInformation) {
         super(id);
         this.component = component;
+        this.componentInformation = componentInformation;
         try {
+            add(locationStamper);
             Map<String, Object> scriptParams = new HashMap<String, Object>();
             scriptParams.put("service", organisationService);
             scriptParams.put("parent", new SimpleScriptContainerWrapper(this));
-            scriptParams.put("parameters", paramMap);
+            scriptParams.put("parameters", componentInformation.getParameterMap());
             SimpleScriptComponentRenderer componentScript = SimpleScriptInvoker.invoke(SimpleScriptComponentRenderer.class, 
                                                                                         scriptParams, 
                                                                                         component.getCodeFile().getInputStream());
