@@ -30,7 +30,7 @@ public class ProductCategory implements Serializable, ContentEntity {
     @ManyToOne
     private Organisation organisation;
     @ManyToOne
-    private ProductCategory productCategoryParent;
+    private ProductCategory productCategoryParent = null;
     
     private String name;
     private String description;
