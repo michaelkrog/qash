@@ -26,13 +26,13 @@ public class ProductCategoryCrudImpl extends ContentCrud<ProductCategory> {
 
     
     /**
-    * Returns all childs of a category.
+    * Returns all childrens of a category.
 
     @param      productCategoryId  Id of the product category.
     *  
-    @return     A list of child id's.
+    @return     A list of children id's.
     */
-    private List getChilds(String productCategoryId) {
+    private List getChildren(String productCategoryId) {
         Filter filter = new CompareFilter<String>("productCategoryParentId", productCategoryId, CompareFilter.CompareType.Equals);
         List<String> idList = listIds(filter, null, null);
 
@@ -85,16 +85,13 @@ public class ProductCategoryCrudImpl extends ContentCrud<ProductCategory> {
         String productCategoryId = super.create();
         ProductCategory productCategory = read(productCategoryId);
         
-        if (productCategoryParentId == null) {
-            productCategory.setproductCategoryParent(null);
-        }
-        else {
+        if (productCategoryParentId != null) {
             ProductCategory productCategoryParent = read(productCategoryParentId);
             productCategory.setproductCategoryParent(productCategoryParent);
+            
+            update(productCategory);
         }
-        
-        update(productCategory);
-        
+
         return productCategoryId;
     }
         
