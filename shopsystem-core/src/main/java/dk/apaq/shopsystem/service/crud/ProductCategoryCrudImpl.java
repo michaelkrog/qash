@@ -6,7 +6,6 @@ import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.ProductCategory;
 import java.util.List;
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +54,7 @@ public class ProductCategoryCrudImpl extends ContentCrud<ProductCategory> {
         idList.add(productCategoryId);
         
         while(go == true) {
-            productCategoryParent = super.read(productCategoryId).getproductCategoryParent();
+            productCategoryParent = super.read(productCategoryId).getProductCategoryParent();
 
             if(productCategoryParent == null) {
                 go = false;
@@ -87,7 +86,7 @@ public class ProductCategoryCrudImpl extends ContentCrud<ProductCategory> {
         
         if (productCategoryParentId != null) {
             ProductCategory productCategoryParent = read(productCategoryParentId);
-            productCategory.setproductCategoryParent(productCategoryParent);
+            productCategory.setProductCategoryParent(productCategoryParent);
             
             update(productCategory);
         }

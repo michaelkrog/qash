@@ -34,6 +34,7 @@ public class ProductCategory implements Serializable, ContentEntity {
     
     private String name;
     private String description;
+    private Boolean childrenAllowed;
 
 
 
@@ -69,11 +70,11 @@ public class ProductCategory implements Serializable, ContentEntity {
         this.organisation = organisation;
     }
     
-    public ProductCategory getproductCategoryParent() {
+    public ProductCategory getProductCategoryParent() {
         return productCategoryParent;
     }
 
-    public void setproductCategoryParent(ProductCategory productCategoryParent) {
+    public void setProductCategoryParent(ProductCategory productCategoryParent) {
         this.productCategoryParent = productCategoryParent;
     }
 
@@ -91,6 +92,14 @@ public class ProductCategory implements Serializable, ContentEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public Boolean getChildrenAllowed() {
+        return childrenAllowed;
+    }
+
+    public void setChildrenAllowed(Boolean childrenAllowed) {
+        this.childrenAllowed = childrenAllowed;
     }
     
 }
