@@ -5,6 +5,7 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -18,6 +19,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.Select;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.Tree;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.service.OrganisationService;
 import java.lang.reflect.InvocationTargetException;
@@ -244,6 +246,11 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
         this.table.setVisibleColumns(this.field.toArray());
        
         
+        // Tree test
+        Tree tree = new Tree();
+        tree.setContainerDataSource(this.table.getContainerDataSource());
+        tree.setItemCaptionPropertyId("name");
+
         // Insert components into content'        
         this.filterHolder.setSpacing(true);
         this.panel.addComponent(this.filterHolder);
@@ -267,6 +274,7 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
         }
         this.content.addComponent(this.panel);
         this.content.addComponent(this.table);
+        this.content.addComponent(tree);
         this.content.addComponent(this.dummy);
     }
     
