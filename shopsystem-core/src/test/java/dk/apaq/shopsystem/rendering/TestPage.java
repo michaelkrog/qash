@@ -105,6 +105,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         tester.executeUrl(url);
         String response = tester.getLastResponseAsString();
         tester.assertContains("style.css");
+        tester.assertContains("<img");
         tester.assertContainsNot("style_small.css");
         tester.assertContainsNot("<cms:component");
         tester.assertContainsNot("</cms:component");
@@ -162,8 +163,9 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         String text = tester.getLastResponseAsString();
         System.out.println(text);
     }
+
         
-            @Test
+    @Test
     public void retrieveSystemFileSuccessfully() throws IOException {
 
         tester.executeUrl("http://localhost/context/servlet/_render/" + org.getId() + "/sites/" + site.getId()+"/_/content/monologo.png");

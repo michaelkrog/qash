@@ -8,6 +8,7 @@ import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.entity.Placeholder;
+import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptInvoker;
 import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptPageRenderer;
 import dk.apaq.shopsystem.service.OrganisationService;
@@ -47,10 +48,11 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
     private boolean failed;
     private String error;
     
-    public CmsPage(OrganisationService organisationService, Page page, PageParameters pageParameters) {
+    public CmsPage(OrganisationService organisationService, Website site, Page page, PageParameters pageParameters) {
         super(pageParameters);
         this.page = page;
         
+       
         
         String themeName = page.getThemeName();
         String templateName = page.getTemplateName();
@@ -99,7 +101,7 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
                 }
                 
                 
-                SimpleScriptComponent customWicketComponent = new SimpleScriptComponent(organisationService, "placeholder", component, info);
+                SimpleScriptComponent customWicketComponent = new SimpleScriptComponent(organisationService, site, "placeholder", component, info);
                 components.add(customWicketComponent);
             }
 

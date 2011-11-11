@@ -32,6 +32,8 @@ public class ResolvingContentResource extends AbstractResource {
         if (site == null) {
             return null;
         }
+        
+        
 
         OrganisationService organisationService = service.getOrganisationService(site.getOrganisation());
 
@@ -41,6 +43,10 @@ public class ResolvingContentResource extends AbstractResource {
 
             for (int i = 0; i < attributes.getParameters().getIndexedCount(); i++) {
                 String nextSegment = attributes.getParameters().get(i).toString();
+                if("".equals(nextSegment)) {
+                    continue;
+                }
+                
                 if (!dir.hasChild(nextSegment)) {
                     break;
                 }

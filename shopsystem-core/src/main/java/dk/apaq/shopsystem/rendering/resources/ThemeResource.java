@@ -41,6 +41,11 @@ public class ThemeResource extends AbstractResource {
         
         String themeName = attributes.getParameters().get("themename").toString();
         
+        //Some may get the url wrong and end the themename with '.theme'. Just remove it if they have.
+        if(themeName.endsWith(".theme")) {
+            themeName = themeName.substring(0, themeName.length()-6);
+        }
+        
         Theme theme = organisationService.getThemes().read(themeName);
         if(theme == null) {
             rr.setError(404, "Theme '"+themeName+"' not found.");
@@ -51,6 +56,10 @@ public class ThemeResource extends AbstractResource {
         
         for(int i=0;i<attributes.getParameters().getIndexedCount();i++) {
             String nextSegment = attributes.getParameters().get(i).toString();
+            if("".equals(nextSegment)) {
+                continue;
+            }
+            
             if(!dir.hasChild(nextSegment)) {
                 return null;
             }

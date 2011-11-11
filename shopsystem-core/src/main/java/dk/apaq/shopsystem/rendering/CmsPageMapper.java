@@ -65,7 +65,7 @@ public class CmsPageMapper extends AbstractMapper implements IRequestMapper {
 
         PageParameters pageParameters = extractPageParameters(request, pagePathSegmentCount, parametersEncoder);
         OrganisationService organisationService = service.getOrganisationService(site.getOrganisation());
-        CmsPage wp = new CmsPage(organisationService, page, pageParameters);
+        CmsPage wp = new CmsPage(organisationService, site, page, pageParameters);
         return new CmsRenderPageRequestHandler(site, page, systemRequest, new PageProvider(wp));
     }
 
