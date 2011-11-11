@@ -16,6 +16,7 @@ import dk.apaq.shopsystem.ui.SiteHeader;
 import dk.apaq.shopsystem.ui.VaadinServiceHolder;
 import dk.apaq.shopsystem.ui.common.CategoryList;
 import dk.apaq.shopsystem.ui.common.CategoryList.SelectEvent;
+import dk.apaq.shopsystem.ui.common.HtmlEditor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +37,7 @@ public class AdminPanel extends CustomComponent {
     private BeanItem datasource;
     private VerticalLayout content = new VerticalLayout();
     private ListListener listListener = new ListListener();
+    private final HtmlEditor htmlEditor = new HtmlEditor();
 
     private class ListListener implements CategoryList.SelectListener {
 
@@ -71,6 +73,7 @@ public class AdminPanel extends CustomComponent {
         categoryList.addCategory("Stores");
         categoryList.addItem("Online", "WEBSITES");
         categoryList.addItem("Retail", "STORES");
+        categoryList.addItem("Html edit", "HTMLEDIT");
         
         categoryList.setSizeFull();
         categoryList.addListener(listListener);
@@ -130,13 +133,13 @@ public class AdminPanel extends CustomComponent {
             c = stockWidget;
         }
 
+        if("HTMLEDIT".equals(name)) {
+            c = htmlEditor;
+        }
+
         if(name.startsWith("WEBSITE:")) {
             c = websiteEditor;
         }
-        
-        //if("CONSTRUCTIONLIST".equals(name)) {
-        //    c = constructionList;
-        //}
         
         if(c==null) {
             c = new Label("Ingen widget til dette område endnu");
