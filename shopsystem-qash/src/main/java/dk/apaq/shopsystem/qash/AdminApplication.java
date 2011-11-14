@@ -8,7 +8,9 @@ import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.SystemService;
+import dk.apaq.vaadin.addon.printservice.VaadinGoogleCloudPrintPlugin;
 import dk.apaq.vaadin.addon.printservice.VaadinPrintPdfPlugin;
+import dk.apaq.vaadin.addon.printservice.VaddinPrintAppletPlugin;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -87,7 +89,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
         LOG.debug("Initializing ShopSystem application");
         setLogoutURL("/");
 
-        //Load classes from spring
+         //Load classes from spring
         ApplicationContext context = VaadinSpringHelper.getSpringContextFromVaadinContext(getContext());
         service = context.getBean("service", SystemService.class);
         annexService = context.getBean("annexService", AnnexService.class);
@@ -101,6 +103,8 @@ public class AdminApplication extends Application implements HttpServletRequestL
         setMainWindow(mainWindow);
 
         PrintFacade.getManager(this).addPlugin(new VaadinPrintPdfPlugin(this));
+        //PrintFacade.getManager(this).addPlugin(new VaadinGoogleCloudPrintPlugin(this, gcpClientId, gcpClientSecret));
+        PrintFacade.getManager(this).addPlugin(new VaddinPrintAppletPlugin(this));
         
         
         outerLayout.setMargin(false);
