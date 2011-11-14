@@ -1,20 +1,21 @@
 package dk.apaq.shopsystem.ui.shoppinnet.factory;
 
-import com.vaadin.data.util.HierarchicalContainer;
+
 import dk.apaq.shopsystem.entity.ProductCategory;
-import dk.apaq.shopsystem.ui.CategoryCrudContainer;
+import dk.apaq.shopsystem.ui.HierarchicalCrudContainer;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonForm;
 import dk.apaq.shopsystem.ui.shoppinnet.common.CommonGrid;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
 public class CategoryFactory extends AbstractFactory {
 
-    HierarchicalContainer categoryContainer = new HierarchicalContainer();
+    HierarchicalCrudContainer categoryContainer;
    
     
     @Override
     public void setCrudContainer() {
-        this.container = new CategoryCrudContainer(this.orgService.getProductCategories());
+        //this.categoryContainer.s
+        this.categoryContainer = new HierarchicalCrudContainer(this.orgService.getProductCategories(), ProductCategory.class);
     }
     
 
