@@ -208,5 +208,6 @@
     <modules>
         <module>shopsystem-webapp</module>
         <module>shopsystem-core</module>
-    </modules>
+    <module>shopsystem-qash</module>
+  </modules>
 </project>
