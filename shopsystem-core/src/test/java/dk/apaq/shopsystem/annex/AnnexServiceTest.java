@@ -8,13 +8,19 @@ import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
+import java.awt.image.BufferedImage;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
+import java.awt.print.Printable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import javax.imageio.ImageIO;
 import junit.framework.TestCase;
 
 public class AnnexServiceTest extends TestCase {
@@ -113,9 +119,10 @@ public class AnnexServiceTest extends TestCase {
         Order order = getOrder(1);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+        //FileOutputStream out = new FileOutputStream("invoice.html");
         
         CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
-        Page page = new Page(PageSize.A4);
+        Page page = new Page(PageSize.A4, 5, 5, 5, 5);
         AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
         annexService.generateInvoice(context, OutputType.Html);
         
@@ -123,6 +130,74 @@ public class AnnexServiceTest extends TestCase {
         assertNotSame(0, value.length());
         System.out.println(value);
     }
+    
+    public void testGenerateInvoicePdf() throws Exception {
+        Organisation org = getOrganisation();
+        Order order = getOrder(1);
+
+        //FileOutputStream out = new FileOutputStream("invoice.pdf");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        
+        CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
+        Page page = new Page(PageSize.A4);
+        AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
+        annexService.generateInvoice(context, OutputType.Pdf);
+        
+        String value = new String(out.toByteArray());
+        assertNotSame(0, value.length());
+        System.out.println(value);
+    }
+    
+    public void testGenerateInvoicePrintable() throws Exception {
+        Organisation org = getOrganisation();
+        Order order = getOrder(1);
+
+        //FileOutputStream out = new FileOutputStream("invoice.pdf");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        
+        CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
+        Page page = new Page(PageSize.A4, 5, 5, 5, 5);
+        
+        AnnexContext<CommercialDocumentContent, Void> context = new AnnexContext<CommercialDocumentContent, Void>(content, null, page, Locale.getDefault());
+        Printable p = annexService.generatePrintableInvoice(context);
+        
+        int width = page.getSize().getPixelWidth();
+        int height = page.getSize().getPixelHeight();
+        
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        PageFormat pf = new PageFormat();
+        Paper paper = new Paper();
+        paper.setSize(width, height);
+        paper.setImageableArea(0, 0, width, height);
+        pf.setPaper(paper);
+        p.print(img.createGraphics(), pf, 0);
+        
+        ImageIO.write(img, "png", out);
+        String value = new String(out.toByteArray());
+        assertNotSame(0, value.length());
+        System.out.println(value);
+    }
+    
+     public void testGenerateInvoicePngBundle() throws Exception{
+        Organisation org = getOrganisation();
+        Order order = getOrder(1);
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        //FileOutputStream out = new FileOutputStream("invoice_png.zip");
+
+        CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
+        Page page = new Page(PageSize.A4);
+        AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
+        annexService.generateInvoice(context, OutputType.PngBundle);
+
+
+        String value = new String(out.toByteArray());
+        assertNotSame(0, value.length());
+
+        //TODO Extract the images and ensure they are correct in size.
+        out.close();
+    }
+
 
     /*public void testPrintReceiptHtml() throws Exception {
         Shop shop = getShop();

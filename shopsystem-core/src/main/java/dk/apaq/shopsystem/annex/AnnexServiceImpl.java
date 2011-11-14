@@ -213,7 +213,7 @@ public class AnnexServiceImpl implements AnnexService {
 
         XHTMLPanel panel = new XHTMLPanel();
         panel.setSize(page.getSize().getPixelWidth(), page.getSize().getPixelHeight());
-        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        //DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         panel.setDocument(new ByteArrayInputStream(baos.toByteArray()), "");
 
         /*XHTMLPrintable printable = new ExtendedXHtmlPrintable(panel);
@@ -228,7 +228,7 @@ public class AnnexServiceImpl implements AnnexService {
             LOG.debug("Document created. [organisation="+organisation.getId()+"]");
         }
         
-        return new XHTMLPrintable(panel);
+        return new ExtendedXHtmlPrintable(panel);//new XHTMLPrintable(panel);
 
     }
 

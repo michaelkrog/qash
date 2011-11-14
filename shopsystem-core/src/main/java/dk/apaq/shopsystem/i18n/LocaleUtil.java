@@ -17,4 +17,14 @@ public class LocaleUtil {
         }
 
     }
+    
+    public static ResourceBundle getResourceBundle(Locale locale) {
+
+        try {
+            return ResourceBundle.getBundle(SYSTEM_I18N_BASE_NAME, locale);
+        } catch (MissingResourceException ex) {
+            return ResourceBundle.getBundle(SYSTEM_I18N_BASE_NAME, Locale.ENGLISH);
+        }
+
+    }
 }

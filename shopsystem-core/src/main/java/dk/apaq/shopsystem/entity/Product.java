@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import dk.apaq.shopsystem.util.TaxTool;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -41,10 +42,13 @@ public class Product implements Serializable, ContentEntity {
     private double discountprice = 0;
     private double quantityInStock = 0;
     private boolean stockProduct = false;
-    @ManyToOne
+    
+    @ManyToOne(fetch= FetchType.EAGER)
     private ProductGroup productGroup;
-    @ManyToMany
+    
+    @ManyToMany(fetch= FetchType.EAGER)
     private List<ProductCategory> productCategories;
+    
     @ManyToOne
     private Tax tax = null;
 

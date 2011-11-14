@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 
- * This class is a copy of Wickets AbstractMarkupParser, just changes to not refer to Application.
+ * This class is a copy of Wickets AbstractMarkupParser, just with changes to not refer to Application.
  * 
  * This is a base MarkupParser specifically for (X)HTML. It makes use of a streaming XML parser to
  * read the markup and IMarkupFilters to remove comments, identify Wicket relevant tags, apply html

@@ -36,10 +36,13 @@ public abstract class BaseUser implements User, Serializable, ContentEntity {
     
     @ManyToOne
     private Organisation organisation;
+    
+    private String identifier;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
     private List<String> roles = new ArrayList<String>();
+    
 
     public String getId() {
         return id;
@@ -79,6 +82,13 @@ public abstract class BaseUser implements User, Serializable, ContentEntity {
         return roles;
     }
 
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
 
     @Override
     public abstract String getName();
