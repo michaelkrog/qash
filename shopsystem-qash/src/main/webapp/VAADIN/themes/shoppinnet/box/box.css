@@ -1,0 +1,18 @@
+.v-box .v-panel-caption,
+.v-box .v-panel-nocaption
+{
+    font-size: 15px;
+    font-weight: normal;
+    color: #ffffff;
+    background-color: #C4C5C8;
+    border-bottom: 0px;
+    line-height: 20px; /* accommodate minimum icon size */
+    padding: 3px 3px 3px 5px;
+}
+
+.v-box .v-panel-content > div,
+.v-box .v-ie6 .v-panel-content
+{
+    background-color: #EDEDEF;
+
+}

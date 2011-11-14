@@ -1,0 +1,16 @@
+.v-navigationpanel {
+    background-color: #55555;
+    background-image: url(../../shopsystem/images/stripes.png);
+    background-repeat: repeat;
+}
+
+/* THIS BREAKS OTHER BUTTONS THAN THE ONES IN NAVIGATION 
+.v-button-link .v-button-caption,
+.v-nativebutton-link .v-nativebutton-caption {
+    color: #ffffff;
+    font-size: 25px;
+    text-shadow: none;
+    text-decoration: none;
+    padding: 5px 5px 5px 15px;
+    
+}*/

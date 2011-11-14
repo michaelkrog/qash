@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:beans="http://www.springframework.org/schema/lang"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security-3.0.2.xsd
+       http://www.springframework.org/schema/lang
+       http://www.springframework.org/schema/lang/spring-lang-2.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"
+        >
+
+    <bean id="crud" class="dk.apaq.shopsystem.service.crud.EntityManagerCrudForSpring" scope="prototype">
+        <property name="transactionsHandledByProvider" value="false"/>
+    </bean>
+
+    <bean id="organisationCrud" class="dk.apaq.shopsystem.service.crud.OrganisationCrudImpl" scope="prototype">
+        <property name="transactionsHandledByProvider" value="false"/>
+    </bean>
+
+    <bean id="orderCrud" class="dk.apaq.shopsystem.service.crud.OrderCrudImpl" scope="prototype">
+        <property name="transactionsHandledByProvider" value="false"/>
+    </bean>
+
+    <bean id="paymentCrud" class="dk.apaq.shopsystem.service.crud.PaymentCrudImpl" scope="prototype">
+        <property name="transactionsHandledByProvider" value="false"/>
+    </bean>
+
+    <bean id="contentCrud" class="dk.apaq.shopsystem.service.crud.ContentCrud" scope="prototype">
+        <property name="transactionsHandledByProvider" value="false"/>
+    </bean>
+    
+    <bean id="webContentCrud" class="dk.apaq.shopsystem.service.crud.WebContentCrud" scope="prototype">
+        <property name="transactionsHandledByProvider" value="false"/>
+    </bean>
+
+    <bean id="userCrud" class="dk.apaq.shopsystem.service.crud.UserCrudImpl" scope="prototype">
+        <property name="transactionsHandledByProvider" value="false"/>
+    </bean>
+
+    <bean id="inventoryManager" class="dk.apaq.shopsystem.service.crud.ProductCrudInventoryManager" scope="prototype"/>
+
+    <bean id="filesystemPopulator" class="dk.apaq.shopsystem.service.DefaultFileSystemPopulator"/>
+    
+    <bean id="service" class="dk.apaq.shopsystem.service.SystemServiceImpl">
+        <property name="fileSystemPopulator" ref="filesystemPopulator"/>
+    </bean>
+    <bean id="organisationService" class="dk.apaq.shopsystem.service.OrganisationServiceImpl" scope="prototype"/>
+    <bean id="annexService" class="dk.apaq.shopsystem.annex.AnnexServiceImpl"/>
+
+    <bean id="filesystem" class="dk.apaq.vfs.impl.nativefs.NativeFileSystem">
+        <constructor-arg type="java.io.File" value="file:${user.home}/filesystem"/>
+    </bean>
+
+    <bean id="wicketApplication" class="dk.apaq.shopsystem.rendering.CmsApplication"/>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="ShopSystem"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" >
+                <property name="showSql" value="false"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+    
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jsonConverter" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+        <!--property name="supportedMediaTypes" value="application/json" /-->
+    </bean>
+
+
+    <tx:annotation-driven />
+    <context:annotation-config />
+    
+    <!-- Scans within the base package of the application for @Components to configure as beans -->
+    <!-- @Controller, @Service, @Configuration, etc. -->
+    <context:component-scan base-package="dk.apaq.shopsystem.api" />
+   
+   <!-- Enables the Spring MVC @Controller programming model -->
+    <mvc:annotation-driven />
+
+</beans>
