@@ -43,12 +43,9 @@ public class HierarchicalCrudContainer<IDT, BT> extends CrudContainer<IDT, BT> i
     @Override
     public Collection<?> getChildren(Object itemId) {
         validateSettings();
-        //getItem(itemId).getItemProperty(this.parentPropertyId).getValue()
-
         CompareFilter compareFilter = new CompareFilter(this.parentPropertyId, crud.read((IDT) itemId), CompareType.Equals);
         Collection idList = getItemIdList(compareFilter, null);
-        
-        System.out.println("getChildren!");
+
         return idList;
     }
 
@@ -61,12 +58,9 @@ public class HierarchicalCrudContainer<IDT, BT> extends CrudContainer<IDT, BT> i
     @Override
     public Collection<?> rootItemIds() {
         validateSettings();
-        //CompareFilter compareFilter = new CompareFilter("name", "Cat 2", CompareType.Equals);
-        IsNullFilter filter = new IsNullFilter(this.parentPropertyId); //new CompareFilter(this.parentPropertyId, null, CompareType.Equals);
+        IsNullFilter filter = new IsNullFilter(this.parentPropertyId); 
         Collection idList = getItemIdList(filter, null);
-        //Collection idList = this.getItemIds();
-        
-        System.out.println("rootItemIds!");
+
         return idList;
     }
 
@@ -81,9 +75,15 @@ public class HierarchicalCrudContainer<IDT, BT> extends CrudContainer<IDT, BT> i
     @Override
     public boolean areChildrenAllowed(Object itemId) {
         validateSettings();
-        //return getItem(itemId).getItemProperty(this.childrenAllowedPropertyId).getValue();
-        //@todo: how to get the boolean value from this item? Always true for now.
-        return true;
+        if (getItem(itemId).getItemProperty(this.childrenAllowedPropertyId).getValue() == null) {
+           return false; 
+        }
+        else if (getItem(itemId).getItemProperty(this.childrenAllowedPropertyId).getValue().toString() == "true") {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     @Override
