@@ -22,6 +22,8 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.Tree;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.ui.HierarchicalCrudContainer;
+import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -38,7 +40,8 @@ import java.util.logging.Logger;
 
 public class CommonGrid extends CustomComponent { //Container.Viewer
     
-    //private Container data;
+    private HierarchicalCrudContainer hierarchicalCrudContainer;
+    private CrudContainer crudContainer;
     //private IndexedContainer data;
     private String factoryClass = "";
     private String pageHeader = "";
@@ -119,10 +122,13 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
 
     
     //@Override
-    public void setContainerDataSource(Container data) {
-        //this.data = data;
-        //this.data = (IndexedContainer) data;
-        this.table.setContainerDataSource(data);
+    public void setContainerDataSource(Container container) {
+        this.table.setContainerDataSource(container);
+    }
+    
+    
+    public void setHierarchicalContainerDataSource(HierarchicalCrudContainer container) {
+        this.hierarchicalCrudContainer = container;
     }
     
     
@@ -190,7 +196,7 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
                                         try {
                                             selectorDefault = select.getValue().toString();
                                             Object o = m.invoke(newInstance, orgService, select.getValue().toString());
-                                            setContainerDataSource((Container) o);
+                                            //setContainerDataSource((container) o);
                                             
                                         } catch (InvocationTargetException ex) {
                                             Logger.getLogger(CommonGrid.class.getName()).log(Level.SEVERE, null, ex);
@@ -247,8 +253,8 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
        
         
         // Tree test
-        Tree tree = new Tree();
-        tree.setContainerDataSource(this.table.getContainerDataSource());
+        Tree tree = new Tree("Test tree");
+        tree.setContainerDataSource(this.hierarchicalCrudContainer);
         tree.setItemCaptionPropertyId("name");
 
         // Insert components into content'        

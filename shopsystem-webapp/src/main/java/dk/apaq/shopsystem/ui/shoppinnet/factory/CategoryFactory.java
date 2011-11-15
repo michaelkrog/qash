@@ -9,13 +9,15 @@ import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
 public class CategoryFactory extends AbstractFactory {
 
-    HierarchicalCrudContainer categoryContainer;
-   
+    HierarchicalCrudContainer container;
     
     @Override
     public void setCrudContainer() {
-        //this.categoryContainer.s
-        this.categoryContainer = new HierarchicalCrudContainer(this.orgService.getProductCategories(), ProductCategory.class);
+        this.container = new HierarchicalCrudContainer(this.orgService.getProductCategories(), ProductCategory.class);
+        
+        this.container.setParentPropertyId("productCategoryParent");
+        this.container.setChildrenAllowedPropertyId("childrenAllowed");
+        
     }
     
 
@@ -24,11 +26,12 @@ public class CategoryFactory extends AbstractFactory {
         CommonGrid grid = new CommonGrid(this.orgService);
 
         grid.setContainerDataSource(this.container);
+        grid.setHierarchicalContainerDataSource(this.container);
         grid.setFactoryClass(CategoryFactory.class.getName());
         
         grid.setEditAble(true);
         grid.setSearch(false);
-        //grid.setPageHeader("Product Categories");
+        grid.setPageHeader("Product Categories");
         //grid.addDescription("", "A product category may be shown in multiple online stores.");
         
         // Add buttons
