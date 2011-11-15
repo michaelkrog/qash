@@ -1,14 +1,8 @@
 package dk.apaq.shopsystem.annex;
 
-import java.util.List;
 
-import dk.apaq.shopsystem.entity.Order;
-import dk.apaq.shopsystem.entity.Store;
-import dk.apaq.shopsystem.entity.Tax;
 import java.awt.print.Printable;
 import java.io.OutputStream;
-import java.util.Locale;
-import javax.print.PrintService;
 
 /**
  * A service that offers methods to write receipts, invoices and more.
@@ -16,19 +10,17 @@ import javax.print.PrintService;
  */
 public interface AnnexService {
 
+        void generate(AnnexContext<CommercialDocumentContent, OutputStream> context, AnnexType annexType, OutputType outputType) throws Exception;
+        Printable generatePrintable(AnnexContext<CommercialDocumentContent, Void> context, AnnexType annexType, OutputType outputType) throws Exception;
 
+        @Deprecated
         void generateReceipt(AnnexContext<CommercialDocumentContent, OutputStream> context, OutputType outputType) throws Exception ;
+        @Deprecated
         Printable generatePrintableReceipt(AnnexContext<CommercialDocumentContent, Void> context) throws Exception ;
 
+        @Deprecated
         void generateInvoice(AnnexContext<CommercialDocumentContent, OutputStream> context, OutputType outputType) throws Exception ;
+        @Deprecated
         Printable generatePrintableInvoice(AnnexContext<CommercialDocumentContent, Void> context) throws Exception ;
-
-        /*
-        public void writeReceipt(Store shop, Order order, OutputType outputType, PageSize pagesize, OutputStream out, Locale locale) throws Exception;
-	public void writeInvoice(Store shop, Order order, OutputType outputType, PageSize pagesize, OutputStream out, Locale locale) throws Exception;
-	public void writeOrder(Store shop, Order order, OutputStream out, OutputType outputType, Locale locale) throws Exception;
-	public void writeOrderList(Store shop, List<Order> orderlist, OutputStream out, OutputType outputType, Locale locale) throws Exception;
-	public void writePostings(List<Order> orderlist,List<Tax> taxlist, int account, int offsetaccount, OutputStream out, OutputType outputType, Locale locale) throws Exception;
-        */
         
 }

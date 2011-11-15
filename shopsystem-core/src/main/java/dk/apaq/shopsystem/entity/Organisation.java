@@ -27,10 +27,11 @@ public class Organisation implements Serializable, BasicEntity {
 
     private String name;
     private String company_reg;
-    private String address;
+    /*private String address;
     private String zip;
     private String city;
-    private String country = "US";
+    private String country = "US";*/
+    private Address address;
     private String email;
     private String telephone;
     private long initialOrdernumber = 1;
@@ -62,12 +63,12 @@ public class Organisation implements Serializable, BasicEntity {
         this.dateChanged = dateChanged;
     }
 
-    public String getCountry() {
-        return country;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public String getCurrency() {
@@ -102,22 +103,6 @@ public class Organisation implements Serializable, BasicEntity {
         this.defaultPaymentPeriodInDays = paymentPeriodInDays;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public String getCompanyReg() {
         return company_reg;
     }
@@ -150,11 +135,4 @@ public class Organisation implements Serializable, BasicEntity {
         this.telephone = telephone;
     }
 
-    public String getZip() {
-        return zip;
-    }
-
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
 }

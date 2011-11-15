@@ -1,5 +1,6 @@
 #set($bodyWidth = $pixelWidth - $pixelMarginLeft)
 #set($bodyWidth = $bodyWidth - $pixelMarginRight)
+#set ($address=$organisation.getAddress())
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -94,7 +95,6 @@
         </style>
     </head>
     <body>
-
         <div class="header">
             <table>
                  <tr>
@@ -107,11 +107,11 @@
                 </tr>
                 <tr>
                     <td><!--$customeraddress--></td>
-                    <td class="right">#if($organisation.getAddress())$tool.html($organisation.getAddress())#end</td>
+                    <td class="right">#if($address.getStreet())$tool.html($address.getStreet())#end</td>
                 </tr>
                 <tr>
                     <td><!--$custoemraddress2--></td>
-                    <td class="right">#if($organisation.getZip())$tool.html($organisation.getZip())#end #if($organisation.getCity())$tool.html($organisation.getCity())#end</td>
+                    <td class="right">#if($address.getPostalCode())$tool.html($address.getPostalCode())#end #if($address.getCity())$tool.html($address.getCity())#end</td>
                 </tr>
                 <tr>
                     <td><!--$customerzip $customercity--></td>

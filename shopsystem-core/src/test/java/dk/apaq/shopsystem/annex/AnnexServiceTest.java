@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.annex;
 
+import dk.apaq.shopsystem.entity.Address;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +33,7 @@ public class AnnexServiceTest extends TestCase {
         org.setName("Apaq");
         org.setTelephone("51923192");
         org.setEmail("mail@gmail.com");
-        org.setAddress("Stoevringparken 10");
-        org.setZip("9530");
-        org.setCity("Stoevring");
+        org.setAddress(new Address("Stovringparken 10", "9530", "Stovring", "DK"));
         return org;
     }
 
@@ -111,7 +110,8 @@ public class AnnexServiceTest extends TestCase {
         
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
-        System.out.println(value);
+        assertTrue(value.contains("Stovringparken"));
+        assertTrue(value.contains("Apaq"));
     }
     
     public void testGenerateInvoiceHtml() throws Exception {
@@ -128,7 +128,8 @@ public class AnnexServiceTest extends TestCase {
         
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
-        System.out.println(value);
+        assertTrue(value.contains("Stovringparken"));
+        assertTrue(value.contains("Apaq"));
     }
     
     public void testGenerateInvoicePdf() throws Exception {
@@ -145,7 +146,6 @@ public class AnnexServiceTest extends TestCase {
         
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
-        System.out.println(value);
     }
     
     public void testGenerateInvoicePrintable() throws Exception {
@@ -175,7 +175,6 @@ public class AnnexServiceTest extends TestCase {
         ImageIO.write(img, "png", out);
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
-        System.out.println(value);
     }
     
      public void testGenerateInvoicePngBundle() throws Exception{
@@ -493,3 +492,4 @@ public class AnnexServiceTest extends TestCase {
 
 
 }
+

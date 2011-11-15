@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-import javax.print.PrintService;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -16,11 +15,9 @@ import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderLine;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Payment;
-import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import java.awt.image.BufferedImage;
 import java.awt.print.Printable;
-import java.awt.print.PrinterJob;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -30,8 +27,6 @@ import java.text.SimpleDateFormat;
 import java.util.Currency;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -76,29 +71,52 @@ public class AnnexServiceImpl implements AnnexService {
     private DateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private NumberFormat usNumberFormat = NumberFormat.getNumberInstance(Locale.US);
 
-   
+    @Override
+    public void generate(AnnexContext<CommercialDocumentContent, OutputStream> context, AnnexType annexType, OutputType outputType) throws Exception {
+        switch(annexType) {
+            case Invoice:
+                generateInvoice(context, outputType);
+            case Receipt:
+                generateReceipt(context, outputType);
+        }
+    }
+    
+    
+    @Override
+    public Printable generatePrintable(AnnexContext<CommercialDocumentContent, Void> context, AnnexType annexType, OutputType outputType) throws Exception {
+        switch(annexType) {
+            case Invoice:
+                return generatePrintableInvoice(context);
+            case Receipt:
+                return generatePrintableReceipt(context);
+            default:
+                return null;
+        }
+    }
+
+    @Override
     public void generateReceipt(AnnexContext<CommercialDocumentContent, OutputStream> context, OutputType outputType) throws Exception {
         generateCommercialDocument(context, outputType, receiptTemplate);
     }
 
+    @Override
     public void generateInvoice(AnnexContext<CommercialDocumentContent, OutputStream> context, OutputType outputType) throws Exception {
         generateCommercialDocument(context, outputType, invoiceTemplate);
     }
 
+    @Override
     public Printable generatePrintableReceipt(AnnexContext<CommercialDocumentContent, Void> context) throws Exception {
         return printCommercialDocument(context, receiptTemplate);
     }
     
+    @Override
     public Printable generatePrintableInvoice(AnnexContext<CommercialDocumentContent, Void> context) throws Exception {
         return printCommercialDocument(context, invoiceTemplate);
     }
 
 
 
-    /**
-     * @deprecated
-     */
-    public void writePostings(List<Order> orderlist, List<Tax> taxlist, int account,
+    /*public void writePostings(List<Order> orderlist, List<Tax> taxlist, int account,
             int offsetaccount, OutputStream out, OutputType outputType, Locale locale) throws Exception {
         if (outputType != OutputType.Csv) {
             throw new IllegalArgumentException("Only Outputtype.Csv is supported.");
@@ -108,7 +126,6 @@ public class AnnexServiceImpl implements AnnexService {
             LOG.debug("Creating postings [format="+outputType+"]");
         }
 
-        /*  create a context and add data */
         VelocityContext context = new VelocityContext();
 
         context.put("dateformatter", isoDateFormat);
@@ -125,7 +142,7 @@ public class AnnexServiceImpl implements AnnexService {
         if(LOG.isDebugEnabled()) {
             LOG.debug("Postings created.");
         }
-    }
+    }*/
 
     private void generateCommercialDocument(AnnexContext<CommercialDocumentContent, OutputStream> context, OutputType outputType, Template template) throws Exception {
         Organisation organisation = context.getInput().getSeller();
@@ -216,19 +233,11 @@ public class AnnexServiceImpl implements AnnexService {
         //DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         panel.setDocument(new ByteArrayInputStream(baos.toByteArray()), "");
 
-        /*XHTMLPrintable printable = new ExtendedXHtmlPrintable(panel);
-
-        PrinterJob printerJob = PrinterJob.getPrinterJob();
-        printerJob.setPrintable(printable);
-        printerJob.setPrintService(context.getOutput());
-        printerJob.print();
-
-*/
         if(LOG.isDebugEnabled()) {
             LOG.debug("Document created. [organisation="+organisation.getId()+"]");
         }
         
-        return new ExtendedXHtmlPrintable(panel);//new XHTMLPrintable(panel);
+        return new ExtendedXHtmlPrintable(panel);
 
     }
 
