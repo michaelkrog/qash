@@ -9,11 +9,14 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Address {
 
-    private final String street;
-    private final String city;
-    private final String stateOrProvince;
-    private final String postalCode;
-    private final String country;
+    private String street;
+    private String city;
+    private String stateOrProvince;
+    private String postalCode;
+    private String country;
+
+    protected Address() {
+    }
 
     public Address(String street, String postalCode, String city, String country) {
         this.street = street;

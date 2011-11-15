@@ -64,6 +64,8 @@ public class Order implements Serializable, ContentEntity {
     private long number = -1;
 
     private long invoiceNumber = -1;
+    
+    
 
 
     public Order() {
