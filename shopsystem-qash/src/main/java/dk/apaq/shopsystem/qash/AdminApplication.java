@@ -100,19 +100,19 @@ public class AdminApplication extends Application implements HttpServletRequestL
 
         setTheme("shopsystem");
         Window mainWindow = new Window();
+        mainWindow.setContent(outerLayout);
         setMainWindow(mainWindow);
 
         PrintFacade.getManager(this).addPlugin(new VaadinPrintPdfPlugin(this));
-        //PrintFacade.getManager(this).addPlugin(new VaadinGoogleCloudPrintPlugin(this, gcpClientId, gcpClientSecret));
         PrintFacade.getManager(this).addPlugin(new VaddinPrintAppletPlugin(this));
+        //PrintFacade.getManager(this).addPlugin(new VaadinGoogleCloudPrintPlugin(this, gcpClientId, gcpClientSecret));
         
         
         outerLayout.setMargin(false);
         outerLayout.setSizeFull();
         outerLayout.setStyleName(Reindeer.LAYOUT_WHITE);
 
-        mainWindow.setContent(outerLayout);
-
+        
         //outerLayout.addComponent(pusher);
         
         updateOrganisation();
