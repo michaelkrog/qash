@@ -14,10 +14,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.openid.AuthenticationCancelledException;
-import org.springframework.security.openid.OpenIDAttribute;
-import org.springframework.security.openid.OpenIDAuthenticationStatus;
-import org.springframework.security.openid.OpenIDAuthenticationToken;
+//import org.springframework.security.openid.AuthenticationCancelledException;
+//import org.springframework.security.openid.OpenIDAttribute;
+//import org.springframework.security.openid.OpenIDAuthenticationStatus;
+//import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
@@ -75,6 +75,7 @@ public class QashAuthenticationProvider implements AuthenticationProvider {
             }
         }
 
+        /*
         //Is it openid?
         if (authentication instanceof OpenIDAuthenticationToken) {
             OpenIDAuthenticationToken response = (OpenIDAuthenticationToken) authentication;
@@ -106,7 +107,7 @@ public class QashAuthenticationProvider implements AuthenticationProvider {
             } else {
                 throw new AuthenticationServiceException("Unrecognized return value " + status.toString());
             }
-        }
+        }*/
 
         newAuthentication = createSuccessfulAuthentication(userDetails, authentication);
 
@@ -123,10 +124,10 @@ public class QashAuthenticationProvider implements AuthenticationProvider {
      * @param auth the token passed to the authenticate method, containing
      * @return the token which will represent the authenticated user.
      */
-    protected Authentication createSuccessfulAuthentication(UserDetails userDetails, OpenIDAuthenticationToken auth) {
+    /*protected Authentication createSuccessfulAuthentication(UserDetails userDetails, OpenIDAuthenticationToken auth) {
         return new OpenIDAuthenticationToken(userDetails, userDetails.getAuthorities(),
                 auth.getIdentityUrl(), auth.getAttributes());
-    }
+    }*/
 
     protected Authentication createSuccessfulAuthentication(UserDetails userDetails, UsernamePasswordAuthenticationToken auth) {
         UsernamePasswordAuthenticationToken successAuth =
@@ -137,8 +138,8 @@ public class QashAuthenticationProvider implements AuthenticationProvider {
     }
 
     protected Authentication createSuccessfulAuthentication(UserDetails userDetails, Authentication auth) {
-        if(auth instanceof OpenIDAuthenticationToken)
-            return createSuccessfulAuthentication(userDetails, (OpenIDAuthenticationToken)auth);
+        //if(auth instanceof OpenIDAuthenticationToken)
+        //    return createSuccessfulAuthentication(userDetails, (OpenIDAuthenticationToken)auth);
         if(auth instanceof UsernamePasswordAuthenticationToken)
             return createSuccessfulAuthentication(userDetails, (UsernamePasswordAuthenticationToken)auth);
         throw new IllegalArgumentException();
@@ -161,8 +162,8 @@ public class QashAuthenticationProvider implements AuthenticationProvider {
      * @see org.springframework.security.authentication.AuthenticationProvider#supports(java.lang.Class)
      */
     public boolean supports(Class<? extends Object> authentication) {
-        return OpenIDAuthenticationToken.class.isAssignableFrom(authentication)
-                || UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+        return /*OpenIDAuthenticationToken.class.isAssignableFrom(authentication)
+                || */UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
     private boolean hasAuthority(Collection<GrantedAuthority> authlist, String role) {
@@ -175,7 +176,7 @@ public class QashAuthenticationProvider implements AuthenticationProvider {
         return false;
     }
 
-    private UserDetails userDetailsFromOpenIdResponse(OpenIDAuthenticationToken response) {
+    /*private UserDetails userDetailsFromOpenIdResponse(OpenIDAuthenticationToken response) {
         String email = null;
         String name = null;
         String username = null;
@@ -218,5 +219,5 @@ public class QashAuthenticationProvider implements AuthenticationProvider {
         account.setName(username);
         account.setIdentifier(response.getIdentityUrl());
         return new SystemUserDetails(account);
-    }
+    }*/
 }

@@ -19,11 +19,11 @@
     </properties>
 
     <dependencies>
-        <dependency>
+        <!--dependency>
             <groupId>dk.apaq.spring</groupId>
             <artifactId>spring-security-rpx</artifactId>
             <version>0.2</version>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>org.apache.maven.shared</groupId>
             <artifactId>maven-runtime</artifactId>

@@ -8,7 +8,6 @@ import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.SystemService;
-import dk.apaq.vaadin.addon.printservice.VaadinGoogleCloudPrintPlugin;
 import dk.apaq.vaadin.addon.printservice.VaadinPrintPdfPlugin;
 import dk.apaq.vaadin.addon.printservice.VaddinPrintAppletPlugin;
 import java.io.IOException;
