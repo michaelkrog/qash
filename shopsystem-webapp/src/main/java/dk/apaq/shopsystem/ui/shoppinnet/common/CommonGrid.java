@@ -20,6 +20,7 @@ import com.vaadin.ui.Select;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Tree;
+import com.vaadin.ui.TreeTable;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.ui.HierarchicalCrudContainer;
@@ -40,9 +41,6 @@ import java.util.logging.Logger;
 
 public class CommonGrid extends CustomComponent { //Container.Viewer
     
-    private HierarchicalCrudContainer hierarchicalCrudContainer;
-    private CrudContainer crudContainer;
-    //private IndexedContainer data;
     private String factoryClass = "";
     private String pageHeader = "";
     private List description = new ArrayList();
@@ -61,7 +59,7 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
     private Container selectorData;
     
     final private OrganisationService orgService;
-    final private Table table = new Table();
+    final private TreeTable table = new TreeTable("Tree Table");
     final private VerticalLayout content = new VerticalLayout();
     final private HorizontalLayout panel = new HorizontalLayout();
     final private HorizontalLayout buttonHolder = new HorizontalLayout();
@@ -115,20 +113,9 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
     }
     
 
-    /*@Override
-    public Container getContainerDataSource() {
-        return this.data;
-    }*/
-
-    
     //@Override
     public void setContainerDataSource(Container container) {
         this.table.setContainerDataSource(container);
-    }
-    
-    
-    public void setHierarchicalContainerDataSource(HierarchicalCrudContainer container) {
-        this.hierarchicalCrudContainer = container;
     }
     
     
@@ -253,9 +240,18 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
        
         
         // Tree test
-        Tree tree = new Tree("Test tree");
-        tree.setContainerDataSource(this.hierarchicalCrudContainer);
+        TreeTable tree = new TreeTable("Test treeTable");
+        tree.setContainerDataSource(this.table.getContainerDataSource());
+        //tree.setItemCaptionPropertyId("name");
+        
+        /*Tree tree = new Tree("Test tree");
+        tree.setContainerDataSource(this.table.getContainerDataSource());
         tree.setItemCaptionPropertyId("name");
+        */
+        //this.table.setContainerDataSource(this.hierarchicalCrudContainer);
+        //this.table.setItemCaptionPropertyId("name");
+//this.table.setImmediate(true);      
+//this.table.setHierarchyColumn("name");
 
         // Insert components into content'        
         this.filterHolder.setSpacing(true);
@@ -275,7 +271,7 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
         if (!"".equals(this.pageHeader)) {
             this.content.addComponent(new PageHeader(this.pageHeader));
         }
-        if (this.description.size() != 0) {
+        if (!this.description.isEmpty()) {
             this.content.addComponent(this.descriptionPanel);
         }
         this.content.addComponent(this.panel);

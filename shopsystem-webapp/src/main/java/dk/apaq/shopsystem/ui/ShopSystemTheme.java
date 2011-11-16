@@ -25,5 +25,4 @@ public class ShopSystemTheme {
 
      public static final String PANEL_BUBBLE = "bubble";
    
-
 }

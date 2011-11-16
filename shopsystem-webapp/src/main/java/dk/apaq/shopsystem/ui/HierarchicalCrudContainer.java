@@ -74,14 +74,18 @@ public class HierarchicalCrudContainer<IDT, BT> extends CrudContainer<IDT, BT> i
 
     @Override
     public boolean areChildrenAllowed(Object itemId) {
+        System.out.println("areChildrenAllowed");
         validateSettings();
         if (getItem(itemId).getItemProperty(this.childrenAllowedPropertyId).getValue() == null) {
-           return false; 
+           System.out.println("Nope...");
+            return false; 
         }
-        else if (getItem(itemId).getItemProperty(this.childrenAllowedPropertyId).getValue().toString() == "true") {
+        else if ("true".equals(getItem(itemId).getItemProperty(this.childrenAllowedPropertyId).getValue().toString())) {
+            System.out.println("Yeps...");
             return true;
         }
         else {
+            System.out.println("Nope...");
             return false;
         }
     }
