@@ -122,7 +122,7 @@ public class SimpleScriptComponent extends Panel implements IMarkupCacheKeyProvi
 
     @Override
     public String getCacheKey(MarkupContainer container, Class<?> containerClass) {
-        return component.getCodeFile().getPath().toString();
+        return component.getCodeFile().getPath().toString() + (failed ? "_failed" : "");
     }
 
 
