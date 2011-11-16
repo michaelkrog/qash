@@ -25,7 +25,7 @@ public class CategoryFactory extends AbstractFactory {
                 
         CommonGrid grid = new CommonGrid(this.orgService);
 
-        grid.setContainerDataSource(this.container);
+        grid.setHContainerDataSource(this.container);
         grid.setFactoryClass(CategoryFactory.class.getName());
         
         grid.setEditAble(true);

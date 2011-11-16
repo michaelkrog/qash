@@ -118,6 +118,9 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
         this.table.setContainerDataSource(container);
     }
     
+    public void setHContainerDataSource(HierarchicalCrudContainer container) {
+        this.table.setContainerDataSource(container);
+    }
     
     @Override
     public void attach() {
