@@ -2,6 +2,7 @@ package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,20 +26,21 @@ public class Organisation implements Serializable, BasicEntity {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateChanged = new Date();
 
-    private String name;
-    private String company_reg;
-    /*private String address;
-    private String zip;
-    private String city;
-    private String country = "US";*/
-    private Address address;
-    private String email;
-    private String telephone;
     private long initialOrdernumber = 1;
     private long initialInvoiceNumber = 1;
     private int defaultPaymentPeriodInDays = 8;
     private String currency = "USD";
-
+    private String name;
+    private String companyRegistration;
+    private String contactName;
+    private String telephone;
+    private String email;private String street;
+    private String city;
+    private String stateOrProvince;
+    private String postalCode;
+    private String country;
+    
+    
     public String getId() {
         return id;
     }
@@ -61,14 +63,6 @@ public class Organisation implements Serializable, BasicEntity {
 
     public void setDateChanged(Date dateChanged) {
         this.dateChanged = dateChanged;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     public String getCurrency() {
@@ -102,37 +96,78 @@ public class Organisation implements Serializable, BasicEntity {
     public void setDefaultPaymentPeriodInDays(int paymentPeriodInDays) {
         this.defaultPaymentPeriodInDays = paymentPeriodInDays;
     }
-
-    public String getCompanyReg() {
-        return company_reg;
-    }
-
-    public void setCompanyReg(String company_reg) {
-        this.company_reg = company_reg;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    
     public String getName() {
         return name;
     }
-
+    
     public void setName(String name) {
         this.name = name;
     }
-
+    
+    public String getCompanyRegistration() {
+        return companyRegistration;
+    }
+    
+    public void setCompanyRegistration(String reg) {
+        this.companyRegistration = reg;
+    }
+    
+    public String getStreet() {
+        return street;
+    }
+    
+    public void setStreet(String street) {
+        this.street = street;
+    }
+    
+    public String getStateOrProvince() {
+        return stateOrProvince;
+    }
+    
+    public void setStateOrProvince(String stateOrProvince) {
+        this.stateOrProvince = stateOrProvince;
+    }
+    
+    public String getPostalCode() {
+        return postalCode;
+    }
+    
+    public void setPostalCode(String postalcode) {
+        this.postalCode = postalcode;
+    }
+    
+    public String getCity() {
+        return city;
+    }
+    
+    public void setCity(String city) {
+        this.city = city;
+    }
+    
+    public String getCountry() {
+        return country;
+    }
+    
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    
     public String getTelephone() {
         return telephone;
     }
-
+    
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
-
+    
+    public String getEmail() {
+        return email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    
 }

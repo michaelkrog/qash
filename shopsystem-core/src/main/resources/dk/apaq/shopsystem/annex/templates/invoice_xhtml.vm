@@ -1,6 +1,5 @@
 #set($bodyWidth = $pixelWidth - $pixelMarginLeft)
 #set($bodyWidth = $bodyWidth - $pixelMarginRight)
-#set ($address=$organisation.getAddress())
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -103,15 +102,15 @@
                 </tr>
                 <tr>
                     <td><!--$customername--></td>
-                    <td class="right">#if($organisation.getCompanyReg())$tool.html($resource.getString("vatno")): $tool.html($organisation.getCompanyReg())#end</td>
+                    <td class="right">#if($organisation.getCompanyRegistration())$tool.html($resource.getString("vatno")): $tool.html($organisation.getCompanyRegistration())#end</td>
                 </tr>
                 <tr>
                     <td><!--$customeraddress--></td>
-                    <td class="right">#if($address.getStreet())$tool.html($address.getStreet())#end</td>
+                    <td class="right">#if($organisation.getStreet())$tool.html($organisation.getStreet())#end</td>
                 </tr>
                 <tr>
                     <td><!--$custoemraddress2--></td>
-                    <td class="right">#if($address.getPostalCode())$tool.html($address.getPostalCode())#end #if($address.getCity())$tool.html($address.getCity())#end</td>
+                    <td class="right">#if($organisation.getPostalCode())$tool.html($organisation.getPostalCode())#end #if($organisation.getCity())$tool.html($organisation.getCity())#end</td>
                 </tr>
                 <tr>
                     <td><!--$customerzip $customercity--></td>

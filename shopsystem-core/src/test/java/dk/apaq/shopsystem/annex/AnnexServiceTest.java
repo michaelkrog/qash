@@ -33,7 +33,10 @@ public class AnnexServiceTest extends TestCase {
         org.setName("Apaq");
         org.setTelephone("51923192");
         org.setEmail("mail@gmail.com");
-        org.setAddress(new Address("Stovringparken 10", "9530", "Stovring", "DK"));
+        org.setStreet("Stovringparken 10");
+        org.setPostalCode("9530");
+        org.setCity("Stovring");
+        org.setCountry("DK");
         return org;
     }
 

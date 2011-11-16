@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -65,6 +66,11 @@ public class Order implements Serializable, ContentEntity {
 
     private long invoiceNumber = -1;
     
+    @Embedded
+    private ContactInformation buyer;
+    
+    @Embedded
+    private ContactInformation recipient;
     
 
 
@@ -93,6 +99,22 @@ public class Order implements Serializable, ContentEntity {
 
     public void setDateChanged(Date dateChanged) {
         this.dateChanged = dateChanged;
+    }
+
+    public ContactInformation getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(ContactInformation buyer) {
+        this.buyer = buyer;
+    }
+
+    public ContactInformation getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(ContactInformation recipient) {
+        this.recipient = recipient;
     }
 
     @Override
