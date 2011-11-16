@@ -4,6 +4,7 @@ import dk.apaq.crud.Crud;
 import dk.apaq.crud.CrudNotifier;
 import dk.apaq.filter.Filter;
 import dk.apaq.filter.core.CompareFilter;
+import dk.apaq.shopsystem.entity.ContactInformation;
 import dk.apaq.shopsystem.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -102,6 +103,9 @@ public class OrderCrudTest {
         Crud.Complete<String, Order> crud = service.getOrganisationService(organisation).getOrders();
         Order result = crud.read(crud.create());
 
+        ContactInformation ci = new ContactInformation();
+        ci.setContactName("Kaj");
+        result.setBuyer(ci);
 
         assertNotNull(result);
         assertNotNull(result.getId());
@@ -117,7 +121,7 @@ public class OrderCrudTest {
         result = crud.read(id);
         assertEquals(OrderStatus.Processing, result.getStatus());
         assertEquals("DKK", result.getCurrency());
-        
+        assertEquals("Kaj", result.getBuyer().getContactName());        
 
         result.setStatus(OrderStatus.Accepted);
         crud.update(result);

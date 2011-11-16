@@ -101,6 +101,9 @@ public class Order implements Serializable, ContentEntity {
         this.dateChanged = dateChanged;
     }
 
+    /**
+     * Retrieves the buyer or null if no buyer has been set no the order.
+     */
     public ContactInformation getBuyer() {
         return buyer;
     }
@@ -109,6 +112,9 @@ public class Order implements Serializable, ContentEntity {
         this.buyer = buyer;
     }
 
+    /**
+     * Retrieves the recipient or null if no recipient has been set.
+     */
     public ContactInformation getRecipient() {
         return recipient;
     }
