@@ -14,16 +14,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
-public class TestController extends AbstractController { 
+public class IndexController extends AbstractController { 
 
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public ModelAndView getProductList() {
-  
-        ModelAndView modelAndView = new ModelAndView("test");
-        modelAndView.addObject("msg", "Martin");
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public ModelAndView getIndex() {
+
+        ModelAndView modelAndView = new ModelAndView("LayoutView");
+        modelAndView.addObject("settings", "Settings");
+        
         return modelAndView;
-
     }
    
 }

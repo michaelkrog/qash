@@ -84,7 +84,7 @@
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
     
-    
+    <!--
     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
         <property name="messageConverters">
             <list>
@@ -95,18 +95,53 @@
 
 
     <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-        <!--property name="supportedMediaTypes" value="application/json" /-->
+    --> 
+    <!--property name="supportedMediaTypes" value="application/json" /-->
+    <!--
     </bean>
-    
+   
     <tx:annotation-driven />
     <context:annotation-config />
-    
+    -->
     <!-- Scans within the base package of the application for @Components to configure as beans -->
     <!-- @Controller, @Service, @Configuration, etc. -->
     <context:component-scan base-package="dk.apaq.shopsystem.api" />
-    <context:component-scan base-package="dk.apaq.shopsystem.ui.admin" />
+    <context:component-scan base-package="dk.apaq.shopsystem.ui.springadmin" />
     
    <!-- Enables the Spring MVC @Controller programming model -->
     <mvc:annotation-driven />
+
+
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+	  <property name="order" value="1" />
+	  <property name="mediaTypes">
+		<map>
+		   <entry key="json" value="application/json" />
+		</map>
+	  </property>
+ 
+	  <property name="defaultViews">
+		<list>
+		  <!-- JSON View -->
+		  <bean
+			class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+		  </bean>
+ 		 </list>
+	  </property>
+	  <property name="ignoreAcceptHeader" value="true" />
+ 
+	</bean>
+ 
+	<!-- If no extension matched, use JSP view -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="2" />
+		<property name="prefix">
+			<value>/WEB-INF/jsp/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+
 
 </beans>
