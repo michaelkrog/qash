@@ -185,7 +185,6 @@ public class AnnexServiceImpl implements AnnexService {
                 ImageIO.write(image, "PNG", orgOut);
                 orgOut.flush();
                 break;
-            case SvgBundle:
             case PngBundle:
             case PostScript:
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -199,16 +198,7 @@ public class AnnexServiceImpl implements AnnexService {
                 XHTMLPrintable printable = new ExtendedXHtmlPrintable(panel);
                 getPrinter(outputType).print(printable, page.getSize(), orgOut);
                 break;
-            case Svg:
-                ByteArrayOutputStream baos3 = new ByteArrayOutputStream();
-                context = new AnnexContext<CommercialDocumentContent, OutputStream>(context, baos3);
-                generateXhtmlOrderAnnex(context, template);
-
-                XHTMLPanel panel2 = new XHTMLPanel();
-                panel2.setSize(page.getSize().getPixelWidth(), page.getSize().getPixelHeight());
-                panel2.setDocument(new ByteArrayInputStream(baos3.toByteArray()), "");
-                getComposer(outputType).compose(panel2, orgOut);
-                break;
+            
 
         }
 
@@ -305,8 +295,6 @@ public class AnnexServiceImpl implements AnnexService {
         switch(type){
             case Png:
                 return new PngAnnexComposer();
-            case Svg:
-                return new SvgAnnexComposer();
             default:
                 return null;
         }
@@ -319,8 +307,6 @@ public class AnnexServiceImpl implements AnnexService {
                 return new PngBundleAnnexPrinter();
             case PostScript:
                 return new PostscriptAnnexPrinter();
-            case SvgBundle:
-                return new SvgAnnexBundlePrinter();
             default:
                 return null;
         }

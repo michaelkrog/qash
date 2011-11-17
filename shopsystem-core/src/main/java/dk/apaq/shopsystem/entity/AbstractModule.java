@@ -1,19 +1,14 @@
 package dk.apaq.shopsystem.entity;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import dk.apaq.shopsystem.rendering.BundleInfo;
 import dk.apaq.shopsystem.rendering.BundleInfoIO;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;
 import dk.apaq.vfs.Node;
 import dk.apaq.vfs.NodeFilter;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
