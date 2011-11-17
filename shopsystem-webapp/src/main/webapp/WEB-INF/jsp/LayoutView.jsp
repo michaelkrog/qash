@@ -4,10 +4,10 @@
 <html>
 
     <head>
-	<title>${administration}</title>
+	<title>Administration</title>
 
-	<meta name="title" content="${administration}" />
-	<meta http-equiv="Content-Type" content="text/html; charset=<?//=$charset?>" />
+	<meta name="title" content="Administration" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 	<script type="text/javascript">
 
@@ -15,11 +15,11 @@
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 	<script type="text/javascript" src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
-	<script type="text/javascript" src="/application/assets/js/init_admin.js"></script>
-	<script type="text/javascript" src="/application/assets/js/functions.js"></script>
+	<script type="text/javascript" src="/js/init_admin.js"></script>
+	<script type="text/javascript" src="/js/functions.js"></script>
 
-	<link rel="icon" type="image/png" href="http://www.shoppinnet.com/favicon.ico" />
-	<link rel="stylesheet" type="text/css" href="/application/assets/css/admin/default_v2.css" rel="stylesheet" />
+	<link rel="icon" type="image/png" href="http://www.shoppinnet.com/graphic/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/css/default_v2.css" />
     </head>
 
     <body>
@@ -28,7 +28,7 @@
 	    <div id="page_margin_top">
 
 		<!-- Section Margin Top -->
-		    <?//=$section_6?>
+		   
 		<!-- // Section Margin Top -->
 
 	    </div>
@@ -43,7 +43,7 @@
 
 		  
 		    <!-- Section Top -->
-			<?//=$section_1?>
+			
 		    <!-- // Section Top -->
 
 		</div>
@@ -57,58 +57,58 @@
 			    <!-- Section Left -->
 				<div id="navigation">
 				    <div>
-					    <h2 class="current">${settings}</h2>
+					    <h2 class="current">Settings</h2>
 					    <div class="pane" style="display:block;">
 						<ul>
-						    <li><a href="javascript:ajax('/index.php/admin/organisation/edit','','dialog','');">${organisation_settings}</a></li>
-						    <li><a href="javascript:ajax('/index.php/admin/website/edit','','dialog','');">${website_settings}</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/organisation/edit','','dialog','');">Organisation Settings</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/website/edit','','dialog','');">Websites</a></li>
 						    <br />
-						    <li><a href="javascript:ajax('/index.php/admin/domain/listing','','section_mid','');">${domains}</a></li>
-						    <li><a href="javascript:ajax('/index.php/admin/domain/edit','','section_mid','');">${create_domain}</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/domain/listing','','section_mid','');">Domains</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/domain/edit','','section_mid','');">Add domain</a></li>
 						    <br />
-						    <li><a href="javascript:ajax('/index.php/admin/payment_method/listing','','section_mid','');">${payment_methods}</a></li>
-						    <li><a href="javascript:ajax('/index.php/admin/payment_method/edit','','section_mid','');">${create_payment_method}</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/payment_method/listing','','section_mid','');">Payment Methods</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/payment_method/edit','','section_mid','');">Add Payment Method</a></li>
 						</ul>
 					    </div>
 				    </div>
 				    <div>
-					    <h2>${users}</h2>
+					    <h2>Users</h2>
 					    <div class="pane">
 						<ul>
-						    <li><a href="javascript:ajax('/index.php/admin/user/listing','','section_mid','');">${user_overview}</a></li>
-						    <li><a href="javascript:ajax('/index.php/admin/user/edit','','dialog','');">${create_user}</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/user/listing','','section_mid','');">User Overview</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/user/edit','','dialog','');">Add User</a></li>
 						    <br />
-						    <li><a href="javascript:ajax('/index.php/admin/user_group/listing','','section_mid','');">${user_group_overview}</a></li>
-						    <li><a href="javascript:ajax('/index.php/admin/user_group/edit','','dialog','');">${create_user_group}</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/user_group/listing','','section_mid','');">User Group Overview</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/user_group/edit','','dialog','');">Add User Group</a></li>
 
 						</ul>
 					    </div>
 				    </div>
 				    <div>
-					    <h2>${categories}</h2>
+					    <h2>Categories</h2>
 					    <div class="pane">
 						<ul>
-						    <li><a href="">${category_overview}</a></li>
-						    <li><a href="">${create_category}</a></li>
+						    <li><a href="">Category Overview</a></li>
+						    <li><a href="">Add Category</a></li>
 						</ul>
 					    </div>
 				    </div>
 				     <div>
-					    <h2>${products}</h2>
+					    <h2>Products</h2>
 					    <div class="pane">
 						<ul>
-						    <li><a href="">${product_overview}</a></li>
-						    <li><a href="">${create_product}</a></li>
+						    <li><a href="">Product Overview</a></li>
+						    <li><a href="">Add Product</a></li>
 						</ul>
 					    </div>
 				    </div>
 				     <div>
-					    <h2>${newsletters}</h2>
+					    <h2>Newsletters</h2>
 					    <div class="pane">
 						<ul>
-						    <li><a href="">${newsletter_overview}</a></li>
-						    <li><a href="">${outbox}</a></li>
-						    <li><a href="">${create_newsletter}</a></li>
+						    <li><a href="">Newsletter Overview</a></li>
+						    <li><a href="">Outbox</a></li>
+						    <li><a href="">Add Newsletter</a></li>
 						</ul>
 					    </div>
 				    </div>
@@ -120,8 +120,7 @@
 			<td id="section_mid">
 			    <div id="section_mid_holder">
 			    <!-- Section Mid -->
-				<?//=$content?>
-				<?//=$section_4?>
+				
 			    <!-- // Section Mid -->
 			    </div>
 			</td>
@@ -133,7 +132,7 @@
 		<div id="page_bottom">
 
 		    <!-- Section Right -->
-			<?//=$section_2?>
+			
 		    <!-- // Section Right -->
 
 		</div
@@ -145,7 +144,7 @@
 	     <div id="page_margin_bottom">
 
 		<!-- Section Margin Bottom -->
-		    <?//=$section_7?>
+		    
 		<!-- // Section Margin Bottom -->
 
 	    </div>
@@ -156,8 +155,8 @@
 	<div id="message"></div>
 	
 	<div id="dialog">
-	    <div class="header header_current">Overskrift</div>
-	    <div class="content">Indhold</div>
+	    <div class="header header_current">Title</div>
+	    <div class="content">Content</div>
 	</div>
 
 	</body>

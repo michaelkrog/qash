@@ -1,0 +1,310 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    font-size: 11px;
+    color: #333333;
+    font-family: arial,sans-serif;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+body
+{
+    /*background-image: url('/admin/graphic/admin_bg.jpg');
+    background-color : #ffffff;
+    background-repeat: repeat-x;
+    background-position: 100% 0%;*/
+    background-color: #F2F2F2;
+    height: 100%;
+    margin: 10px 10px 0 10px;
+}
+
+input, select
+{
+    padding: 3px;
+    /*margin:0.25em 0 0.25em 0;*/
+    width: 100%;
+}
+
+div
+{
+    width: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0px;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+}
+
+table td
+{
+	vertical-align: top;
+	padding: 5px;
+}
+
+form
+{
+	display: inline;
+}
+
+#page_container {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#page_holder {
+    width: 1015px;
+    margin: 0px auto;
+    text-align: left;
+}
+
+#page_logo {
+    position: relative;
+}
+
+#page_logo, #page_logo_text {
+    position: relative;
+    margin: 3px 0 3px 0;
+    font-size: 18px;
+    color: #888888; /* cfd0d8 */
+    text-align: right;
+}
+
+#page_logo_reg {
+    position: relative;
+    margin-left: 2px;
+    font-size: 10px;
+    color: #888888;
+    top: -6px;
+}
+
+#section_left, #section_mid, #dialog, #actions {
+    border: 1px solid #e1e2e7;
+}
+
+#section_mid {
+    padding: 0;
+    background-color : #ffffff;
+}
+
+#section_mid_holder {
+    position: relative;
+}
+
+#section_left {
+    padding: 0 0 0px 0px;
+    width: 200px;
+    background-color: #ffffff;
+}
+
+/* root element for accordion. decorated with rounded borders and gradient background image */
+#navigation {
+	background-color:#f3f4f7;
+	/*width: 300px;
+	border:1px solid #333;*/
+}
+
+/* accordion/grid header */
+#navigation h2, .grid .header, .header, #button {
+	background:#eeeeee url('/application/assets/graphics/global/gradient30.png');
+	margin:0;
+	padding:5px 5px;
+	font-size:14px;
+	font-weight:normal;
+	color: #888888;
+	border:1px solid #fff;
+	border-bottom:1px solid #ddd;
+	cursor:pointer;
+	text-align: left;
+}
+
+/* currently active header */
+#navigation h2.current, .header_current, #button:hover {
+	cursor: default;
+	background-color: #888888;
+	color: #ffffff;
+}
+
+/* accordion pane */
+#navigation .pane {
+	border:1px solid #fff;
+	border-width:0 2px;
+	display:none;
+	height:180px;
+	padding:15px;
+	color:#fff;
+	font-size:12px;
+}
+
+#navigation .pane ul{
+    margin-left: 15px;
+}
+
+/* a title inside pane */
+#navigation .pane a {
+	font-weight:normal;
+	margin:0 0 0px 0px;
+	font-size:11px;
+	color:#555555;
+}
+
+.grid *
+{
+    font-size: 11px;
+}
+
+.grid td {
+    max-width: 60px;
+    overflow: hidden;
+    border: 1px solid #eeeeee;
+    vertical-align: middle;
+}
+
+.grid .actions div {
+    position: relative;
+    width: 20px;
+    margin-right: 10px;
+}
+
+.grid .actions div {
+    position: relative;
+    width: 20px;
+    margin: 0 3px;
+}
+
+.grid .actions div img {
+    position: absolute;
+    top: -12px;
+    left: -2px;
+}
+
+#actions {
+    background-color: #ffffff;
+    position: absolute;
+    display: none;
+    top: 30px;
+    right: 40px;
+    width: 150px;
+    padding: 5px 5px 5px 25px;
+    z-index: 999;
+}
+
+#actions li:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.subheader {
+    background-color: #ffffff;
+    border: 0;
+    border-style: solid;
+    border-color: #000000;
+}
+/* GRID END */
+
+
+
+/* FORMS */
+.form td {
+	width: 50%;
+}
+
+.form .title {
+	text-align: right;
+	font-size: 11px;
+	padding-right: 20px;
+	vertical-align: middle;
+}
+
+.form .field {
+	text-align: left;
+}
+
+.form .description {
+	padding: 0 0 0 18px;
+	font-size:9px;
+	font-style: italic;
+	position: relative;
+	top: -8px;
+	text-align: left;
+}
+
+.form .description .icon {
+	position: absolute;
+	left: 5px;
+	top: 2px;
+}
+
+.form .submitbutton {
+	padding-bottom: 10px;
+	text-align: right;
+}
+/* FORMS END */
+
+#button_large {
+	background:#eeeeee url('/application/assets/graphics/global/gradient30.png');
+	margin: 0;
+	padding: 5px;
+	font-size: 14px;
+	font-weight: normal;
+	color: #888888;
+	border: 1px solid #fff;
+	border-bottom: 1px solid #ddd;
+	cursor: pointer;
+	text-align: center;
+}
+
+.link_small
+{
+    font-size: 10px;
+    font-weight: normal;
+    color: #888888;
+    text-decoration: underline;
+}
+
+.highlight
+{
+	background-color: #f3f4f7;
+}
+
+#message
+{
+	position: fixed;
+	_position: absolute;
+	_top: expression(eval(document.body.scrolltop));
+	top: 0px;
+	padding: 20px 20px 20px 20px;
+	background-color : #ffffff;
+	width: 100%;
+	height: 30px;
+	border: 1px solid #c4c5c8;
+	display: none;
+	z-index: 99999999;
+	text-align: center;
+	color: #000000;
+	font-size: 15px;
+	overflow: auto;
+	overflow-x: hidden;
+}
+
+#dialog
+{
+    z-index: 999;
+    display: none;
+    width: 500px;
+    /*min-height: 200px;*/
+    background-color: #ffffff;
+}
+#dialog .content
+{
+    margin: 5px;
+}
+
