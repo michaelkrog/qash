@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.annex;
 
 import dk.apaq.shopsystem.entity.Address;
+import dk.apaq.shopsystem.entity.ContactInformation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,15 @@ public class AnnexServiceTest extends TestCase {
 
     private AnnexService annexService = new AnnexServiceImpl();
 
+    private ContactInformation getContactInformation() {
+        ContactInformation ci = new ContactInformation();
+        ci.setCompanyName("Apple");
+        ci.setContactName("Steve Jobs");
+        ci.setStreet("Infinite loop 1");
+        ci.setPostalCode("12345");
+        ci.setCity("Somewhere");
+        return ci;
+    }
     private Organisation getOrganisation(){
         Organisation org = new Organisation();
         org.setName("Apaq");
@@ -51,6 +61,7 @@ public class AnnexServiceTest extends TestCase {
         order.setInvoiceNumber(12312);
         order.setDateInvoiced(new Date());
         order.setDateTimelyPayment(new Date());
+        order.setBuyer(getContactInformation());
 
         for(int i=0;i<orderlinecount;i++){
             order.addOrderLine("Coffee & cup and much much more #"+i, 1, 10.23*(i+1), i%2==0?tax:tax2);
@@ -131,8 +142,13 @@ public class AnnexServiceTest extends TestCase {
         
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
-        assertTrue(value.contains("Stovringparken"));
+        assertTrue(value.contains("Stovringparken 10"));
+        assertTrue(value.contains("9530 Stovring"));
         assertTrue(value.contains("Apaq"));
+        
+        assertTrue(value.contains("Apple"));
+        assertTrue(value.contains("Steve Jobs"));
+        assertTrue(value.contains("Infinite loop"));
     }
     
     public void testGenerateInvoicePdf() throws Exception {

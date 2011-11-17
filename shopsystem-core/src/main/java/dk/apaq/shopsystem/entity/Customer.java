@@ -109,7 +109,7 @@ public class Customer extends BaseUser {
         this.companyRegistration = companyRegistration;
     }
 
-    public String getDisplayname() {
+    public String getDisplayName() {
         return displayName;
     }
 

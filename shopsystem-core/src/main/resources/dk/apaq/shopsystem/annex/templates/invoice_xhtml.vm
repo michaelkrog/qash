@@ -101,19 +101,19 @@
                     <td class="logo right">$tool.html($organisation.getName())</td>
                 </tr>
                 <tr>
-                    <td><!--$customername--></td>
+                    <td><!--$companyname-->#if($order.getBuyer().getCompanyName())$tool.html($order.getBuyer().getCompanyName())#end</td>
                     <td class="right">#if($organisation.getCompanyRegistration())$tool.html($resource.getString("vatno")): $tool.html($organisation.getCompanyRegistration())#end</td>
                 </tr>
                 <tr>
-                    <td><!--$customeraddress--></td>
+                    <td><!--$contact-->#if($order.getBuyer().getContactName())$tool.html($order.getBuyer().getContactName())#end</td>
                     <td class="right">#if($organisation.getStreet())$tool.html($organisation.getStreet())#end</td>
                 </tr>
                 <tr>
-                    <td><!--$custoemraddress2--></td>
+                    <td><!--$customeraddress-->#if($order.getBuyer().getStreet())$tool.html($order.getBuyer().getStreet())#end</td>
                     <td class="right">#if($organisation.getPostalCode())$tool.html($organisation.getPostalCode())#end #if($organisation.getCity())$tool.html($organisation.getCity())#end</td>
                 </tr>
                 <tr>
-                    <td><!--$customerzip $customercity--></td>
+                    <td><!--$customerzip $customercity-->#if($order.getBuyer().getPostalCode())$tool.html($order.getBuyer().getPostalCode())#end #if($order.getBuyer().getCity())$tool.html($order.getBuyer().getCity())#end</td>
                     <td class="right"></td>
                 </tr>
 

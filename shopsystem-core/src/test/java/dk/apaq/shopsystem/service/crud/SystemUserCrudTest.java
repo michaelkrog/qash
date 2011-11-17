@@ -90,7 +90,7 @@ public class SystemUserCrudTest {
         result = service.getSystemUserCrud().read(id);
 
         assertEquals("michael.krog", result.getName());
-        assertEquals("Michael Krog", result.getDisplayname());
+        assertEquals("Michael Krog", result.getDisplayName());
     }
 
     /**

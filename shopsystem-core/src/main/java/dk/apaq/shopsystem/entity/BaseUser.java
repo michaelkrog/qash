@@ -95,7 +95,7 @@ public abstract class BaseUser implements User, Serializable, ContentEntity {
     public abstract String getName();
 
     @Override
-    public abstract String getDisplayname();
+    public abstract String getDisplayName();
 
     @Override
     public abstract String getEmail();

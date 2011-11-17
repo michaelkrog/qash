@@ -11,7 +11,7 @@ import java.util.List;
 public interface User extends Principal, HasId<String> {
 
     public List<String> getRoles();
-    public String getDisplayname();
+    public String getDisplayName();
 
     public String getEmail();
 

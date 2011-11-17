@@ -28,7 +28,7 @@ public class SystemUser extends BaseSystemUser {
     
 
     @Override
-    public String getDisplayname() {
+    public String getDisplayName() {
         return displayname;
     }
 

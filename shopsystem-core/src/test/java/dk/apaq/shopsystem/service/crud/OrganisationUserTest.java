@@ -100,7 +100,7 @@ public class OrganisationUserTest {
         result = (SystemUser) crud.read(id);
 
         assertEquals("michael.krog", result.getName());
-        assertEquals("Michael Krog", result.getDisplayname());
+        assertEquals("Michael Krog", result.getDisplayName());
     }
 
     /**

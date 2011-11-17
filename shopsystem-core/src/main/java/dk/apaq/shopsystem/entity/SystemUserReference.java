@@ -29,8 +29,8 @@ public class SystemUserReference extends BaseSystemUser {
     }
 
     @Override
-    public String getDisplayname() {
-        return user == null ? null : user.getDisplayname();
+    public String getDisplayName() {
+        return user == null ? null : user.getDisplayName();
     }
 
     @Override
