@@ -291,16 +291,6 @@ public class AnnexServiceImpl implements AnnexService {
 
     }
 
-    private AnnexComposer getComposer(OutputType type){
-        switch(type){
-            case Png:
-                return new PngAnnexComposer();
-            default:
-                return null;
-        }
-
-    }
-
     private AnnexPrinter getPrinter(OutputType outputType){
         switch(outputType){
             case PngBundle:
