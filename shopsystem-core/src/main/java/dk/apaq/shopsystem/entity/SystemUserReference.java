@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
  * user has for this reference.
  */
 @Entity
-public class SystemUserReference extends BaseUser {
+public class SystemUserReference extends BaseSystemUser {
 
     @OneToOne
     private SystemUser user;

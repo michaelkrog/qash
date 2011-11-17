@@ -11,7 +11,7 @@ import javax.persistence.Temporal;
  * @author michael
  */
 @Entity
-public class SystemUser extends BaseUser {
+public class SystemUser extends BaseSystemUser {
 
     private String displayname;
     private String email;

@@ -11,6 +11,7 @@ import dk.apaq.filter.core.AndFilter;
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.limit.Limit;
 import dk.apaq.filter.sort.Sorter;
+import dk.apaq.shopsystem.entity.BaseSystemUser;
 import dk.apaq.shopsystem.entity.BaseUser;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.SystemUser;
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author michaelzachariassenkrog
  */
-public class UserCrudImpl extends EntityManagerCrudForSpring<String, BaseUser> implements UserCrud {
+public class UserCrudImpl extends EntityManagerCrudForSpring<String, BaseSystemUser> implements UserCrud {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserCrudImpl.class);
     protected final Organisation organisation;
@@ -42,7 +43,7 @@ public class UserCrudImpl extends EntityManagerCrudForSpring<String, BaseUser> i
 
     @Override
     @Transactional
-    public  String create(BaseUser entity) {
+    public String create(BaseSystemUser entity) {
         throw new UnsupportedOperationException("No supported.");
     }
 
