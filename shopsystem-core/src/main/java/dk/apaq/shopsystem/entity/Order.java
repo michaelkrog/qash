@@ -60,14 +60,12 @@ public class Order implements Serializable, ContentEntity {
     @Fetch(FetchMode.SUBSELECT)
     private List<OrderLine> orderlines = new ArrayList<OrderLine>();
 
-    private String customerRef;
-
     private long number = -1;
-
     private long invoiceNumber = -1;
     
     @Embedded
     private ContactInformation buyer;
+    private String buyerId;
     
     @Embedded
     private ContactInformation recipient;
@@ -112,6 +110,14 @@ public class Order implements Serializable, ContentEntity {
         this.buyer = buyer;
     }
 
+    public String getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(String buyerId) {
+        this.buyerId = buyerId;
+    }
+    
     /**
      * Retrieves the recipient or null if no recipient has been set.
      */
@@ -132,13 +138,7 @@ public class Order implements Serializable, ContentEntity {
         this.organisation = organisation;
     }
 
-    public String getCustomerRef() {
-        return customerRef;
-    }
-
-    public void setCustomerRef(String customerRef) {
-        this.customerRef = customerRef;
-    }
+    
 
     public Date getDateInvoiced() {
         return dateInvoiced;
