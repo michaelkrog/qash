@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  * @author Martin Christensen
  */
 
-public class CommonGrid extends CustomComponent { //Container.Viewer
+public class CommonGrid extends CustomComponent {
     
     private String factoryClass = "";
     private String pageHeader = "";
@@ -57,9 +57,12 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
     private String selectorName = "";
     private String selectorDefault = "";
     private Container selectorData;
-    
+        
     final private OrganisationService orgService;
-    final private TreeTable table = new TreeTable("Tree Table");
+    final private TreeTable table = new TreeTable();
+    
+    private Boolean hierarchicalData = false;
+    
     final private VerticalLayout content = new VerticalLayout();
     final private HorizontalLayout panel = new HorizontalLayout();
     final private HorizontalLayout buttonHolder = new HorizontalLayout();
@@ -118,13 +121,19 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
         this.table.setContainerDataSource(container);
     }
     
-    public void setHContainerDataSource(HierarchicalCrudContainer container) {
+    public void setHierarchicalContainerDataSource(HierarchicalCrudContainer container) {
         this.table.setContainerDataSource(container);
+        this.hierarchicalData = true;
     }
+    
+ 
     
     @Override
     public void attach() {
         
+        this.table.addStyleName("noarrow");
+        this.table.addStyleName("striped");
+                
         // Clear all
         this.content.removeAllComponents();
         this.panel.removeAllComponents();
@@ -242,20 +251,6 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
         this.table.setVisibleColumns(this.field.toArray());
        
         
-        // Tree test
-        TreeTable tree = new TreeTable("Test treeTable");
-        tree.setContainerDataSource(this.table.getContainerDataSource());
-        //tree.setItemCaptionPropertyId("name");
-        
-        /*Tree tree = new Tree("Test tree");
-        tree.setContainerDataSource(this.table.getContainerDataSource());
-        tree.setItemCaptionPropertyId("name");
-        */
-        //this.table.setContainerDataSource(this.hierarchicalCrudContainer);
-        //this.table.setItemCaptionPropertyId("name");
-//this.table.setImmediate(true);      
-//this.table.setHierarchyColumn("name");
-
         // Insert components into content'        
         this.filterHolder.setSpacing(true);
         this.panel.addComponent(this.filterHolder);
@@ -279,7 +274,6 @@ public class CommonGrid extends CustomComponent { //Container.Viewer
         }
         this.content.addComponent(this.panel);
         this.content.addComponent(this.table);
-        this.content.addComponent(tree);
         this.content.addComponent(this.dummy);
     }
     

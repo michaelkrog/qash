@@ -75,7 +75,7 @@
         <property name="persistenceUnitName" value="ShopSystem"/>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" >
-                <property name="showSql" value="false"/>
+                <property name="showSql" value="true"/>
             </bean>
         </property>
     </bean>
@@ -83,6 +83,7 @@
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
+    
     
     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
         <property name="messageConverters">
@@ -92,18 +93,19 @@
         </property>
     </bean>
 
+
     <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
         <!--property name="supportedMediaTypes" value="application/json" /-->
     </bean>
-
-
+    
     <tx:annotation-driven />
     <context:annotation-config />
     
     <!-- Scans within the base package of the application for @Components to configure as beans -->
     <!-- @Controller, @Service, @Configuration, etc. -->
     <context:component-scan base-package="dk.apaq.shopsystem.api" />
-   
+    <context:component-scan base-package="dk.apaq.shopsystem.ui.admin" />
+    
    <!-- Enables the Spring MVC @Controller programming model -->
     <mvc:annotation-driven />
 

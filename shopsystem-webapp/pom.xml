@@ -20,7 +20,7 @@
     </properties>
 
     <dependencies>
-        <dependency>
+       <dependency>
             <groupId>dk.apaq.filter</groupId>
             <artifactId>filter-jpa</artifactId>
             <version>1.0.10</version>
