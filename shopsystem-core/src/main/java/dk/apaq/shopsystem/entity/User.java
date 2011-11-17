@@ -21,9 +21,6 @@ public interface User extends Principal, HasId<String> {
 
     public boolean isLocked();
     
-    public String getPhone();
-
-    
-    public Date getBirthDay();
+    public String getTelephone();
 
 }

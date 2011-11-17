@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
  * user has for this reference.
  */
 @Entity
-public class SystemUserReference extends BaseUser {
+public class SystemUserReference extends BaseSystemUser {
 
     @OneToOne
     private SystemUser user;
@@ -59,7 +59,7 @@ public class SystemUserReference extends BaseUser {
     }
     
     @Override
-    public String getPhone() {
-        return user == null ? null : user.getPhone();
+    public String getTelephone() {
+        return user == null ? null : user.getTelephone();
     }
 }

@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author krog
  */
 @Entity
-public class Customer implements ContentEntity {
+public class Customer extends BaseUser {
 
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -27,7 +27,19 @@ public class Customer implements ContentEntity {
     @ManyToOne
     private Organisation organisation;
     
-    
+    private String companyName;
+    private String companyRegistration;
+    private String contactName;
+    private String telephone;
+    private String email;
+    private String password;
+    private boolean emailVerified;
+    private String street;
+    private String city;
+    private String stateOrProvince;
+    private String postalCode;
+    private String country;
+    private boolean loginAllowed=true;
     
     @Override
     public String getId() {
@@ -68,4 +80,141 @@ public class Customer implements ContentEntity {
     public void setOrganisation(Organisation organisation) {
         this.organisation = organisation;
     }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyRegistration() {
+        return companyRegistration;
+    }
+
+    public void setCompanyRegistration(String companyRegistration) {
+        this.companyRegistration = companyRegistration;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    @Override
+    public String getName() {
+        return contactName;
+    }
+
+    
+    @Override
+    public String getDisplayname() {
+        if(companyName!=null && contactName!=null) {
+            return contactName + "("+ companyName+")";
+        } else if(companyName==null && contactName!=null) {
+            return contactName;
+        } else if (companyName!=null) {
+            return companyName;
+        } else {
+            return "Unnamed Customer";
+        }
+        
+    }
+
+    
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getStateOrProvince() {
+        return stateOrProvince;
+    }
+
+    public void setStateOrProvince(String stateOrProvince) {
+        this.stateOrProvince = stateOrProvince;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    @Override
+    public boolean isLocked() {
+        return !loginAllowed;
+    }
+
+    public void setLoginAllowed(boolean loginAllowed) {
+        this.loginAllowed = loginAllowed;
+    }
+
+    public boolean isLoginAllowed() {
+        return loginAllowed;
+    }
+
+    @Override
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+    
+    
+    
 }

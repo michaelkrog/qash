@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.Fetch;
@@ -20,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
  *
  */
 @Entity
-@Inheritance
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public abstract class BaseUser implements User, Serializable, ContentEntity {
 
     @Id
@@ -108,7 +109,6 @@ public abstract class BaseUser implements User, Serializable, ContentEntity {
     @Override
     public abstract boolean isLocked();
     
-    public abstract String getPhone();
-    
-    public abstract Date getBirthDay();
+    public abstract String getTelephone();
+
 }

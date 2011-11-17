@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.service;
 
 import dk.apaq.crud.Crud;
+import dk.apaq.shopsystem.entity.Customer;
 import dk.apaq.shopsystem.entity.ProductGroup;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Order;
@@ -30,6 +31,7 @@ public interface OrganisationService extends Serializable {
     UserCrud getUsers();
 
     Crud.Editable<String, Store> getStores();
+    Crud.Complete<String, Customer> getCustomers();
     Crud.Complete<String, ProductGroup> getProductGroups();
     Crud.Complete<String, ProductCategory> getProductCategories();
     Crud.Complete<String, Order> getOrders();

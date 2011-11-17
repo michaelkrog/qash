@@ -11,7 +11,7 @@ import javax.persistence.Temporal;
  * @author michael
  */
 @Entity
-public class SystemUser extends BaseUser implements dk.apaq.crud.HasId<String> {
+public class SystemUser extends BaseSystemUser implements dk.apaq.crud.HasId<String> {
 
     private String displayname;
     private String email;
@@ -90,7 +90,7 @@ public class SystemUser extends BaseUser implements dk.apaq.crud.HasId<String> {
     }
 
     @Override
-    public String getPhone() {
+    public String getTelephone() {
         return phone;
     }
 
