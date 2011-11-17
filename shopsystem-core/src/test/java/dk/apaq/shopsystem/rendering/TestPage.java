@@ -1,9 +1,7 @@
 package dk.apaq.shopsystem.rendering;
 
-import com.mchange.util.AssertException;
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.ComponentInformation;
-import dk.apaq.shopsystem.entity.ComponentParameter;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Page;
@@ -19,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import junit.framework.Assert;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
