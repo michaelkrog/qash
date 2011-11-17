@@ -29,9 +29,10 @@ public class Customer extends BaseUser {
     
     private String companyName;
     private String companyRegistration;
-    private String contactName;
+    private String displayName;
     private String telephone;
     private String email;
+    private String name;
     private String password;
     private boolean emailVerified;
     private String street;
@@ -40,6 +41,9 @@ public class Customer extends BaseUser {
     private String postalCode;
     private String country;
     private boolean loginAllowed=true;
+    
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date birthDay = new Date();
     
     @Override
     public String getId() {
@@ -105,12 +109,12 @@ public class Customer extends BaseUser {
         this.companyRegistration = companyRegistration;
     }
 
-    public String getContactName() {
-        return contactName;
+    public String getDisplayname() {
+        return displayName;
     }
 
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
+    public void setDisplayname(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getCountry() {
@@ -123,25 +127,9 @@ public class Customer extends BaseUser {
 
     @Override
     public String getName() {
-        return contactName;
+        return name;
     }
 
-    
-    @Override
-    public String getDisplayname() {
-        if(companyName!=null && contactName!=null) {
-            return contactName + "("+ companyName+")";
-        } else if(companyName==null && contactName!=null) {
-            return contactName;
-        } else if (companyName!=null) {
-            return companyName;
-        } else {
-            return "Unnamed Customer";
-        }
-        
-    }
-
-    
     @Override
     public String getPassword() {
         return password;
@@ -214,7 +202,14 @@ public class Customer extends BaseUser {
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
     }
-    
-    
+
+    @Override
+    public Date getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
     
 }

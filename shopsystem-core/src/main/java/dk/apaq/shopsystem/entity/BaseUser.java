@@ -109,6 +109,8 @@ public abstract class BaseUser implements User, Serializable, ContentEntity {
     @Override
     public abstract boolean isLocked();
     
+    @Override
     public abstract String getTelephone();
 
+    public abstract Date getBirthDay();
 }
