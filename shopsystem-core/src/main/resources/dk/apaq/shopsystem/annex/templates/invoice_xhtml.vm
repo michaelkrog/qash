@@ -89,7 +89,7 @@
             }
 
             .orderlinetableline{
-                border-bottom:1px solid black;
+                border-bottom:1px solid #5f5f5f;
             }
         </style>
     </head>

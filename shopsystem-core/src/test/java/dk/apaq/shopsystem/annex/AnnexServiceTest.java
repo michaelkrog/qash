@@ -159,7 +159,7 @@ public class AnnexServiceTest extends TestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         
         CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
-        Page page = new Page(PageSize.A4);
+        Page page = new Page(PageSize.A4, 15, 15, 15, 15);
         AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
         annexService.generateInvoice(context, OutputType.Pdf);
         

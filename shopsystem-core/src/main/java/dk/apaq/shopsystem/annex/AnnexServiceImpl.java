@@ -167,7 +167,7 @@ public class AnnexServiceImpl implements AnnexService {
                 generateXhtmlOrderAnnex(context, template);
 
                 Document dom = XMLResource.load(new ByteArrayInputStream(baos2.toByteArray())).getDocument();
-                ITextRenderer renderer = new ITextRenderer();
+                ITextRenderer renderer = new ITextRenderer(72, 72);
                 renderer.setDocument(dom, "http://localhost");
                 renderer.layout();
                 renderer.createPDF(orgOut);
