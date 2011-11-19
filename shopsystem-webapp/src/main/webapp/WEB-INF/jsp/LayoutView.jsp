@@ -1,12 +1,13 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-
 <html>
 
     <head>
-	<title>Administration</title>
+	<title>Administration - ${organisationName}</title>
 
-	<meta name="title" content="Administration" />
+	<meta name="title" content="Administration - ${organisationName}" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 	<script type="text/javascript">
@@ -57,10 +58,10 @@
 			    <!-- Section Left -->
 				<div id="navigation">
 				    <div>
-					    <h2 class="current">Settings</h2>
+					    <h2 class="current">Settings (${organisationName})</h2>
 					    <div class="pane" style="display:block;">
 						<ul>
-						    <li><a href="javascript:ajax('/index.php/admin/organisation/edit','','dialog','');">Organisation Settings</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/organisation/edit','','dialog','');"><spring:message code="organisation.settings" text="default text" /></a></li>
 						    <li><a href="javascript:ajax('/index.php/admin/website/edit','','dialog','');">Websites</a></li>
 						    <br />
 						    <li><a href="javascript:ajax('/index.php/admin/domain/listing','','section_mid','');">Domains</a></li>
