@@ -1,5 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -58,16 +58,16 @@
 			    <!-- Section Left -->
 				<div id="navigation">
 				    <div>
-					    <h2 class="current">Settings (${organisationName})</h2>
+					    <h2 class="current"><spring:message code="settings" text="settings" /> (${organisationName})</h2>
 					    <div class="pane" style="display:block;">
 						<ul>
-						    <li><a href="javascript:ajax('/index.php/admin/organisation/edit','','dialog','');"><spring:message code="organisation.settings" text="default text" /></a></li>
-						    <li><a href="javascript:ajax('/index.php/admin/website/edit','','dialog','');">Websites</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/organisation/edit','','dialog','');"><spring:message code="organisation.settings" text="organisation.settings" /></a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/website/edit','','dialog','');"><spring:message code="websites" text="websites" /></a></li>
 						    <br />
-						    <li><a href="javascript:ajax('/index.php/admin/domain/listing','','section_mid','');">Domains</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/domain/listing','','section_mid','');"><spring:message code="domains" text="domains" /></a></li>
 						    <li><a href="javascript:ajax('/index.php/admin/domain/edit','','section_mid','');">Add domain</a></li>
 						    <br />
-						    <li><a href="javascript:ajax('/index.php/admin/payment_method/listing','','section_mid','');">Payment Methods</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/payment_method/listing','','section_mid','');"><spring:message code="payment.methods" text="payment.methods" /></a></li>
 						    <li><a href="javascript:ajax('/index.php/admin/payment_method/edit','','section_mid','');">Add Payment Method</a></li>
 						</ul>
 					    </div>
@@ -76,10 +76,10 @@
 					    <h2>Users</h2>
 					    <div class="pane">
 						<ul>
-						    <li><a href="javascript:ajax('/index.php/admin/user/listing','','section_mid','');">User Overview</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/user/listing','','section_mid','');"><spring:message code="users" text="users" /></a></li>
 						    <li><a href="javascript:ajax('/index.php/admin/user/edit','','dialog','');">Add User</a></li>
 						    <br />
-						    <li><a href="javascript:ajax('/index.php/admin/user_group/listing','','section_mid','');">User Group Overview</a></li>
+						    <li><a href="javascript:ajax('/index.php/admin/user_group/listing','','section_mid','');"><spring:message code="user.groups" text="user.groups" /></a></li>
 						    <li><a href="javascript:ajax('/index.php/admin/user_group/edit','','dialog','');">Add User Group</a></li>
 
 						</ul>
@@ -89,7 +89,7 @@
 					    <h2>Categories</h2>
 					    <div class="pane">
 						<ul>
-						    <li><a href="">Category Overview</a></li>
+						    <li><a href=""><spring:message code="categories" text="categories" /></a></li>
 						    <li><a href="">Add Category</a></li>
 						</ul>
 					    </div>
@@ -98,7 +98,7 @@
 					    <h2>Products</h2>
 					    <div class="pane">
 						<ul>
-						    <li><a href="">Product Overview</a></li>
+						    <li><a href=""><spring:message code="products" text="products" /></a></li>
 						    <li><a href="">Add Product</a></li>
 						</ul>
 					    </div>
@@ -107,8 +107,7 @@
 					    <h2>Newsletters</h2>
 					    <div class="pane">
 						<ul>
-						    <li><a href="">Newsletter Overview</a></li>
-						    <li><a href="">Outbox</a></li>
+						    <li><a href=""><spring:message code="newsletters" text="newsletters" /></a></li>
 						    <li><a href="">Add Newsletter</a></li>
 						</ul>
 					    </div>

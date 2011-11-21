@@ -1,6 +1,9 @@
 package dk.apaq.shopsystem.ui.springadmin.common;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 
 /**
  *
@@ -8,6 +11,9 @@ import java.util.ArrayList;
  */
 public class CommonGrid {
        
+    @Autowired
+    private MessageSource messageSource;
+
     private String object = "";
     private String id = ""; // Grid identification, for allowing multiple grids
     private ArrayList header = new ArrayList();
@@ -55,16 +61,16 @@ public class CommonGrid {
 	return newValue;  
     }
 
-
 /*
-    public void  build()
+    public String build()
     {
+
         StringBuilder output = new StringBuilder();
         
 	// Create actions box
 	output.append("<div style='position:relative;'><div id='actions'><ul><li onclick=\"actions('" + this.id + "','check');\">Alle</li><li onclick=\"actions('" + this.id + "','uncheck');\">Ingen</li><br />\n");
-	for (String i=0;i < count(this.action); i++) {
-	    output.append("<li><a href=\"" + this.action[i][1] + "\">" + this.action[i][0] + "</a></li>\n");
+	for (Integer i=0;i < this.action.size(); i++) {
+	    //output.append("<li><a href=\"" + this.action[i][1] + "\">" + this.action[i][0] + "</a></li>\n");
 	}
 	output.append("</ul></div></div>");
 
@@ -78,8 +84,8 @@ public class CommonGrid {
 
 		output.append("<tr>\n");
 
-		for (String i=0;i < count(this.header); i++) {
-		    output.append("<td class='header'>" + this.header[i] + "</td>\n");
+		for (Integer i=0;i < this.header.size(); i++) {
+		    output.append("<td class='header'>" + this.header.get(i) + "</td>\n");
 		}
 
 		output.append("<td class='header actions' style='text-align:right;width:1px;'>\n");
@@ -98,7 +104,7 @@ public class CommonGrid {
 
 	// Insert rows
 	Integer highlightCnt = 1;
-	foreach(this.data as object) {
+	for(Iterable object : this.data) {
 	    
 		e = this.domain_model.read(String object->id);
 	    
@@ -155,16 +161,16 @@ public class CommonGrid {
 
 	}
 
-	# If no data exists
-	if (!this.data) {
-	    output.append("<tr><td colspan='" + i + "'>" + lang("admin_no_data") + "</td></tr>\n");
+	// If no data exists
+	if (this.data.isEmpty()) {
+	    output.append("<tr><td colspan='" + i + "'>" + messageSource.getMessage("", null, Locale.forLanguageTag("da")) + "</td></tr>\n");
 	}
 
 	// Finish grid creation
 	output.append("</tbody>\n</table>\n");
 
 	
-	return output;
+	return output.toString();
 	
     }
 
