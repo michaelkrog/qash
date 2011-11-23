@@ -54,8 +54,6 @@ public class FilesystemTest {
         FileSystem fs = service.getFileSystem();
         Directory root = fs.getRoot();
 
-        root.getDirectory("System").getDirectory("Modules").getDirectory("Standard");
-        root.getDirectory("System").getDirectory("Modules").getDirectory("Optional");
         root.getDirectory("System").getDirectory("Themes").getDirectory("Standard");
         root.getDirectory("System").getDirectory("Themes").getDirectory("Optional");
         root.getDirectory("Organisations");
@@ -69,7 +67,6 @@ public class FilesystemTest {
         OrganisationService os = service.getOrganisationService(o);
         
         FileSystem fs = os.getFileSystem();
-        fs.getRoot().getDirectory("Modules");
         fs.getRoot().getDirectory("Themes");
     }
 }

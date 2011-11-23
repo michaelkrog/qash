@@ -41,6 +41,7 @@ public class Customer extends BaseUser {
     private String postalCode;
     private String country;
     private boolean loginAllowed=true;
+    private boolean enabled;
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date birthDay = new Date();

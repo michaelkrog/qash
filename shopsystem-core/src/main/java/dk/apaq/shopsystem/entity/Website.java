@@ -21,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
  * Defines a Website.
  */
 @Entity
-public class Website implements Serializable, ContentEntity {
+public class Website implements Serializable, ContentEntity, HasEnable {
 
     @Id
     @GeneratedValue(generator="system-uuid")
@@ -44,6 +44,7 @@ public class Website implements Serializable, ContentEntity {
     private String name;
 
     private String themeName;
+    private boolean enabled = true;
 
     @Override
     public String getId() {
@@ -55,6 +56,14 @@ public class Website implements Serializable, ContentEntity {
         this.id = id;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+    
     @Override
     public Date getDateCreated() {
         return dateCreated;

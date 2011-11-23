@@ -5,8 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- *
- * @author krog
+ * An embeddable entity that specifies an Address.
  */
 @Embeddable
 public class Address implements Serializable {
@@ -29,18 +28,30 @@ public class Address implements Serializable {
         this.country = country;
     }
 
+    /**
+     * Retrieves the ciy name.
+     */
     public String getCity() {
         return city;
     }
 
+    /**
+     * Sets the city name.
+     */
     public void setCity(String city) {
         this.city = city;
     }
 
+    /**
+     * Get countrycode.
+     */
     public String getCountry() {
         return country;
     }
 
+    /**
+     * Sets countrycode.
+     */
     public void setCountry(String country) {
         this.country = country;
     }
@@ -53,10 +64,16 @@ public class Address implements Serializable {
         this.postalCode = postalCode;
     }
 
+    /**
+     * Retrieves state(fx 'Alabama') or province(fx 'Nordjylland'). 
+     */
     public String getStateOrProvince() {
         return stateOrProvince;
     }
 
+    /**
+     * Sets state(fx 'Alabama') or province(fx 'Nordjylland').
+      */
     public void setStateOrProvince(String stateOrProvince) {
         this.stateOrProvince = stateOrProvince;
     }

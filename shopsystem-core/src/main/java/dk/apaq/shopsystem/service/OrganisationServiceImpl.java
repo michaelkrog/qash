@@ -202,17 +202,6 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
 
     @Override
-    public Crud<String, Module> getModules() {
-        try {
-            return new ModuleCrud((Directory)service.getFileSystem().getNode("/System/Modules/Standard"),
-                                                (Directory)getFileSystem().getNode("/Modules"));
-        } catch (FileNotFoundException ex) {
-            LOG.error("Unable to create modulecrud.", ex);
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Override
     public FileSystem getFileSystem() {
         if(fs==null) {
             try {
@@ -233,17 +222,10 @@ public class OrganisationServiceImpl implements OrganisationService, Application
                                                         getDirectory("Standard", true);
                 ((LayeredFileSystem)fs).addLayer(injectedThemesPath, injectedThemesDirectory);
                 
-                Path injectedModulesPath = new Path("/Modules");
-                Directory injectedModulesDirectory = systemFs.getRoot().
-                                                        getDirectory("System", true).
-                                                        getDirectory("Modules",true).
-                                                        getDirectory("Standard", true);
-                ((LayeredFileSystem)fs).addLayer(injectedModulesPath, injectedModulesDirectory);
-
+                
                 Directory root = fs.getRoot();
 
                 if(!root.hasDirectory("Content")) root.createDirectory("Content");
-                if(!root.hasDirectory("Modules")) root.createDirectory("Modules");
                 if(!root.hasDirectory("Themes")) root.createDirectory("Themes");
                 
             } catch (IOException ex) {

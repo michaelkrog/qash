@@ -19,8 +19,8 @@ public class ProductController extends AbstractController {
     @RequestMapping(value = "/{orgInfo}/products", method = RequestMethod.GET)
     public @ResponseBody List getProductList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit, @RequestParam(value = "full", required=false) String full) {
   
-        orgService = GetOrgService(orgInfo);
-        Limit l = new Limit(ValidateLimit(limit));
+        orgService = getOrganisationService(orgInfo);
+        Limit l = new Limit(validateLimit(limit));
         
         if ("true".equals(full)) {
             return orgService.getProducts().list(l);
@@ -34,7 +34,7 @@ public class ProductController extends AbstractController {
     @RequestMapping(value = "/{orgInfo}/products/{id}", method = RequestMethod.GET)
     public @ResponseBody Product getProduct(@PathVariable String orgInfo, @PathVariable String id) {
         
-        orgService = GetOrgService(orgInfo);
+        orgService = getOrganisationService(orgInfo);
         return orgService.getProducts().read(id);
     }
     

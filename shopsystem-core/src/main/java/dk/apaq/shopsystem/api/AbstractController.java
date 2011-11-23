@@ -5,17 +5,21 @@ import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AbstractController {
+/**
+ * An abtract class for Rest API controllers.
+ */
+public abstract class AbstractController {
 
     @Autowired
     protected SystemService service;
     protected Organisation org;
     protected OrganisationService orgService;
 
-    protected OrganisationService GetOrgService(String orgInfo) {
+    /**
+     * Retrieve organaistion from id.
+     */
+    protected OrganisationService getOrganisationService(String id) {
 
-        // @TODO: orgInfo should be a secret string. Should it be possible to grant access to different parties?
-        String id = orgInfo;
         this.org = service.getOrganisationCrud().read(id);
         if (this.org == null) {
             throw new ResourceNotFoundException("Organisation not found. [id=" + id + "]");
@@ -25,16 +29,25 @@ public class AbstractController {
         return orgService;
     }
 
-    protected Integer ValidateLimit(Integer limit) {
+    /**
+     * Ensures that a Limit is not null and does not exceed maxLimit.
+     * If limit is null it will se set to defaultLimit. If limit exceeds
+     * maxLimit it will be set to maxLimit.
+     */
+    protected Integer validateLimit(Integer limit, int defaultLimit, int maxLimit) {
 
         // For server protection, a limit of 1000 can't be exceeded
         if (limit == null) {
-            limit = 1000;
+            limit = defaultLimit;
         }
-        if (limit > 1000) {
-            limit = 1000;
+        if (limit > maxLimit) {
+            limit = maxLimit;
         }
 
         return limit;
+    }
+    
+    protected Integer validateLimit(Integer limit) {
+        return validateLimit(limit, 100, 1000);
     }
 }

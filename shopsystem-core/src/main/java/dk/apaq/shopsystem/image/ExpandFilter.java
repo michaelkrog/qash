@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 
 /**
- *
+ * A filter for expanding the canvas of an image to a bigger size.
  * @author michael
  */
 public class ExpandFilter extends AbstractBufferedImageOp {

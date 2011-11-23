@@ -29,64 +29,18 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
                                     "   </head>\n"+
                                     "   <body>\n"+
                                     "       <wicket:container wicket:id=\"placeholder_1\">\n"+
-                                    "           <div wicket:id=\"placeholder\"/>\n"+
-                                    "           <cms:component module=\"Standard\" component=\"Label\">\n"+
-                                    "               <cms:parameter name=\"text\" value=\"Test\"/>"+
-                                    "           </cms:component>"+
-                                    "           <cms:component module=\"Standard\" component=\"Image\">\n"+
-                                    "               <cms:parameter name=\"path\" value=\"image.png\" type=\"Path\"/>"+
-                                    "           </cms:component>"+
+                                    "           <div wicket:id=\"placeholder\">\n"+
+                                    "               <cms:module name=\"label\">\n"+
+                                    "                   <cms:parameter name=\"text\" value=\"Test\"/>"+
+                                    "               </cms:module>"+
+                                    "               <cms:module name=\"image\">\n"+
+                                    "                   <cms:parameter name=\"path\" value=\"image.png\" type=\"Path\"/>"+
+                                    "               </cms:module>"+
+                                    "           </div>"+
                                     "       </wicket:container>\n"+
                                     "   </body>\n"+
                                     "</html>\n";
     private String stylesheet = "body { background:yellow;}";
-    private String moduleInfo = "{\"version\":\"1.0.0\",  \"releaseDate\":\"2011-01-01\", \"seller\": { \"id\":\"qwerty\", \"name\":\"Apaq\", \"email\": \"mic@apaq.dk\"}}";
-    private String imageComponentCode = "/*\n"
-            + "*@Description(value=\"A simple image component\")\n"
-            + "*@Parameter(name=\"path\",type=\"String\",optionalText=\"The filesystem path for the image\")\n"
-            + "*/\n"
-            + "function render(){\n"
-            + "   var gui = new JavaImporter(Packages.org.apache.wicket.markup.html.image, Packages.dk.apaq.vfs, Packages.dk.apaq.shopsystem.rendering.resources, Packages.org.apache.wicket.request.mapper.parameter);\n"
-            + "   with(gui) {\n"
-            //+ "      var node = service.getFileSystem().getNode(parameters.get(\"path\").getString());\n"
-            //+ "      var resource = new ContentResource(node);\n"
-            //+ "      parent.addComponent(new Image(\"image\", resource));\n"
-            + "      var path = parameters.get(\"path\").getString();\n"
-            + "      var resourceRef;\n"
-            + "      var pp = new PageParameters();\n"
-            + "      pp.add(\"orgid\", service.readOrganisation().getId());\n"
-            + "      pp.add(\"siteid\", site.getId());\n"
-            + "      //Split url and add it as pageparameters\n"
-            + "      if(path.startsWith(\"/Content/\")) {\n"
-            + "          resourceRef = application.getContentResourceReference();\n"
-            + "          path=path.substr(9);\n"
-            + "      } else if(path.startsWith(\"/Themes/\")) {\n"
-            + "          resourceRef = application.getThemeResourceReference();\n"
-            + "          path=path.substr(8);\n"
-            + "          var firstSlash = path.indexOf(\"/\");\n"
-            + "          pp.add(\"themename\", path.substr(0,firstSlash));\n"
-            + "          path = path.substr(firstSlash+1);\n"
-            + "      } else {\n"
-            + "          throw \"Path should start with /Content or /Themes\";\n"
-            + "      }\n"
-            + "      var patharray = path.split(\"/\");\n"
-            + "      for(i=0;i<patharray.length;i++) {\n"
-            + "        pp.set(i, patharray[i]);\n"
-            + "      }\n"
-            + "      parent.addComponent(new Image(\"image\", resourceRef, pp));\n"
-            + "      \n"
-            + "   }\n"
-            + "}\n";
-    private String imageComponentMarkup = "<wicket:panel><img class=\"cms-image\" wicket:id=\"image\" /></wicket:panel>";
-    private String labelComponentCode = "/*\n"
-            + "*@Description(value=\"A simple label component\")\n"
-            + "*@Parameter(name=\"text\",type=\"String\",optionalText=\"The text for the label\")\n"
-            + "*/\n"
-            + "function render(){\n"
-            + "var gui = new JavaImporter(org.apache.wicket.markup.html.basic);\n"
-            + "with(gui) {parent.addComponent(new Label(\"text\", parameters.get(\"text\").getString()));}\n"
-            + "}\n";
-    private String labelComponentMarkup = "<wicket:panel><span class=\"cms-label\" wicket:id=\"text\" /></wicket:panel>";
     private String imageData = "iVBORw0KGgoAAAANSUhEUgAAAF0AAABwCAYAAAB8Q3wrAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI"
             + "WXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH1QgeFDky0+2bxwAAIABJREFUeNrtfXmYHFW59+891d3T"
             + "07OQZSb7JDMJ2YOGgKzKGuLCE1AQ7/X66adXFPQDRRFwufcJ8aoPuOCGHwgqopd79YPrihAWCWFJ"
@@ -271,14 +225,6 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
             root.getDirectory("Users", true);
 
             root.getDirectory("System", true).
-                    getDirectory("Modules", true).
-                    getDirectory("Standard", true);
-
-            root.getDirectory("System", true).
-                    getDirectory("Modules", true).
-                    getDirectory("Optional", true);
-
-            root.getDirectory("System", true).
                     getDirectory("Themes", true).
                     getDirectory("Standard", true);
 
@@ -291,10 +237,6 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
                     getDirectory("Standard", true).
                     getDirectory("Basic.theme", true);
 
-            Directory moduleDir = root.getDirectory("System", true).
-                    getDirectory("Modules", true).
-                    getDirectory("Standard", true).
-                    getDirectory("Standard.module", true);
             
             Directory contentDir = root.getDirectory("System", true).
                     getDirectory("Content", true);
@@ -324,31 +266,6 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
             OutputStreamWriter styleWriter = new OutputStreamWriter(stylefile.getOutputStream());
             styleWriter.write(stylesheet);
             styleWriter.close();
-
-            File moduleInfofile = moduleDir.getFile("bundle.info", true);
-            OutputStreamWriter moduleInfoWriter = new OutputStreamWriter(moduleInfofile.getOutputStream());
-            moduleInfoWriter.write(moduleInfo);
-            moduleInfoWriter.close();
-
-            File imageComponentCodeFile = moduleDir.getFile("Image.code", true);
-            OutputStreamWriter imageComponentCodeWriter = new OutputStreamWriter(imageComponentCodeFile.getOutputStream());
-            imageComponentCodeWriter.write(imageComponentCode);
-            imageComponentCodeWriter.close();
-
-            File imageComponentMarkupFile = moduleDir.getFile("Image.html", true);
-            OutputStreamWriter imageComponentMarkupWriter = new OutputStreamWriter(imageComponentMarkupFile.getOutputStream());
-            imageComponentMarkupWriter.write(imageComponentMarkup);
-            imageComponentMarkupWriter.close();
-
-            File labelComponentCodeFile = moduleDir.getFile("Label.code", true);
-            OutputStreamWriter labelComponentCodeWriter = new OutputStreamWriter(labelComponentCodeFile.getOutputStream());
-            labelComponentCodeWriter.write(labelComponentCode);
-            labelComponentCodeWriter.close();
-
-            File labelComponentMarkupFile = moduleDir.getFile("Label.html", true);
-            OutputStreamWriter labelComponentMarkupWriter = new OutputStreamWriter(labelComponentMarkupFile.getOutputStream());
-            labelComponentMarkupWriter.write(labelComponentMarkup);
-            labelComponentMarkupWriter.close();
 
             File imageFile = contentDir.getFile("monologo.png", true);
             OutputStream imageOs = imageFile.getOutputStream();

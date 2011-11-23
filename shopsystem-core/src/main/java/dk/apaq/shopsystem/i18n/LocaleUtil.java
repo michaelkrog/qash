@@ -4,6 +4,10 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * Simple util class for I18N.
+ * @author michael
+ */
 public class LocaleUtil {
 
     public static final String SYSTEM_I18N_BASE_NAME = "dk.apaq.shopsystem.i18n.Messages";

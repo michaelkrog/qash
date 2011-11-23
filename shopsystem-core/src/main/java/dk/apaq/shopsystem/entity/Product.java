@@ -19,7 +19,7 @@ import org.hibernate.annotations.GenericGenerator;
  * Specifies a product.
  */
 @Entity
-public class Product implements Serializable, ContentEntity {
+public class Product implements Serializable, ContentEntity, HasEnable {
 
     @Id
     @GeneratedValue(generator="system-uuid")
@@ -42,6 +42,7 @@ public class Product implements Serializable, ContentEntity {
     private double discountprice = 0;
     private double quantityInStock = 0;
     private boolean stockProduct = false;
+    private boolean enabled = true;
     
     @ManyToOne(fetch= FetchType.EAGER)
     private ProductGroup productGroup;
@@ -63,6 +64,15 @@ public class Product implements Serializable, ContentEntity {
         this.id = id;
     }
 
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+    
     public Date getDateCreated() {
         return dateCreated;
     }

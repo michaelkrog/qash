@@ -106,22 +106,23 @@ public class TemplateInformationExtractor {
                         continue;
                     }
 
-                    if (tag.isClose() && "component".equals(tag.getName()) && inCmsComponentTag) {
+                    if (tag.isClose() && "module".equals(tag.getName()) && inCmsComponentTag) {
                         inCmsComponentTag = false;
-                        componentInformations.add(componentInformation);
-                        componentInformation = null;
-
+                        if(componentInformation!=null) {
+                            componentInformations.add(componentInformation);
+                            componentInformation = null;
+                        }
                         continue;
                     }
 
-                    if (!tag.isClose() && "component".equals(tag.getName()) && !inCmsComponentTag && inContainer) {
+                    if (!tag.isClose() && "module".equals(tag.getName()) && !inCmsComponentTag && inContainer) {
                         inCmsComponentTag = true;
-                        String module = tag.getAttribute("module") == null ? null : tag.getAttribute("module").toString();
-                        String component = tag.getAttribute("component") == null ? null : tag.getAttribute("component").toString();
-                        componentInformation = new ComponentInformation();
-                        componentInformation.setModuleName(module);
-                        componentInformation.setComponentName(component);
-                        componentInformation.setPlaceholderName(currentPlaceHolder.getId());
+                        String name = tag.getAttribute("name") == null ? null : tag.getAttribute("name").toString();
+                        if(name!=null) {
+                            componentInformation = new ComponentInformation();
+                            componentInformation.setModuleName(name);
+                            componentInformation.setPlaceholderName(currentPlaceHolder.getId());
+                        }
                         continue;
                     }
                 }

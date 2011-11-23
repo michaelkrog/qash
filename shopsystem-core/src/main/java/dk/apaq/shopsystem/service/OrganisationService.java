@@ -42,8 +42,6 @@ public interface OrganisationService extends Serializable {
     Crud.Complete<String, Domain> getDomains();
     Crud.Complete<String, Website> getWebsites();
     Crud<String,Theme> getThemes();
-    Crud<String,Module> getModules();
-
     Crud.Complete<String,Page> getPages(Website website);
 
     FileSystem getFileSystem();

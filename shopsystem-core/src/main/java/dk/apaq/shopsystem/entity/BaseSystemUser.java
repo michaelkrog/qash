@@ -5,8 +5,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 /**
- *
- * @author krog
+ * Abstract class for system users.
  */
 @Entity
 @Inheritance(strategy= InheritanceType.TABLE_PER_CLASS)

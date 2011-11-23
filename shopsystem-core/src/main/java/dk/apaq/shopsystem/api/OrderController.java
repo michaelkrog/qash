@@ -10,16 +10,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.stereotype.Controller;
 
-
+/**
+ * A controller for retrieveing Orders via the Rest API.
+ */
 @Controller
 public class OrderController extends AbstractController { 
 
 
+    /**
+     * Retrieves an orderlist.
+     */
     @RequestMapping(value = "/{orgInfo}/orders", method = RequestMethod.GET)
     public @ResponseBody List getOrderList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit, @RequestParam(value = "full", required=false) String full) {
   
-        orgService = GetOrgService(orgInfo);
-        Limit l = new Limit(ValidateLimit(limit));
+        orgService = getOrganisationService(orgInfo);
+        Limit l = new Limit(validateLimit(limit));
         
         if ("true".equals(full)) {
             return orgService.getProducts().list(l);
@@ -30,11 +35,13 @@ public class OrderController extends AbstractController {
         
     }
     
-    
+    /**
+     * Retrieves an specific order.
+     */
     @RequestMapping(value = "/{orgInfo}/orders/{id}", method = RequestMethod.GET)
     public @ResponseBody Order getOrder(@PathVariable String orgInfo, @PathVariable String id) {
         
-        orgService = GetOrgService(orgInfo);
+        orgService = getOrganisationService(orgInfo);
         return orgService.getOrders().read(id);
     }
 

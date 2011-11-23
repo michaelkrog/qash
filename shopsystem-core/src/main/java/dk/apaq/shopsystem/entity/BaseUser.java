@@ -18,7 +18,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Abstract class for users.
  */
 @Entity
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)

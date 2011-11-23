@@ -1,31 +1,21 @@
 package dk.apaq.shopsystem.rendering;
 
-import dk.apaq.shopsystem.entity.Component;
-import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptComponent;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.entity.Template;
-import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.entity.Placeholder;
 import dk.apaq.shopsystem.entity.Website;
-import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptInvoker;
-import dk.apaq.shopsystem.rendering.simplescript.SimpleScriptPageRenderer;
+import dk.apaq.shopsystem.rendering.module.CmsModule;
 import dk.apaq.shopsystem.service.OrganisationService;
-import java.io.IOException;
-import java.lang.reflect.UndeclaredThrowableException;
-import java.security.PrivilegedActionException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import javax.script.ScriptException;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -74,82 +64,43 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
             LOG.debug("Loading ComponentInformations for placeholder [placeholder={}]", availablePlaceHolder);
             List<ComponentInformation> infolist = page.getComponentInformations(availablePlaceHolder.getId());
             
+            List<org.apache.wicket.Component> components = new ArrayList<org.apache.wicket.Component>();
+            
             if (infolist == null || infolist.isEmpty()) {
                 
                 LOG.debug("No ComponentInformation found for placeholder [placeholder={}]", availablePlaceHolder);
                 
                 //Add a dummy component
-                Label lbl = new Label(availablePlaceHolder.getId(), "Missing component");
-                add(lbl);
-                continue;
-            }
+                Label lbl = new Label("placeholder", "Missing component");
+                components.add(lbl);
+            } else {
 
-            //Compile list of custom components
-            List<SimpleScriptComponent> components = new ArrayList<SimpleScriptComponent>();
-            for (ComponentInformation info : infolist) {
-                LOG.debug("Retrieving module and component for ComponentInformation [moduleName={};componentname={}]", new Object[]{info.getModuleName(), info.getComponentName()});
-                Module module = organisationService.getModules().read(info.getModuleName());
-                if (module == null) {
-                    LOG.debug("Module not found. [moduleName={}]", info.getModuleName());
-                    continue;
+                //Compile list of custom components
+                for (ComponentInformation info : infolist) {
+                    LOG.debug("Retrieving module for ComponentInformation [moduleName={}]", info.getModuleName());
+                    CmsModule module = CmsModule.create("placeholder", info.getModuleName());
+                    module.setOrganisationService(organisationService);
+                    module.setParameters(info.getParameterMap());
+                    module.setWebSite(site);
+                    module.compose();
+
+                    components.add(module);
                 }
-                
-                Component component = module.getComponent(info.getComponentName());
-                if (component == null) {
-                    LOG.debug("Component not found. [componentName={}]", info.getComponentName());
-                    continue;
-                }
-                
-                
-                SimpleScriptComponent customWicketComponent = new SimpleScriptComponent(organisationService, site, "placeholder", component, info);
-                components.add(customWicketComponent);
             }
 
             LOG.debug("Adding components to placeholder. [placeholder={};noOfComponents={}]", new Object[]{availablePlaceHolder, components.size()});
             
             //Add list of components to placeholder
-            add(new ListView<SimpleScriptComponent>(availablePlaceHolder.getId(), components) {
+            add(new ListView<org.apache.wicket.Component>(availablePlaceHolder.getId(), components) {
                 
                 @Override
-                protected void populateItem(ListItem<SimpleScriptComponent> item) {
+                protected void populateItem(ListItem<org.apache.wicket.Component> item) {
                     item.add(item.getModelObject());
                 }
             });
             
         }
         
-    }
-    
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        if (template.getCodeFile() != null) {
-            try {
-                SimpleScriptPageRenderer renderer = SimpleScriptInvoker.invoke(SimpleScriptPageRenderer.class, new HashMap<String, Object>(), template.getCodeFile().getInputStream());
-                renderer.renderHead(response);
-            } catch (IOException ex) {
-                failed = true;
-                error = "Unable to read from component code file. " + ex.getMessage();
-                LOG.error(error, ex);
-            } catch (ScriptException ex) {
-                failed = true;
-                error = "Unable to evaluate script." + ex.getMessage();
-                LOG.error(error, ex);
-            } catch (UndeclaredThrowableException ex) {
-                failed = true;
-                Throwable t = ex.getUndeclaredThrowable();
-                
-                
-                if (t instanceof PrivilegedActionException) {
-                    PrivilegedActionException pae = (PrivilegedActionException) t;
-                    Exception ex2 = pae.getException();
-                    error = ex2.getMessage();
-                } else {
-                    error = "Unknown error in script. ";
-                }
-                LOG.error(error, ex);
-            }
-        }
     }
     
     public Page getPageData() {

@@ -5,8 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- *
- * @author krog
+ * Interface for entities with basic data like id, dateChanged, dateCreated etc.
  */
 public interface BasicEntity extends HasId<String>, Serializable {
 
@@ -19,5 +18,6 @@ public interface BasicEntity extends HasId<String>, Serializable {
     void setDateCreated(Date date);
 
     void setId(String id);
+
 
 }

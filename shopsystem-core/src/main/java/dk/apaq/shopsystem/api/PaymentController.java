@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PaymentController extends AbstractController { 
 
 
+    /**
+     * Retrieves a payment list.
+     */
     @RequestMapping(value = "/{orgInfo}/payments", method = RequestMethod.GET)
     public @ResponseBody List getPaymentList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit, @RequestParam(value = "full", required=false) String full) {
   
-        orgService = GetOrgService(orgInfo);
-        Limit l = new Limit(ValidateLimit(limit));
+        orgService = getOrganisationService(orgInfo);
+        Limit l = new Limit(validateLimit(limit));
         
         if ("true".equals(full)) {
             return orgService.getProducts().list(l);
@@ -29,11 +32,13 @@ public class PaymentController extends AbstractController {
         }
     }
     
-    
+    /**
+     * REtrieves a specific payment.
+     */
     @RequestMapping(value = "/{orgInfo}/payments/{id}", method = RequestMethod.GET)
     public @ResponseBody Payment getPayment(@PathVariable String orgInfo, @PathVariable String id) {
         
-        orgService = GetOrgService(orgInfo);
+        orgService = getOrganisationService(orgInfo);
         return orgService.getPayments().read(id);
     }
 

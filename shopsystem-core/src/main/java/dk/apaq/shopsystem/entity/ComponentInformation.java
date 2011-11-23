@@ -23,7 +23,6 @@ public class ComponentInformation implements Serializable {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     protected String id;
     private String moduleName;
-    private String componentName;
     private String placeholderName;
     
     @OneToMany(cascade= CascadeType.ALL, fetch= FetchType.EAGER)
@@ -35,14 +34,6 @@ public class ComponentInformation implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getComponentName() {
-        return componentName;
-    }
-
-    public void setComponentName(String componentName) {
-        this.componentName = componentName;
     }
 
     public String getModuleName() {
