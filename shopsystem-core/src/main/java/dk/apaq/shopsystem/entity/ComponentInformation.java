@@ -25,7 +25,7 @@ public class ComponentInformation implements Serializable {
     private String moduleName;
     private String placeholderName;
     
-    @OneToMany(cascade= CascadeType.ALL, fetch= FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL, fetch= FetchType.EAGER)
     private Map<String, ComponentParameter> parameterMap = new HashMap<String, ComponentParameter>();
 
     public String getId() {

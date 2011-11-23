@@ -24,7 +24,7 @@ public class Image extends CmsModule {
         ResourceReference resourceRef;
         CmsApplication application = (CmsApplication) Application.get();
         PageParameters pp = new PageParameters();
-        pp.add("orgid", organisationService.readOrganisation().getId());
+        pp.add("orgid", application.getOrgansiationService().readOrganisation().getId());
         pp.add("siteid", webSite.getId());
         
         if(path.startsWith("/Content/")) {

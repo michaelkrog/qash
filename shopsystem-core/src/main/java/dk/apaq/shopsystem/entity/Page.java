@@ -40,7 +40,7 @@ public class Page implements Serializable, WebContentEntity {
     private String themeName;
     private String templateName;
     
-    @OneToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL,fetch= FetchType.EAGER)
     private List<ComponentInformation> placeholderList = new ArrayList<ComponentInformation>();
     
     @ManyToOne

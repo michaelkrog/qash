@@ -11,6 +11,7 @@ import dk.apaq.shopsystem.service.OrganisationService;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
@@ -42,7 +43,7 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
         super(pageParameters);
         this.page = page;
         
-       
+        CmsApplication application = (CmsApplication) Application.get();
         
         String themeName = page.getThemeName();
         String templateName = page.getTemplateName();
@@ -79,7 +80,6 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
                 for (ComponentInformation info : infolist) {
                     LOG.debug("Retrieving module for ComponentInformation [moduleName={}]", info.getModuleName());
                     CmsModule module = CmsModule.create("placeholder", info.getModuleName());
-                    module.setOrganisationService(organisationService);
                     module.setParameters(info.getParameterMap());
                     module.setWebSite(site);
                     module.add(new ModuleMarkerBehavior(info));

@@ -12,16 +12,11 @@ import org.apache.wicket.markup.html.panel.Panel;
  */
 public abstract class CmsModule extends Panel {
 
-    protected OrganisationService organisationService;
     protected Website webSite;
     protected Map<String, ComponentParameter> parameters;
     
     public CmsModule(String id) {
         super(id);
-    }
-
-    public void setOrganisationService(OrganisationService organisationService) {
-        this.organisationService = organisationService;
     }
 
     public void setWebSite(Website webSite) {

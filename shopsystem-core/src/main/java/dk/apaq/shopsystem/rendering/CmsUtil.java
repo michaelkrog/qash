@@ -33,6 +33,44 @@ public class CmsUtil {
     return site;
     
     }*/
+    
+    public static OrganisationService getOrganisationService(SystemService service, Request request) {
+        String host = request.getClientUrl().getHost();
+        if (host != null) {
+
+            if (isSystemRequest(request)) {
+                Url url = request.getUrl();
+                // /_render/<id>/sites/<id>
+                if (url.getSegments().size() < 4) {
+                    return null;
+                }
+
+                String section1 = url.getSegments().get(0);
+                if (!CmsApplication.SYSTEMSITE_PREFIX.equals(section1)) {
+                    return null;
+                }
+
+                String orgId = url.getSegments().get(1);
+                
+                Organisation organisation = service.getOrganisationCrud().read(orgId);
+                return service.getOrganisationService(organisation);
+            } else {
+                dk.apaq.filter.Filter filter = new CompareFilter("name", host, CompareFilter.CompareType.Equals);
+                List<String> idlist = service.getDomains().listIds(filter, null);
+
+                if (!idlist.isEmpty()) {
+                    Domain domain = service.getDomains().read(idlist.get(0));
+
+                    if (domain.getWebsite() != null) {
+                        return service.getOrganisationService(domain.getOrganisation());
+                    }
+                }
+            }
+
+        }
+        return null;
+    }
+    
     public static Website getWebsite(SystemService service, Request request) {
         String host = request.getClientUrl().getHost();
         if (host != null) {

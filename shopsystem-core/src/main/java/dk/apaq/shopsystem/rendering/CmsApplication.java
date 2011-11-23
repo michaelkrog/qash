@@ -2,11 +2,13 @@ package dk.apaq.shopsystem.rendering;
 
 import dk.apaq.shopsystem.rendering.resources.ContentResourceReference;
 import dk.apaq.shopsystem.rendering.resources.ThemeResourceReference;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebResponse;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,5 +111,8 @@ public class CmsApplication extends WebApplication {
         return agent.contains("CmsGuiEditor");
     }
     
+    public OrganisationService getOrgansiationService() {
+        return CmsUtil.getOrganisationService(service, RequestCycle.get().getRequest());
+    }
     
 }
