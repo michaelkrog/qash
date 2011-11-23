@@ -10,7 +10,7 @@ public class ModuleFactory extends AbstractFactory {
     
     @Override
     public void setCrudContainer() {
-            this.container = new CrudContainer(this.orgService.getModules(), Module.class);
+            this.container = null; //new CrudContainer(this.orgService.getModules(), Module.class);
     }
     
             

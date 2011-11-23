@@ -96,6 +96,7 @@ public class PageFactory extends AbstractFactory {
                 
         CommonGrid grid = new CommonGrid(this.orgService);
 
+        /*
         grid.setContainerDataSource(new CrudContainer(this.orgService.getModules(), Website.class));
         grid.setFactoryClass(PageFactory.class.getName()); //
         
@@ -117,7 +118,7 @@ public class PageFactory extends AbstractFactory {
         // Add grid fields
         grid.addField("name", "");
         grid.addField("title", "");
-        
+        */
         // Insert grid into layout
         return grid;
     }
