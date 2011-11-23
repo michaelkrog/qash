@@ -83,6 +83,11 @@
             <version>${spring.version}</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
         
         <!-- VAADIN -->
@@ -127,24 +132,11 @@
         <dependency>
             <groupId>dk.apaq.vaadin.addon</groupId>
             <artifactId>printservice-addon</artifactId>
-            <version>0.1.3-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>0.1.4-SNAPSHOT</version>
+            
         </dependency>
         
 
-        
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-taglibs</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        
-        
 
     </dependencies>
 

@@ -453,7 +453,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
                 return replacedElement;
             } catch (Exception e) {
                 LOG.debug("Could not replace SVG element; rendering failed"
-                        + " in SVG renderer. Skipping and using blank JPanel.", e);
+                        + " in SVG renderer. Skipping and using blank JPanel. Message="+e.getMessage());
                 return null;
             }
 
