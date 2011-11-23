@@ -23,52 +23,45 @@ import java.util.logging.Logger;
  * @author krog
  */
 public class HtmlEditor extends CustomComponent {
+
     private CustomLayout customLayout;
     private String html = "<html><body><div location=\"ci1\">Label indhold</div><div location=\"ci2\"><b>Fed tekst</b></div><div location=\"ci3\">Label indhold</div></body></html>";
 
     public HtmlEditor() {
         List<ComponentInformation> cilist = new ArrayList<ComponentInformation>();
-        
+
         ComponentInformation ci = new ComponentInformation();
-        ci.setModuleName("Standard");
-        ci.setComponentName("Label");
+        ci.setModuleName("label");
         ci.setId("ci1");
         cilist.add(ci);
-        
+
         ci = new ComponentInformation();
-        ci.setModuleName("Standard");
-        ci.setComponentName("Html");
+        ci.setModuleName("image");
         ci.setId("ci2");
         cilist.add(ci);
-        
+
         ci = new ComponentInformation();
-        ci.setModuleName("Custom");
-        ci.setComponentName("ProductList");
+        ci.setModuleName("ProductList");
         ci.setId("ci3");
         ComponentParameter param = new ComponentParameter();
         param.setString("test");
         ci.getParameterMap().put("value", param);
         cilist.add(ci);
-        
-        
+
+
         try {
             customLayout = new CustomLayout(new ByteArrayInputStream(html.getBytes()));
             setCompositionRoot(customLayout);
-            
-            for(ComponentInformation currentci : cilist) {
-                if("Standard".equals(currentci.getModuleName())) {
-                    if("Label".equals(currentci.getComponentName())) {
-                        customLayout.addComponent(new TextField(), currentci.getId());
-                    }
-                    
-                    if("Html".equals(currentci.getComponentName())) {
-                        customLayout.addComponent(new RichTextArea(), currentci.getId());
-                    }
-                    
+
+            for (ComponentInformation currentci : cilist) {
+                if ("Label".equals(currentci.getModuleName())) {
+                    customLayout.addComponent(new TextField(), currentci.getId());
+                } else if ("Html".equals(currentci.getModuleName())) {
+                    customLayout.addComponent(new RichTextArea(), currentci.getId());
                 } else {
-                    Panel panel = new Panel(currentci.getComponentName());
-                    
-                    for(Entry<String, ComponentParameter> e : currentci.getParameterMap().entrySet()) {
+                    Panel panel = new Panel(currentci.getModuleName());
+
+                    for (Entry<String, ComponentParameter> e : currentci.getParameterMap().entrySet()) {
                         String name = e.getKey();
                         ComponentParameter cp = e.getValue();
                         TextField tf = new TextField(name);
@@ -79,11 +72,10 @@ public class HtmlEditor extends CustomComponent {
                     customLayout.addComponent(panel, currentci.getId());
                 }
             }
-            
+
+
         } catch (IOException ex) {
             Logger.getLogger(HtmlEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
 }
