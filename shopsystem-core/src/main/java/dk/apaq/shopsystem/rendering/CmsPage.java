@@ -82,6 +82,7 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
                     module.setOrganisationService(organisationService);
                     module.setParameters(info.getParameterMap());
                     module.setWebSite(site);
+                    module.add(new ModuleMarkerBehavior(info));
                     module.compose();
 
                     components.add(module);

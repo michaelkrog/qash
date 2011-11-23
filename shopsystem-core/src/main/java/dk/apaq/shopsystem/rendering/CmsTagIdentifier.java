@@ -23,9 +23,7 @@ import org.apache.wicket.util.string.Strings;
  */
 public final class CmsTagIdentifier extends AbstractMarkupFilter
 {
-	/** List of well known wicket tag names */
-	private static List<String> wellKnownTagNames;
-
+	
 	/** The current markup needed to get the markups namespace */
 	private final MarkupResourceStream markup;
 

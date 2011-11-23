@@ -90,6 +90,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         tester.assertContains("Basic/style.css");
         tester.assertContains("<img class=\"cms-image\"");
         tester.assertContains("style_small.css");
+        tester.assertContains("location=\"");
         
         
     }
