@@ -39,4 +39,11 @@ public class EntityManagerCrudForSpring<IDTYPE, BEANTYPE> extends EntityManagerC
         return super.create();
     }
 
+    @Override
+    @Transactional
+    public <T extends BEANTYPE> IDTYPE create(T entity) {
+        return super.create(entity);
+    }
+
+    
 }

@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author krog
  */
 @Entity
-public class Customer extends BaseUser {
+public class Customer implements Serializable, ContentEntity {
 
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -126,12 +127,10 @@ public class Customer extends BaseUser {
         this.country = country;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
@@ -182,7 +181,6 @@ public class Customer extends BaseUser {
         this.telephone = telephone;
     }
 
-    @Override
     public boolean isLocked() {
         return !loginAllowed;
     }
@@ -195,7 +193,6 @@ public class Customer extends BaseUser {
         return loginAllowed;
     }
 
-    @Override
     public boolean isEmailVerified() {
         return emailVerified;
     }
@@ -204,7 +201,6 @@ public class Customer extends BaseUser {
         this.emailVerified = emailVerified;
     }
 
-    @Override
     public Date getBirthDay() {
         return birthDay;
     }

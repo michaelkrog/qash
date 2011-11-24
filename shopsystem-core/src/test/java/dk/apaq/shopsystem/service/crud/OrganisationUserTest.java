@@ -13,7 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.SystemUserReference;
-import dk.apaq.shopsystem.entity.User;
 import dk.apaq.shopsystem.service.OrganisationService;
 import java.util.List;
 import org.junit.After;
