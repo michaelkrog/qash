@@ -19,13 +19,13 @@
         <form-login login-page="/login.jsp" />
         <logout logout-url="/logout" logout-success-url="/" />
 
-        <custom-filter position="OPENID_FILTER" ref="rpxFilter" />
+        <!--custom-filter position="OPENID_FILTER" ref="rpxFilter" /-->
     </http>
 
-    <beans:bean id="rpxFilter" class="dk.apaq.spring.rpx.RpxAuthenticationFilter">
+    <!--beans:bean id="rpxFilter" class="dk.apaq.spring.rpx.RpxAuthenticationFilter">
         <beans:property name="authenticationManager" ref="authenticationManager"/>
         <beans:property name="rpxApiKey" value="042b7f697063d653e6f1a4f533a57c74a625d200"/>
-    </beans:bean>
+    </beans:bean-->
 
     <beans:bean id="customAuthenticationProvider" class="dk.apaq.shopsystem.qash.security.QashAuthenticationProvider">
         <beans:property name="userDetailsManager">

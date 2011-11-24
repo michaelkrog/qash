@@ -3,6 +3,8 @@
     Created on : 16-05-2011, 11:20:51
     Author     : michaelzachariassenkrog
 --%>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
+<%@page import="dk.apaq.shopsystem.service.crud.OrganisationCrud"%>
 <%@page import="dk.apaq.shopsystem.service.OrganisationService"%>
 <%@page import="dk.apaq.shopsystem.qash.Qash"%>
 <%@page import="dk.apaq.shopsystem.entity.Organisation"%>
@@ -24,7 +26,9 @@
 
 WebApplicationContext wac = WebApplicationContextUtils.getWebApplicationContext(application);
 SystemService service = wac.getBean(SystemService.class);
-Crud.Editable<String, Organisation> orgCrud = service.getOrganisationCrud();
+OrganisationCrud orgCrud = service.getOrganisationCrud();
+
+//TODO List organisations
 List<String> idlist = orgCrud.listIds();
 
 boolean autoRedirect = "true".equalsIgnoreCase(request.getParameter("autoRedirect"));
@@ -135,7 +139,7 @@ String since30DaysString = df.format(since30Days);
 
                     </tbody>
                 </table>
-                <a href="create_shop.jsp" class="button-standard"><%=res.getString("dashboard.create")%></a>&nbsp;&nbsp;&nbsp;<%=res.getString("dashboard.footnote")%>
+                <%=res.getString("dashboard.footnote")%>
                 <!--Restrictions are based on the plan chosen for the Shop.--><br/>
                 
  

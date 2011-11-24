@@ -26,7 +26,7 @@ import dk.apaq.shopsystem.qash.data.util.CurrencyAmountValidator;
 import dk.apaq.vaadin.addon.crudcontainer.HasBean;
 
 /**
- * An editor for Products.
+ * An editor for Customers
  * @author michaelzachariassenkrog
  */
 public class CustomerEditor extends CustomComponent implements

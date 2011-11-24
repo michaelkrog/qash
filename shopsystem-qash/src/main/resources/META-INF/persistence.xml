@@ -20,6 +20,7 @@
     <class>dk.apaq.shopsystem.entity.Website</class>
     <class>dk.apaq.shopsystem.entity.ProductCategory</class>
     <class>dk.apaq.shopsystem.entity.ProductGroup</class>
+    <class>dk.apaq.shopsystem.entity.Customer</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.DefaultComponentSafeNamingStrategy"/>

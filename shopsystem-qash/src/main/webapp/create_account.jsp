@@ -1,18 +1,18 @@
+<%@page import="dk.apaq.shopsystem.service.OrganisationService"%>
+<%@page import="dk.apaq.shopsystem.entity.Organisation"%>
+<%@page import="dk.apaq.shopsystem.entity.SystemUser"%>
+<%@page import="dk.apaq.shopsystem.service.SystemService"%>
 <%@page import="org.springframework.security.web.authentication.WebAuthenticationDetails"%>
 <%@page import="org.springframework.security.authentication.AuthenticationManager"%>
 <%@page import="org.springframework.security.authentication.UsernamePasswordAuthenticationToken"%>
-<%@page import="org.apache.commons.validator.EmailValidator"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="dk.apaq.filter.core.CompareFilter"%>
 <%@page import="dk.apaq.filter.Filter"%>
 <%@page import="dk.apaq.crud.Crud"%>
-<%@page import="dk.apaq.qash.server.service.Service"%>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
 <%@page import="org.springframework.web.context.WebApplicationContext"%>
 <%@page import="org.apache.commons.lang.StringEscapeUtils"%>
-<%@page import="dk.apaq.qash.share.model.Account"%>
-<%@page import="dk.apaq.qash.security.QashUserDetails"%>
 <%@page import="org.springframework.security.core.context.SecurityContext"%>
 <%@page import="org.springframework.security.core.Authentication"%>
 <%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
@@ -36,7 +36,7 @@
         return o1.equals(o2);
     }
 
-private void authenticateUserAndSetSession(AuthenticationManager am, Account account,  HttpServletRequest request)
+private void authenticateUserAndSetSession(AuthenticationManager am, SystemUser account,  HttpServletRequest request)
 {
     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
             account.getName(), account.getPassword());
@@ -55,15 +55,17 @@ private void authenticateUserAndSetSession(AuthenticationManager am, Account acc
 request.setCharacterEncoding("utf-8");
 WebApplicationContext wac = WebApplicationContextUtils.getWebApplicationContext(application);
 AuthenticationManager am =  (AuthenticationManager)wac.getBean("authenticationManager");
-Service service = wac.getBean(Service.class);
-Crud.Complete<String, Account> accountCrud = service.getAccountCrud();
+SystemService service = wac.getBean(SystemService.class);
+Crud.Complete<String, SystemUser> accountCrud = service.getSystemUserCrud();
 
 boolean save = "true".equals(request.getParameter("save"));
 boolean emailError = false;
 boolean passwordError = false;
 boolean usernameError = false;
+boolean companyError = false;
 String error = null;
 
+String company = request.getParameter("company");
 String username = request.getParameter("username");
 String name = request.getParameter("name");
 String email1 = request.getParameter("email1");
@@ -74,7 +76,10 @@ String password2 = request.getParameter("password2");
 if(save) {
     Filter filterUsername = new CompareFilter("name", username, CompareFilter.CompareType.Equals);
     
-    if(username.length()<4) {
+    if(company.length()<4) {
+        companyError = true;
+        error = "Name of company too short. Use at least 4 characters";
+    } else if(username.length()<4) {
         usernameError = true;
         error = "Username too short. Use at least 4 characters";
     } else if(!accountCrud.listIds(filterUsername, null).isEmpty()) {
@@ -83,10 +88,10 @@ if(save) {
     } else if(!email1.equals(email2)) {
         emailError = true;
         error = "Confirmed email does not match.";
-    } else if(!EmailValidator.getInstance().isValid(email1)) {
+    }/* else if(!EmailValidator.getInstance().isValid(email1)) {
         emailError = true;
         error = "Email does not seem to be a valid email address.";
-    }
+    }*/
     else if(!password1.equals(password2)) {
         passwordError=true;
         error = "Confirmed password does not match.";
@@ -96,13 +101,19 @@ if(save) {
     }
 
     if(error==null) {
-        Account account = accountCrud.read(accountCrud.create());
+        Organisation org = new Organisation();
+        org.setName(company);
+        String orgId = service.getOrganisationCrud().create(org);
+        org = service.getOrganisationCrud().read(orgId);
+        OrganisationService orgService = service.getOrganisationService(org);
+        
+        SystemUser account = (SystemUser)orgService.getUsers().read(orgService.getUsers().createSystemUser());
         account.setName(username);
         account.setDisplayname(name);
         account.setEmail(email1);
         account.setPassword(password1);
-        accountCrud.update(account);
-
+        orgService.getUsers().update(account);
+        
         //Login
         authenticateUserAndSetSession(am, account, request);
         
@@ -173,6 +184,9 @@ if(save) {
             <form method="POST" enctype="application/x-www-form-urlencoded">
                 <input type="hidden" name="save" value="true"/>
             <table class="table-minimalistic">
+                <tr>
+                    <td class="lined">Company</td><td class="lined"><input <%=companyError?"style=\"background:#EFAFAF\"":""%> type="text" name="company" value="<%=prepareText(company)%>"/></td>
+                </tr>
                 <tr>
                     <td>Username</td><td><input <%=usernameError?"style=\"background:#EFAFAF\"":""%> type="text" name="username" value="<%=prepareText(username)%>"/></td>
                 </tr>
