@@ -22,6 +22,7 @@
     <class>dk.apaq.shopsystem.entity.ProductGroup</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
+      <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.DefaultComponentSafeNamingStrategy"/>
       <property name="hibernate.connection.username" value="root"/>
       <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
       <property name="hibernate.connection.password" value=""/>
