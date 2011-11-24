@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *
@@ -40,7 +42,7 @@ public class Page implements Serializable, WebContentEntity {
     private String themeName;
     private String templateName;
     
-    @OneToMany(cascade=CascadeType.ALL,fetch= FetchType.EAGER)
+    @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL,fetch= FetchType.EAGER)
     private List<ComponentInformation> placeholderList = new ArrayList<ComponentInformation>();
     
     @ManyToOne

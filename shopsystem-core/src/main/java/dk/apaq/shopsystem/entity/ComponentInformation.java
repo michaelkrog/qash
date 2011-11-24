@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *
@@ -25,7 +27,7 @@ public class ComponentInformation implements Serializable {
     private String moduleName;
     private String placeholderName;
     
-    @OneToMany(cascade=CascadeType.ALL, fetch= FetchType.EAGER)
+    @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL, fetch= FetchType.EAGER)
     private Map<String, ComponentParameter> parameterMap = new HashMap<String, ComponentParameter>();
 
     public String getId() {
