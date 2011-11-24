@@ -26,6 +26,7 @@ public class AdminPanel extends CustomComponent {
     private static final Logger LOG = LoggerFactory.getLogger(AdminPanel.class);
     private final SalesView salesView = new SalesView();
     private final ProductList stockWidget = new ProductList();
+    private final CustomerList customerList = new CustomerList();
     private final WebsiteEditor websiteEditor = new WebsiteEditor();
     private final SiteHeader header;
     private final VerticalLayout outerLayout = new VerticalLayout();
@@ -52,7 +53,8 @@ public class AdminPanel extends CustomComponent {
 
         stockWidget.setSizeFull();
         salesView.setSizeFull();
-
+        customerList.setSizeFull();
+        
         HorizontalSplitPanel mainLayout = new HorizontalSplitPanel();
         mainLayout.setSizeFull();
         mainLayout.setMargin(false);
@@ -105,6 +107,8 @@ public class AdminPanel extends CustomComponent {
         stockWidget.setProductCrud(orgService.getProducts());
         stockWidget.setTaxCrud(orgService.getTaxes());
 
+        customerList.setCustomerCrud(orgService.getCustomers());
+        
         salesView.setOrderCrud(orgService.getOrders());
         salesView.setPaymentCrud(orgService.getPayments());
         salesView.setProductCrud(orgService.getProducts());
@@ -128,6 +132,10 @@ public class AdminPanel extends CustomComponent {
         
         if("STOCK".equals(name)) {
             c = stockWidget;
+        }
+        
+        if("CUSTOMERS".equals(name)) {
+            c = customerList;
         }
 
         if("HTMLEDIT".equals(name)) {
