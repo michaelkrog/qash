@@ -21,6 +21,7 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.vfs.FileSystem;
 import javax.persistence.PersistenceContext;
+import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author michaelzachariassenkrog

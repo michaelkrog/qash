@@ -42,7 +42,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
     private Website site;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() throws IOException, InterruptedException {
         WebApplication app = applicationContext.getBean("wicketApplication", WebApplication.class);
         tester = new WicketTester(app);
         
@@ -77,12 +77,12 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         File targetImageFile = fs.getRoot().getDirectory("Content", true).getFile("monologo.png", true);
         StreamUtils.copy(sourceImageFile.getInputStream(), targetImageFile.getOutputStream());
                 
-   
+
 
     }
 
     @Test
-    public void homepageRendersSuccessfully() {
+    public void homepageRendersSuccessfully() throws InterruptedException {
 
         //start and render the test page
         String url = "http://coolbiks.dk/context/servlet/" + page.getName();
@@ -91,7 +91,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         tester.assertContains("<img class=\"cms-image\"");
         tester.assertContains("style_small.css");
         tester.assertContains("location=\"");
-        
+                
         
     }
     

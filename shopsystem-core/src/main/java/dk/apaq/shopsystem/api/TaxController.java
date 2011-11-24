@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class TaxController extends AbstractController { 
 
 
-    @RequestMapping(value = "/{orgInfo}/taxes", method = RequestMethod.GET)
+    @RequestMapping(value = "/organisations/{orgInfo}/taxes", method = RequestMethod.GET)
     public @ResponseBody List getTaxList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit, @RequestParam(value = "full", required=false) String full) {
   
         orgService = getOrganisationService(orgInfo);
-        Limit l = new Limit(validateLimit(limit));
+        Limit l = new Limit(ControllerUtil.validateLimit(limit));
         
         if ("true".equals(full)) {
             return orgService.getTaxes().list(l);
@@ -30,7 +30,7 @@ public class TaxController extends AbstractController {
     }
     
     
-    @RequestMapping(value = "/{orgInfo}/taxes/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/organisations/{orgInfo}/taxes/{id}", method = RequestMethod.GET)
     public @ResponseBody Tax getTax(@PathVariable String orgInfo, @PathVariable String id) {
         
         orgService = getOrganisationService(orgInfo);

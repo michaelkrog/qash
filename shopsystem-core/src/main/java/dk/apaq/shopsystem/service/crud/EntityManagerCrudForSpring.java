@@ -16,6 +16,12 @@ public class EntityManagerCrudForSpring<IDTYPE, BEANTYPE> extends EntityManagerC
     }
 
     @Override
+    @Transactional(readOnly=true)
+    public BEANTYPE read(IDTYPE id) {
+        return super.read(id);
+    }
+
+    @Override
     @Transactional
     public void update(BEANTYPE entity) {
         super.update(entity);

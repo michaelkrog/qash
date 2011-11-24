@@ -29,25 +29,5 @@ public abstract class AbstractController {
         return orgService;
     }
 
-    /**
-     * Ensures that a Limit is not null and does not exceed maxLimit.
-     * If limit is null it will se set to defaultLimit. If limit exceeds
-     * maxLimit it will be set to maxLimit.
-     */
-    protected Integer validateLimit(Integer limit, int defaultLimit, int maxLimit) {
 
-        // For server protection, a limit of 1000 can't be exceeded
-        if (limit == null) {
-            limit = defaultLimit;
-        }
-        if (limit > maxLimit) {
-            limit = maxLimit;
-        }
-
-        return limit;
-    }
-    
-    protected Integer validateLimit(Integer limit) {
-        return validateLimit(limit, 100, 1000);
-    }
 }

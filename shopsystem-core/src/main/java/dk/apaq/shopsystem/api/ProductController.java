@@ -16,11 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class ProductController extends AbstractController { 
 
 
-    @RequestMapping(value = "/{orgInfo}/products", method = RequestMethod.GET)
+    @RequestMapping(value = "/organisations/{orgInfo}/products", method = RequestMethod.GET)
     public @ResponseBody List getProductList(@PathVariable String orgInfo, @RequestParam(value = "limit", required=false) Integer limit, @RequestParam(value = "full", required=false) String full) {
   
         orgService = getOrganisationService(orgInfo);
-        Limit l = new Limit(validateLimit(limit));
+        Limit l = new Limit(ControllerUtil.validateLimit(limit));
         
         if ("true".equals(full)) {
             return orgService.getProducts().list(l);
@@ -31,7 +31,7 @@ public class ProductController extends AbstractController {
     }
     
     
-    @RequestMapping(value = "/{orgInfo}/products/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/organisations/{orgInfo}/products/{id}", method = RequestMethod.GET)
     public @ResponseBody Product getProduct(@PathVariable String orgInfo, @PathVariable String id) {
         
         orgService = getOrganisationService(orgInfo);
