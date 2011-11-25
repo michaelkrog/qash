@@ -34,8 +34,9 @@ public class CustomerEditor extends CustomComponent implements
 
     private final TabSheet tabSheet = new TabSheet();
     private final GeneralPanel generalPanel = new GeneralPanel();
-    private final PricePanel pricePanel = new PricePanel();
-    private final StockPanel stockPanel = new StockPanel();
+    private final ShipToPanel pricePanel = new ShipToPanel();
+    private final MiscellaneousPanel stockPanel = new MiscellaneousPanel();
+    private final NotesPanel notesPanel = new NotesPanel();
     private VerticalLayout layout = new VerticalLayout();
     private Item dataSource;
     private CurrencyAmountValidator amountValidator;
@@ -92,9 +93,9 @@ public class CustomerEditor extends CustomComponent implements
 
     private class GeneralPanel extends CustomComponent {
         private final GridLayout layout = new GridLayout(2, 3);
-        private final Label lblTitle = new Label("Title:");
-        private final Label lblItemNo = new Label("Itemno.:");
-        private final Label lblBarcode = new Label("Barcode:");
+        private final Label lblCompany = new Label("Title:");
+        private final Label lblCompanyRegistration = new Label("Itemno.:");
+        private final Label lblAttention = new Label("Barcode:");
         private final TextField txtTitle = new TextField();
         private final TextField txtItemnNo = new TextField();
         private final TextField txtBarcode = new TextField();
@@ -102,29 +103,29 @@ public class CustomerEditor extends CustomComponent implements
 
         public GeneralPanel() {
 
-            lblTitle.setSizeUndefined();
-            lblTitle.setStyleName("bold");
+            lblCompany.setSizeUndefined();
+            lblCompany.setStyleName("bold");
 
-            lblItemNo.setSizeUndefined();
-            lblItemNo.setStyleName("bold");
+            lblCompanyRegistration.setSizeUndefined();
+            lblCompanyRegistration.setStyleName("bold");
 
-            lblBarcode.setSizeUndefined();
-            lblBarcode.setStyleName("bold");
+            lblAttention.setSizeUndefined();
+            lblAttention.setStyleName("bold");
 
-            layout.addComponent(lblTitle);
+            layout.addComponent(lblCompany);
             layout.addComponent(txtTitle);
-            layout.addComponent(lblItemNo);
+            layout.addComponent(lblCompanyRegistration);
             layout.addComponent(txtItemnNo);
-            layout.addComponent(lblBarcode);
+            layout.addComponent(lblAttention);
             layout.addComponent(txtBarcode);
 
 
             layout.setSpacing(true);
             layout.setMargin(true);
             
-            layout.setComponentAlignment(lblTitle, Alignment.MIDDLE_RIGHT);
-            layout.setComponentAlignment(lblItemNo, Alignment.MIDDLE_RIGHT);
-            layout.setComponentAlignment(lblBarcode, Alignment.MIDDLE_RIGHT);
+            layout.setComponentAlignment(lblCompany, Alignment.MIDDLE_RIGHT);
+            layout.setComponentAlignment(lblCompanyRegistration, Alignment.MIDDLE_RIGHT);
+            layout.setComponentAlignment(lblAttention, Alignment.MIDDLE_RIGHT);
 
             setCompositionRoot(layout);
         }
@@ -145,7 +146,7 @@ public class CustomerEditor extends CustomComponent implements
 
     }
 
-    private class PricePanel extends CustomComponent {
+    private class ShipToPanel extends CustomComponent {
         private final GridLayout layout = new GridLayout(3, 3);
         private final HorizontalLayout priceLayout = new HorizontalLayout();
         private final Label lblPrice = new Label("Price:");
@@ -157,7 +158,7 @@ public class CustomerEditor extends CustomComponent implements
         private final ComboBox cmbTax = new ComboBox();
         private final TextField txtDiscount = new TextField();
 
-        public PricePanel() {
+        public ShipToPanel() {
 
             lblPrice.setSizeUndefined();
             lblPrice.setStyleName("bold");
@@ -213,14 +214,14 @@ public class CustomerEditor extends CustomComponent implements
 
     }
 
-    private class StockPanel extends CustomComponent {
+    private class MiscellaneousPanel extends CustomComponent {
         private final GridLayout layout = new GridLayout(2, 2);
         private final Label lblStock = new Label("");
         private final Label lblAmount = new Label("Amount:");
         private final CheckBox chkStock = new CheckBox("Inventory management");
         private final TextField txtAmount = new TextField();
 
-        public StockPanel() {
+        public MiscellaneousPanel() {
 
             lblStock.setSizeUndefined();
             lblStock.setStyleName(ShopSystemTheme.LABEL_BOLD);
@@ -256,7 +257,15 @@ public class CustomerEditor extends CustomComponent implements
 
 
     }
+    
+    private class NotesPanel extends CustomComponent {
 
+        public NotesPanel() {
+        }
+        
+    }
+
+    
     public CustomerEditor() {
 
         propertyMap.put("name", generalPanel.getTxtTitle());

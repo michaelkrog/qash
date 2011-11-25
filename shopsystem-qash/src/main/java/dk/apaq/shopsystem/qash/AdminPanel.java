@@ -115,7 +115,7 @@ public class AdminPanel extends CustomComponent {
         salesView.setTaxCrud(orgService.getTaxes());
         salesView.setAnnexService(annexService);
 
-        leftLayout.setCaption(org.getName());
+        leftLayout.setCaption(org.getCompanyName());
 
         header.getSettingsDialog().setService(orgService);
         header.getSettingsDialog().setDatasource(this.datasource);

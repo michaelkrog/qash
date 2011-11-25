@@ -1,5 +1,6 @@
-package dk.apaq.shopsystem.qash.settings;
+package dk.apaq.shopsystem.qash;
 
+import dk.apaq.shopsystem.qash.settings.*;
 import com.vaadin.data.Buffered;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanContainer;
@@ -14,8 +15,12 @@ import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.util.Country;
@@ -26,25 +31,31 @@ import java.util.List;
  *
  * @author krog
  */
-public class OrganisationForm extends Form {
+public class CustomerForm extends Form {
+    
+    private static final List<String> PROPERTIES = Arrays.asList(new String[]{
+                    "companyName", "contactName", "street", "postalCode", "city", "country", "telephone",
+                    "email", "companyRegistration", "bankAccount", "websiteUrl", "birthDay"});
 
-    private static List<String> PROPERTIES = Arrays.asList(new String[]{"companyName", "street", "postalCode", "city", 
-                                                        "country", "telephone", "email", "companyRegistration", 
-                                                        "bankAccount", "websiteUrl"});
-    private GridLayout ourLayout;
+    private TabSheet tabSheet = new TabSheet();
+    private VerticalLayout outerLayout = new VerticalLayout();
+    private HorizontalLayout buttonLayout = new HorizontalLayout();
+    private GridLayout generalLayout;
+    private GridLayout miscLayout;
     private Label lblName = new Label("Company Name");
+    private Label lblAtt = new Label("Att.");
     private Label lblAddress = new Label("Address");
     private Label lblEmail = new Label("Email");
     private Label lblPhone = new Label("Phone");
     private Label lblVatNo = new Label("VatNo.");
     private Label lblBankAccount = new Label("Bank");
     private Label lblWebsite = new Label("Website");
+    private Label lblBirthday = new Label("Birthday");
     private Button btnSave = new Button("Save");
-    private OrganisationService service;
+    
 
 
-
-    private class FormFieldFactory extends DefaultFieldFactory {
+    protected class FormFieldFactory extends DefaultFieldFactory {
 
         final ComboBox countries = new ComboBox("Country");
 
@@ -70,7 +81,7 @@ public class OrganisationForm extends Form {
             }
 
             if("companyName".equals(propertyId)) {
-                f.addValidator(new StringLengthValidator("Name should be at least 3 characters.", 3, 30, true));
+                f.addValidator(new StringLengthValidator("Name should be at least one character.", 1, 30, true));
                 ((TextField)f).setInputPrompt("Name of Shop");
             } else if("street".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("Street and houseno.");
@@ -83,7 +94,7 @@ public class OrganisationForm extends Form {
             } else if("bankAccount".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("Your bank account number");
             } else if("websiteUrl".equals(propertyId)) {
-                ((TextField)f).setInputPrompt("Url for your companys website");
+                ((TextField)f).setInputPrompt("Your bank account number");
             }
 
             if(f instanceof TextField) {
@@ -94,15 +105,36 @@ public class OrganisationForm extends Form {
         }
     }
 
-    public OrganisationForm() {
-        // Create our layout (3x3 GridLayout)
-        ourLayout = new GridLayout(3, 10);
+    public CustomerForm() {
+        
+        // Create generalt layout (3x3 GridLayout)
+        generalLayout = new GridLayout(3, 6);
+        miscLayout = new GridLayout(2,5);
 
         // Use top-left margin and spacing
-        ourLayout.setMargin(true, false, false, true);
-        ourLayout.setSpacing(true);
+        generalLayout.setMargin(true, false, false, true);
+        generalLayout.setSpacing(true);
+        miscLayout.setMargin(true, false, false, true);
+        miscLayout.setSpacing(true);
 
-        setLayout(ourLayout);
+        tabSheet.addTab(generalLayout, "General");
+        tabSheet.addTab(miscLayout, "Miscellaneous");
+        
+        tabSheet.setSizeFull();
+        tabSheet.setStyleName(Reindeer.TABLE_BORDERLESS);
+        
+        outerLayout.addComponent(tabSheet);
+        outerLayout.addComponent(buttonLayout);
+        outerLayout.setSizeFull();
+        outerLayout.setExpandRatio(tabSheet, 1.0F);
+        outerLayout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);
+        
+        buttonLayout.addComponent(btnSave);
+        buttonLayout.setSpacing(true);
+        buttonLayout.setMargin(true);
+        
+        setLayout(outerLayout);
+        setSizeFull();
 
         setFormFieldFactory(new FormFieldFactory());
         
@@ -110,39 +142,31 @@ public class OrganisationForm extends Form {
         setWriteThrough(false); // we want explicit 'apply'
         setInvalidCommitted(false); // no invalid values in datamodel
 
- 
-        lblName.setSizeUndefined();
-        ourLayout.addComponent(lblName, 0, 0);
-        ourLayout.setComponentAlignment(lblName, Alignment.MIDDLE_RIGHT);
-        lblAddress.setSizeUndefined();
-        ourLayout.addComponent(lblAddress, 0, 1);
-        ourLayout.setComponentAlignment(lblAddress, Alignment.MIDDLE_RIGHT);
-        lblPhone.setSizeUndefined();
-        ourLayout.addComponent(lblPhone, 0, 4);
-        ourLayout.setComponentAlignment(lblPhone, Alignment.MIDDLE_RIGHT);
-        lblEmail.setSizeUndefined();
-        ourLayout.addComponent(lblEmail, 0, 5);
-        ourLayout.setComponentAlignment(lblEmail, Alignment.MIDDLE_RIGHT);
-        lblVatNo.setSizeUndefined();
-        ourLayout.addComponent(lblVatNo, 0, 6);
-        ourLayout.setComponentAlignment(lblVatNo, Alignment.MIDDLE_RIGHT);
-        lblBankAccount.setSizeUndefined();
-        ourLayout.addComponent(lblBankAccount, 0, 7);
-        ourLayout.setComponentAlignment(lblBankAccount, Alignment.MIDDLE_RIGHT);
-        lblWebsite.setSizeUndefined();
-        ourLayout.addComponent(lblWebsite, 0, 8);
-        ourLayout.setComponentAlignment(lblWebsite, Alignment.MIDDLE_RIGHT);
-        ourLayout.addComponent(btnSave, 1, 9);
-
+        
+        addLabel(generalLayout, lblName, 0, 0);
+        addLabel(generalLayout, lblAtt, 0, 1);
+        addLabel(generalLayout, lblAddress, 0, 2);
+        addLabel(generalLayout, lblVatNo, 0, 5);
+        
+        addLabel(miscLayout, lblPhone, 0, 0);
+        addLabel(miscLayout, lblEmail, 0, 1);
+        addLabel(miscLayout, lblBankAccount, 0, 2);
+        addLabel(miscLayout, lblWebsite, 0, 3);
+        addLabel(miscLayout, lblBirthday, 0, 4);
+        
         btnSave.addListener(new Button.ClickListener() {
 
             public void buttonClick(ClickEvent event) {
                 commit();
-                Organisation org = ((BeanItem<Organisation>)getItemDataSource()).getBean();
-                service.updateOrganisation(org);
+                if(getItemDataSource() instanceof Buffered) {
+                    ((Buffered)getItemDataSource()).commit();
+                }
             }
         });
+        
+        
     }
+    
 
     /*
      * Override to get control over where fields are placed.
@@ -152,32 +176,38 @@ public class OrganisationForm extends Form {
         field.setCaption(null);
         if (propertyId.equals("companyName")) {
             field.setWidth(100, UNITS_PERCENTAGE);
-            ourLayout.addComponent(field, 1, 0, 2, 0);
+            generalLayout.addComponent(field, 1, 0, 2, 0);
+        } else if (propertyId.equals("contactName")) {
+            field.setWidth(100, UNITS_PERCENTAGE);
+            generalLayout.addComponent(field, 1, 1, 2, 1);
         } else if (propertyId.equals("street")) {
             field.setWidth(100, UNITS_PERCENTAGE);
-            ourLayout.addComponent(field, 1, 1, 2, 1);
+            generalLayout.addComponent(field, 1, 2, 2, 2);
         } else if (propertyId.equals("postalCode")) {
-            ourLayout.addComponent(field, 1, 2);
+            generalLayout.addComponent(field, 1, 3);
         } else if (propertyId.equals("city")) {
-            ourLayout.addComponent(field, 2, 2);
+            generalLayout.addComponent(field, 2, 3);
         } else if (propertyId.equals("country")) {
             field.setWidth(100, UNITS_PERCENTAGE);
-            ourLayout.addComponent(field, 1, 3, 2, 3);
-        } else if (propertyId.equals("telephone")) {
-            field.setWidth(100, UNITS_PERCENTAGE);
-            ourLayout.addComponent(field, 1, 4, 2, 4);
-        } else if (propertyId.equals("email")) {
-            field.setWidth(100, UNITS_PERCENTAGE);
-            ourLayout.addComponent(field, 1, 5, 2, 5);
+            generalLayout.addComponent(field, 1, 4, 2, 4);
         } else if (propertyId.equals("companyRegistration")) {
             field.setWidth(100, UNITS_PERCENTAGE);
-            ourLayout.addComponent(field, 1, 6, 2, 6);
+            generalLayout.addComponent(field, 1, 5, 2, 5);
+        } else if (propertyId.equals("telephone")) {
+            field.setWidth(100, UNITS_PERCENTAGE);
+            miscLayout.addComponent(field, 1, 0);
+        } else if (propertyId.equals("email")) {
+            field.setWidth(100, UNITS_PERCENTAGE);
+            miscLayout.addComponent(field, 1, 1);
         } else if (propertyId.equals("bankAccount")) {
             field.setWidth(100, UNITS_PERCENTAGE);
-            ourLayout.addComponent(field, 1, 7, 2, 7);
+            miscLayout.addComponent(field, 1, 2);
         } else if (propertyId.equals("websiteUrl")) {
             field.setWidth(100, UNITS_PERCENTAGE);
-            ourLayout.addComponent(field, 1, 8, 2, 8);
+            miscLayout.addComponent(field, 1, 3);
+        } else if (propertyId.equals("birthDay")) {
+            field.setWidth(100, UNITS_PERCENTAGE);
+            miscLayout.addComponent(field, 1, 4);
         } else {
             return;
         }
@@ -185,25 +215,17 @@ public class OrganisationForm extends Form {
         field.setTabIndex(PROPERTIES.indexOf(propertyId) + 1);
     }
 
-    public void setService(OrganisationService service) {
-        this.service = service;
-        
-    }
-
     @Override
-    @Deprecated
     public void setItemDataSource(Item newDataSource) {
         super.setItemDataSource(newDataSource, PROPERTIES);
     }
-
-    @Override
-    public void attach() {
-        if(service!=null) {
-            BeanItem<Organisation> item = new BeanItem<Organisation>(service.readOrganisation());
-            super.setItemDataSource(item, PROPERTIES);
-        }
+    
+    private void addLabel(GridLayout layout, Label label, int x, int y) {
+        label.setSizeUndefined();
+        layout.addComponent(label, x, y);
+        layout.setComponentAlignment(label, Alignment.MIDDLE_RIGHT);
+        
     }
-
 
 
 }

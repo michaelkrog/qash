@@ -1,15 +1,11 @@
 package dk.apaq.shopsystem.qash;
 
-import com.vaadin.data.Buffered;
-import com.vaadin.data.Container;
 import com.vaadin.data.Item;
-import com.vaadin.data.Property;
 import com.vaadin.event.Action;
 import com.vaadin.event.Action.Handler;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -20,47 +16,40 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window.CloseEvent;
-import com.vaadin.ui.Window.CloseListener;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
 
 import dk.apaq.crud.Crud;
+import dk.apaq.filter.FilterGenerator;
 import dk.apaq.filter.sort.Sorter;
 import dk.apaq.shopsystem.entity.Customer;
-import dk.apaq.shopsystem.entity.Product;
-import dk.apaq.shopsystem.entity.Tax;
-import dk.apaq.shopsystem.qash.common.CommonDialog;
-import dk.apaq.shopsystem.qash.common.ProductFilterGenerator;
+import dk.apaq.shopsystem.qash.common.CustomerFilterGenerator;
 import dk.apaq.shopsystem.qash.common.Spacer;
-import dk.apaq.shopsystem.qash.data.ProductContainer;
-import dk.apaq.shopsystem.qash.data.util.NumberColumnGenerator;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
-import dk.apaq.vaadin.addon.crudcontainer.HasBean;
 
 /**
  * A List for products including filtering and editing.
  */
 public class CustomerList extends CustomComponent {
 
-    private static final String[] COLUMNS = {"companyName", "displayName", "email"};
+    private static final String[] COLUMNS = {"companyName", "contactName", "email"};
     private final Action editAction = new Action("Edit");
     private final Action deleteAction = new Action("Delete");
     private Label titleLabel = new Label("Customer Management");
     private VerticalLayout layout = new VerticalLayout();
     private VerticalLayout topVLayout = new VerticalLayout();
     private HorizontalLayout topHLayout = new HorizontalLayout();
-    private Button addButton = new Button("Add new item");
-    private Button removeButton = new Button("Remove item");
-    private Button openButton = new Button("Open item");
+    private Button addButton = new Button("Add new customer");
+    private Button removeButton = new Button("Remove customer");
+    private Button openButton = new Button("Edit customer");
     private TextField searchField = new TextField();
     private Spacer spacer = new Spacer();
     private Table table = new Table();
     private Crud<String, Customer> customerCrud;
     private CrudContainer customerContainer;
-    private ThemeResource resourceDelete = new ThemeResource("img/clear.png");
-    private Sorter sorter = new Sorter("displayName");
-    private final ProductFilterGenerator filterGenerator = new ProductFilterGenerator();
+    private Sorter sorter = new Sorter("contactName");
+    private final FilterGenerator filterGenerator = new CustomerFilterGenerator();
 
     private class SearchFieldHandler implements TextChangeListener {
 
@@ -121,7 +110,7 @@ public class CustomerList extends CustomComponent {
             public void buttonClick(ClickEvent event) {
                 Object id = table.addItem();
                 Item item = table.getItem(id);
-                item.getItemProperty("displayName").setValue("Unnamed customer");
+                item.getItemProperty("companyName").setValue("Unnamed customer");
                 editItem(item);
             }
         });
@@ -167,6 +156,16 @@ public class CustomerList extends CustomComponent {
     }
 
     private void editItem(final Item item) {
+        final CustomerForm form = new CustomerForm();
+        VerticalLayout layout = new VerticalLayout();
+        layout.setSizeFull();
+        Window dialog = new Window("Edit Customer", layout);
+        dialog.addComponent(form);
+        dialog.setWidth(445, Component.UNITS_PIXELS);
+        dialog.setHeight(370, Component.UNITS_PIXELS);
+        dialog.center();
+        
+        /*
         final CustomerEditor editor = new CustomerEditor();
         //editor.setWriteThrough(false);
 
@@ -174,32 +173,13 @@ public class CustomerList extends CustomComponent {
         dialog.setWidth(400, Component.UNITS_PIXELS);
         dialog.setHeight(285, Component.UNITS_PIXELS);
         dialog.center();
-        dialog.setDefaultButtonType(CommonDialog.ButtonType.Close);
+        dialog.setDefaultButtonType(CommonDialog.ButtonType.Close);*/
         getApplication().getMainWindow().addWindow(dialog);
 
-        if(customerContainer!=null) {
-            editor.setTaxContainerDatasource(customerContainer);
-        }
-
-        editor.setItemDataSource(item);
         
-        dialog.addListener(new CloseListener() {
-
-            @Override
-            public void windowClose(CloseEvent e) {
-                if (dialog.getResult() == CommonDialog.ButtonType.Close) {
-                    editor.commit();
-                    if (item instanceof Buffered) {
-                        ((Buffered) item).commit();
-                    }
-                } else {
-                    if (item instanceof Buffered) {
-                        ((Buffered) item).discard();
-                    }
-                }
-            }
-        });
-
+        form.setItemDataSource(item);
+        
+        
     }
 
     private void refreshCustomerContainer() {
