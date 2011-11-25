@@ -40,7 +40,7 @@ public class AnnexServiceTest extends TestCase {
     }
     private Organisation getOrganisation(){
         Organisation org = new Organisation();
-        org.setName("Apaq");
+        org.setCompanyName("Apaq");
         org.setTelephone("51923192");
         org.setEmail("mail@gmail.com");
         org.setStreet("Stovringparken 10");

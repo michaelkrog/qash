@@ -75,14 +75,14 @@ public class OrganisationCrudTest extends AbstractJUnit4SpringContextTests  {
 
         String id = result.getId();
 
-        result.setName("Apaq");
+        result.setCompanyName("Apaq");
         //result.getUsers().add("Michael");
         
         service.getOrganisationCrud().update(result);
 
         result = service.getOrganisationCrud().read(id);
 
-        assertEquals("Apaq", result.getName());
+        assertEquals("Apaq", result.getCompanyName());
 //        assertEquals("Michael", result.getUsers().get(0));
         
         

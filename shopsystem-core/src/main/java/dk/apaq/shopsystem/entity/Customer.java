@@ -2,6 +2,7 @@ package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,35 +15,19 @@ import org.hibernate.annotations.GenericGenerator;
  * @author krog
  */
 @Entity
-public class Customer implements Serializable, ContentEntity {
+public class Customer extends AbstractCompany implements Serializable, ContentEntity {
 
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    protected String id;
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dateCreated = new Date();
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dateChanged = new Date();
-    
     @ManyToOne
     private Organisation organisation;
     
-    private String companyName;
-    private String companyRegistration;
-    private String displayName;
-    private String telephone;
-    private String email;
-    private String name;
+    private String username;
     private String password;
     private boolean emailVerified;
-    private String street;
-    private String city;
-    private String stateOrProvince;
-    private String postalCode;
-    private String country;
     private boolean loginAllowed=true;
-    private boolean enabled;
+    private boolean enabled = true;
+    
+    @Column(length=4096)
+    private String notes;
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date birthDay = new Date();
@@ -57,25 +42,6 @@ public class Customer implements Serializable, ContentEntity {
         this.id = id;
     }
 
-    @Override
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    @Override
-    public void setDateCreated(Date date) {
-        this.dateCreated = date;
-    }
-
-    @Override
-    public Date getDateChanged() {
-        return dateChanged;
-    }
-
-    @Override
-    public void setDateChanged(Date dateChanged) {
-        this.dateChanged = dateChanged;
-    }
     
     @Override
     public Organisation getOrganisation() {
@@ -87,50 +53,15 @@ public class Customer implements Serializable, ContentEntity {
         this.organisation = organisation;
     }
 
-    public String getCity() {
-        return city;
+    public String getUsername() {
+        return username;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getCompanyRegistration() {
-        return companyRegistration;
-    }
-
-    public void setCompanyRegistration(String companyRegistration) {
-        this.companyRegistration = companyRegistration;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayname(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getName() {
-        return name;
-    }
-
+    
     public String getPassword() {
         return password;
     }
@@ -139,48 +70,6 @@ public class Customer implements Serializable, ContentEntity {
         this.password = password;
     }
     
-    
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getStateOrProvince() {
-        return stateOrProvince;
-    }
-
-    public void setStateOrProvince(String stateOrProvince) {
-        this.stateOrProvince = stateOrProvince;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
     public boolean isLocked() {
         return !loginAllowed;
     }
@@ -208,5 +97,23 @@ public class Customer implements Serializable, ContentEntity {
     public void setBirthDay(Date birthDay) {
         this.birthDay = birthDay;
     }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+    
+    
     
 }

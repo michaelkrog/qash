@@ -70,7 +70,7 @@
     <body>
     
     	<div class="addresslabel">
-    		<div>$tool.html($organisation.getName())</div>
+    		<div>$tool.html($organisation.getCompanyName())</div>
     		<div>$tool.html($organisation.getStreet())</div>
        		<div>$tool.html($organisation.getPostalCode()) $tool.html($organisation.getCity())</div>
         </div>

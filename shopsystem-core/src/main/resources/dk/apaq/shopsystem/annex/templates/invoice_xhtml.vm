@@ -98,7 +98,7 @@
             <table>
                  <tr>
                     <td></td>
-                    <td class="logo right">$tool.html($organisation.getName())</td>
+                    <td class="logo right">$tool.html($organisation.getCompanyName())</td>
                 </tr>
                 <tr>
                     <td><!--$companyname-->#if($order.getBuyer().getCompanyName())$tool.html($order.getBuyer().getCompanyName())#end</td>
