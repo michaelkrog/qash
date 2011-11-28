@@ -19,6 +19,7 @@ public class Organisation extends AbstractCompany {
     private long initialInvoiceNumber = 1;
     private int defaultPaymentPeriodInDays = 8;
     private String currency = "USD";
+    private String annexNote;
     
     
     public String getCurrency() {
@@ -51,6 +52,14 @@ public class Organisation extends AbstractCompany {
     public void setDefaultPaymentPeriodInDays(int paymentPeriodInDays) {
         this.defaultPaymentPeriodInDays = paymentPeriodInDays;
     }
-    
+
+    public String getAnnexNote() {
+        return annexNote;
+    }
+
+    public void setAnnexNote(String annexNote) {
+        this.annexNote = annexNote;
+    }
+
     
 }
