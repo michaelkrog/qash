@@ -51,6 +51,7 @@ import dk.apaq.printing.core.PrinterListChangeListener;
 import dk.apaq.printing.core.PrinterManager;
 import dk.apaq.shopsystem.annex.AnnexContext;
 import dk.apaq.shopsystem.annex.AnnexService;
+import dk.apaq.shopsystem.annex.AnnexType;
 import dk.apaq.shopsystem.annex.CommercialDocumentContent;
 import dk.apaq.shopsystem.annex.Page;
 import dk.apaq.shopsystem.annex.PageSize;
@@ -947,19 +948,38 @@ public class OrderEditor extends CustomComponent implements
                 return;
             }
 
+            String strPrintType = settings.get(PrintFacade.generatePrintTypeSettingKey(printer));
+            AnnexType printType;
+            if(strPrintType==null) {
+                printType = AnnexType.Receipt;
+            } else {
+                printType = AnnexType.valueOf(strPrintType);
+            }
+
             OrganisationService organisationService = VaadinServiceHolder.getService(getApplication());
             Order order = (Order) ((HasBean<Order>) dataSource).getBean();
             
             List<Payment> payments = organisationService.getPayments().list(new CompareFilter("orderId", order.getId(), CompareFilter.CompareType.Equals), null);
             
             //Generate document
+            PrinterJob pj;
             CommercialDocumentContent cdc = new CommercialDocumentContent(organisationService.readOrganisation(), order, payments);
-            Page page = new Page(PageSize.A4, 15, 15, 15, 15);
-            AnnexContext<CommercialDocumentContent, Void> annexContext = new AnnexContext<CommercialDocumentContent, Void>(cdc, null, page, Locale.getDefault());
-            Printable printable = annexService.generatePrintableInvoice(annexContext);
+            if(printType == AnnexType.Receipt) {
+                Page page = new Page(PageSize.A4, 5, 5, 5, 5);
+                AnnexContext<CommercialDocumentContent, Void> annexContext = new AnnexContext<CommercialDocumentContent, Void>(cdc, null, page, Locale.getDefault());
+                Printable printable =annexService.generatePrintableReceipt(annexContext);
             
-            //Print the generated document
-            PrinterJob pj = PrinterJob.getBuilder(printer, printable).setPaper(Paper.A4).setName("Order_"+order.getNumber()).build();
+                //Print the generated document
+                pj = PrinterJob.getBuilder(printer, printable).setPaper(Paper.A4).setName("Order_"+order.getNumber()).build();
+            } else {
+                Page page = new Page(PageSize.A4, 15, 15, 15, 15);
+                AnnexContext<CommercialDocumentContent, Void> annexContext = new AnnexContext<CommercialDocumentContent, Void>(cdc, null, page, Locale.getDefault());
+                Printable printable =annexService.generatePrintableInvoice(annexContext);
+            
+                //Print the generated document
+                pj = PrinterJob.getBuilder(printer, printable).setPaper(Paper.A4).setName("Order_"+order.getNumber()).build();
+
+            }
             PrintFacade.getManager(getApplication()).print(pj);
             
             
