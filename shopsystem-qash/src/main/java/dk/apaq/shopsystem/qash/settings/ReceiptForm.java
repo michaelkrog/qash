@@ -30,7 +30,7 @@ public class ReceiptForm extends Form {
         public Field createField(Item item, Object propertyId, Component uiContext) {
             Field f;
 
-            if ("receiptNote".equals(propertyId)) {
+            if ("annexNote".equals(propertyId)) {
                 f = new TextArea();
                 ((TextArea) f).setInputPrompt("Note at bottom of receipt");
                 ((TextArea) f).setColumns(25);
@@ -87,7 +87,7 @@ public class ReceiptForm extends Form {
     @Override
     protected void attachField(Object propertyId, Field field) {
         field.setCaption(null);
-        if (propertyId.equals("receiptNote")) {
+        if (propertyId.equals("annexNote")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             ourLayout.addComponent(field, 1, 0);
             ourLayout.setColumnExpandRatio(1, 1.0F);
@@ -96,6 +96,6 @@ public class ReceiptForm extends Form {
 
     @Override
     public void setItemDataSource(Item newDataSource) {
-        super.setItemDataSource(newDataSource, Arrays.asList(new String[]{"receiptNote"}));
+        super.setItemDataSource(newDataSource, Arrays.asList(new String[]{"annexNote"}));
     }
 }

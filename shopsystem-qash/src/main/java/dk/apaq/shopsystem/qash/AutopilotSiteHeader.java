@@ -6,6 +6,7 @@ import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.Resource;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Embedded;
@@ -19,19 +20,14 @@ import dk.apaq.shopsystem.qash.settings.SettingsDialog;
 public class AutopilotSiteHeader extends CustomComponent implements SiteHeader {
 
     private CssLayout layout = new CssLayout();
-    private CssLayout linkColumn1 = new CssLayout();
-    private CssLayout linkColumn2 = new CssLayout();
+    private CssLayout innerLayout = new CssLayout();
+
     private Resource homeResource = new ExternalResource("/");
-    private Resource helpResource = new ExternalResource("http://help.qashapp.com");
     private Resource logoResource = new ThemeResource("images/ge-logo.png");
     private Embedded logo = new Embedded(null, logoResource);
-    private Button linkOptions = new Button("Company options");
-    private Button linkImportExport = new Button("Import/Export");
-    private Link linkHelp = new Link("Help & Support", helpResource, "Help", 500, 500, Link.TARGET_BORDER_MINIMAL);
-    private Link linkLogout = new Link("Log out", new ExternalResource("/logout"));
-    private Link linkContact = new Link("info@shoppinnet.com", new ExternalResource("../contact.jsp"));
-    private final SettingsDialog settingsDialog = new SettingsDialog();
-
+    private Link linkContact = new Link("info@qashapp.com", new ExternalResource("../contact.jsp"));
+    private int linkCount = 0;
+    private CssLayout currentColumn;
 
     public AutopilotSiteHeader() {
 
@@ -39,25 +35,12 @@ public class AutopilotSiteHeader extends CustomComponent implements SiteHeader {
 
         layout.setMargin(false, true, false, true);
         layout.addComponent(logo);
-        layout.addComponent(linkColumn1);
-        layout.addComponent(linkColumn2);
+        layout.addComponent(innerLayout);
         layout.addComponent(linkContact);
-
-        linkColumn1.addComponent(linkOptions);
-        linkColumn1.addComponent(linkImportExport);
-
-        linkColumn2.addComponent(linkLogout);
-        linkColumn2.addComponent(linkHelp);
 
         layout.setStyleName("ge-header");
         logo.setStyleName("ge-logo");
-        linkColumn1.setStyleName("ge-userinfo");
-        linkColumn2.setStyleName("ge-userinfo");
         linkContact.setStyleName("ge-phone");
-
-        linkHelp.setStyleName(Reindeer.BUTTON_LINK);
-        linkOptions.setStyleName(Reindeer.BUTTON_LINK);
-        linkImportExport.setStyleName(Reindeer.BUTTON_LINK);
 
         setStyleName("ge-header-container");
         setCompositionRoot(layout);
@@ -69,19 +52,34 @@ public class AutopilotSiteHeader extends CustomComponent implements SiteHeader {
             }
         });
 
-        linkOptions.addListener(new Button.ClickListener() {
-
-            public void buttonClick(Button.ClickEvent event) {
-                settingsDialog.center();
-                getApplication().getMainWindow().addWindow(settingsDialog);
-            }
-        });
-
     }
 
-    public SettingsDialog getSettingsDialog() {
+    @Override
+    public void addLink(Link link) {
+        link.setStyleName(Reindeer.BUTTON_LINK);
+        add(link);
+    }
+
+    @Override
+    public void addButton(Button link) {
+        link.setStyleName(Reindeer.BUTTON_LINK);
+        add(link);
+    }
+
+    private void add(Component c) {
+        if(linkCount % 2 == 0) {
+            currentColumn = new CssLayout();
+            currentColumn.setStyleName("ge-userinfo");
+            innerLayout.addComponent(currentColumn);
+        }
+        currentColumn.addComponent(c);
+        linkCount++;
+    }
+
+    /*public SettingsDialog getSettingsDialog() {
         return settingsDialog;
-    }
+    }*/
+
 
 
 }

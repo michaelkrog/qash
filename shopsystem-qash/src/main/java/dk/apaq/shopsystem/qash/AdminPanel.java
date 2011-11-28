@@ -1,10 +1,15 @@
 package dk.apaq.shopsystem.qash;
 
+import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.terminal.ExternalResource;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Link;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
@@ -13,6 +18,7 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.qash.common.CategoryList;
 import dk.apaq.shopsystem.qash.common.CategoryList.SelectEvent;
 import dk.apaq.shopsystem.qash.common.HtmlEditor;
+import dk.apaq.shopsystem.qash.settings.SettingsDialog;
 import dk.apaq.shopsystem.service.OrganisationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +33,7 @@ public class AdminPanel extends CustomComponent {
     private final SalesView salesView = new SalesView();
     private final ProductList stockWidget = new ProductList();
     private final CustomerList customerList = new CustomerList();
-    private final WebsiteEditor websiteEditor = new WebsiteEditor();
+    private final StoreList storeList = new StoreList();
     private final SiteHeader header;
     private final VerticalLayout outerLayout = new VerticalLayout();
     private Panel leftLayout;
@@ -36,6 +42,26 @@ public class AdminPanel extends CustomComponent {
     private VerticalLayout content = new VerticalLayout();
     private ListListener listListener = new ListListener();
     private final HtmlEditor htmlEditor = new HtmlEditor();
+    private final Button btnSettings = new Button("Company options");
+    private final Link linkHelp = new Link("Help & Support", new ExternalResource("http://help.qashapp.com"), "Help", 500, 500, Link.TARGET_BORDER_MINIMAL);
+    private final Link linkLogout = new Link("Log out", new ExternalResource("/logout"));
+
+    private class SettingsListener implements Button.ClickListener {
+
+        @Override
+        public void buttonClick(ClickEvent event) {
+            SettingsDialog settingsDialog = new SettingsDialog();
+            OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
+
+            Organisation org = orgService.readOrganisation();
+            Item datasource = new BeanItem(org);
+
+            settingsDialog.setService(orgService);
+            settingsDialog.setDatasource(datasource);
+
+            getApplication().getMainWindow().addWindow(settingsDialog);
+        }
+    }
 
     private class ListListener implements CategoryList.SelectListener {
 
@@ -44,7 +70,6 @@ public class AdminPanel extends CustomComponent {
             String selection = event.getSelection();
             setContent(selection);
         }
-        
     }
 
     public AdminPanel(SiteHeader siteHeader, AnnexService annexService) {
@@ -54,7 +79,8 @@ public class AdminPanel extends CustomComponent {
         stockWidget.setSizeFull();
         salesView.setSizeFull();
         customerList.setSizeFull();
-        
+        storeList.setSizeFull();
+
         HorizontalSplitPanel mainLayout = new HorizontalSplitPanel();
         mainLayout.setSizeFull();
         mainLayout.setMargin(false);
@@ -68,15 +94,14 @@ public class AdminPanel extends CustomComponent {
         categoryList.addItem("Kunder", "CUSTOMERS");
         categoryList.addItem("Ordrer", "ORDERS");
         categoryList.addItem("Produkter", "STOCK");
-        
-        categoryList.addCategory("Stores");
-        categoryList.addItem("Online", "WEBSITES");
-        categoryList.addItem("Retail", "STORES");
-        categoryList.addItem("Html edit", "HTMLEDIT");
-        
+        categoryList.addItem("Butikker", "STORES");
+
+        categoryList.addCategory("Import/Export");
+        categoryList.addItem("Export Daybook", "DAYBOOK");
+
         categoryList.setSizeFull();
         categoryList.addListener(listListener);
-        
+
         content.setSizeFull();
 
         mainLayout.addComponent(categoryList);
@@ -88,10 +113,16 @@ public class AdminPanel extends CustomComponent {
         outerLayout.addComponent(mainLayout);
         outerLayout.setExpandRatio(mainLayout, 1.0F);
         outerLayout.setSizeFull();
-        
+
+        siteHeader.addButton(btnSettings);
+        siteHeader.addLink(linkHelp);
+        siteHeader.addLink(linkLogout);
+
+        btnSettings.addListener(new SettingsListener());
+
         setCompositionRoot(outerLayout);
         categoryList.select("ORDERS");
-        
+
 
     }
 
@@ -108,7 +139,9 @@ public class AdminPanel extends CustomComponent {
         stockWidget.setTaxCrud(orgService.getTaxes());
 
         customerList.setCustomerCrud(orgService.getCustomers());
-        
+
+        storeList.setStoreCrud(orgService.getStores());
+
         salesView.setOrderCrud(orgService.getOrders());
         salesView.setPaymentCrud(orgService.getPayments());
         salesView.setProductCrud(orgService.getProducts());
@@ -117,42 +150,35 @@ public class AdminPanel extends CustomComponent {
 
         leftLayout.setCaption(org.getCompanyName());
 
-        header.getSettingsDialog().setService(orgService);
-        header.getSettingsDialog().setDatasource(this.datasource);
+        //header.getSettingsDialog().setService(orgService);
+        //header.getSettingsDialog().setDatasource(this.datasource);
     }
 
-    
-    
     private void setContent(String name) {
-        
+
         Component c = null;
-        if("ORDERS".equals(name)) {
+        if ("ORDERS".equals(name)) {
             c = salesView;
         }
-        
-        if("STOCK".equals(name)) {
+
+        if ("STOCK".equals(name)) {
             c = stockWidget;
         }
-        
-        if("CUSTOMERS".equals(name)) {
+
+        if ("STORES".equals(name)) {
+            c = storeList;
+        }
+
+        if ("CUSTOMERS".equals(name)) {
             c = customerList;
         }
 
-        if("HTMLEDIT".equals(name)) {
-            c = htmlEditor;
-        }
-
-        if(name.startsWith("WEBSITE:")) {
-            c = websiteEditor;
-        }
-        
-        if(c==null) {
+        if (c == null) {
             c = new Label("Ingen widget til dette område endnu");
         }
-        
-        
+
+
         content.removeAllComponents();
         content.addComponent(c);
     }
-
 }

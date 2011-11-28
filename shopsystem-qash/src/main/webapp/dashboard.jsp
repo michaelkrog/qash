@@ -141,15 +141,25 @@ String since30DaysString = df.format(since30Days);
                             out.println("</tr>");
                             
                             Crud<String, Store> storeCrud = orgService.getStores();
-                            for(Store store : storeCrud.list()) {
+                            List<Store> storeList = storeCrud.list();
+                            if(storeList.isEmpty()) {
                                 out.println("<tr class=\"oddrow\"><td colspan=\"5\">-&nbsp;");
-                                out.println("<a icon=\"hyperlink\" href=\"/register/id:" + org.getId() + "\">");
-                                out.println("<b>");
-                                out.println(StringEscapeUtils.escapeHtml(store.getName()));
-                                out.println("</b>");
-                                out.println("(" + res.getString("dashboard.register") + ")</a>");
-                                out.println("</td>");
-                                out.println("</tr>");
+                                    out.println("<i>");
+                                    out.println(StringEscapeUtils.escapeHtml(res.getString("dashboard.no_registers")));
+                                    out.println("</i>");
+                                    out.println("</td>");
+                                    out.println("</tr>");
+                            } else {
+                                for(Store store : storeList) {
+                                    out.println("<tr class=\"oddrow\"><td colspan=\"5\">-&nbsp;");
+                                    out.println("<a icon=\"hyperlink\" href=\"/register/id:" + org.getId() + "\">");
+                                    out.println("<b>");
+                                    out.println(StringEscapeUtils.escapeHtml(store.getName()));
+                                    out.println("</b>");
+                                    out.println("(" + res.getString("dashboard.register") + ")</a>");
+                                    out.println("</td>");
+                                    out.println("</tr>");
+                                }
                             }
                             
                         }

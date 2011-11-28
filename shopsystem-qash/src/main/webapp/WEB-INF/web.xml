@@ -10,6 +10,8 @@
         <param-name>productionMode</param-name>
         <param-value>false</param-value>
     </context-param>
+
+    <!-- ADMIN APPLICATION -->
     <servlet>
         <servlet-name>AdminServlet</servlet-name>
         <servlet-class>com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>
@@ -30,7 +32,27 @@
         <url-pattern>/admin/*</url-pattern>
     </servlet-mapping>
 
-    
+    <!-- REGISTER APPLICATION -->
+        <servlet>
+        <servlet-name>RegisterServlet</servlet-name>
+        <servlet-class>com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>
+        <init-param>
+            <description>Vaadin application class to start</description>
+            <param-name>application</param-name>
+            <param-value>dk.apaq.shopsystem.qash.RegisterApplication</param-value>
+        </init-param>
+        <init-param>
+            <param-name>widgetset</param-name>
+            <param-value>dk.apaq.shopsystem.widgetset</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/register/*</url-pattern>
+    </servlet-mapping>
+
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
