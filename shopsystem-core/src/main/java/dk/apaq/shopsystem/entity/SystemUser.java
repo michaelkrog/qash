@@ -61,7 +61,7 @@ public class SystemUser extends BaseUser {
         this.locked = locked;
     }
 
-    public void setDisplayname(String displayname) {
+    public void setDisplayName(String displayname) {
         this.displayname = displayname;
     }
 
@@ -94,7 +94,7 @@ public class SystemUser extends BaseUser {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setTelephone(String phone) {
         this.phone = phone;
     }
     

@@ -92,7 +92,7 @@ public class OrganisationUserTest {
         String id = result.getId();
 
         result.setName("michael.krog");
-        result.setDisplayname("Michael Krog");
+        result.setDisplayName("Michael Krog");
 
         crud.update(result);
 
@@ -172,7 +172,7 @@ public class OrganisationUserTest {
         assertEquals("michael", userRef.getName());
         assertEquals("ROLE_ORGADMIN", user.getRoles().get(0));
         assertEquals("ROLE_ORGUSER", userRef.getRoles().get(0));
-
+        
         //delete the reference
         crud.delete(userRef.getId());
         userRef = (SystemUserReference) crud.read(userRef.getId());

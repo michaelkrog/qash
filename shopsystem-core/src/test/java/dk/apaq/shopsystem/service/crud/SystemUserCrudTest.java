@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.Crud;
@@ -83,7 +79,7 @@ public class SystemUserCrudTest {
         String id = result.getId();
 
         result.setName("michael.krog");
-        result.setDisplayname("Michael Krog");
+        result.setDisplayName("Michael Krog");
 
         service.getSystemUserCrud().update(result);
 

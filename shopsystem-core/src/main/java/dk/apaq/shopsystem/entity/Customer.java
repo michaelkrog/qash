@@ -53,11 +53,11 @@ public class Customer extends AbstractCompany implements Serializable, ContentEn
         this.organisation = organisation;
     }
 
-    public String getUsername() {
+    public String getUserName() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUserName(String username) {
         this.username = username;
     }
 
