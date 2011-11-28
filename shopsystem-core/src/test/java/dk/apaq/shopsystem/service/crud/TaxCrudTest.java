@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.*;
 
 /**
@@ -25,6 +26,7 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/defaultspringcontext.xml"})
+@Transactional
 public class TaxCrudTest {
 
     public TaxCrudTest() {
@@ -168,6 +170,42 @@ public class TaxCrudTest {
             taxCrud2.update(tax1);
             fail("Should not be allowed");
         } catch(SecurityException ex) { }
+
+    }
+    
+    @Test
+    public void testListingSecurity() {
+        OrganisationCrud orgcrud = service.getOrganisationCrud();
+        Organisation org1 = orgcrud.read(orgcrud.create());
+        Organisation org2 = orgcrud.read(orgcrud.create());
+
+        Crud.Editable<String, Tax> taxCrud1 = service.getOrganisationService(org1).getTaxes();
+        Crud.Editable<String, Tax> taxCrud2 = service.getOrganisationService(org2).getTaxes();
+
+        Tax tax1 = taxCrud1.read(taxCrud1.create());
+        Tax tax2 = taxCrud2.read(taxCrud2.create());
+
+        //Test listids
+        List<String> idlist1 = taxCrud1.listIds();
+        List<String> idlist2 = taxCrud2.listIds();
+        
+        assertEquals(1, idlist1.size());
+        assertEquals(tax1.getId(), idlist1.get(0));
+        
+        assertEquals(1, idlist2.size());
+        assertEquals(tax2.getId(), idlist2.get(0));
+        
+        //Test list
+        List<Tax> list1 = taxCrud1.list();
+        List<Tax> list2 = taxCrud2.list();
+        
+        assertEquals(1, list1.size());
+        assertEquals(tax1.getId(), list1.get(0).getId());
+        
+        assertEquals(1, list2.size());
+        assertEquals(tax2.getId(), list2.get(0).getId());
+        
+        
 
     }
      

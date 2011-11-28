@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
  * An embeddable entity that specifies an Address.
  */
 @Embeddable
-public class Address implements Serializable {
+public class Address implements Serializable, HasAddress {
 
     private String street;
     private String city;
@@ -31,6 +31,7 @@ public class Address implements Serializable {
     /**
      * Retrieves the ciy name.
      */
+    @Override
     public String getCity() {
         return city;
     }
@@ -38,6 +39,7 @@ public class Address implements Serializable {
     /**
      * Sets the city name.
      */
+    @Override
     public void setCity(String city) {
         this.city = city;
     }
@@ -45,6 +47,7 @@ public class Address implements Serializable {
     /**
      * Get countrycode.
      */
+    @Override
     public String getCountry() {
         return country;
     }
@@ -52,14 +55,17 @@ public class Address implements Serializable {
     /**
      * Sets countrycode.
      */
+    @Override
     public void setCountry(String country) {
         this.country = country;
     }
 
+    @Override
     public String getPostalCode() {
         return postalCode;
     }
 
+    @Override
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
@@ -67,6 +73,7 @@ public class Address implements Serializable {
     /**
      * Retrieves state(fx 'Alabama') or province(fx 'Nordjylland'). 
      */
+    @Override
     public String getStateOrProvince() {
         return stateOrProvince;
     }
@@ -74,14 +81,17 @@ public class Address implements Serializable {
     /**
      * Sets state(fx 'Alabama') or province(fx 'Nordjylland').
       */
+    @Override
     public void setStateOrProvince(String stateOrProvince) {
         this.stateOrProvince = stateOrProvince;
     }
 
+    @Override
     public String getStreet() {
         return street;
     }
 
+    @Override
     public void setStreet(String street) {
         this.street = street;
     }

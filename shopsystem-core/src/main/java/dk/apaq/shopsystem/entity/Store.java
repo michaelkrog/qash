@@ -16,7 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
  *
  */
 @Entity
-public class Store implements Serializable, ContentEntity {
+public class Store implements Serializable, ContentEntity, HasAddress {
 
     @Id
     @GeneratedValue(generator="system-uuid")
@@ -33,13 +33,14 @@ public class Store implements Serializable, ContentEntity {
     private Organisation organisation;
 
     private String name;
-    private String road;
-    private String zipCode;
+    private String street;
+    private String postalCode;
     private String city;
-    private String phoneNo;
+    private String telephone;
     private String faxNo;
     private String email;
     private String countryCode = "US";
+    private String stateOrProvince;
 
     public String getId() {
         return id;
@@ -74,11 +75,11 @@ public class Store implements Serializable, ContentEntity {
         this.organisation = organisation;
     }
 
-    public String getCountryCode() {
+    public String getCountry() {
         return countryCode;
     }
 
-    public void setCountryCode(String countryCode) {
+    public void setCountry(String countryCode) {
         if (countryCode == null) {
             countryCode = "US";
         }
@@ -109,28 +110,28 @@ public class Store implements Serializable, ContentEntity {
         this.name = name;
     }
 
-    public String getPhoneNo() {
-        return phoneNo;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
+    public void setTelephone(String phoneNo) {
+        this.telephone = phoneNo;
     }
 
-    public String getRoad() {
-        return road;
+    public String getStreet() {
+        return street;
     }
 
-    public void setRoad(String road) {
-        this.road = road;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
-    public String getZipCode() {
-        return zipCode;
+    public String getPostalCode() {
+        return postalCode;
     }
 
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     public String getCity() {
@@ -140,4 +141,14 @@ public class Store implements Serializable, ContentEntity {
     public void setCity(String city) {
         this.city = city;
     }
+
+    public String getStateOrProvince() {
+        return stateOrProvince;
+    }
+
+    public void setStateOrProvince(String stateOrProvince) {
+        this.stateOrProvince = stateOrProvince;
+    }
+
+    
 }

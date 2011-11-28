@@ -39,6 +39,15 @@ public class Country {
         return iso + " - " + code + " - " + name.toUpperCase();
     }
 
+    public static Country getCountry(String countryCode, Locale locale) {
+        for(Country c : getCountries(locale)) {
+            if(countryCode.equals(c.getIso())) {
+                return c;
+            }
+        }
+        return null;
+    }
+    
     public static List<Country> getCountries() {
         return getCountries(Locale.getDefault());
     }

@@ -56,16 +56,21 @@ public class ContentCrud<T extends ContentEntity> extends EntityManagerCrudForSp
 
     @Override
     public List<String> listIds(Filter filter, Sorter sorter, Limit limit) {
-        Filter wrapFilter;
-        if(filter==null) {
-            wrapFilter = orgFilter;
-        } else {
-            wrapFilter = new AndFilter(orgFilter, filter);
-        }
-
-        return super.listIds(wrapFilter, sorter, limit);
+        return super.listIds(createContentFilter(filter), sorter, limit);
     }
 
+    @Override
+    public List<T> list(Filter filter, Sorter sorter, Limit limit) {
+        return super.list(createContentFilter(filter), sorter, limit);
+    }
+    
+    private Filter createContentFilter(Filter filter) {
+        if(filter==null) {
+           return orgFilter;
+        } else {
+            return new AndFilter(orgFilter, filter);
+        }
+    }
 
 
 }
