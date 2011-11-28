@@ -147,7 +147,7 @@ String since30DaysString = df.format(since30Days);
                                 out.println("<b>");
                                 out.println(StringEscapeUtils.escapeHtml(store.getName()));
                                 out.println("</b>");
-                                out.println("(Kasseapparat)</a>");
+                                out.println("(" + res.getString("dashboard.register") + ")</a>");
                                 out.println("</td>");
                                 out.println("</tr>");
                             }
