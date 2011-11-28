@@ -2,6 +2,8 @@ package dk.apaq.shopsystem.api;
 
 import dk.apaq.filter.limit.Limit;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.SystemUser;
+import dk.apaq.shopsystem.security.SystemUserDetails;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import java.util.List;
@@ -39,7 +41,9 @@ public class OrganisationController {
         if("true".equalsIgnoreCase(forAll)) {
             return crud.listIds(l);
         } else {
-            return crud.listIds(l, SecurityContextHolder.getContext().getAuthentication().getName());
+            SystemUserDetails details = (SystemUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            SystemUser su = details.getUser();
+            return crud.listIds(l, su);
         }
     }
     

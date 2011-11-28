@@ -59,12 +59,12 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     private final Map<Class, Complete<String, Order>> crudMap = new WeakHashMap<Class, Complete<String, Order>>();
     private final Map<String, Map<Class, Complete>> webcontentCrudMap = new WeakHashMap<String, Map<Class, Complete>>();
     private ApplicationContext context;
-    private String orgId;
     private FileSystem fs;
+    private Organisation organisation;
     
 
     public OrganisationServiceImpl(Organisation org) {
-        this.orgId = org.getId();
+        this.organisation = org;
     }
 
 
@@ -171,13 +171,14 @@ public class OrganisationServiceImpl implements OrganisationService, Application
 
     @Override
     public Organisation readOrganisation() {
-        return service.getOrganisationCrud().read(this.orgId);
+        return organisation;
     }
 
     @Override
     @Transactional
     public void updateOrganisation(Organisation org) {
         this.service.getOrganisationCrud().update(org);
+        this.organisation = org;
     }
 
     @Override
@@ -206,6 +207,7 @@ public class OrganisationServiceImpl implements OrganisationService, Application
         if(fs==null) {
             try {
                 //Must create a filesystem for this organisation
+                String orgId = organisation.getId();
                 FileSystem systemFs = service.getFileSystem();
                 Directory orgsDir = systemFs.getRoot().getDirectory("Organisations");
                 if(!orgsDir.hasDirectory(orgId)) orgsDir.createDirectory(orgId);

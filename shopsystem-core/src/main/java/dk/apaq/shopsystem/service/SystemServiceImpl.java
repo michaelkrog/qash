@@ -67,7 +67,7 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
         LOG.debug("Retrieving OrganisationCrud");
         if(orgCrud==null) {
             orgCrud = (OrganisationCrud) context.getBean("organisationCrud", em);
-            ((CrudNotifier)orgCrud).addListener(new SecurityHandler.OrganisationSecurity());
+            ((CrudNotifier)orgCrud).addListener(new SecurityHandler.OrganisationSecurity(this));
         }
         return orgCrud;
     }
@@ -110,6 +110,26 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.context = applicationContext;
     }
+
+    @Override
+    @Transactional
+    public Organisation createOrganisation(SystemUser user, Organisation organisation) {
+        if(user.getId()!=null) {
+            throw new IllegalArgumentException("User has already been persisted.");
+        }
+
+        if(organisation.getId()!=null) {
+            throw new IllegalArgumentException("Organisation has already been persisted.");
+        }
+
+        String orgId = getOrganisationCrud().create(organisation);
+        organisation = getOrganisationCrud().read(orgId);
+
+        user.setOrganisation(organisation);
+        getSystemUserCrud().create(user);
+        return organisation;
+    }
+
 
    
 }

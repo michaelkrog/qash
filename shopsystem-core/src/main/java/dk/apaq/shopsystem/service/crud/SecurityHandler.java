@@ -3,9 +3,12 @@ package dk.apaq.shopsystem.service.crud;
 import dk.apaq.crud.CrudEvent.WithEntity;
 import dk.apaq.crud.CrudEvent.WithId;
 import dk.apaq.crud.core.BaseCrudListener;
+import dk.apaq.shopsystem.entity.BaseUser;
 import dk.apaq.shopsystem.entity.ContentEntity;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.service.SystemService;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,8 +51,8 @@ public final class SecurityHandler {
         return false;
     }
 
-    private static boolean isInUserList(Authentication auth, List<SystemUser> users) {
-        for(SystemUser user : users) {
+    private static boolean isInUserList(Authentication auth, List<BaseUser> users) {
+        for(BaseUser user : users) {
             if(auth.getName().equals(user.getName())) {
                 return true;
             }
@@ -59,16 +62,15 @@ public final class SecurityHandler {
 
     public static class OrganisationSecurity extends BaseCrudListener<String, Organisation> {
 
-        
+        private SystemService service;
+
+        public OrganisationSecurity(SystemService service) {
+            this.service = service;
+        }
+
         @Override
         public void onEntityRead(WithEntity<String, Organisation> event) {
-            /*Organisation organisation = event.getEntity();
-            if(organisation!=null) {
-                Authentication auth = getAuthentication();
-                if (!isAdministrator(auth) && !isInUserList(auth, organisation.getUsers())) {
-                    throw new SecurityException("User is not authorized to retrieve organisation.");
-                }
-            }*/
+            
         }
 
         @Override
@@ -82,14 +84,16 @@ public final class SecurityHandler {
         }
 
         private void handleEdit(Organisation organisation) {
-            /*if(organisation==null) {
-                return;
+            if(organisation!=null) {
+                OrganisationService orgService = service.getOrganisationService(organisation);
+                List<BaseUser> users = orgService.getUsers().list();
+
+
+                Authentication auth = getAuthentication();
+                if (!isAdministrator(auth) && !isInUserList(auth, users)) {
+                    throw new SecurityException("User is not authorized to edit organisation.");
+                }
             }
-            Authentication auth = getAuthentication();
-            if (!isAdministrator(auth)
-                    && !isInUserList(auth, organisation.getUsers())) {
-                throw new SecurityException("User is not administrator, not the creator and is not in organisations userlist. Cannot edit organisation.");
-            }*/
         }
     }
 

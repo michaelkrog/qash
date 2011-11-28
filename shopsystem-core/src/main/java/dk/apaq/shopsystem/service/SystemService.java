@@ -24,6 +24,11 @@ public interface SystemService extends Serializable {
      */
     Crud.Filterable<String, Domain> getDomains();
     
-    
+    /**
+     * Creates a new organisation together with a new user who will be
+     * the administrator of the organisation. The organisation and the user
+     * must not have been persisted previously.
+     */
+    Organisation createOrganisation(SystemUser user, Organisation organisation);
 
 }
