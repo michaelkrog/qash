@@ -25,7 +25,7 @@ public class IndexController extends AbstractController {
 
         GetOrgService();
         ModelAndView modelAndView = new ModelAndView("LayoutView");
-        modelAndView.addObject("organisationName", org.getName());
+        modelAndView.addObject("organisationName", org.getCompanyName());
        
         // String[] args = { "Mr.", "X" };
         // E.g. message.code="Dear {0} {1}"
