@@ -3,6 +3,8 @@
     Created on : 16-05-2011, 11:20:51
     Author     : michaelzachariassenkrog
 --%>
+<%@page import="dk.apaq.shopsystem.util.AddressUtil"%>
+<%@page import="dk.apaq.shopsystem.entity.Store"%>
 <%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
 <%@page import="dk.apaq.shopsystem.service.crud.OrganisationCrud"%>
 <%@page import="dk.apaq.shopsystem.service.OrganisationService"%>
@@ -109,7 +111,7 @@ String since30DaysString = df.format(since30Days);
                             <th scope="col"><%=res.getString("dashboard.column.plan")%></th>
                             <th scope="col"><%=res.getString("dashboard.column.orderUsage")%></th>
                             <th scope="col"><%=res.getString("dashboard.column.inventoryUsage")%></th>
-                            <th scope="col"><%=res.getString("dashboard.column.users")%></th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -123,17 +125,33 @@ String since30DaysString = df.format(since30Days);
                             int orderCount = orgService.getOrders().listIds(dateFilter, null).size();
 
                             out.println("<tr><td>");
-                            out.println("<a icon=\"hyperlink\" href=\"/admin/id:" + org.getId() + "\">");
-                            out.println(StringEscapeUtils.escapeHtml(org.getName()));
-                            out.println("</a></td>");
+                            out.println(StringEscapeUtils.escapeHtml(org.getCompanyName()));
+                            out.println("</td>");
                             out.println("<td>"/* + org.getServiceLevel()*/);
                             //out.println("&nbsp;<a href=\"change_plan.jsp?shopid=" + shop.getId() + "\" class=\"button-small\">Change</a>");
                             out.println("</td>");
                             out.println("<td>" + orderCount + " <span class=\"light\">(" + noLimit+ ")</span> </td>");
                             out.println("<td>" + itemCount + " <span class=\"light\">(" + noLimit+ ")</span></td>");
-                            out.println("<td></td>");
+                            out.println("<td>");
+                            out.println("<a icon=\"hyperlink\" href=\"/admin/id:" + org.getId() + "\">");
+                            out.println(res.getString("dashboard.administer"));
+                            out.println("</a>");
+                            out.println("</td>");
                             //out.println("<td>" + StringEscapeUtils.escapeHtml(org.getCreatedBy()) + "</td>");
                             out.println("</tr>");
+                            
+                            Crud<String, Store> storeCrud = orgService.getStores();
+                            for(Store store : storeCrud.list()) {
+                                out.println("<tr class=\"oddrow\"><td colspan=\"5\">-&nbsp;");
+                                out.println("<a icon=\"hyperlink\" href=\"/register/id:" + org.getId() + "\">");
+                                out.println("<b>");
+                                out.println(StringEscapeUtils.escapeHtml(store.getName()));
+                                out.println("</b>");
+                                out.println("(Kasseapparat)</a>");
+                                out.println("</td>");
+                                out.println("</tr>");
+                            }
+                            
                         }
                         %>
 

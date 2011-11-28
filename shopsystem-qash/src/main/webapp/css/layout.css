@@ -979,6 +979,11 @@ Forms
     padding: 9px 8px 1px;
 }
 
+.table-minimalistic tr.oddrow td{
+    background:white;
+    font-size: 10px;
+}
+
 .table-minimalistic-lined td,
 .table-minimalistic td.lined{
     border-bottom: 1px solid #CCC;

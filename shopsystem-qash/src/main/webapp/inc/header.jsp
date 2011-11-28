@@ -28,7 +28,7 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
         %>
             <div class="ge-userinfo">
                 <div><a href="account.jsp"><span><%=res.getString("header.accountLink")%></span></a></div>
-                <div><a href="admin"><span><%=res.getString("header.shoplistLink")%></span></a></div>
+                <div><a href="dashboard.jsp"><span><%=res.getString("header.shoplistLink")%></span></a></div>
             </div>
             <div class="ge-userinfo">
                 <div><a href="/logout"><span><%=res.getString("header.logoutLink")%></span></a></div>
