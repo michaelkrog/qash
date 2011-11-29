@@ -96,5 +96,5 @@
         <module>shopsystem-webapp</module>
         <module>shopsystem-core</module>
         <module>shopsystem-qash</module>
-    </modules>
+  </modules>
 </project>

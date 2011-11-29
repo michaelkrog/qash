@@ -196,6 +196,27 @@ public class AnnexServiceTest extends TestCase {
         assertNotSame(0, value.length());
     }
     
+    
+    public void testGenerateInvoicePostScript() throws Exception{
+        Organisation org = getOrganisation();
+        Order order = getOrder(1);
+
+        //ByteArrayOutputStream out = new ByteArrayOutputStream();
+        FileOutputStream out = new FileOutputStream("invoice.ps");
+
+        CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
+        Page page = new Page(PageSize.A4);
+        AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
+        annexService.generateInvoice(context, OutputType.PostScript);
+
+
+        //String value = new String(out.toByteArray());
+        //assertNotSame(0, value.length());
+
+        //TODO Extract the images and ensure they are correct in size.
+        //out.close();
+    }
+    
      public void testGenerateInvoicePngBundle() throws Exception{
         Organisation org = getOrganisation();
         Order order = getOrder(1);
