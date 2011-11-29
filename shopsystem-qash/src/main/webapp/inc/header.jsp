@@ -39,7 +39,7 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
         if(!authenticated) {
         %>
             <div class="ge-userinfo">
-                <div><a href="admin"><span><%=res.getString("header.loginLink")%></span></a></div>
+                <div><a href="dashboard.jsp"><span><%=res.getString("header.loginLink")%></span></a></div>
             </div>
         <%
         }

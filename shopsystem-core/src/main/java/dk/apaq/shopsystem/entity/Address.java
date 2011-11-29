@@ -14,18 +14,18 @@ public class Address implements Serializable, HasAddress {
     private String city;
     private String stateOrProvince;
     private String postalCode;
-    private String country;
+    private String countryCode;
     
 
     public Address() {
     }
 
-    public Address(String street, String postalCode, String city, String stateOrProvince, String country) {
+    public Address(String street, String postalCode, String city, String stateOrProvince, String countryCode) {
         this.street = street;
         this.city = city;
         this.stateOrProvince = stateOrProvince;
         this.postalCode = postalCode;
-        this.country = country;
+        this.countryCode = countryCode;
     }
 
     /**
@@ -48,16 +48,16 @@ public class Address implements Serializable, HasAddress {
      * Get countrycode.
      */
     @Override
-    public String getCountry() {
-        return country;
+    public String getCountryCode() {
+        return countryCode;
     }
 
     /**
      * Sets countrycode.
      */
     @Override
-    public void setCountry(String country) {
-        this.country = country;
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 
     @Override

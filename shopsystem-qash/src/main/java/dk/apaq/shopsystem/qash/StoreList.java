@@ -22,9 +22,7 @@ import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.crud.Crud;
 import dk.apaq.filter.FilterGenerator;
 import dk.apaq.filter.sort.Sorter;
-import dk.apaq.shopsystem.entity.Customer;
 import dk.apaq.shopsystem.entity.Store;
-import dk.apaq.shopsystem.qash.common.CustomerFilterGenerator;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.shopsystem.qash.common.StoreFilterGenerator;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
@@ -87,7 +85,6 @@ public class StoreList extends CustomComponent {
         topHLayout.addComponent(addButton);
         topHLayout.addComponent(openButton);
         topHLayout.addComponent(removeButton);
-        //topHLayout.addComponent(adjustButton);
         topHLayout.setComponentAlignment(searchField, Alignment.BOTTOM_RIGHT);
         topHLayout.setExpandRatio(spacer, 1.0F);
         topHLayout.setWidth(100, Component.UNITS_PERCENTAGE);
@@ -146,7 +143,7 @@ public class StoreList extends CustomComponent {
         layout.setSizeFull();
     }
 
-    public void setStoreCrud(Crud<String, Store> crud) {
+    public void setCrud(Crud<String, Store> crud) {
         this.crud = crud;
         refreshContainer();
     }
@@ -158,10 +155,10 @@ public class StoreList extends CustomComponent {
     }
 
     private void editItem(final Item item) {
-        final CustomerForm form = new CustomerForm();
+        final StoreForm form = new StoreForm();
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
-        Window dialog = new Window("Edit Customer", layout);
+        Window dialog = new Window("Edit Store", layout);
         dialog.addComponent(form);
         dialog.setWidth(445, Component.UNITS_PIXELS);
         dialog.setHeight(370, Component.UNITS_PIXELS);

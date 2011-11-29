@@ -75,11 +75,11 @@ public class Store implements Serializable, ContentEntity, HasAddress {
         this.organisation = organisation;
     }
 
-    public String getCountry() {
+    public String getCountryCode() {
         return countryCode;
     }
 
-    public void setCountry(String countryCode) {
+    public void setCountryCode(String countryCode) {
         if (countryCode == null) {
             countryCode = "US";
         }

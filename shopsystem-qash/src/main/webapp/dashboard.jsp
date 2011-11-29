@@ -3,6 +3,7 @@
     Created on : 16-05-2011, 11:20:51
     Author     : michaelzachariassenkrog
 --%>
+<%@page import="dk.apaq.shopsystem.security.SystemUserDetails"%>
 <%@page import="dk.apaq.shopsystem.util.AddressUtil"%>
 <%@page import="dk.apaq.shopsystem.entity.Store"%>
 <%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
@@ -31,7 +32,9 @@ SystemService service = wac.getBean(SystemService.class);
 OrganisationCrud orgCrud = service.getOrganisationCrud();
 
 //TODO List organisations
-List<String> idlist = orgCrud.listIds();
+SystemUserDetails sud = ((SystemUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+List<String> idlist = orgCrud.listIds(null, sud.getUser());
 
 boolean autoRedirect = "true".equalsIgnoreCase(request.getParameter("autoRedirect"));
 int shopCount = idlist.size();

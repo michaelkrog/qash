@@ -14,7 +14,7 @@ public interface HasAddress {
     /**
      * Get countrycode.
      */
-    String getCountry();
+    String getCountryCode();
 
     String getPostalCode();
 
@@ -33,7 +33,7 @@ public interface HasAddress {
     /**
      * Sets countrycode.
      */
-    void setCountry(String country);
+    void setCountryCode(String countryCode);
 
     void setPostalCode(String postalCode);
 

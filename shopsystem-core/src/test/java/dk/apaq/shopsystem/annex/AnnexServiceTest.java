@@ -46,7 +46,7 @@ public class AnnexServiceTest extends TestCase {
         org.setStreet("Stovringparken 10");
         org.setPostalCode("9530");
         org.setCity("Stovring");
-        org.setCountry("DK");
+        org.setCountryCode("DK");
         return org;
     }
 

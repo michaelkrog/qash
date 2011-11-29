@@ -34,7 +34,7 @@ import java.util.List;
 public class CustomerForm extends Form {
     
     private static final List<String> PROPERTIES = Arrays.asList(new String[]{
-                    "companyName", "contactName", "street", "postalCode", "city", "country", "telephone",
+                    "companyName", "contactName", "street", "postalCode", "city", "countryCode", "telephone",
                     "email", "companyRegistration", "bankAccount", "websiteUrl", "birthDay"});
 
     private TabSheet tabSheet = new TabSheet();
@@ -74,7 +74,7 @@ public class CustomerForm extends Form {
         @Override
         public Field createField(Item item, Object propertyId, Component uiContext) {
             Field f;
-            if ("country".equals(propertyId)) {
+            if ("countryCode".equals(propertyId)) {
                 return countries;
             } else {
                 f = super.createField(item, propertyId, uiContext);
@@ -187,7 +187,7 @@ public class CustomerForm extends Form {
             generalLayout.addComponent(field, 1, 3);
         } else if (propertyId.equals("city")) {
             generalLayout.addComponent(field, 2, 3);
-        } else if (propertyId.equals("country")) {
+        } else if (propertyId.equals("countryCode")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             generalLayout.addComponent(field, 1, 4, 2, 4);
         } else if (propertyId.equals("companyRegistration")) {

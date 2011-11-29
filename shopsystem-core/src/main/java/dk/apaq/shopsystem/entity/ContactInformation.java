@@ -21,8 +21,8 @@ public class ContactInformation extends Address implements Serializable {
 
     public ContactInformation(){}
 
-    public ContactInformation(String companyName, String companyRegistration, String contactName, String telephone, String email, String street, String postalCode, String city, String stateOrProvince, String country) {
-        super(street, postalCode, city, stateOrProvince, country);
+    public ContactInformation(String companyName, String companyRegistration, String contactName, String telephone, String email, String street, String postalCode, String city, String stateOrProvince, String countryCode) {
+        super(street, postalCode, city, stateOrProvince, countryCode);
         this.companyName = companyName;
         this.companyRegistration = companyRegistration;
         this.contactName = contactName;

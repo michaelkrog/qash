@@ -37,7 +37,7 @@ public abstract class AbstractCompany implements BasicEntity, Serializable, Comp
     private String city;
     private String stateOrProvince;
     private String postalCode;
-    private String country;
+    private String countryCode;
     private String bankAccount;
     private String websiteUrl;
 
@@ -76,8 +76,8 @@ public abstract class AbstractCompany implements BasicEntity, Serializable, Comp
     }
 
     @Override
-    public String getCountry() {
-        return country;
+    public String getCountryCode() {
+        return countryCode;
     }
 
 
@@ -139,11 +139,9 @@ public abstract class AbstractCompany implements BasicEntity, Serializable, Comp
     }
 
     @Override
-    public void setCountry(String country) {
-        this.country = country;
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
-
-
 
     public void setDateChanged(Date dateChanged) {
         this.dateChanged = dateChanged;

@@ -22,6 +22,13 @@
         <!--custom-filter position="OPENID_FILTER" ref="rpxFilter" /-->
     </http>
 
+    <!-- WORKAROUND FOR A BUG IN LOGOUT IN 3.0.6 THAT CAUSES NPE's-->
+    <bean class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+        <property name="targetUrlParameter">
+            <util:constant static-field="org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler.DEFAULT_TARGET_PARAMETER"/>
+        </property>
+    </bean>
+    
     <!--beans:bean id="rpxFilter" class="dk.apaq.spring.rpx.RpxAuthenticationFilter">
         <beans:property name="authenticationManager" ref="authenticationManager"/>
         <beans:property name="rpxApiKey" value="042b7f697063d653e6f1a4f533a57c74a625d200"/>

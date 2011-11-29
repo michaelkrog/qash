@@ -77,8 +77,8 @@
     
     	<div class="addresslabel">
     		<div>$tool.html($organisation.getCompanyName())</div>
-    		<div>$tool.html($organisation.getStreet())</div>
-       		<div>$tool.html($organisation.getPostalCode()) $tool.html($organisation.getCity())</div>
+    		<div>#if($organisation.getStreet())$tool.html($organisation.getStreet())#end</div>
+       		<div>#if($organisation.getPostalCode())$tool.html($organisation.getPostalCode())#end #if($organisation.getCity())$tool.html($organisation.getCity())#end</div>
         </div>
 
         <table class="header" cellpadding="0" cellspacing="0">
