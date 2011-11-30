@@ -3,25 +3,24 @@
     Created on : 16-05-2011, 11:20:51
     Author     : michaelzachariassenkrog
 --%>
+<%@page import="dk.apaq.shopsystem.entity.Organisation"%>
+<%@page import="dk.apaq.shopsystem.service.SystemService"%>
 <%@page import="org.springframework.web.context.WebApplicationContext"%>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
-<%@page import="javax.accessories.crud.Crud"%>
-<%@page import="dk.apaq.qash.share.model.Shop"%>
-<%@page import="dk.apaq.qash.server.service.Service"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-String shopid = request.getParameter("shopid");
+String orgid = request.getParameter("orgid");
 boolean change = "true".equalsIgnoreCase(request.getParameter("change"));
 
 if(change) {
     String name = request.getParameter("name");
     if(name != null && !"".equals(name)) {
         WebApplicationContext wac = WebApplicationContextUtils.getWebApplicationContext(application);
-        Service service = wac.getBean(Service.class);
-        Crud.Editable<String, Shop> shopCrud = service.getShopCrud();
-        Shop shop = shopCrud.create();
-        shop.setName(name);
-        shopCrud.update(shop);
+        SystemService service = wac.getBean(SystemService.class);
+        dk.apaq.crud.Crud.Editable<String, Organisation> orgCrud = service.getOrganisationCrud();
+        Organisation org = orgCrud.read(orgCrud.create());
+        org.setCompanyName(name);
+        orgCrud.update(org);
         response.sendRedirect("dashboard.jsp");
         return;
     }
@@ -85,7 +84,7 @@ if(change) {
             <p>
                 <form method="POST">
                     <input type="hidden" name="change" value="true" />
-                    <input type="hidden" name="shopid" value="true" />
+                    <input type="hidden" name="orgid" value="<%=orgid%>" />
                     <input type="radio" name="plan" value="Basic" /> Basic (Free)<br/>
                     <input type="radio" name="plan" value="Popular" /> Popular (15$/month)<br/>
                     <input type="radio" name="plan" value="Pro" /> Pro (25$/month)<br/>

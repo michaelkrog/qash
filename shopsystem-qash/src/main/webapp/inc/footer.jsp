@@ -16,7 +16,7 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
             <!-- /call to action -->
         </div>
         <!-- call to action button -->
-        <span class="ge-calltoaction-button"><a href="login.jsp"><%=res.getString("footer.start")%></a></span>
+        <span class="ge-calltoaction-button"><a href="dashboard.jsp"><%=res.getString("footer.start")%></a></span>
         <!-- /call to action button -->
         <div class="clear"></div>
         <div class="ge-copyright">

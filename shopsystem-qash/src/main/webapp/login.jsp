@@ -17,7 +17,7 @@
 
 String redirect = request.getParameter("redirect");
 if(redirect==null) {
-        redirect="shoplist.jsp?autoRedirect=true";
+        redirect="dashboard.jsp?autoRedirect=true";
 }
 
 SecurityContext ctx = SecurityContextHolder.getContext();
