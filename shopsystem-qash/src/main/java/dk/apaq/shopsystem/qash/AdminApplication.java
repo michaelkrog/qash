@@ -33,23 +33,6 @@ public class AdminApplication extends Application implements HttpServletRequestL
     private AdminPanel adminPanel;
     private SiteHeader siteHeader;
     private VerticalLayout outerLayout = new VerticalLayout();
-    //private final ICEPush pusher = new ICEPush();
-    //private final CrudChangeHandler crudChangeHandler = new CrudChangeHandler();
-
-    /*private class CrudChangeHandler extends BaseCrudListener {
-
-        @Override
-        public void onEntityDelete(WithId event) {
-            pusher.push();
-        }
-
-        @Override
-        public void onEntityUpdate(WithEntity event) {
-            pusher.push();
-        }
-
-
-    }*/
     
     @Override
     /**
@@ -94,9 +77,6 @@ public class AdminApplication extends Application implements HttpServletRequestL
         annexService = context.getBean("annexService", AnnexService.class);
         // Spring end
         
-        siteHeader = new AutopilotSiteHeader();
-        
-
         setTheme("shopsystem");
         Window mainWindow = new Window();
         mainWindow.setContent(outerLayout);
@@ -140,19 +120,12 @@ public class AdminApplication extends Application implements HttpServletRequestL
         }
         
         VaadinServiceHolder.setService(this, service.getOrganisationService(org));
+        siteHeader = new AutopilotSiteHeader();
         adminPanel = new AdminPanel(siteHeader, annexService);
         
         outerLayout.addComponent(adminPanel);
         outerLayout.setExpandRatio(adminPanel, 1.0F);
         adminPanel.setSizeFull();
-
-        /*
-        Organisation shop = service.get.read(shopId);
-        ((CrudNotifier)service.getItemCrud(shop)).addListener(crudChangeHandler);
-        ((CrudNotifier)service.getOrderCrud(shop)).addListener(crudChangeHandler);
-        ((CrudNotifier)service.getTaxCrud(shop)).addListener(crudChangeHandler);
-*/
-        
 
     }
     

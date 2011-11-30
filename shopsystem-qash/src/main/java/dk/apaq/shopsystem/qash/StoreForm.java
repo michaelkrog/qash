@@ -1,8 +1,8 @@
 package dk.apaq.shopsystem.qash;
 
+import com.vaadin.data.Buffered;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanContainer;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -15,8 +15,6 @@ import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
-import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.util.Country;
 import java.util.Arrays;
 import java.util.List;
@@ -36,10 +34,7 @@ public class StoreForm  extends Form {
     private Label lblPhone = new Label("Phone");
     private Label lblFax = new Label("VatNo.");
     private Button btnSave = new Button("Save");
-    private OrganisationService service;
-
-
-
+    
     private class FormFieldFactory extends DefaultFieldFactory {
 
         final ComboBox countries = new ComboBox("Country");
@@ -124,8 +119,9 @@ public class StoreForm  extends Form {
 
             public void buttonClick(ClickEvent event) {
                 commit();
-                Organisation org = ((BeanItem<Organisation>)getItemDataSource()).getBean();
-                service.updateOrganisation(org);
+                if(getItemDataSource() instanceof Buffered) {
+                    ((Buffered)getItemDataSource()).commit();
+                }
             }
         });
     }
@@ -169,16 +165,6 @@ public class StoreForm  extends Form {
     public void setItemDataSource(Item newDataSource) {
         super.setItemDataSource(newDataSource, PROPERTIES);
     }
-
-    @Override
-    public void attach() {
-        if(service!=null) {
-            BeanItem<Organisation> item = new BeanItem<Organisation>(service.readOrganisation());
-            super.setItemDataSource(item, PROPERTIES);
-        }
-    }
-
-
 
 }
 

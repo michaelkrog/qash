@@ -134,7 +134,7 @@ public class CustomerList extends CustomComponent {
         removeButton.addListener(new Button.ClickListener() {
 
             public void buttonClick(ClickEvent event) {
-                Object id = table.addItem();
+                Object id = table.getValue();
                 table.removeItem(id);
             }
         });

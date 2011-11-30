@@ -29,7 +29,7 @@ import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
 
 /**
- * A List for products including filtering and editing.
+ * A List for stores including filtering and editing.
  */
 public class StoreList extends CustomComponent {
 
@@ -109,7 +109,7 @@ public class StoreList extends CustomComponent {
             public void buttonClick(ClickEvent event) {
                 Object id = table.addItem();
                 Item item = table.getItem(id);
-                item.getItemProperty("companyName").setValue("Unnamed customer");
+                item.getItemProperty("name").setValue("Unnamed store");
                 editItem(item);
             }
         });
@@ -122,8 +122,8 @@ public class StoreList extends CustomComponent {
                 if (table.getValue() == null) {
                     return;
                 }
-                String productId = (String) table.getValue();
-                Item item = table.getItem(productId);
+                String itemId = (String) table.getValue();
+                Item item = table.getItem(itemId);
 
                 editItem(item);
 
@@ -133,7 +133,7 @@ public class StoreList extends CustomComponent {
         removeButton.addListener(new Button.ClickListener() {
 
             public void buttonClick(ClickEvent event) {
-                Object id = table.addItem();
+                Object id = table.getValue();
                 table.removeItem(id);
             }
         });

@@ -51,11 +51,14 @@
     text-shadow: 0px 1px 1px #3f3f3f;
     letter-spacing: 0em;
     word-spacing: 0em;
-    line-height: 1.2;
+    line-height: 1.0;
     color: #dadada;
     text-decoration: none;
 }
 
+.ge-userinfo .link {
+    /*height:20px;*/
+}
 .ge-userinfo {
     height:32px;
     float:left;
