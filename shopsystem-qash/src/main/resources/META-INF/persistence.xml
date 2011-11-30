@@ -26,7 +26,7 @@
       <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.DefaultComponentSafeNamingStrategy"/>
       <property name="hibernate.connection.username" value="root"/>
       <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-      <property name="hibernate.connection.password" value="root"/>
+      <property name="hibernate.connection.password" value=""/>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.connection.url" value="jdbc:mysql://localhost/shopsystem"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>

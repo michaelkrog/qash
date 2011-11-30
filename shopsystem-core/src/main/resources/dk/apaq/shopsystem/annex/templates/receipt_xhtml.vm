@@ -1,5 +1,7 @@
 #set($bodyWidth = $pixelWidth - $pixelMarginLeft)
 #set($bodyWidth = $bodyWidth - $pixelMarginRight)
+#set($bodyFontSize = 18)
+#set($titleFontSize = 28)
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -15,7 +17,7 @@
 
                 body{
                     font-family:verdana;
-                    font-size:8px;
+                    font-size:${bodyFontSize}px;
                     width:${bodyWidth}px;
                     margin-top: ${pixelMarginTop}px;
                     margin-right: ${pixelMarginRight}px;
@@ -30,7 +32,7 @@
         		margin: 5px 5px 10px 5px;
                         width:100%;
                         overflow:hidden;
-                        font-size:16px;
+                        font-size:${titleFontSize}px;
 
         	}
 

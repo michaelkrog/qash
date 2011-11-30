@@ -17,13 +17,13 @@
         <intercept-url pattern="/**/admin/**" access="ROLE_USER" />
 
         <form-login login-page="/login.jsp" />
-        <logout logout-url="/logout" logout-success-url="/" invalidate-session="true" success-handler-ref="myLogoutSuccessHandler"/>
+        <logout logout-url="/logout" invalidate-session="true" success-handler-ref="myLogoutSuccessHandler"/>
 
         <!--custom-filter position="OPENID_FILTER" ref="rpxFilter" /-->
     </http>
 
     <!-- WORKAROUND FOR A BUG IN LOGOUT IN 3.0.6 THAT CAUSES NPE's-->
-    <bean id="myLogoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuc‌​cessHandler"/>
+    <beans:bean id="myLogoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler"/>
     
     <!--beans:bean id="rpxFilter" class="dk.apaq.spring.rpx.RpxAuthenticationFilter">
         <beans:property name="authenticationManager" ref="authenticationManager"/>
