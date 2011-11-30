@@ -24,7 +24,6 @@
                     margin-bottom: ${pixelMarginBottom}px;
                     margin-left: ${pixelMarginLeft}px;
                     padding: 0;
-                    margin:0px;
                 }
 
                 .addresslabel{
@@ -78,7 +77,7 @@
     <body>
     
     	<div class="addresslabel">
-    		<div>$tool.html($organisation.getCompanyName())</div>
+    		<div>#if($organisation.getCompanyName())$tool.html($organisation.getCompanyName())#end</div>
     		<div>#if($organisation.getStreet())$tool.html($organisation.getStreet())#end</div>
        		<div>#if($organisation.getPostalCode())$tool.html($organisation.getPostalCode())#end #if($organisation.getCity())$tool.html($organisation.getCity())#end</div>
         </div>
