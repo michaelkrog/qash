@@ -242,7 +242,7 @@ ResourceBundle res = Qash   .getResourceBundle(request.getLocale());
                         </li>
                         <li class="endscreenshot">
                             <span class="in-screenshots-view"><img src="images/in-screenshot-view.png" alt="view" width="19" height="19" /></span>
-                            <a href="images/screenshots/screenshot-006.jpg" rel="prettyPhoto[gallery]"><img src="images/screenshots/thumbnail-006.jpg" alt="example" width="138" height="76" /></a>
+                            <a href="images/screenshots/instore_picture.jpg" rel="prettyPhoto[gallery]"><img src="images/screenshots/instore_picture_thumb.jpg" alt="In store illustration" width="138" height="76" /></a>
                         </li>
                     </ul>
                     <!-- /screenshots -->
