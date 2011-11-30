@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
   xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:util="http://www.springframework.org/schema/util"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-           http://www.springframework.org/schema/security
-           http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/util/spring-util-3.0.xsd
+           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
 
 
     <http auto-config='true'>
@@ -23,7 +22,11 @@
     </http>
 
     <!-- WORKAROUND FOR A BUG IN LOGOUT IN 3.0.6 THAT CAUSES NPE's-->
-    <beans:bean id="myLogoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler"/>
+    <beans:bean id="myLogoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+        <property name="targetUrlParameter">
+            <util:constant static-field="org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler.DEFAULT_TARGET_PARAMETER"/>
+        </property>
+    </beans:bean>
     
     <!--beans:bean id="rpxFilter" class="dk.apaq.spring.rpx.RpxAuthenticationFilter">
         <beans:property name="authenticationManager" ref="authenticationManager"/>

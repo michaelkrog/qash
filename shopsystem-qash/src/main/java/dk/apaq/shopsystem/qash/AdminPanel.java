@@ -42,8 +42,8 @@ public class AdminPanel extends CustomComponent {
     private VerticalLayout content = new VerticalLayout();
     private ListListener listListener = new ListListener();
     private final HtmlEditor htmlEditor = new HtmlEditor();
-    private final Button btnSettings = new Button("Company options");
-    private final Link linkHelp = new Link("Help & Support", new ExternalResource("http://help.qashapp.com"), "Help", 500, 500, Link.TARGET_BORDER_MINIMAL);
+    private final Button btnSettings = new Button("Settings");
+    private final Link linkHelp = new Link("Help", new ExternalResource("http://help.qashapp.com"), "Help", 500, 500, Link.TARGET_BORDER_MINIMAL);
     private final Link linkLogout = new Link("Log out", new ExternalResource("/logout"));
 
     private class SettingsListener implements Button.ClickListener {
