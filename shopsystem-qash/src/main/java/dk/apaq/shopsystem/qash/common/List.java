@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  */
 public class List extends CustomComponent {
 
-    private VerticalLayout layout = new VerticalLayout();
+    protected VerticalLayout layout = new VerticalLayout();
     private ButtonListener buttonListener = new ButtonListener();
     private Button lastSelected = null;
 

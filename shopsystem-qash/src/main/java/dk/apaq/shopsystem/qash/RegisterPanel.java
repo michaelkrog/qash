@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
  */
 public class RegisterPanel extends CustomComponent {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AdminPanel.class);
     private final SalesView salesView = new SalesView();
     private final ProductList stockWidget = new ProductList();
     private final CustomerList customerList = new CustomerList();
@@ -65,6 +64,7 @@ public class RegisterPanel extends CustomComponent {
         listPanel.addItem("ORDERS", "Ordrer", salesView);
         listPanel.addItem("STOCK", "Produkter", stockWidget);
         listPanel.setSizeFull();
+        listPanel.setSplitPosition(250, UNITS_PIXELS);
         
         //outerLayout.addComponent(cookies);
         outerLayout.addComponent(header);
