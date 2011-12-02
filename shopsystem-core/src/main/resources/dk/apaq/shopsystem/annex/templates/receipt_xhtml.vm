@@ -28,7 +28,7 @@
 
                 .addresslabel{
         		text-align:center;
-        		margin: 5px 5px 10px 5px;
+        		margin: 15px 15px 30px 15px;
                         width:100%;
                         overflow:hidden;
                         font-size:${titleFontSize}px;
@@ -72,9 +72,9 @@
                 .totalline_title,
                 .totalline_value {
                     border-top: 1px solid #6f6f6f;
-                    padding-top: 4px
+                    padding-top: 4px;
                     font-size:${titleFontSize}px;
-                    padding-bottom: 4px
+                    padding-bottom: 4px;
                 }
 
                 
@@ -111,13 +111,16 @@
 
         #end
             <tr>
-                <td class="totalline_title">Total</td>
+                <td class="totalline_title">Total (inkl. moms $cf2.format($order.getTotalTax()))</td>
                 <td class="totalline_value">$cf2.format($order.getTotalWithTax())</td>
             </tr>
+
+        #foreach($payment in $payments)
             <tr>
-                <td class="orderline_title">Heraf moms</td>
-                <td class="orderline_total">$cf2.format($order.getTotalTax())</td>
+                <td class="orderline_title"><div class="orderline_title">$payment.getPaymentType()</div></td>
+                <td class="orderline_total">$cf2.format($payment.getAmount())</td>
             </tr>
+        #end
         </table>
         #if($organisation.getAnnexNote())
         <div class="receiptNote">$tool.html($organisation.getAnnexNote()).replaceAll("\n","<br/>")</div>

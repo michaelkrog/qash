@@ -264,7 +264,7 @@ public class AnnexServiceImpl implements AnnexService {
 
         context.put("order", order);
         context.put("orderlines", orderlineList);
-        context.put("payment", payments);
+        context.put("payments", payments);
 
         context.put("organisation", organisation);
         context.put("nf", nf);
