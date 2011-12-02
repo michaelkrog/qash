@@ -141,7 +141,6 @@ String since30DaysString = df.format(since30Days);
                             out.println(res.getString("dashboard.administer"));
                             out.println("</a>");
                             out.println("</td>");
-                            //out.println("<td>" + StringEscapeUtils.escapeHtml(org.getCreatedBy()) + "</td>");
                             out.println("</tr>");
                             
                             Crud<String, Store> storeCrud = orgService.getStores();
