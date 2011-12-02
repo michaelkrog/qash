@@ -275,8 +275,8 @@ public class OrderEditor extends CustomComponent implements
         private final Label lbl_due = new Label("Due: 0,00");
         private final Label lbl_status = new Label("New");
         private final TextField txt_barcode = new TextField();
-        private final Button btn_addLine = new Button("Add non-stock item (F8)");
-        private final Button btn_print = new Button("Print (F10)");
+        private final Button btn_addLine = new Button("Add non-stock item");
+        private final Button btn_print = new Button("Print");
         private final Button btn_advance = new Button("Invoice");
         private final SearchField field_search = new SearchField();
         private final ProductFilterGenerator filterGenerator = new ProductFilterGenerator();
@@ -292,13 +292,13 @@ public class OrderEditor extends CustomComponent implements
             lbl_customer.setStyleName(Reindeer.LABEL_H1);
             lbl_status.setStyleName(Reindeer.LABEL_H2);
 
-            field_search.setInputPrompt("Search Item (F4)");
+            field_search.setInputPrompt("Search Item");
             field_search.setImmediate(true);
             field_search.setItemCaptionMode(Select.ITEM_CAPTION_MODE_ITEM);
             field_search.setItemCaptionPropertyId("name");
             //field_search.setNullSelectionAllowed(false);
 
-            txt_barcode.setInputPrompt("Barcode (F6)");
+            txt_barcode.setInputPrompt("Barcode");
             txt_barcode.setImmediate(true);
             txt_barcode.setStyleName(ShopSystemTheme.TEXTFIELD_BARCODE);
 
@@ -543,11 +543,11 @@ public class OrderEditor extends CustomComponent implements
             }
         });
 
-        header.getSearchField().addShortcutListener(new FocusShortcut(header.getSearchField(), KeyCode.F4, ModifierKey.META));
+        /*header.getSearchField().addShortcutListener(new FocusShortcut(header.getSearchField(), KeyCode.F4, ModifierKey.META));
         header.getBarcodeField().addShortcutListener(new FocusShortcut(header.getBarcodeField(), KeyCode.F6, ModifierKey.META));
         header.getButtonAddLine().setClickShortcut(KeyCode.F8, ModifierKey.META);
         header.getButtonPrint().setClickShortcut(KeyCode.F10, ModifierKey.META);
-        header.getButtonAdvanceOrder().setClickShortcut(KeyCode.F12, ModifierKey.META);
+        header.getButtonAdvanceOrder().setClickShortcut(KeyCode.F12, ModifierKey.META);*/
 
         header.setWidth("100%");
         footer.setWidth("100%");
@@ -786,13 +786,13 @@ public class OrderEditor extends CustomComponent implements
         header.getLabelStatus().setValue(statusString);
 
         if (!completed) {
-            header.getButtonAdvanceOrder().setCaption("Conclude (F12)");
+            header.getButtonAdvanceOrder().setCaption("Conclude");
             header.getButtonAdvanceOrder().setEnabled(true);
         } else if (completed && !paid) {
-            header.getButtonAdvanceOrder().setCaption("Pay (F12)");
+            header.getButtonAdvanceOrder().setCaption("Pay");
             header.getButtonAdvanceOrder().setEnabled(true);
         } else {
-            header.getButtonAdvanceOrder().setCaption("Pay (F12)");
+            header.getButtonAdvanceOrder().setCaption("Pay");
             header.getButtonAdvanceOrder().setEnabled(false);
         }
 
