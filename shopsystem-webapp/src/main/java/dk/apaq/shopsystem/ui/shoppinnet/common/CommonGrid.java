@@ -70,7 +70,8 @@ public class CommonGrid extends CustomComponent {
     final private Panel descriptionPanel = new Panel();
     final private VerticalLayout descriptionPanelContent = new VerticalLayout();
     final private VerticalLayout dummy = new VerticalLayout();
-    
+
+   
     
     public void setFactoryClass (String factoryClass) {
         this.factoryClass = factoryClass;

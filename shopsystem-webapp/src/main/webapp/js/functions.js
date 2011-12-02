@@ -110,6 +110,7 @@ function ajax(posturl,postdata,result_element,VisualActions) {
 	var action_update = false;
 
 
+
 	if(VisualActions) {
 	    var array_actions = VisualActions.split(","); // Provide a string of actions to process if succeded
 	
@@ -157,8 +158,11 @@ function ajax(posturl,postdata,result_element,VisualActions) {
 	    // Close action box in case it is open
 	    show_actions(0);
 
+
+
+                        
             $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: posturl,
                     data: postdata,
                     cache: false,
@@ -168,6 +172,7 @@ function ajax(posturl,postdata,result_element,VisualActions) {
                                     show_message(window.language["server_failed"] + "<br /><br />" + msg,"show");
                             }
                             else {
+                                
 				    if (!result_element == "") {
                                         msg = msg.replace("pageload:ok","")
 					$("#" + result_element).html(msg);
@@ -217,7 +222,7 @@ function ajax(posturl,postdata,result_element,VisualActions) {
 			show_message("Error: " + errorThrown + " / " + textStatus + " / " + XMLHttpRequest,"alert");
 			//window.language["server_failed"] + "<br /><br />
 		}
-            });
+            });            
        }
 }
 

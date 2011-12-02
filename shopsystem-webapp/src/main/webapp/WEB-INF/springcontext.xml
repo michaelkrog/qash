@@ -105,9 +105,9 @@
     -->
     <!-- Scans within the base package of the application for @Components to configure as beans -->
     <!-- @Controller, @Service, @Configuration, etc. -->
-    <context:component-scan base-package="dk.apaq.shopsystem.api" />
     <context:component-scan base-package="dk.apaq.shopsystem.ui.springadmin" />
-    
+    <context:component-scan base-package="dk.apaq.shopsystem.api" />
+        
    <!-- Enables the Spring MVC @Controller programming model -->
     <mvc:annotation-driven />
 

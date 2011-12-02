@@ -6,6 +6,7 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.ui.springadmin.common.CommonGrid;
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Locale;
 import javax.servlet.jsp.PageContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +25,12 @@ public class IndexController extends AbstractController {
     public ModelAndView getIndex() {
 
         GetOrgService();
-        ModelAndView modelAndView = new ModelAndView("LayoutView");
+        ModelAndView modelAndView = new ModelAndView("admin/Layout");
         modelAndView.addObject("organisationName", org.getCompanyName());
        
         // String[] args = { "Mr.", "X" };
         // E.g. message.code="Dear {0} {1}"
-        // messageSource.getMessage("message.code", args, "en");
+        //messageSource.getMessage("", null, Locale.forLanguageTag("da"));
 
         
         //CommonGrid grid = new CommonGrid();

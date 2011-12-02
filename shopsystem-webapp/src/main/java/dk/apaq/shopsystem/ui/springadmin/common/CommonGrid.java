@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.ui.springadmin.common;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -20,7 +21,8 @@ public class CommonGrid {
     private ArrayList field = new ArrayList();
     private ArrayList action = new ArrayList();
     //private String link = null;
-    private String data = null;
+    private List data = null;
+    
 
 
     public void setObject(String value) {
@@ -47,7 +49,7 @@ public class CommonGrid {
     //	this.link[] =  value;
     //}
 
-    public void  set_data(String data) {
+    public void  setData(List data) {
 	this.data =  data;
     }
 
@@ -61,22 +63,22 @@ public class CommonGrid {
 	return newValue;  
     }
 
-/*
+
     public String build()
     {
 
         StringBuilder output = new StringBuilder();
         
 	// Create actions box
-	output.append("<div style='position:relative;'><div id='actions'><ul><li onclick=\"actions('" + this.id + "','check');\">Alle</li><li onclick=\"actions('" + this.id + "','uncheck');\">Ingen</li><br />\n");
+//	output.append("<div style='position:relative;'><div id='actions'><ul><li onclick=\"actions('" + this.id + "','check');\">Alle</li><li onclick=\"actions('" + this.id + "','uncheck');\">Ingen</li><br />\n");
 	for (Integer i=0;i < this.action.size(); i++) {
 	    //output.append("<li><a href=\"" + this.action[i][1] + "\">" + this.action[i][0] + "</a></li>\n");
 	}
-	output.append("</ul></div></div>");
+//	output.append("</ul></div></div>");
 
 
 	// Create outer grid
-	output.append("<table class='grid'>\n");
+//	output.append("<table class='grid'>\n");
 
 
 	// Create header
@@ -104,7 +106,7 @@ public class CommonGrid {
 
 	// Insert rows
 	Integer highlightCnt = 1;
-	for(Iterable object : this.data) {
+	/*for(Iterable object : this.data) {
 	    
 		e = this.domain_model.read(String object->id);
 	    
@@ -157,14 +159,16 @@ public class CommonGrid {
 
 		// End row
 		output.append("</tr>\n");
-		highlightCnt;++;
+		highlightCnt++;
 
-	}
+	}*/
 
 	// If no data exists
-	if (this.data.isEmpty()) {
-	    output.append("<tr><td colspan='" + i + "'>" + messageSource.getMessage("", null, Locale.forLanguageTag("da")) + "</td></tr>\n");
-	}
+	if (this.data == null) {
+	    // colspan='" + this.header.size() + "'
+            //output.append("<tr><td >" + messageSource.getMessage("test", null, "en") + "</td></tr>\n");
+	
+        }
 
 	// Finish grid creation
 	output.append("</tbody>\n</table>\n");
@@ -176,7 +180,7 @@ public class CommonGrid {
 
 
 }
-*/
+
     
     
-}
+

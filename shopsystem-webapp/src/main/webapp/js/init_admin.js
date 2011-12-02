@@ -6,8 +6,6 @@ $.getJSON("/index.php/admin/init/jslanguage", function(data) {
 $(function(){
     $.ajaxSetup({cache: false});
 
-    
-
 
     // Navigation
     $("#navigation").tabs("#navigation div div", {tabs: 'h2', effect: 'slide', initialIndex: null});

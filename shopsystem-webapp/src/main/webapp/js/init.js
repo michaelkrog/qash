@@ -7,6 +7,8 @@ $.getJSON("/index.php/admin/init/jslanguage", function(data) {
 // Do some stuff on page load
 $(function(){
 
+
+
     // Settings
     $.ajaxSetup({cache: false});
 

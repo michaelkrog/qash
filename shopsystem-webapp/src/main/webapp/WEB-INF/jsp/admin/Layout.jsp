@@ -76,7 +76,7 @@
 					    <h2>Users</h2>
 					    <div class="pane">
 						<ul>
-						    <li><a href="javascript:ajax('/index.php/admin/user/listing','','section_mid','');"><spring:message code="users" text="users" /></a></li>
+						    <li><a href="javascript:ajax('http://localhost:8084/_admin/ajax/websites/list.html','','section_mid','');"><spring:message code="users" text="users" /></a></li>
 						    <li><a href="javascript:ajax('/index.php/admin/user/edit','','dialog','');">Add User</a></li>
 						    <br />
 						    <li><a href="javascript:ajax('/index.php/admin/user_group/listing','','section_mid','');"><spring:message code="user.groups" text="user.groups" /></a></li>
