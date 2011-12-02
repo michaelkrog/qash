@@ -19,7 +19,7 @@ import dk.apaq.vaadin.addon.crudcontainer.HasBean;
  *
  * @author michaelzachariassenkrog
  */
-public class SettingsDialog extends Window {
+public class SettingsDialogForAdmin extends Window {
 
     private final CategoryGridPanel gridPanel = new CategoryGridPanel();
     private final VerticalLayout layout = new VerticalLayout();
@@ -34,7 +34,7 @@ public class SettingsDialog extends Window {
     private Item datasource;
     private OrganisationService service;
 
-    public SettingsDialog() {
+    public SettingsDialogForAdmin() {
         
         setCaption("Settings");
         setResizable(false);

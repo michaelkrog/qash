@@ -12,7 +12,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.themes.Reindeer;
-import dk.apaq.shopsystem.qash.settings.SettingsDialog;
+import dk.apaq.shopsystem.qash.settings.SettingsDialogForAdmin;
 
 /**
  *

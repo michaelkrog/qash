@@ -12,7 +12,7 @@ import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.qash.common.CategoryListPanel;
-import dk.apaq.shopsystem.qash.settings.SettingsDialog;
+import dk.apaq.shopsystem.qash.settings.SettingsDialogForAdmin;
 import dk.apaq.shopsystem.service.OrganisationService;
 
 /**
@@ -39,7 +39,7 @@ public class AdminPanel extends CustomComponent {
 
         @Override
         public void buttonClick(ClickEvent event) {
-            SettingsDialog settingsDialog = new SettingsDialog();
+            SettingsDialogForAdmin settingsDialog = new SettingsDialogForAdmin();
             OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
 
             Organisation org = orgService.readOrganisation();
