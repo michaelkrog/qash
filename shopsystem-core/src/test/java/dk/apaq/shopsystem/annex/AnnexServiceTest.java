@@ -47,6 +47,7 @@ public class AnnexServiceTest extends TestCase {
         org.setPostalCode("9530");
         org.setCity("Stovring");
         org.setCountryCode("DK");
+        org.setAnnexNote("Dette er en note\nPas på den");
         return org;
     }
 
@@ -126,6 +127,7 @@ public class AnnexServiceTest extends TestCase {
         assertNotSame(0, value.length());
         assertTrue(value.contains("Stovringparken"));
         assertTrue(value.contains("Apaq"));
+        assertTrue(value.contains("Dette er en note<br/>Pas p&aring; den"));
     }
     
     public void testGenerateInvoiceHtml() throws Exception {

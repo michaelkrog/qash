@@ -1,7 +1,7 @@
 #set($bodyWidth = $pixelWidth - $pixelMarginLeft)
 #set($bodyWidth = $bodyWidth - $pixelMarginRight)
-#set($bodyFontSize = 18)
-#set($titleFontSize = 28)
+#set($bodyFontSize = 20)
+#set($titleFontSize = 30)
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -56,19 +56,31 @@
                     table-layout:fixed;
                 }
 
-        	.orderline_title{
+        	.orderline_title,
+                .totalline_title{
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     overflow: hidden;
                 }
 
-        	.orderline_total{
+        	.totalline_value,
+                .orderline_total{
                     text-align:right;
                     width:40px;
                 }
 
+                .totalline_title,
+                .totalline_value {
+                    border-top: 1px solid #6f6f6f;
+                    padding-top: 4px
+                    font-size:${titleFontSize}px;
+                    padding-bottom: 4px
+                }
+
+                
+
         	.receiptNote{
-                    margin:10px 5px;
+                    margin:30px 15px;
                     text-align:center;
         	}
 
@@ -94,12 +106,21 @@
         #foreach($orderline in $orderlines)
             <tr>
                 <td class="orderline_title"><div class="orderline_title">$nf.format($orderline.quantity) x $tool.html($orderline.title)</div></td>
-                <td class="orderline_total">$cf2.format($orderline.getTotal())</td>
+                <td class="orderline_total">$cf2.format($orderline.getTotalWithTax())</td>
             </tr>
+
         #end
+            <tr>
+                <td class="totalline_title">Total</td>
+                <td class="totalline_value">$cf2.format($order.getTotalWithTax())</td>
+            </tr>
+            <tr>
+                <td class="orderline_title">Heraf moms</td>
+                <td class="orderline_total">$cf2.format($order.getTotalTax())</td>
+            </tr>
         </table>
-        #if($organisation.getReceiptNote())
-        <div class="receiptNote">$tool.html($organisation.getReceiptNote())</div>
+        #if($organisation.getAnnexNote())
+        <div class="receiptNote">$tool.html($organisation.getAnnexNote()).replaceAll("\n","<br/>")</div>
         #end
     </body>
 </html>
