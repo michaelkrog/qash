@@ -14,11 +14,8 @@ import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.terminal.ThemeResource;
-import com.vaadin.ui.AbstractField.FocusShortcut;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -270,7 +267,7 @@ public class OrderEditor extends CustomComponent implements
         private final Label lbl_invoiceno = new Label("Invoiceno: #12");
         private final Label lbl_dateCreated = new Label("Created: 1/2 2011");
         private final Label lbl_dateDelivered = new Label("Delivered: 1/2 2011");
-        private final Label lbl_customer = new Label("Anonymous Customer");
+        private final Button btn_customer = new Button("Anonymous Customer");
         private final Label lbl_clerk = new Label("Clerk: Hannah Krog");
         private final Label lbl_due = new Label("Due: 0,00");
         private final Label lbl_status = new Label("New");
@@ -289,7 +286,6 @@ public class OrderEditor extends CustomComponent implements
             field_search.setFilterGenerator(filterGenerator);
 
             lbl_orderno.setStyleName(Reindeer.LABEL_H1);
-            lbl_customer.setStyleName(Reindeer.LABEL_H1);
             lbl_status.setStyleName(Reindeer.LABEL_H2);
 
             field_search.setInputPrompt("Search Item");
@@ -302,11 +298,10 @@ public class OrderEditor extends CustomComponent implements
             txt_barcode.setImmediate(true);
             txt_barcode.setStyleName(ShopSystemTheme.TEXTFIELD_BARCODE);
 
-            lbl_customer.setSizeUndefined();
             lbl_clerk.setSizeUndefined();
             lbl_status.setSizeUndefined();
             lbl_due.setSizeUndefined();
-
+            
             outerLayout.addComponent(topLayout);
             outerLayout.addComponent(bottomLayout);
             outerLayout.addComponent(orderlineLayout);
@@ -321,8 +316,8 @@ public class OrderEditor extends CustomComponent implements
 
             topLayout.setMargin(true, true, true, true);
             topLayout.addComponent(lbl_orderno);
-            //topLayout.addComponent(lbl_customer);
-            //topLayout.setComponentAlignment(lbl_customer, Alignment.TOP_RIGHT);
+            topLayout.addComponent(btn_customer);
+            topLayout.setComponentAlignment(btn_customer, Alignment.TOP_RIGHT);
             topLayout.setWidth(100, Component.UNITS_PERCENTAGE);
 
             leftLayout.setMargin(false);
@@ -336,8 +331,8 @@ public class OrderEditor extends CustomComponent implements
             rightLayout.setComponentAlignment(lbl_status, Alignment.TOP_RIGHT);
             rightLayout.addComponent(lbl_due);
             rightLayout.setComponentAlignment(lbl_due, Alignment.TOP_RIGHT);
-            //rightLayout.addComponent(lbl_clerk);
-            //rightLayout.setComponentAlignment(lbl_clerk, Alignment.TOP_RIGHT);
+            rightLayout.addComponent(lbl_clerk);
+            rightLayout.setComponentAlignment(lbl_clerk, Alignment.TOP_RIGHT);
             rightLayout.setSizeFull();
 
             orderlineLayout.setMargin(false, true, false, true);
@@ -349,6 +344,14 @@ public class OrderEditor extends CustomComponent implements
             orderlineLayout.addComponent(btn_advance);
 
             btn_advance.setStyleName(Reindeer.BUTTON_DEFAULT);
+            
+            btn_customer.addListener(new ClickListener() {
+
+                @Override
+                public void buttonClick(ClickEvent event) {
+                    getWindow().showNotification("Change customer");
+                }
+            });
 
             setCompositionRoot(outerLayout);
 
@@ -406,7 +409,7 @@ public class OrderEditor extends CustomComponent implements
         private final HorizontalLayout outerLayout = new HorizontalLayout();
         private final HorizontalLayout leftLayout = new HorizontalLayout();
         private final Label lbl_total = new Label();
-        private final Label lbl_shortcutdescription = new Label("Shortcuts using Ctrl + Shift. S=Search, B=Barcode, A=Add item, P=Print and Enter=Complete order");
+        //private final Label lbl_shortcutdescription = new Label("Shortcuts using Ctrl + Shift. S=Search, B=Barcode, A=Add item, P=Print and Enter=Complete order");
         private final Button btn_vat = new Button();
         private final Button btn_freight = new Button();
         private final Button btn_discount = new Button();
@@ -543,12 +546,6 @@ public class OrderEditor extends CustomComponent implements
             }
         });
 
-        /*header.getSearchField().addShortcutListener(new FocusShortcut(header.getSearchField(), KeyCode.F4, ModifierKey.META));
-        header.getBarcodeField().addShortcutListener(new FocusShortcut(header.getBarcodeField(), KeyCode.F6, ModifierKey.META));
-        header.getButtonAddLine().setClickShortcut(KeyCode.F8, ModifierKey.META);
-        header.getButtonPrint().setClickShortcut(KeyCode.F10, ModifierKey.META);
-        header.getButtonAdvanceOrder().setClickShortcut(KeyCode.F12, ModifierKey.META);*/
-
         header.setWidth("100%");
         footer.setWidth("100%");
         footer.setHeight("27px");
@@ -561,14 +558,15 @@ public class OrderEditor extends CustomComponent implements
 
         header.getButtonPrint().addListener(new ClickListener() {
 
+            @Override
             public void buttonClick(ClickEvent event) {
                 doPrint();
-
             }
         });
 
         header.getButtonAdvanceOrder().addListener(new ClickListener() {
 
+            @Override
             public void buttonClick(ClickEvent event) {
                 Property propStatus = dataSource.getItemProperty("status");
                 OrderStatus status = (OrderStatus) propStatus.getValue();
@@ -1001,7 +999,7 @@ public class OrderEditor extends CustomComponent implements
 
         if (openPayDialog) {
             doPay();
-        }
+        } 
 
     }
 
@@ -1021,6 +1019,7 @@ public class OrderEditor extends CustomComponent implements
         getApplication().getMainWindow().addWindow(dialog);
         dialog.addListener(new Window.CloseListener() {
 
+            @Override
             public void windowClose(CloseEvent e) {
                 if (dialog.getResult() == CommonDialog.ButtonType.Ok) {
                     PaymentType pt = panel.getPaymentType();
@@ -1035,11 +1034,11 @@ public class OrderEditor extends CustomComponent implements
                             addPayment(PaymentType.Change, due);
                         }
 
-                        /*String cookieVal = settings.get(PrinterUtil.PRINT_ON_COMPLETE_SETTING);
+                        String cookieVal = settings.get(PrintFacade.PRINT_ON_COMPLETE_SETTING);
                         boolean print = "true".equalsIgnoreCase(cookieVal);
                         if (print) {
-                        doPrint();
-                        }*/
+                            doPrint();
+                        }
                     }
                 }
             }
