@@ -83,7 +83,7 @@ public class SettingsDialog extends Window {
 
     public void setDatasource(Item datasource) {
         this.datasource = datasource;
-        //receiptForm.setItemDataSource(datasource);
+        receiptForm.setItemDataSource(datasource);
 
         gridPanel.showGrid();
     }

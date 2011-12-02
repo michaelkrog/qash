@@ -32,7 +32,7 @@ public class ReceiptForm extends Form {
 
             if ("annexNote".equals(propertyId)) {
                 f = new TextArea();
-                ((TextArea) f).setInputPrompt("Note at bottom of receipt");
+                ((TextArea) f).setInputPrompt("Note at bottom of receipts");
                 ((TextArea) f).setColumns(25);
             } else {
                 f = super.createField(item, propertyId, uiContext);
