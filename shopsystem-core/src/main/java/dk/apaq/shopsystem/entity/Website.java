@@ -21,40 +21,14 @@ import org.hibernate.annotations.GenericGenerator;
  * Defines a Website.
  */
 @Entity
-public class Website implements Serializable, ContentEntity, HasEnable {
-
-    @Id
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    protected String id;
-
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dateCreated = new Date();
-
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dateChanged = new Date();
+public class Website extends Outlet implements HasEnable {
 
     //This is only mapped here to allow cascading upon website removal..
     @OneToMany(mappedBy = "website", cascade=CascadeType.REMOVE)
     private List<Page> pages;
 
-    @ManyToOne
-    private Organisation organisation;
-
-    private String name;
-
     private String themeName;
     private boolean enabled = true;
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public boolean isEnabled() {
         return enabled;
@@ -64,43 +38,6 @@ public class Website implements Serializable, ContentEntity, HasEnable {
         this.enabled = enabled;
     }
     
-    @Override
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    @Override
-    public void setDateCreated(Date date) {
-        this.dateCreated = date;
-    }
-
-    @Override
-    public Date getDateChanged() {
-        return dateChanged;
-    }
-
-    @Override
-    public void setDateChanged(Date dateChanged) {
-        this.dateChanged = dateChanged;
-    }
-
-    @Override
-    public Organisation getOrganisation() {
-        return organisation;
-    }
-
-    public void setOrganisation(Organisation organisation) {
-        this.organisation = organisation;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getThemeName() {
         return themeName;
     }

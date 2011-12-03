@@ -16,23 +16,8 @@ import org.hibernate.annotations.GenericGenerator;
  *
  */
 @Entity
-public class Store implements Serializable, ContentEntity, HasAddress {
+public class Store extends Outlet implements HasAddress {
 
-    @Id
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    protected String id;
-
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dateCreated = new Date();
-
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dateChanged = new Date();
-
-    @ManyToOne
-    private Organisation organisation;
-
-    private String name;
     private String street;
     private String postalCode;
     private String city;
@@ -41,40 +26,7 @@ public class Store implements Serializable, ContentEntity, HasAddress {
     private String email;
     private String countryCode = "US";
     private String stateOrProvince;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Date date) {
-        this.dateCreated = date;
-    }
-
-    public Date getDateChanged() {
-        return dateChanged;
-    }
-
-    public void setDateChanged(Date dateChanged) {
-        this.dateChanged = dateChanged;
-    }
-
-    @Override
-    public Organisation getOrganisation() {
-        return organisation;
-    }
-
-    public void setOrganisation(Organisation organisation) {
-        this.organisation = organisation;
-    }
-
+    
     public String getCountryCode() {
         return countryCode;
     }
@@ -100,14 +52,6 @@ public class Store implements Serializable, ContentEntity, HasAddress {
 
     public void setFaxNo(String faxNo) {
         this.faxNo = faxNo;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getTelephone() {

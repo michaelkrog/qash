@@ -70,6 +70,10 @@ public class Order implements Serializable, ContentEntity {
     @Embedded
     private ContactInformation recipient;
     
+    private String clerkUserId;
+    private String clerkName;
+    
+    private Outlet outlet;
 
 
     public Order() {
@@ -99,6 +103,14 @@ public class Order implements Serializable, ContentEntity {
         this.dateChanged = dateChanged;
     }
 
+    public Outlet getOutlet() {
+        return outlet;
+    }
+
+    public void setOutlet(Outlet outlet) {
+        this.outlet = outlet;
+    }
+
     /**
      * Retrieves the buyer or null if no buyer has been set no the order.
      */
@@ -116,6 +128,22 @@ public class Order implements Serializable, ContentEntity {
 
     public void setBuyerId(String buyerId) {
         this.buyerId = buyerId;
+    }
+
+    public String getClerkUserId() {
+        return clerkUserId;
+    }
+
+    public void setClerkUserId(String clerkUserId) {
+        this.clerkUserId = clerkUserId;
+    }
+
+    public String getClerkName() {
+        return clerkName;
+    }
+
+    public void setClerkName(String clerk) {
+        this.clerkName = clerk;
     }
     
     /**

@@ -1,7 +1,8 @@
 #set($bodyWidth = $pixelWidth - $pixelMarginLeft)
 #set($bodyWidth = $bodyWidth - $pixelMarginRight)
-#set($bodyFontSize = 20)
-#set($titleFontSize = 30)
+#set($normal-font-size = 20)
+#set($h1-font-size = 30)
+#set($h2-font-size = 24)
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -17,7 +18,7 @@
 
                 body{
                     font-family:verdana;
-                    font-size:${bodyFontSize}px;
+                    font-size:${normal-font-size}px;
                     width:${bodyWidth}px;
                     margin-top: ${pixelMarginTop}px;
                     margin-right: ${pixelMarginRight}px;
@@ -31,7 +32,7 @@
         		margin: 15px 15px 30px 15px;
                         width:100%;
                         overflow:hidden;
-                        font-size:${titleFontSize}px;
+                        font-size:${h1-font-size}px;
 
         	}
 
@@ -71,13 +72,16 @@
 
                 .totalline_title,
                 .totalline_value {
-                    border-top: 1px solid #6f6f6f;
-                    padding-top: 4px;
-                    font-size:${titleFontSize}px;
-                    padding-bottom: 4px;
+                    font-size:${h2-font-size}px;
                 }
 
-                
+                .with-top-padding {
+                    padding-top:10px;
+                }
+    
+                .with-bottom-padding {
+                    padding-bottom:10px;
+                }
 
         	.receiptNote{
                     margin:30px 15px;
@@ -96,8 +100,8 @@
 
         <table class="header" cellpadding="0" cellspacing="0">
             <tr>
-                <td class="datelabel">Dato: $df.format($order.getDateChanged())</td>
-                <td class="orderNolabel">Ordrenr: $order.getNumber()</td>
+                <td class="datelabel">$tool.html($resource.getString("date")): $df.format($order.getDateChanged())</td>
+                <td class="orderNolabel">$tool.html($resource.getString("order_number")): $order.getNumber()</td>
             </tr>
         </table>
 
@@ -111,16 +115,18 @@
 
         #end
             <tr>
-                <td class="totalline_title">Total (inkl. moms $cf2.format($order.getTotalTax()))</td>
-                <td class="totalline_value">$cf2.format($order.getTotalWithTax())</td>
+                <td class="totalline_title with-top-padding with-bottom-padding">$tool.html($resource.getString("total")) ($tool.html($resource.getString("including_tax")) $cf2.format($order.getTotalTax()))</td>
+                <td class="totalline_value with-top-padding with-bottom-padding">$cf2.format($order.getTotalWithTax())</td>
             </tr>
 
         #foreach($payment in $payments)
             <tr>
-                <td class="orderline_title"><div class="orderline_title">$payment.getPaymentType()</div></td>
+                <td class="orderline_title"><div class="orderline_title">$tool.html($resource.getString($payment.getPaymentType().name()))</div></td>
                 <td class="orderline_total">$cf2.format($payment.getAmount())</td>
             </tr>
         #end
+
+
         </table>
         #if($organisation.getAnnexNote())
         <div class="receiptNote">$tool.html($organisation.getAnnexNote()).replaceAll("\n","<br/>")</div>
