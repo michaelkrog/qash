@@ -28,7 +28,7 @@ import java.text.NumberFormat;
  */
 public class PaymentPanel extends CustomComponent implements Property, Property.Editor {
 
-    private static final PaymentType[] PAYMENTTYPES = {PaymentType.Cash, PaymentType.CreditCard, PaymentType.Transfer};
+    private static final PaymentType[] PAYMENTTYPES = {PaymentType.Cash, PaymentType.Card, PaymentType.Transfer};
     private static final String[] PAYMENTTYPEICONS = {"img/cash_16.png", "img/creditcard_16.png", "img/transfer_16.png"};
     private String currency = "USD";
     private ObjectProperty changeProperty = new ObjectProperty(new Double(0.0));

@@ -1,1 +1,14 @@
 @import "button-text-only.css";
+
+/*.v-nativebutton-multiline {
+      text-align:left;
+      background:white;
+      border:1px solid #e1e1e1;
+      border-radius:5px;
+      vertical-align: top;
+}
+
+.v-nativebutton-multiline .v-nativebutton-caption {
+      white-space: pre;
+      height:100%;
+}*/

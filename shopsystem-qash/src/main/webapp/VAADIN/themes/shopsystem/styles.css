@@ -6,39 +6,9 @@
 @import "navigationpanel/navigationpanel.css";
 @import "layout/layout.css";
 
-/* Top gradient in website editor */
-/*.v-WebsiteEditor{
-    background: white url(img/gradient-bg.png) repeat-x;
-}*/
-
-/* Title matching top gradient in website editor*/
-/*.v-WebsiteEditor .title{
-    font-family: "Helvetica Neue", helvetica, arial, sans-serif;
-    font-weight: bold;
-    font-size: 24px;
-    line-height: 28px;
-    color: #1E2229;
-    letter-spacing: -0.015em;
-    text-shadow: 0 2px 1px #C0C1C2;
-    padding: 7px 0 8px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}*/
-
-/*.v-WebsiteEditor .v-horizontallayout-title {
-    background: transparent url(img/title-border.png) repeat-x 0 41px;
-    padding-bottom: 10px;
-}
-
-.v-WebsiteEditor .v-horizontallayout-title .v-nativebutton {
-    padding-top: 18px;
-    display: block;
-    margin: 0 0 0 10px;
-}*/
 
 
-/* The black bubble panel */
+/* IS THIS IN USE???? The black bubble panel */
 .v-panel-bubble {
     background: #1E2123 url(img/info-bubble-bg.png) repeat-y;
     color: #B8BBBE;
@@ -88,6 +58,11 @@
     text-shadow: none;
     padding: 0;
     height: auto;
+}
+
+
+.white .v-label-highlight {
+    color: #c10000;
 }
 
 /* CATEGORY LIST */
@@ -348,7 +323,7 @@
 .v-button.v-button-CategoryGrid,
 .v-button.v-button-IconButton{
     width:80px;
-    height:80px;
+    height:76px;
 }
 
 .v-button.v-button-CategoryGrid img,

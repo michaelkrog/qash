@@ -15,6 +15,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.event.ShortcutListener;
+import com.vaadin.terminal.Resource;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -27,6 +28,7 @@ import com.vaadin.ui.Embedded;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout.MarginInfo;
+import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.Select;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TableFieldFactory;
@@ -260,16 +262,19 @@ public class OrderEditor extends CustomComponent implements
 
         private final VerticalLayout outerLayout = new VerticalLayout();
         private final HorizontalLayout topLayout = new HorizontalLayout();
+        private final HorizontalLayout topButtonLayout = new HorizontalLayout();
+        private final VerticalLayout topInfoLayout = new VerticalLayout();
         private final VerticalLayout leftLayout = new VerticalLayout();
         private final VerticalLayout rightLayout = new VerticalLayout();
         private final HorizontalLayout bottomLayout = new HorizontalLayout();
-        private final Label lbl_orderno = new Label("#12");
+        private final Label lbl_title = new Label("#12");
         private final Label lbl_invoiceno = new Label("Invoiceno: #12");
         private final Label lbl_dateCreated = new Label("Created: 1/2 2011");
         private final Label lbl_dateDelivered = new Label("Delivered: 1/2 2011");
-        private final Button btn_customer = new Button("Anonymous Customer");
-        private final Label lbl_clerk = new Label("Clerk: Hannah Krog");
-        private final Label lbl_due = new Label("Due: 0,00");
+        //private final Button btn_shipping = new Button("Shipping");
+        private final Button btn_recipient = new Button("Customer & Recipient");
+        private final Button btn_payments = new Button("Payments");
+        //private final Label lbl_clerk = new Label("Clerk: Hannah Krog");
         private final Label lbl_status = new Label("New");
         private final TextField txt_barcode = new TextField();
         private final Button btn_addLine = new Button("Add non-stock item");
@@ -277,6 +282,9 @@ public class OrderEditor extends CustomComponent implements
         private final Button btn_advance = new Button("Invoice");
         private final SearchField field_search = new SearchField();
         private final ProductFilterGenerator filterGenerator = new ProductFilterGenerator();
+        private final Resource resource_shipping_icon = new ThemeResource("img/shipping_48.png");
+        private final Resource resource_recipient_icon = new ThemeResource("img/recipient_48.png");
+        private final Resource resource_payments_icon = new ThemeResource("img/payments_48.png");
         private HorizontalLayout orderlineLayout = new HorizontalLayout();
         private Property property;
         private boolean enabled = true;
@@ -285,7 +293,7 @@ public class OrderEditor extends CustomComponent implements
 
             field_search.setFilterGenerator(filterGenerator);
 
-            lbl_orderno.setStyleName(Reindeer.LABEL_H1);
+            lbl_title.setStyleName(Reindeer.LABEL_H1);
             lbl_status.setStyleName(Reindeer.LABEL_H2);
 
             field_search.setInputPrompt("Search Item");
@@ -298,9 +306,8 @@ public class OrderEditor extends CustomComponent implements
             txt_barcode.setImmediate(true);
             txt_barcode.setStyleName(ShopSystemTheme.TEXTFIELD_BARCODE);
 
-            lbl_clerk.setSizeUndefined();
+            //lbl_clerk.setSizeUndefined();
             lbl_status.setSizeUndefined();
-            lbl_due.setSizeUndefined();
             
             outerLayout.addComponent(topLayout);
             outerLayout.addComponent(bottomLayout);
@@ -315,24 +322,32 @@ public class OrderEditor extends CustomComponent implements
 
 
             topLayout.setMargin(true, true, true, true);
-            topLayout.addComponent(lbl_orderno);
-            topLayout.addComponent(btn_customer);
-            topLayout.setComponentAlignment(btn_customer, Alignment.TOP_RIGHT);
+            topLayout.addComponent(topInfoLayout);
+            topLayout.addComponent(topButtonLayout);
+            topLayout.setComponentAlignment(topButtonLayout, Alignment.TOP_RIGHT);
             topLayout.setWidth(100, Component.UNITS_PERCENTAGE);
 
+            topInfoLayout.addComponent(lbl_title);
+            topInfoLayout.addComponent(lbl_status);
+            topInfoLayout.addComponent(lbl_invoiceno);
+            
+            topButtonLayout.addComponent(btn_recipient);
+            //topButtonLayout.addComponent(btn_shipping);
+            topButtonLayout.addComponent(btn_payments);
+            
+            topButtonLayout.setSpacing(true);
+            
             leftLayout.setMargin(false);
-            leftLayout.addComponent(lbl_invoiceno);
+            //leftLayout.addComponent(lbl_invoiceno);
             leftLayout.addComponent(lbl_dateCreated);
             leftLayout.addComponent(lbl_dateDelivered);
             leftLayout.setSizeFull();
 
             rightLayout.setMargin(false);
-            rightLayout.addComponent(lbl_status);
-            rightLayout.setComponentAlignment(lbl_status, Alignment.TOP_RIGHT);
-            rightLayout.addComponent(lbl_due);
-            rightLayout.setComponentAlignment(lbl_due, Alignment.TOP_RIGHT);
-            rightLayout.addComponent(lbl_clerk);
-            rightLayout.setComponentAlignment(lbl_clerk, Alignment.TOP_RIGHT);
+            //rightLayout.addComponent(lbl_status);
+            //rightLayout.setComponentAlignment(lbl_status, Alignment.TOP_RIGHT);
+            //rightLayout.addComponent(lbl_clerk);
+            //rightLayout.setComponentAlignment(lbl_clerk, Alignment.TOP_RIGHT);
             rightLayout.setSizeFull();
 
             orderlineLayout.setMargin(false, true, false, true);
@@ -345,7 +360,14 @@ public class OrderEditor extends CustomComponent implements
 
             btn_advance.setStyleName(Reindeer.BUTTON_DEFAULT);
             
-            btn_customer.addListener(new ClickListener() {
+            //btn_shipping.setStyleName("IconButton");
+            //btn_shipping.setIcon(resource_shipping_icon);
+            btn_recipient.setStyleName("IconButton");
+            btn_recipient.setIcon(resource_recipient_icon);
+            btn_payments.setStyleName("IconButton");
+            btn_payments.setIcon(resource_payments_icon);
+            
+            btn_recipient.addListener(new ClickListener() {
 
                 @Override
                 public void buttonClick(ClickEvent event) {
@@ -371,16 +393,12 @@ public class OrderEditor extends CustomComponent implements
             return lbl_invoiceno;
         }
 
-        public Label getLabelOrderno() {
-            return lbl_orderno;
+        public Label getLabelTitle() {
+            return lbl_title;
         }
 
-        public Label getLabelStatus() {
+        public Label getLabelInfo() {
             return lbl_status;
-        }
-
-        public Label getLabelDue() {
-            return lbl_due;
         }
 
         public Button getButtonAdvanceOrder() {
@@ -738,7 +756,7 @@ public class OrderEditor extends CustomComponent implements
     private void update() {
 
 
-        String numberString = "";
+        String titleString = "";
         String invoiceNumberString = "";
         String createdString = "";
         String invoicedString = "";
@@ -746,7 +764,8 @@ public class OrderEditor extends CustomComponent implements
         String changeString = "";
         boolean completed = false;
         boolean paid = false;
-
+        boolean highlightInfo = false;
+            
 
         if (dataSource != null) {
             long number = (Long) dataSource.getItemProperty("number").getValue();
@@ -756,7 +775,9 @@ public class OrderEditor extends CustomComponent implements
 
             OrderStatus status = (OrderStatus) dataSource.getItemProperty("status").getValue();
 
-            numberString = number < 0 ? "New Order" : "#" + number;
+            titleString = number < 0 ? "New Order" : "#" + number;
+            titleString = titleString + ": " + getStatusString(status);
+            
             invoiceNumberString = "InvoiceNo.: " + (invoiceNumber > 0 ? invoiceNumber : "-");
             createdString = "Created: " + dateFormat.format(created);
             invoicedString = "Invoiced: " + (invoiced == null ? "-" : dateFormat.format(invoiced));
@@ -764,11 +785,14 @@ public class OrderEditor extends CustomComponent implements
 
             double due = getDue();
             double change = getChange();
+            double paidAmount = getPaidValue() + change;
+            
             if (status.isConfirmedState()) {
                 if (due > 0) {
+                    highlightInfo = true;
                     statusString = "Due: " + numberFormat.format(due);
                 } else {
-                    changeString = "Change: " + numberFormat.format(change);
+                    statusString = "Paid: " + numberFormat.format(paidAmount) + " (Change: " + numberFormat.format(change) + ")";
                 }
             }
             completed = status.isConfirmedState();
@@ -776,13 +800,18 @@ public class OrderEditor extends CustomComponent implements
 
         }
 
-        header.getLabelDue().setValue(changeString);
-        header.getLabelOrderno().setValue(numberString);
+        header.getLabelTitle().setValue(titleString);
+        header.getLabelInfo().setValue(statusString);
+        if(highlightInfo) {
+            header.getLabelInfo().addStyleName("highlight");
+        } else {
+            header.getLabelInfo().removeStyleName("highlight");
+        }
+
         header.getLabelInvoiceno().setValue(invoiceNumberString);
         header.getLabelDateCreated().setValue(createdString);
         header.getLabelDateDelivered().setValue(invoicedString);
-        header.getLabelStatus().setValue(statusString);
-
+        
         if (!completed) {
             header.getButtonAdvanceOrder().setCaption("Conclude");
             header.getButtonAdvanceOrder().setEnabled(true);
@@ -921,6 +950,7 @@ public class OrderEditor extends CustomComponent implements
     }
 
     private String getStatusString(OrderStatus status) {
+        
         if (status.isConfirmedState()) {
             return status.name();
         }
