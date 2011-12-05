@@ -16,7 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Inheritance(strategy= InheritanceType.TABLE_PER_CLASS)
-public abstract class AbstractCompany implements BasicEntity, Serializable, Company {
+public abstract class AbstractCompany implements BasicEntity, Serializable, Company, HasContactInformation {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")

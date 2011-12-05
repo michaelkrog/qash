@@ -19,6 +19,15 @@ public class Address implements Serializable, HasAddress {
 
     public Address() {
     }
+    
+    public Address(HasAddress hasAddress) {
+        this.street = hasAddress.getStreet();
+        this.stateOrProvince = hasAddress.getStateOrProvince();
+        this.postalCode = hasAddress.getPostalCode();
+        this.city = hasAddress.getCity();
+        this.countryCode = hasAddress.getCountryCode();
+    }
+
 
     public Address(String street, String postalCode, String city, String stateOrProvince, String countryCode) {
         this.street = street;

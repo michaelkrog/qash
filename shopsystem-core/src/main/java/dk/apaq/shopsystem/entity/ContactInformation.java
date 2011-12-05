@@ -11,18 +11,41 @@ import javax.persistence.InheritanceType;
  * @author krog
  */
 @Embeddable
-public class ContactInformation extends Address implements Serializable {
+public class ContactInformation implements Serializable, HasContactInformation {
     
     private String companyName;
     private String companyRegistration;
     private String contactName;
     private String telephone;
     private String email;
-
+    private String street;
+    private String city;
+    private String stateOrProvince;
+    private String postalCode;
+    private String countryCode;
+    
     public ContactInformation(){}
 
+    public ContactInformation(HasContactInformation hasContactInformation){
+        this(hasContactInformation.getCompanyName(),
+            null,
+            hasContactInformation.getContactName(),
+            hasContactInformation.getTelephone(),
+            hasContactInformation.getEmail(),
+            hasContactInformation.getStreet(),
+            hasContactInformation.getPostalCode(),
+            hasContactInformation.getCity(),
+            hasContactInformation.getStateOrProvince(),
+            hasContactInformation.getCountryCode());
+        
+    }
+
     public ContactInformation(String companyName, String companyRegistration, String contactName, String telephone, String email, String street, String postalCode, String city, String stateOrProvince, String countryCode) {
-        super(street, postalCode, city, stateOrProvince, countryCode);
+        this.street = street;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.stateOrProvince = stateOrProvince;
+        this.countryCode = countryCode;
         this.companyName = companyName;
         this.companyRegistration = companyRegistration;
         this.contactName = contactName;
@@ -30,6 +53,7 @@ public class ContactInformation extends Address implements Serializable {
         this.email = email;
     }
     
+    @Override
     public String getCompanyName() {
         return companyName;
     }
@@ -46,6 +70,7 @@ public class ContactInformation extends Address implements Serializable {
         this.companyRegistration = companyRegistration;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
@@ -54,6 +79,7 @@ public class ContactInformation extends Address implements Serializable {
         this.email = email;
     }
 
+    @Override
     public String getContactName() {
         return contactName;
     }
@@ -62,6 +88,7 @@ public class ContactInformation extends Address implements Serializable {
         this.contactName = contactName;
     }
 
+    @Override
     public String getTelephone() {
         return telephone;
     }
@@ -70,5 +97,72 @@ public class ContactInformation extends Address implements Serializable {
         this.telephone = telephone;
     }
     
+    /**
+     * Retrieves the ciy name.
+     */
+    @Override
+    public String getCity() {
+        return city;
+    }
+
+    /**
+     * Sets the city name.
+     */
+    @Override
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    /**
+     * Get countrycode.
+     */
+    @Override
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    /**
+     * Sets countrycode.
+     */
+    @Override
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    @Override
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    @Override
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    /**
+     * Retrieves state(fx 'Alabama') or province(fx 'Nordjylland'). 
+     */
+    @Override
+    public String getStateOrProvince() {
+        return stateOrProvince;
+    }
+
+    /**
+     * Sets state(fx 'Alabama') or province(fx 'Nordjylland').
+      */
+    @Override
+    public void setStateOrProvince(String stateOrProvince) {
+        this.stateOrProvince = stateOrProvince;
+    }
+
+    @Override
+    public String getStreet() {
+        return street;
+    }
+
+    @Override
+    public void setStreet(String street) {
+        this.street = street;
+    }
     
 }
