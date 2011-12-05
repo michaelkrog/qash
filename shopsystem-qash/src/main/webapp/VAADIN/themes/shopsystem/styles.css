@@ -65,6 +65,10 @@
     color: #c10000;
 }
 
+.v-addresslabel .v-label {
+    line-height:14px;
+}
+
 /* CATEGORY LIST */
 .v-categorylist .v-button {
     font-size: 11px;

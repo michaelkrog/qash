@@ -279,7 +279,7 @@ public class OrderEditor extends CustomComponent implements
         private final Label lbl_dateCreated = new Label("Created: 1/2 2011");
         private final Label lbl_dateDelivered = new Label("Delivered: 1/2 2011");
         //private final Button btn_shipping = new Button("Shipping");
-        private final Button btn_customer = new Button("Customer & Recipient");
+        private final Button btn_customer = new Button("Customer");
         private final Button btn_payments = new Button("Payments");
         //private final Label lbl_clerk = new Label("Clerk: Hannah Krog");
         private final Label lbl_status = new Label("New");
@@ -314,6 +314,8 @@ public class OrderEditor extends CustomComponent implements
             txt_barcode.setImmediate(true);
             txt_barcode.setStyleName(ShopSystemTheme.TEXTFIELD_BARCODE);
 
+            lbl_dateCreated.setSizeUndefined();
+            lbl_dateDelivered.setSizeUndefined();
             //lbl_clerk.setSizeUndefined();
             lbl_status.setSizeUndefined();
             
@@ -346,14 +348,16 @@ public class OrderEditor extends CustomComponent implements
             topButtonLayout.setSpacing(true);
             
             leftLayout.setMargin(false);
-            //leftLayout.addComponent(lbl_invoiceno);
-            leftLayout.addComponent(lbl_dateCreated);
-            leftLayout.addComponent(lbl_dateDelivered);
+            leftLayout.addComponent(customerAddress);
+            //leftLayout.addComponent(lbl_dateCreated);
+            //leftLayout.addComponent(lbl_dateDelivered);
             leftLayout.setSizeFull();
 
             rightLayout.setMargin(false);
-            rightLayout.addComponent(customerAddress);
-            rightLayout.setComponentAlignment(customerAddress, Alignment.TOP_RIGHT);
+            rightLayout.addComponent(lbl_dateCreated);
+            rightLayout.setComponentAlignment(lbl_dateCreated, Alignment.TOP_RIGHT);
+            rightLayout.addComponent(lbl_dateDelivered);
+            rightLayout.setComponentAlignment(lbl_dateDelivered, Alignment.TOP_RIGHT);
             //rightLayout.addComponent(lbl_clerk);
             //rightLayout.setComponentAlignment(lbl_clerk, Alignment.TOP_RIGHT);
             rightLayout.setSizeFull();
@@ -375,14 +379,6 @@ public class OrderEditor extends CustomComponent implements
             btn_payments.setStyleName("IconButton");
             btn_payments.setIcon(resource_payments_icon);
             
-            btn_customer.addListener(new ClickListener() {
-
-                @Override
-                public void buttonClick(ClickEvent event) {
-                    getWindow().showNotification("Change customer");
-                }
-            });
-
             setCompositionRoot(outerLayout);
 
             setStyleName("v-ordereditor-header");
@@ -568,6 +564,8 @@ public class OrderEditor extends CustomComponent implements
         table.addGeneratedColumn("delete", new DeleteColumnGenerator());
         table.setSizeFull();
         table.setTableFieldFactory(fieldFactory);
+        
+        header.getCustomerLabel().setNullRepresentation("Anonymous Customer");
 
         this.orderlineContainer.addListener(new Container.ItemSetChangeListener() {
 
@@ -648,7 +646,11 @@ public class OrderEditor extends CustomComponent implements
                             order.setBuyer(new ContactInformation(customer));
                             hasChanges = true;
                             
+                        }
+                        
+                        if(hasChanges) {
                             commit();
+                            update();
                         }
                     }
                 });
@@ -963,7 +965,8 @@ public class OrderEditor extends CustomComponent implements
         header.getBarcodeField().setEnabled(editable);
         header.getButtonAddLine().setEnabled(editable);
         header.getButtonPrint().setEnabled(!editable);
-
+        header.getToolbarButtonCustomers().setEnabled(editable);
+        
         table.setEditable(editable);
 
     }
