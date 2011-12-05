@@ -657,6 +657,20 @@ public class OrderEditor extends CustomComponent implements
                 getWindow().addWindow(commonDialog);
             }
         });
+        
+        header.getToolbarButtonPayments().addListener(new ClickListener() {
+
+            @Override
+            public void buttonClick(ClickEvent event) {
+                final Table table = new Table();
+                CrudContainer<String, Payment> container = new CrudContainer<String, Payment>(organisationService.getPayments(), Payment.class);
+                container.setFilter(new CompareFilter("orderId", getOrderFromDatasource().getId(), CompareFilter.CompareType.Equals));
+                table.setContainerDataSource(container);
+                table.setVisibleColumns(new Object[]{"dateCreated", "paymentType", "amount"});
+                final CommonDialog commonDialog = new CommonDialog("Betalinger", table, CommonDialog.ButtonType.Close);
+                getWindow().addWindow(commonDialog);
+            }
+        });
 
         header.getButtonAddLine().addListener(new ClickListener() {
 
