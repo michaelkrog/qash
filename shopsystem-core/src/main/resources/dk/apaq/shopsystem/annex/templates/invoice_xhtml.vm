@@ -105,7 +105,7 @@
                     <td class="right">#if($organisation.getCompanyRegistration())$tool.html($resource.getString("vatno")): $tool.html($organisation.getCompanyRegistration())#end</td>
                 </tr>
                 <tr>
-                    <td><!--$contact-->#if($order.getBuyer().getContactName())$tool.html($order.getBuyer().getContactName())#end</td>
+                    <td>Att: <!--$contact-->#if($order.getBuyer().getContactName())$tool.html($order.getBuyer().getContactName())#end</td>
                     <td class="right">#if($organisation.getStreet())$tool.html($organisation.getStreet())#end</td>
                 </tr>
                 <tr>
