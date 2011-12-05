@@ -1,6 +1,8 @@
 package dk.apaq.shopsystem.qash;
 
+import com.vaadin.data.Container;
 import com.vaadin.data.Item;
+import com.vaadin.data.Property;
 import com.vaadin.event.Action;
 import com.vaadin.event.Action.Handler;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -27,11 +29,12 @@ import dk.apaq.shopsystem.qash.common.CustomerFilterGenerator;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
+import java.util.Collection;
 
 /**
  * A List for products including filtering and editing.
  */
-public class CustomerList extends CustomComponent {
+public class CustomerList extends CustomComponent implements Property, Property.Editor, Container, Container.Editor {
 
     private static final String[] COLUMNS = {"companyName", "contactName", "email"};
     private final Action editAction = new Action("Edit");
@@ -150,6 +153,106 @@ public class CustomerList extends CustomComponent {
     }
 
     @Override
+    public Object getValue() {
+        return table.getValue();
+    }
+
+    @Override
+    public void setValue(Object newValue) throws ReadOnlyException, ConversionException {
+        table.setValue(newValue);
+    }
+
+    @Override
+    public Class<?> getType() {
+        return table.getType();
+    }
+    
+    @Override
+    public Item getItem(Object itemId) {
+        return table.getItem(itemId);
+    }
+
+    @Override
+    public Collection<?> getContainerPropertyIds() {
+        return table.getContainerPropertyIds();
+    }
+
+    @Override
+    public Collection<?> getItemIds() {
+        return table.getItemIds();
+    }
+
+    @Override
+    public Property getContainerProperty(Object itemId, Object propertyId) {
+        return table.getContainerProperty(itemId, propertyId);
+    }
+
+    @Override
+    public Class<?> getType(Object propertyId) {
+        return table.getType(propertyId);
+    }
+
+    @Override
+    public int size() {
+        return table.size();
+    }
+
+    @Override
+    public boolean containsId(Object itemId) {
+        return table.containsId(itemId);
+    }
+
+    @Override
+    public Item addItem(Object itemId) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Object addItem() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean removeItem(Object itemId) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean addContainerProperty(Object propertyId, Class<?> type, Object defaultValue) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean removeContainerProperty(Object propertyId) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean removeAllItems() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    @Override
+    public void setPropertyDataSource(Property newDataSource) {
+        table.setPropertyDataSource(newDataSource);
+    }
+
+    @Override
+    public Property getPropertyDataSource() {
+        return table.getPropertyDataSource();
+    }
+
+    @Override
+    public void setContainerDataSource(Container newDataSource) {
+        throw new UnsupportedOperationException("Not supported. Use setCustomerCrud.");
+    }
+
+    @Override
+    public Container getContainerDataSource() {
+        return table.getContainerDataSource();
+    }
+    
+    @Override
     public void attach() {
         super.attach();
         refreshCustomerContainer();
@@ -165,15 +268,6 @@ public class CustomerList extends CustomComponent {
         dialog.setHeight(370, Component.UNITS_PIXELS);
         dialog.center();
         
-        /*
-        final CustomerEditor editor = new CustomerEditor();
-        //editor.setWriteThrough(false);
-
-        final CommonDialog dialog = new CommonDialog("Edit Customer", editor, CommonDialog.ButtonType.Close);
-        dialog.setWidth(400, Component.UNITS_PIXELS);
-        dialog.setHeight(285, Component.UNITS_PIXELS);
-        dialog.center();
-        dialog.setDefaultButtonType(CommonDialog.ButtonType.Close);*/
         getApplication().getMainWindow().addWindow(dialog);
 
         
@@ -191,4 +285,7 @@ public class CustomerList extends CustomComponent {
         }
     }
 
+    
+    
+    
 }

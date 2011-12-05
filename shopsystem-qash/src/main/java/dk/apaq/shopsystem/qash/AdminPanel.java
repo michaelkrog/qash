@@ -106,10 +106,7 @@ public class AdminPanel extends CustomComponent {
 
         storeList.setCrud(orgService.getStores());
 
-        salesView.setOrderCrud(orgService.getOrders());
-        salesView.setPaymentCrud(orgService.getPayments());
-        salesView.setProductCrud(orgService.getProducts());
-        salesView.setTaxCrud(orgService.getTaxes());
+        salesView.setOrganisationService(orgService);
         salesView.setAnnexService(annexService);
 
     }

@@ -78,11 +78,8 @@ public class RegisterPanel extends CustomComponent {
         Organisation org = orgService.readOrganisation();
         this.datasource = new BeanItem(org);
 
-        salesView.setOrderCrud(orgService.getOrders());
-        salesView.setPaymentCrud(orgService.getPayments());
-        salesView.setProductCrud(orgService.getProducts());
-        salesView.setTaxCrud(orgService.getTaxes());
         salesView.setAnnexService(annexService);
+        salesView.setOrganisationService(orgService);
 
     }
 

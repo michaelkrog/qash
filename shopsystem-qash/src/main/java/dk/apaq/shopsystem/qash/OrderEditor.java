@@ -54,12 +54,16 @@ import dk.apaq.shopsystem.annex.AnnexType;
 import dk.apaq.shopsystem.annex.CommercialDocumentContent;
 import dk.apaq.shopsystem.annex.Page;
 import dk.apaq.shopsystem.annex.PageSize;
+import dk.apaq.shopsystem.entity.ContactInformation;
+import dk.apaq.shopsystem.entity.Customer;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderLineTax;
 import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.entity.Product;
+import dk.apaq.shopsystem.entity.Tax;
+import dk.apaq.shopsystem.qash.common.AddressLabel;
 import dk.apaq.shopsystem.qash.common.CommonDialog;
 import dk.apaq.shopsystem.qash.common.ProductFilterGenerator;
 import dk.apaq.shopsystem.qash.common.SearchField;
@@ -73,6 +77,8 @@ import dk.apaq.shopsystem.qash.data.util.NumberValidator;
 import dk.apaq.shopsystem.qash.data.util.PercentageFormatter;
 import dk.apaq.shopsystem.qash.data.util.PercentageValidator;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
+import dk.apaq.vaadin.addon.crudcontainer.CrudItem;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
 import dk.apaq.vaadin.addon.crudcontainer.HasBean;
 import java.awt.print.Printable;
@@ -127,6 +133,7 @@ public class OrderEditor extends CustomComponent implements
     private SystemSettings settings;
     private final PaymentChangeListener paymentChangeListener = new PaymentChangeListener();
     private final OrderChangeListener orderChangeListener = new OrderChangeListener();
+    private OrganisationService organisationService;
     private AnnexService annexService;
     
     private class OrderChangeListener implements Item.PropertySetChangeListener {
@@ -272,10 +279,11 @@ public class OrderEditor extends CustomComponent implements
         private final Label lbl_dateCreated = new Label("Created: 1/2 2011");
         private final Label lbl_dateDelivered = new Label("Delivered: 1/2 2011");
         //private final Button btn_shipping = new Button("Shipping");
-        private final Button btn_recipient = new Button("Customer & Recipient");
+        private final Button btn_customer = new Button("Customer & Recipient");
         private final Button btn_payments = new Button("Payments");
         //private final Label lbl_clerk = new Label("Clerk: Hannah Krog");
         private final Label lbl_status = new Label("New");
+        private final AddressLabel customerAddress = new AddressLabel();
         private final TextField txt_barcode = new TextField();
         private final Button btn_addLine = new Button("Add non-stock item");
         private final Button btn_print = new Button("Print");
@@ -331,7 +339,7 @@ public class OrderEditor extends CustomComponent implements
             topInfoLayout.addComponent(lbl_status);
             topInfoLayout.addComponent(lbl_invoiceno);
             
-            topButtonLayout.addComponent(btn_recipient);
+            topButtonLayout.addComponent(btn_customer);
             //topButtonLayout.addComponent(btn_shipping);
             topButtonLayout.addComponent(btn_payments);
             
@@ -344,8 +352,8 @@ public class OrderEditor extends CustomComponent implements
             leftLayout.setSizeFull();
 
             rightLayout.setMargin(false);
-            //rightLayout.addComponent(lbl_status);
-            //rightLayout.setComponentAlignment(lbl_status, Alignment.TOP_RIGHT);
+            rightLayout.addComponent(customerAddress);
+            rightLayout.setComponentAlignment(customerAddress, Alignment.TOP_RIGHT);
             //rightLayout.addComponent(lbl_clerk);
             //rightLayout.setComponentAlignment(lbl_clerk, Alignment.TOP_RIGHT);
             rightLayout.setSizeFull();
@@ -362,12 +370,12 @@ public class OrderEditor extends CustomComponent implements
             
             //btn_shipping.setStyleName("IconButton");
             //btn_shipping.setIcon(resource_shipping_icon);
-            btn_recipient.setStyleName("IconButton");
-            btn_recipient.setIcon(resource_recipient_icon);
+            btn_customer.setStyleName("IconButton");
+            btn_customer.setIcon(resource_recipient_icon);
             btn_payments.setStyleName("IconButton");
             btn_payments.setIcon(resource_payments_icon);
             
-            btn_recipient.addListener(new ClickListener() {
+            btn_customer.addListener(new ClickListener() {
 
                 @Override
                 public void buttonClick(ClickEvent event) {
@@ -412,6 +420,14 @@ public class OrderEditor extends CustomComponent implements
         public Button getButtonPrint() {
             return btn_print;
         }
+        
+        public Button getToolbarButtonCustomers() {
+            return btn_customer;
+        }
+        
+        public Button getToolbarButtonPayments() {
+            return btn_payments;
+        }
 
         public TextField getBarcodeField() {
             return txt_barcode;
@@ -419,6 +435,10 @@ public class OrderEditor extends CustomComponent implements
 
         public SearchField getSearchField() {
             return field_search;
+        }
+        
+        public AddressLabel getCustomerLabel() {
+            return customerAddress;
         }
     }
 
@@ -598,6 +618,43 @@ public class OrderEditor extends CustomComponent implements
 
             }
         });
+        
+        header.getToolbarButtonCustomers().addListener(new ClickListener() {
+
+            @Override
+            public void buttonClick(ClickEvent event) {
+                final CustomerList customerList = new CustomerList();
+                customerList.setCustomerCrud(organisationService.getCustomers());
+                final CommonDialog commonDialog = new CommonDialog("Vælg kunde", customerList, CommonDialog.ButtonType.Close, CommonDialog.ButtonType.Cancel, CommonDialog.ButtonType.Ok);
+                commonDialog.setButtonCaption(CommonDialog.ButtonType.Close, "Anonym kunde");
+                commonDialog.addListener(new Window.CloseListener() {
+
+                    @Override
+                    public void windowClose(CloseEvent e) {
+                        Order order = getOrderFromDatasource();
+                        if(commonDialog.getResult() == CommonDialog.ButtonType.Close) {
+                            order.setBuyerId(null);
+                            order.setBuyer(null);
+                            hasChanges = true;
+                        }
+                        
+                        if(commonDialog.getResult() == CommonDialog.ButtonType.Ok) {
+                            String id = (String) customerList.getValue();
+                            if(id == null) return;
+                            CrudItem<String, Customer> item = (CrudItem<String, Customer>) customerList.getItem(id);
+                            Customer customer = item.getBean();
+                            
+                            order.setBuyerId(customer.getId());
+                            order.setBuyer(new ContactInformation(customer));
+                            hasChanges = true;
+                            
+                            commit();
+                        }
+                    }
+                });
+                getWindow().addWindow(commonDialog);
+            }
+        });
 
         header.getButtonAddLine().addListener(new ClickListener() {
 
@@ -686,7 +743,8 @@ public class OrderEditor extends CustomComponent implements
 
     }
 
-    public void setPaymentDatasource(Container container) {
+    @Deprecated
+    private void setPaymentDatasource(Container container) {
         if (this.paymentContainer != null && this.paymentContainer instanceof Container.ItemSetChangeNotifier) {
             ((Container.ItemSetChangeNotifier) this.paymentContainer).removeListener(paymentChangeListener);
         }
@@ -703,26 +761,30 @@ public class OrderEditor extends CustomComponent implements
         }
 
 
+    }
 
-        //this.header.getSearchField().setContainerDataSource(container);
+    public void setOrganisationService(OrganisationService organisationService) {
+        this.organisationService = organisationService;
+        
+        //products
+        this.productCrud = organisationService.getProducts();
+        this.productContainer = new CrudContainer(productCrud, Product.class);
+        if (this.productContainer instanceof FilterableContainer) {
+            ((FilterableContainer) this.productContainer).setSorter(productSorter);
+        }
+        this.header.getSearchField().setContainerDataSource(this.productContainer);
+        
+        //taxes
+        this.taxContainer = new CrudContainer(organisationService.getTaxes(), Tax.class);
+        
+        //payments
+        setPaymentDatasource(new CrudContainer(organisationService.getPayments(), Payment.class));
     }
 
     public void setAnnexService(AnnexService annexService) {
         this.annexService = annexService;
     }
     
-    public void setProductDatasource(Container container) {
-        this.productContainer = container;
-        if (this.productContainer instanceof FilterableContainer) {
-            ((FilterableContainer) this.productContainer).setSorter(productSorter);
-        }
-        this.header.getSearchField().setContainerDataSource(container);
-    }
-
-    public void setTaxDataSource(Container container) {
-        this.taxContainer = container;
-    }
-
     public void setItemDataSource(com.vaadin.data.Item newDataSource) {
 
         if (this.dataSource != null && (this.dataSource instanceof Item.PropertySetChangeNotifier)) {
@@ -774,6 +836,9 @@ public class OrderEditor extends CustomComponent implements
             Date invoiced = (Date) dataSource.getItemProperty("dateInvoiced").getValue();
 
             OrderStatus status = (OrderStatus) dataSource.getItemProperty("status").getValue();
+            
+            ContactInformation ci = (ContactInformation) dataSource.getItemProperty("buyer").getValue();
+            header.getCustomerLabel().setAddress(ci);
 
             titleString = number < 0 ? "New Order" : "#" + number;
             titleString = titleString + ": " + getStatusString(status);
@@ -898,25 +963,6 @@ public class OrderEditor extends CustomComponent implements
         header.getBarcodeField().setEnabled(editable);
         header.getButtonAddLine().setEnabled(editable);
         header.getButtonPrint().setEnabled(!editable);
-
-        /*
-        if (editable) {
-        if (!hasEditableColumns) {
-        table.addGeneratedColumn("price", editableColumnGenerator);
-        table.addGeneratedColumn("priceWithTax", editableColumnGenerator);
-        table.addGeneratedColumn("discountPercentage", editableColumnGenerator);
-        table.addGeneratedColumn("quantity", editableColumnGenerator);
-        //table.addGeneratedColumn("totalWithTax", updateableTotalGenerator);
-        hasEditableColumns = true;
-        }
-        } else {
-        table.removeGeneratedColumn("price");
-        table.removeGeneratedColumn("priceWithTax");
-        table.removeGeneratedColumn("quantity");
-        table.removeGeneratedColumn("discountPercentage");
-        //table.removeGeneratedColumn("totalWithTax");
-        hasEditableColumns = false;
-        }*/
 
         table.setEditable(editable);
 

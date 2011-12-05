@@ -16,6 +16,7 @@ import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Tax;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import dk.apaq.vaadin.addon.crudcontainer.SortableCrudContainer;
 
@@ -26,12 +27,13 @@ public class SalesView extends CustomComponent {
 
     private final TabSheet tabSheet = new TabSheet();
     private final OrderList orderList = new OrderList();
-    private Container productContainer;
+    //private Container productContainer;
     private SortableCrudContainer orderContainer;
-    private Container taxContainer;
+    //private Container taxContainer;
     private Crud.Complete<String, Product> productCrud;
     private Crud.Editable<String, Payment> paymentCrud;
     private OrderEditor chosenEditor = null;
+    private OrganisationService organisationService;
     private AnnexService annexService;
     
     public SalesView() {
@@ -100,12 +102,13 @@ public class SalesView extends CustomComponent {
     private OrderEditor createEditor(Item item) {
         OrderEditor editor = new OrderEditor();
         editor.setSizeFull();
-        editor.setPaymentDatasource(new CrudContainer(paymentCrud, Payment.class));
-        editor.setTaxDataSource(taxContainer);
-        editor.setProductDatasource(productContainer);
-        editor.setItemDataSource(item);
-        editor.setProductCrud(productCrud);
+        editor.setOrganisationService(organisationService);
         editor.setAnnexService(annexService);
+        //editor.setPaymentDatasource(new CrudContainer(paymentCrud, Payment.class));
+        //editor.setTaxDataSource(taxContainer);
+        //editor.setProductDatasource(productContainer);
+        editor.setItemDataSource(item);
+        //editor.setProductCrud(productCrud);
         return editor;
     }
 
@@ -160,27 +163,18 @@ public class SalesView extends CustomComponent {
         }
     }
 
+    public void setOrganisationService(OrganisationService organisationService) {
+        this.organisationService = organisationService;
+        
+        initOrderListView();
+        this.orderContainer = new SortableCrudContainer(organisationService.getOrders(), Order.class);
+        orderList.setContainerDataSource(orderContainer);
+        
+        this.paymentCrud = organisationService.getPayments();
+    }
+
     public void setAnnexService(AnnexService annexService) {
         this.annexService = annexService;
     }
     
-    public void setOrderCrud(Crud.Complete<String, Order> orderCrud) {
-        initOrderListView();
-        this.orderContainer = new SortableCrudContainer(orderCrud, Order.class);
-        orderList.setContainerDataSource(orderContainer);
-    }
-
-    public void setTaxCrud(Crud.Editable<String, Tax> taxCrud) {
-        this.taxContainer = new CrudContainer(taxCrud, Tax.class);
-    }
-
-    public void setProductCrud(Crud.Complete<String, Product> productCrud) {
-        this.productContainer = new CrudContainer(productCrud, Product.class);
-        this.productCrud = productCrud;
-    }
-
-    public void setPaymentCrud(Crud.Editable<String, Payment> paymentCrud) {
-        this.paymentCrud = paymentCrud;
-    }
-
 }
