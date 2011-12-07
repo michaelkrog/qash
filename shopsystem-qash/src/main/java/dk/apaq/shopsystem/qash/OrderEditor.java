@@ -1047,7 +1047,6 @@ public class OrderEditor extends CustomComponent implements
                 printType = AnnexType.valueOf(strPrintType);
             }
 
-            OrganisationService organisationService = VaadinServiceHolder.getService(getApplication());
             Order order = (Order) ((HasBean<Order>) dataSource).getBean();
             
             List<Payment> payments = organisationService.getPayments().list(new CompareFilter("orderId", order.getId(), CompareFilter.CompareType.Equals), null);

@@ -75,10 +75,11 @@ public class SettingsDialogForAdmin extends Window {
         });
     }
 
-    public void setService(OrganisationService service) {
+    public void setOrganisationService(OrganisationService service) {
         this.service = service;
         organisationForm.setService(service);
         currencyAndTaxPanel.setService(service);
+        userManagerPanel.setOrgansiationService(service);
     }
 
     public void setDatasource(Item datasource) {

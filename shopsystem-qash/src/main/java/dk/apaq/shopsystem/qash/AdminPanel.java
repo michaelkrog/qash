@@ -28,7 +28,7 @@ public class AdminPanel extends CustomComponent {
     private final SiteHeader header;
     private final VerticalLayout outerLayout = new VerticalLayout();
     private final AnnexService annexService;
-    private BeanItem datasource;
+    private OrganisationService organisationService;
     private final Button btnSettings = new Button("Settings");
     private final Link linkHelp = new Link("Help", new ExternalResource("http://help.qashapp.com"), "Help", 500, 500, Link.TARGET_BORDER_MINIMAL);
     private final Link linkLogout = new Link("Log out", new ExternalResource("/logout"));
@@ -40,12 +40,11 @@ public class AdminPanel extends CustomComponent {
         @Override
         public void buttonClick(ClickEvent event) {
             SettingsDialogForAdmin settingsDialog = new SettingsDialogForAdmin();
-            OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
-
-            Organisation org = orgService.readOrganisation();
+            
+            Organisation org = organisationService.readOrganisation();
             Item datasource = new BeanItem(org);
 
-            settingsDialog.setService(orgService);
+            settingsDialog.setOrganisationService(organisationService);
             settingsDialog.setDatasource(datasource);
 
             getApplication().getMainWindow().addWindow(settingsDialog);
@@ -55,6 +54,8 @@ public class AdminPanel extends CustomComponent {
     public AdminPanel(SiteHeader siteHeader, AnnexService annexService) {
         this.header = siteHeader;
         this.annexService = annexService;
+        
+        salesView.setAnnexService(annexService);
 
         stockWidget.setSizeFull();
         salesView.setSizeFull();
@@ -91,23 +92,19 @@ public class AdminPanel extends CustomComponent {
 
     }
 
-    @Override
-    public void attach() {
-        OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
+    public void setOrganisationService(OrganisationService organisationService) {
+        this.organisationService = organisationService;
+    
+        
+        stockWidget.setProductCrud(organisationService.getProducts());
+        stockWidget.setTaxCrud(organisationService.getTaxes());
 
-        Organisation org = orgService.readOrganisation();
-        this.datasource = new BeanItem(org);
+        customerList.setCustomerCrud(organisationService.getCustomers());
 
+        storeList.setCrud(organisationService.getStores());
 
-        stockWidget.setProductCrud(orgService.getProducts());
-        stockWidget.setTaxCrud(orgService.getTaxes());
-
-        customerList.setCustomerCrud(orgService.getCustomers());
-
-        storeList.setCrud(orgService.getStores());
-
-        salesView.setOrganisationService(orgService);
-        salesView.setAnnexService(annexService);
+        salesView.setOrganisationService(organisationService);
+        
 
     }
 

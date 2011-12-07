@@ -24,7 +24,7 @@ public class RegisterPanel extends CustomComponent {
     private final SalesView salesView = new SalesView();
     private final SiteHeader header;
     private final AnnexService annexService;
-    private BeanItem datasource;
+    private OrganisationService organisationService;
     private final Button btnSettings = new Button("Settings");
     private final Link linkHelp = new Link("Help", new ExternalResource("http://help.qashapp.com"), "Help", 500, 500, Link.TARGET_BORDER_MINIMAL);
     private final Link linkLogout = new Link("Log out", new ExternalResource("/logout"));
@@ -35,12 +35,11 @@ public class RegisterPanel extends CustomComponent {
         @Override
         public void buttonClick(ClickEvent event) {
             SettingsDialogForRegister settingsDialog = new SettingsDialogForRegister();
-            OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
-
-            Organisation org = orgService.readOrganisation();
+            
+            Organisation org = organisationService.readOrganisation();
             Item datasource = new BeanItem(org);
 
-            settingsDialog.setService(orgService);
+            settingsDialog.setService(organisationService);
             settingsDialog.setDatasource(datasource);
 
             getApplication().getMainWindow().addWindow(settingsDialog);
@@ -52,6 +51,7 @@ public class RegisterPanel extends CustomComponent {
         this.annexService = annexService;
 
         salesView.setSizeFull();
+        salesView.setAnnexService(annexService);
         
         siteHeader.addLink(linkDashboard);
         siteHeader.addButton(btnSettings);
@@ -70,17 +70,10 @@ public class RegisterPanel extends CustomComponent {
 
     }
 
-    @Override
-    public void attach() {
-        //This should be cleaned up
-        OrganisationService orgService = VaadinServiceHolder.getService(getApplication());
-
-        Organisation org = orgService.readOrganisation();
-        this.datasource = new BeanItem(org);
-
-        salesView.setAnnexService(annexService);
-        salesView.setOrganisationService(orgService);
-
+    public void setOrganisationService(OrganisationService organisationService) {
+        this.organisationService = organisationService;
+        salesView.setOrganisationService(organisationService);
     }
 
+    
 }

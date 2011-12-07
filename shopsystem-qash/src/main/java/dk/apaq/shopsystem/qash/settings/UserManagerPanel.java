@@ -17,7 +17,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.entity.BaseUser;
 import dk.apaq.shopsystem.entity.Tax;
-import dk.apaq.shopsystem.qash.VaadinServiceHolder;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
@@ -39,7 +38,7 @@ public class UserManagerPanel extends CustomComponent {
     private final Button btnNewUser = new Button("New user");
     private final Button btnRemoveUser = new Button("Remove user");
     private Container userContainer;
-    private OrganisationService service;
+    private OrganisationService organsiationService;
 
     private class ListSelectionHandler implements ValueChangeListener {
 
@@ -178,16 +177,16 @@ public class UserManagerPanel extends CustomComponent {
 
             public void buttonClick(ClickEvent event) {
                 String id = (String) userList.getValue();
-                service.getUsers().delete(id);
+                organsiationService.getUsers().delete(id);
             }
         });
 
     }
 
-    @Override
-    public void attach() {
-        this.service = VaadinServiceHolder.getService(getApplication());
-        this.userList.setContainerDataSource(new CrudContainer(service.getUsers(), BaseUser.class));
+    public void setOrgansiationService(OrganisationService organsiationService) {
+        this.organsiationService = organsiationService;
+    
+        this.userList.setContainerDataSource(new CrudContainer(organsiationService.getUsers(), BaseUser.class));
     }
 
 

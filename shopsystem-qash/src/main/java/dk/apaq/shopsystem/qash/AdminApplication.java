@@ -119,7 +119,6 @@ public class AdminApplication extends Application implements HttpServletRequestL
             return;
         }
         
-        VaadinServiceHolder.setService(this, service.getOrganisationService(org));
         siteHeader = new AutopilotSiteHeader();
         adminPanel = new AdminPanel(siteHeader, annexService);
         

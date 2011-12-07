@@ -27,6 +27,7 @@ import dk.apaq.filter.core.OrFilter;
 import dk.apaq.filter.sort.SortDirection;
 import dk.apaq.filter.sort.Sorter;
 import dk.apaq.shopsystem.entity.OrderStatus;
+import dk.apaq.shopsystem.entity.Outlet;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.shopsystem.qash.data.util.CurrencyColumnGenerator;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
@@ -59,6 +60,7 @@ public class OrderList extends CustomComponent implements
     private final ThemeResource resourceDelete = new ThemeResource("img/clear.png");
     private final CurrencyColumnGenerator currencyColumnGenerator = new CurrencyColumnGenerator();
     private final Sorter sorter = new Sorter("number", SortDirection.Descending);
+    private Outlet outlet;
 
 
     private class DeleteColumnGenerator implements Table.ColumnGenerator {
@@ -175,6 +177,10 @@ public class OrderList extends CustomComponent implements
 
             public void buttonClick(ClickEvent event) {
                 Object id = container.addItem();
+                Item item = table.getItem(id);
+                
+                //Set the outlet for the order
+                item.getItemProperty("outlet").setValue(outlet);
                 table.select(id);
             }
         });
@@ -237,4 +243,9 @@ public class OrderList extends CustomComponent implements
         return table.getType();
     }
 
+    public void setOutlet(Outlet outlet) {
+        this.outlet = outlet;
+    }
+    
+    
 }

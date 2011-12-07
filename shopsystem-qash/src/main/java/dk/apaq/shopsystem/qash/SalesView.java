@@ -13,6 +13,7 @@ import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Order;
+import dk.apaq.shopsystem.entity.Outlet;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Tax;
@@ -27,14 +28,13 @@ public class SalesView extends CustomComponent {
 
     private final TabSheet tabSheet = new TabSheet();
     private final OrderList orderList = new OrderList();
-    //private Container productContainer;
     private SortableCrudContainer orderContainer;
-    //private Container taxContainer;
     private Crud.Complete<String, Product> productCrud;
     private Crud.Editable<String, Payment> paymentCrud;
     private OrderEditor chosenEditor = null;
     private OrganisationService organisationService;
     private AnnexService annexService;
+    private Outlet outlet;
     
     public SalesView() {
         
@@ -104,11 +104,7 @@ public class SalesView extends CustomComponent {
         editor.setSizeFull();
         editor.setOrganisationService(organisationService);
         editor.setAnnexService(annexService);
-        //editor.setPaymentDatasource(new CrudContainer(paymentCrud, Payment.class));
-        //editor.setTaxDataSource(taxContainer);
-        //editor.setProductDatasource(productContainer);
         editor.setItemDataSource(item);
-        //editor.setProductCrud(productCrud);
         return editor;
     }
 
@@ -173,6 +169,11 @@ public class SalesView extends CustomComponent {
         this.paymentCrud = organisationService.getPayments();
     }
 
+    public void setOutlet(Outlet outlet) {
+        this.outlet = outlet;
+        orderList.setOutlet(outlet);
+    }
+    
     public void setAnnexService(AnnexService annexService) {
         this.annexService = annexService;
     }

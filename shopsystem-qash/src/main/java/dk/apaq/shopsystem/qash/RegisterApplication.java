@@ -7,6 +7,8 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.Store;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.vaadin.addon.printservice.VaadinPrintPdfPlugin;
 import dk.apaq.vaadin.addon.printservice.VaddinPrintAppletPlugin;
@@ -31,6 +33,7 @@ public class RegisterApplication extends Application implements HttpServletReque
     private AnnexService annexService;
     private SystemService service;
     private String organisationId;
+    private String storeId;
 
     /**
      * Called on each new request. The method will detect which id is written in the url and then the
@@ -49,8 +52,16 @@ public class RegisterApplication extends Application implements HttpServletReque
         int idStartIndex = path.lastIndexOf("/");
         if(idStartIndex>=0) {
             String tmp = path.substring(idStartIndex + 1);
-            if(tmp.startsWith("id:")) {
-                this.organisationId = tmp.substring(3);
+            if(tmp.startsWith("org/")) {
+                String data = tmp.substring(4);
+                String[] dataArray = data.split("/");
+                
+                if(dataArray.length<2) {
+                    getMainWindow().showNotification("Url should contain organsiationid and storeid");
+                    return;
+                }
+                this.organisationId = dataArray[0];
+                this.storeId = dataArray[1];
                 updateStore();
             }
         }
@@ -100,7 +111,7 @@ public class RegisterApplication extends Application implements HttpServletReque
      * Updates the organisation for this application and adds listeners for the cruds.
      */
     private void updateStore() {
-        if (service == null || this.organisationId == null) {
+        if (service == null || this.organisationId == null || this.storeId == null) {
             return;
         }
 
@@ -114,8 +125,10 @@ public class RegisterApplication extends Application implements HttpServletReque
             getMainWindow().showNotification("Organsiation with id "+organisationId+" does not exist.", Window.Notification.TYPE_ERROR_MESSAGE);
             return;
         }
+        
+        OrganisationService orgService = service.getOrganisationService(org);
+        Store store = orgService.getStores().read(storeId);
 
-        VaadinServiceHolder.setService(this, service.getOrganisationService(org));
         siteHeader = new AutopilotSiteHeader();
         registerPanel = new RegisterPanel(siteHeader, annexService);
 
