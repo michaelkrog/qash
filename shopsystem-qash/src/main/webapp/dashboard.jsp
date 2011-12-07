@@ -155,7 +155,7 @@ String since30DaysString = df.format(since30Days);
                             } else {
                                 for(Store store : storeList) {
                                     out.println("<tr class=\"oddrow\"><td colspan=\"5\">-&nbsp;");
-                                    out.println("<a icon=\"hyperlink\" href=\"/register/id:" + org.getId() + "\">");
+                                    out.println("<a icon=\"hyperlink\" href=\"/register/org/" + org.getId() + "/" + store.getId() + "\">");
                                     out.println("<b>");
                                     out.println(StringEscapeUtils.escapeHtml(store.getName()));
                                     out.println("</b>");
