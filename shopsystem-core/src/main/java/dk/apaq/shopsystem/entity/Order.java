@@ -73,7 +73,10 @@ public class Order implements Serializable, ContentEntity {
     private String clerkUserId;
     private String clerkName;
     
+    @ManyToOne
     private Outlet outlet;
+    
+    private boolean paid;
 
 
     public Order() {
@@ -130,6 +133,14 @@ public class Order implements Serializable, ContentEntity {
         this.buyerId = buyerId;
     }
 
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+    
     public String getClerkUserId() {
         return clerkUserId;
     }

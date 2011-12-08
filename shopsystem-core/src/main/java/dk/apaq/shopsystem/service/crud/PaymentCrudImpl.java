@@ -45,7 +45,7 @@ public class PaymentCrudImpl extends ContentCrud<Payment> {
 
     }
 
-    public void update(Payment entity, Order order) {
+    private void update(Payment entity, Order order) {
         LOG.debug("Updating payment [id={}]", entity.getId());
 
         Payment existingPayment = read(entity.getId());
@@ -79,6 +79,7 @@ public class PaymentCrudImpl extends ContentCrud<Payment> {
 
         if(due - entity.getAmount() <=0 && order.getStatus()!=OrderStatus.Completed) {
             order.setStatus(OrderStatus.Completed);
+            order.setPaid(true);
             orderCrud.update(order);
         }
 

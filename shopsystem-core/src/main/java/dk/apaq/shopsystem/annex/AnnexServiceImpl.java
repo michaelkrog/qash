@@ -179,7 +179,7 @@ public class AnnexServiceImpl implements AnnexService {
                 generateXhtmlOrderAnnex(context, template);
 
                 Document dom2 = XMLResource.load(new ByteArrayInputStream(baos4.toByteArray())).getDocument();
-                Java2DRenderer renderer2 = new Java2DRenderer(dom2, page.getSize().getPixelWidth(), -1);
+                Java2DRenderer renderer2 = new Java2DRenderer(dom2, page.getSize().getWidth().getPixels(), -1);
 
                 BufferedImage image = renderer2.getImage();
                 ImageIO.write(image, "PNG", orgOut);
@@ -192,7 +192,7 @@ public class AnnexServiceImpl implements AnnexService {
                 generateXhtmlOrderAnnex(context, template);
 
                 XHTMLPanel panel = new XHTMLPanel();
-                panel.setSize(page.getSize().getPixelWidth(), page.getSize().getPixelHeight());
+                panel.setSize(page.getSize().getWidth().getPixels(), page.getSize().getHeight().getPixels());
                 panel.setDocument(new ByteArrayInputStream(baos.toByteArray()), "");
 
                 XHTMLPrintable printable = new ExtendedXHtmlPrintable(panel);
@@ -219,7 +219,7 @@ public class AnnexServiceImpl implements AnnexService {
         generateXhtmlOrderAnnex(new AnnexContext<CommercialDocumentContent, OutputStream>(context, baos), template);
 
         XHTMLPanel panel = new XHTMLPanel();
-        panel.setSize(page.getSize().getPixelWidth(), page.getSize().getPixelHeight());
+        panel.setSize(page.getSize().getWidth().getPixels(), page.getSize().getHeight().getPixels());
         //DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         panel.setDocument(new ByteArrayInputStream(baos.toByteArray()), "");
 
@@ -275,14 +275,20 @@ public class AnnexServiceImpl implements AnnexService {
         context.put("resource", rb);
         context.put("locale", locale);
         context.put("tool", new VelocityTool());
-        context.put("pageWidth", annexcontext.getPage().getSize().getWidth());
-        context.put("pageHeight", annexcontext.getPage().getSize().getHeight());
-        context.put("pixelWidth", page.getSize().getPixelWidth());
-        context.put("pixelHeight", annexcontext.getPage().getSize().getPixelHeight());
-        context.put("pixelMarginTop", page.getTopMargin());
-        context.put("pixelMarginRight", page.getRightMargin());
-        context.put("pixelMarginBottom", page.getBottomMargin());
-        context.put("pixelMarginLeft", page.getLeftMargin());
+        
+        context.put("pageWidth",        page.getSize().getWidth().getMillimetres());
+        context.put("pageHeight",       page.getSize().getHeight().getMillimetres());
+        context.put("pageMarginTop",    page.getTopMargin().getMillimetres());
+        context.put("pageMarginRight",  page.getRightMargin().getMillimetres());
+        context.put("pageMarginBottom", page.getBottomMargin().getMillimetres());
+        context.put("pageMarginLeft",   page.getLeftMargin().getMillimetres());
+        
+        context.put("pixelWidth",        page.getSize().getWidth().getPixels());
+        context.put("pixelHeight",       page.getSize().getHeight().getPixels());
+        context.put("pixelMarginTop",    page.getTopMargin().getPixels());
+        context.put("pixelMarginRight",  page.getRightMargin().getPixels());
+        context.put("pixelMarginBottom", page.getBottomMargin().getPixels());
+        context.put("pixelMarginLeft",   page.getLeftMargin().getPixels());
 
         Writer writer = new OutputStreamWriter(annexcontext.getOutput(), "utf-8");
 

@@ -37,7 +37,6 @@ public class OrderCrudImpl extends ContentCrud<Order> {
         return id;
     }
 
-
     @Override
     public Order read(String id) {
         Order order = super.read(id);
@@ -48,13 +47,13 @@ public class OrderCrudImpl extends ContentCrud<Order> {
     @Transactional
     public void update(Order entity) {
         fireOnBeforeUpdate(entity.getId(), entity);
-        if(entity.getStatus() == OrderStatus.New) {
+        if (entity.getStatus() == OrderStatus.New) {
             entity.setStatus(OrderStatus.Processing);
         }
 
         Order existingOrder = read(entity.getId());
 
-        if(existingOrder.getStatus() == OrderStatus.Completed) {
+        if (existingOrder.getStatus() == OrderStatus.Completed) {
             throw new ServiceException("The order has already been marked as completed. Cannot persist it anymore.");
         }
 
@@ -63,28 +62,28 @@ public class OrderCrudImpl extends ContentCrud<Order> {
         }
         checkStatusChange(existingOrder, entity);
 
-        boolean pickFromStock = (existingOrder.getStatus().ordinal() < OrderStatus.Accepted.ordinal()) &&
-                                (entity.getStatus().ordinal() >= OrderStatus.Accepted.ordinal());
+        boolean changeToAccepted = (existingOrder.getStatus().ordinal() < OrderStatus.Accepted.ordinal())
+                && (entity.getStatus().ordinal() >= OrderStatus.Accepted.ordinal());
 
-        if(pickFromStock) {
+        if (changeToAccepted) {
             for (int i = 0; i < entity.getOrderLineCount(); i++) {
-            OrderLine line = entity.getOrderLine(i);
-            String itemid = line.getItemId();
-            if (itemid != null) {
-                if(inventoryManager.isStockItem(itemid)) {
-                    inventoryManager.pullFromStock(itemid, line.getQuantity());
+                OrderLine line = entity.getOrderLine(i);
+                String itemid = line.getItemId();
+                if (itemid != null) {
+                    if (inventoryManager.isStockItem(itemid)) {
+                        inventoryManager.pullFromStock(itemid, line.getQuantity());
+                    }
                 }
             }
-        }
 
             long invoicenumber = getNextSequence(em,
-                                        organisation.getId() + "_InvoiceSequence",
-                                        organisation.getInitialInvoiceNumber());
+                    organisation.getId() + "_InvoiceSequence",
+                    organisation.getInitialInvoiceNumber());
 
             Date invoiceDate = new Date();
             Date timelyPayment = new Date(invoiceDate.getTime() + (DAYINMILLIS * organisation.getDefaultPaymentPeriodInDays()));
 
-                entity.setInvoiceNumber(invoicenumber);
+            entity.setInvoiceNumber(invoicenumber);
             entity.setDateInvoiced(invoiceDate);
             entity.setDateTimelyPayment(timelyPayment);
         }
@@ -93,16 +92,15 @@ public class OrderCrudImpl extends ContentCrud<Order> {
         fireOnUpdate(entity.getId(), entity);
     }
 
-
     private void checkStatusChange(Order existingOrder, Order newOrder) {
         OrderStatus currentStatus = existingOrder.getStatus();
         OrderStatus newStatus = newOrder.getStatus();
 
-        if(newStatus == OrderStatus.New) {
+        if (newStatus == OrderStatus.New) {
             throw new ServiceException("An order cannot be persisted as new. Persist as processing instead.");
         }
 
-        if(currentStatus.isConfirmedState() && !newStatus.isConfirmedState()) {
+        if (currentStatus.isConfirmedState() && !newStatus.isConfirmedState()) {
             throw new ServiceException("Existing order is confirmed and can not be changed to a non confirmed state.");
         }
     }
@@ -118,7 +116,7 @@ public class OrderCrudImpl extends ContentCrud<Order> {
             try {
 
                 sequence = em.find(Sequence.class, id);
-                if(sequence == null) {
+                if (sequence == null) {
                     if (initialSequence < 1) {
                         initialSequence = 1;
                     }
@@ -127,7 +125,7 @@ public class OrderCrudImpl extends ContentCrud<Order> {
                     sequence.setId(id);
                     sequence.setSequence(initialSequence);
                 } else {
-                        sequence.incrementSequence();
+                    sequence.incrementSequence();
                 }
 
                 nextSequence = sequence.getSequence();

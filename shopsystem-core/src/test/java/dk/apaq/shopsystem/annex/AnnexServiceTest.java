@@ -138,7 +138,7 @@ public class AnnexServiceTest extends TestCase {
         //FileOutputStream out = new FileOutputStream("invoice.html");
         
         CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
-        Page page = new Page(PageSize.A4, 5, 5, 5, 5);
+        Page page = new Page(PageSize.A4, 7, 7, 7, 7);
         AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
         annexService.generateInvoice(context, OutputType.Html);
         
@@ -151,6 +151,10 @@ public class AnnexServiceTest extends TestCase {
         assertTrue(value.contains("Apple"));
         assertTrue(value.contains("Steve Jobs"));
         assertTrue(value.contains("Infinite loop"));
+        
+        assertTrue(value.contains(page.getLeftMargin().getMillimetres() + "mm"));
+        assertTrue(value.contains(page.getSize().getWidth().getMillimetres() + "mm"));
+        
     }
     
     public void testGenerateInvoicePdf() throws Exception {
@@ -182,8 +186,8 @@ public class AnnexServiceTest extends TestCase {
         AnnexContext<CommercialDocumentContent, Void> context = new AnnexContext<CommercialDocumentContent, Void>(content, null, page, Locale.getDefault());
         Printable p = annexService.generatePrintableInvoice(context);
         
-        int width = page.getSize().getPixelWidth();
-        int height = page.getSize().getPixelHeight();
+        int width = page.getSize().getWidth().getPixels();
+        int height = page.getSize().getHeight().getPixels();
         
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         PageFormat pf = new PageFormat();
@@ -221,13 +225,13 @@ public class AnnexServiceTest extends TestCase {
     
      public void testGenerateInvoicePngBundle() throws Exception{
         Organisation org = getOrganisation();
-        Order order = getOrder(1);
+        Order order = getOrder(30);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         //FileOutputStream out = new FileOutputStream("invoice_png.zip");
 
         CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
-        Page page = new Page(PageSize.A4);
+        Page page = new Page(PageSize.A4, 7);
         AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
         annexService.generateInvoice(context, OutputType.PngBundle);
 

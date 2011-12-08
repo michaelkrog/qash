@@ -41,9 +41,9 @@ public class PostscriptAnnexPrinter implements AnnexPrinter{
         sps = factories[0].getPrintService(output);
 
         PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
-        MediaSizeName mediaSizeName = MediaSize.findMedia(pageSize.getWidth(), pageSize.getHeight(), MediaSize.MM);
+        MediaSizeName mediaSizeName = MediaSize.findMedia(pageSize.getWidth().getMillimetres(), pageSize.getHeight().getMillimetres(), MediaSize.MM);
         aset.add(mediaSizeName);
-        aset.add(new MediaPrintableArea(0, 0, pageSize.getWidth(), pageSize.getHeight(), Size2DSyntax.MM));
+        aset.add(new MediaPrintableArea(0, 0, pageSize.getWidth().getMillimetres(), pageSize.getHeight().getMillimetres(), Size2DSyntax.MM));
         Doc doc = new SimpleDoc(printable, flavor, null);
 
         DocPrintJob job = sps.createPrintJob();

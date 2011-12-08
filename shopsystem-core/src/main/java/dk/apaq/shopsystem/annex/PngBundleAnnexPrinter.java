@@ -24,8 +24,8 @@ public class PngBundleAnnexPrinter implements AnnexPrinter {
     public void print(Printable printable, PageSize pageSize, OutputStream output) throws Exception {
         BufferedImage page;
         Graphics g;
-        int width = pageSize.getPixelWidth();
-        int height = pageSize.getPixelHeight();
+        int width = pageSize.getWidth().getPixels();
+        int height = pageSize.getHeight().getPixels();
 
         PageFormat pf = new PageFormat();
         Paper paper = new Paper();

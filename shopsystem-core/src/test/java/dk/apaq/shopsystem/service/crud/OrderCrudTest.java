@@ -18,6 +18,7 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.entity.Store;
+import dk.apaq.shopsystem.service.OrganisationService;
 import java.util.Date;
 import java.util.List;
 import org.junit.After;
@@ -100,12 +101,18 @@ public class OrderCrudTest {
         System.out.println("update");
         Crud.Editable<String, Organisation> orgcrud = service.getOrganisationCrud();
         Organisation organisation = orgcrud.read(orgcrud.create());
-        Crud.Complete<String, Order> crud = service.getOrganisationService(organisation).getOrders();
+        OrganisationService organisationService = service.getOrganisationService(organisation);
+        Crud.Complete<String, Order> crud = organisationService.getOrders();
         Order result = crud.read(crud.create());
 
         ContactInformation ci = new ContactInformation();
         ci.setContactName("Kaj");
         result.setBuyer(ci);
+        
+        Store store = organisationService.getStores().read(organisationService.getStores().create());
+        store.setName("butik");
+        organisationService.getStores().update(store);
+        result.setOutlet(store);
 
         assertNotNull(result);
         assertNotNull(result.getId());

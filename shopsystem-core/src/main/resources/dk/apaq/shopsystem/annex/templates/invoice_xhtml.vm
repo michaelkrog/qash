@@ -1,5 +1,6 @@
 #set($bodyWidth = $pixelWidth - $pixelMarginLeft)
 #set($bodyWidth = $bodyWidth - $pixelMarginRight)
+#set($bodyWidth = $bodyWidth - 5)
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -7,7 +8,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>Invoice</title>
         <style>
-            @page { size: ${pageWidth}mm ${pageHeight}mm; margin:0mm; }
+            @page { 
+                size: ${pageWidth}mm ${pageHeight}mm;
+                margin: ${pageMarginTop}mm ${pageMarginRight}mm ${pageMarginBottom}mm ${pageMarginLeft}mm; 
+            }
 
 
             .left{
@@ -48,9 +52,14 @@
                 padding-right:4px;
             }
 
+            td{
+                font-size:10px;
+            }
+            
             th{
                 color:#4f4f4f;
                 text-transform: uppercase;
+                font-size:10px;
 }
 
             .header table td{
@@ -69,11 +78,12 @@
                 font-size:10px;
                 font-family: helvetica;
                 width:${bodyWidth}px;
-                margin-top: ${pixelMarginTop}px;
+                /*margin-top: ${pixelMarginTop}px;
                 margin-right: ${pixelMarginRight}px;
                 margin-bottom: ${pixelMarginBottom}px;
-                margin-left: ${pixelMarginLeft}px;
-                padding: 0;
+                margin-left: ${pixelMarginLeft}px;*/
+                padding: 0px;
+                margin:0px;
             }
 
             .title{
@@ -105,7 +115,7 @@
                     <td class="right">#if($organisation.getCompanyRegistration())$tool.html($resource.getString("vatno")): $tool.html($organisation.getCompanyRegistration())#end</td>
                 </tr>
                 <tr>
-                    <td>Att: <!--$contact-->#if($order.getBuyer().getContactName())$tool.html($order.getBuyer().getContactName())#end</td>
+                    <td><!--$contact-->#if($order.getBuyer().getContactName())Att: $tool.html($order.getBuyer().getContactName())#end</td>
                     <td class="right">#if($organisation.getStreet())$tool.html($organisation.getStreet())#end</td>
                 </tr>
                 <tr>
