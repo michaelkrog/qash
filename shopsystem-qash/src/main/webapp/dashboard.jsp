@@ -137,7 +137,7 @@ String since30DaysString = df.format(since30Days);
                             out.println("<td>" + orderCount + " <span class=\"light\">(" + noLimit+ ")</span> </td>");
                             out.println("<td>" + itemCount + " <span class=\"light\">(" + noLimit+ ")</span></td>");
                             out.println("<td>");
-                            out.println("<a icon=\"hyperlink\" href=\"/admin/id:" + org.getId() + "\">");
+                            out.println("<a icon=\"hyperlink\" href=\"/admin/org/" + org.getId() + "\">");
                             out.println(res.getString("dashboard.administer"));
                             out.println("</a>");
                             out.println("</td>");

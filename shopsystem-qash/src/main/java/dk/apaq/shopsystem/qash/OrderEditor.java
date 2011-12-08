@@ -1055,7 +1055,7 @@ public class OrderEditor extends CustomComponent implements
             PrinterJob pj;
             CommercialDocumentContent cdc = new CommercialDocumentContent(organisationService.readOrganisation(), order, payments);
             if(printType == AnnexType.Receipt) {
-                Page page = new Page(PageSize.A4, 5, 5, 5, 5);
+                Page page = new Page(PageSize.A4, 2, 2, 2, 2);
                 AnnexContext<CommercialDocumentContent, Void> annexContext = new AnnexContext<CommercialDocumentContent, Void>(cdc, null, page, Locale.getDefault());
                 Printable printable =annexService.generatePrintableReceipt(annexContext);
             
@@ -1063,7 +1063,7 @@ public class OrderEditor extends CustomComponent implements
                 Paper paper = Paper.A4;
                 pj = PrinterJob.getBuilder(printer, printable).setPaper(paper).setName("Receipt_"+order.getNumber()).build();
             } else {
-                Page page = new Page(PageSize.A4, 15, 15, 15, 15);
+                Page page = new Page(PageSize.A4, 7, 7, 7, 7);
                 AnnexContext<CommercialDocumentContent, Void> annexContext = new AnnexContext<CommercialDocumentContent, Void>(cdc, null, page, Locale.getDefault());
                 Printable printable =annexService.generatePrintableInvoice(annexContext);
             

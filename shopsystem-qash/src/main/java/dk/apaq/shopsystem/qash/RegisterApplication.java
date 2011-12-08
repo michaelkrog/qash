@@ -24,12 +24,11 @@ import org.springframework.context.ApplicationContext;
  * @author michaelzachariassenkrog
  */
 public class RegisterApplication extends Application implements HttpServletRequestListener {
-    private static final Logger LOG = LoggerFactory.getLogger(RegisterApplication.class);
 
+    private static final Logger LOG = LoggerFactory.getLogger(RegisterApplication.class);
     private RegisterPanel registerPanel;
     private VerticalLayout outerLayout = new VerticalLayout();
     private SiteHeader siteHeader;
-
     private AnnexService annexService;
     private SystemService service;
     private String organisationId;
@@ -41,7 +40,7 @@ public class RegisterApplication extends Application implements HttpServletReque
      */
     public void onRequestStart(HttpServletRequest request, HttpServletResponse response) {
         String path = request.getPathInfo();
-        if(path==null) {
+        if (path == null) {
             try {
                 response.sendRedirect("/");
                 return;
@@ -49,21 +48,18 @@ public class RegisterApplication extends Application implements HttpServletReque
                 LOG.error("Unable to redirect user.", ex);
             }
         }
-        int idStartIndex = path.lastIndexOf("/");
-        if(idStartIndex>=0) {
-            String tmp = path.substring(idStartIndex + 1);
-            if(tmp.startsWith("org/")) {
-                String data = tmp.substring(4);
-                String[] dataArray = data.split("/");
-                
-                if(dataArray.length<2) {
-                    getMainWindow().showNotification("Url should contain organsiationid and storeid");
-                    return;
-                }
-                this.organisationId = dataArray[0];
-                this.storeId = dataArray[1];
-                updateStore();
+        if (path.startsWith("/org/")) {
+            String data = path.substring(5);
+            String[] dataArray = data.split("/");
+
+            if (dataArray.length < 2) {
+                getMainWindow().showNotification("Url should contain organsiationid and storeid");
+                return;
             }
+            this.organisationId = dataArray[0];
+            this.storeId = dataArray[1];
+            updateStore();
+
         }
     }
 
@@ -78,7 +74,7 @@ public class RegisterApplication extends Application implements HttpServletReque
         LOG.debug("Initializing ShopSystem application");
         setLogoutURL("/");
 
-         //Load classes from spring
+        //Load classes from spring
         ApplicationContext context = VaadinSpringHelper.getSpringContextFromVaadinContext(getContext());
         service = context.getBean("service", SystemService.class);
         annexService = context.getBean("annexService", AnnexService.class);
@@ -115,17 +111,17 @@ public class RegisterApplication extends Application implements HttpServletReque
             return;
         }
 
-        if(registerPanel != null) {
+        if (registerPanel != null) {
             //Remove existing adminPanel from layout
             outerLayout.removeComponent(registerPanel);
         }
 
         Organisation org = service.getOrganisationCrud().read(organisationId);
-        if(org==null) {
-            getMainWindow().showNotification("Organsiation with id "+organisationId+" does not exist.", Window.Notification.TYPE_ERROR_MESSAGE);
+        if (org == null) {
+            getMainWindow().showNotification("Organsiation with id " + organisationId + " does not exist.", Window.Notification.TYPE_ERROR_MESSAGE);
             return;
         }
-        
+
         OrganisationService orgService = service.getOrganisationService(org);
         Store store = orgService.getStores().read(storeId);
 
@@ -135,8 +131,8 @@ public class RegisterApplication extends Application implements HttpServletReque
         outerLayout.addComponent(registerPanel);
         outerLayout.setExpandRatio(registerPanel, 1.0F);
         registerPanel.setSizeFull();
+        registerPanel.setOrganisationService(orgService);
+        registerPanel.setOutlet(store);
 
     }
-
-
 }

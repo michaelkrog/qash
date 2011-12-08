@@ -10,6 +10,7 @@ import com.vaadin.ui.Link;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.Outlet;
 import dk.apaq.shopsystem.qash.settings.SettingsDialogForAdmin;
 import dk.apaq.shopsystem.qash.settings.SettingsDialogForRegister;
 import dk.apaq.shopsystem.service.OrganisationService;
@@ -73,6 +74,10 @@ public class RegisterPanel extends CustomComponent {
     public void setOrganisationService(OrganisationService organisationService) {
         this.organisationService = organisationService;
         salesView.setOrganisationService(organisationService);
+    }
+    
+    public void setOutlet(Outlet outlet) {
+        salesView.setOutlet(outlet);
     }
 
     

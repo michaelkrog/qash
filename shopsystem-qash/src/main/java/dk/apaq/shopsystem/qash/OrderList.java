@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.qash;
 
+import com.vaadin.data.Buffered;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
@@ -22,6 +23,7 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.filter.Filter;
+import dk.apaq.filter.core.AndFilter;
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.core.OrFilter;
 import dk.apaq.filter.sort.SortDirection;
@@ -38,13 +40,11 @@ import java.util.Date;
  *
  */
 public class OrderList extends CustomComponent implements
-        Property.ValueChangeNotifier, Container.Editor, 
+        Property.ValueChangeNotifier, Container.Editor,
         ItemClickEvent.ItemClickNotifier, Property {
 
     private static final String LABEL_INPROCESS = "In process";
-    private static final String LABEL_COMPLETED= "Completed";
-
-
+    private static final String LABEL_COMPLETED = "Completed";
     private final Label labelTitle = new Label("Order Overview");
     private final VerticalLayout topLayout = new VerticalLayout();
     private final VerticalLayout innerLayout = new VerticalLayout();
@@ -61,15 +61,15 @@ public class OrderList extends CustomComponent implements
     private final CurrencyColumnGenerator currencyColumnGenerator = new CurrencyColumnGenerator();
     private final Sorter sorter = new Sorter("number", SortDirection.Descending);
     private Outlet outlet;
-
+    private String chosenStatus;
 
     private class DeleteColumnGenerator implements Table.ColumnGenerator {
 
         public Component generateCell(Table source, final Object itemId, Object columnId) {
             Item item = source.getItem(itemId);
-            OrderStatus status = (OrderStatus)item.getItemProperty("status").getValue();
+            OrderStatus status = (OrderStatus) item.getItemProperty("status").getValue();
 
-            if(status == OrderStatus.New || status == OrderStatus.Processing) {
+            if (status == OrderStatus.New || status == OrderStatus.Processing) {
                 Embedded embedded = new Embedded("Delete row", resourceDelete);
                 embedded.setHeight(16, UNITS_PIXELS);
                 embedded.addListener(new com.vaadin.event.MouseEvents.ClickListener() {
@@ -83,7 +83,20 @@ public class OrderList extends CustomComponent implements
                 return null;
             }
         }
+    }
 
+    private class OutletColumnGenerator implements Table.ColumnGenerator {
+
+        @Override
+        public Object generateCell(Table source, Object itemId, Object columnId) {
+            Item item = source.getItem(itemId);
+            Outlet outlet = (Outlet) item.getItemProperty("outlet").getValue();
+            if (outlet == null) {
+                return null;
+            } else {
+                return new Label(outlet.getName());
+            }
+        }
     }
 
     private class FormattedDateGenerator implements Table.ColumnGenerator {
@@ -93,7 +106,6 @@ public class OrderList extends CustomComponent implements
             Date date = (Date) prop.getValue();
             return new Label(dateFormat.format(date));
         }
-
     }
 
     public void addListener(ItemClickListener listener) {
@@ -125,10 +137,11 @@ public class OrderList extends CustomComponent implements
         table.setStyleName(Reindeer.TABLE_STRONG);
         table.setImmediate(true);
         table.addGeneratedColumn("delete", new DeleteColumnGenerator());
+        table.addGeneratedColumn("outlet", new OutletColumnGenerator());
         table.setColumnAlignment("totalWithTax", Table.ALIGN_RIGHT);
 
         currencyColumnGenerator.setCurrencyPropertyId("currency");
-        
+
         filterLayout.addComponent(cmbStatus);
         //filterLayout.addComponent(cmbClerk);
         filterLayout.addComponent(filterSpacer);
@@ -156,20 +169,8 @@ public class OrderList extends CustomComponent implements
         cmbStatus.addListener(new ValueChangeListener() {
 
             public void valueChange(ValueChangeEvent event) {
-                if(container instanceof FilterableContainer) {
-                    Filter filter = null;
-                    String value = (String) event.getProperty().getValue();
-                    if(LABEL_INPROCESS.equals(value)) {
-                        filter = new CompareFilter("status", OrderStatus.Processing, CompareFilter.CompareType.Equals);
-                    }
-                    if(LABEL_COMPLETED.equals(value)) {
-                        filter = new OrFilter(
-                                new CompareFilter("status", OrderStatus.Accepted, CompareFilter.CompareType.Equals),
-                                new CompareFilter("status", OrderStatus.Completed, CompareFilter.CompareType.Equals));
-                    }
-                    ((FilterableContainer)container).setFilter(filter);
-                }
-
+                chosenStatus = (String) event.getProperty().getValue();
+                updateFilter();
             }
         });
 
@@ -178,9 +179,12 @@ public class OrderList extends CustomComponent implements
             public void buttonClick(ClickEvent event) {
                 Object id = container.addItem();
                 Item item = table.getItem(id);
-                
+
                 //Set the outlet for the order
                 item.getItemProperty("outlet").setValue(outlet);
+                if(item instanceof Buffered) {
+                    ((Buffered)item).commit();
+                }
                 table.select(id);
             }
         });
@@ -206,11 +210,11 @@ public class OrderList extends CustomComponent implements
     public void setContainerDataSource(Container newDataSource) {
         this.container = newDataSource;
         table.setContainerDataSource(newDataSource);
-        table.setVisibleColumns(new Object[]{"delete", "number", "status", "dateChanged", "totalWithTax"});
-        table.setColumnHeaders(new String[]{"", "Number", "Status", "Changed", "Total"});
+        table.setVisibleColumns(new Object[]{"delete", "number", "status", "paid", "outlet", "dateChanged", "totalWithTax"});
+        table.setColumnHeaders(new String[]{"", "Number", "Status", "Paid", "Store", "Changed", "Total"});
 
-        if(newDataSource instanceof FilterableContainer) {
-            ((FilterableContainer)newDataSource).setSorter(sorter);
+        if (newDataSource instanceof FilterableContainer) {
+            ((FilterableContainer) newDataSource).setSorter(sorter);
         }
     }
 
@@ -222,7 +226,7 @@ public class OrderList extends CustomComponent implements
     public void attach() {
         super.attach();
 
-        if(!initialized) {
+        if (!initialized) {
             dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
             table.addGeneratedColumn("dateChanged", new FormattedDateGenerator());
             table.addGeneratedColumn("totalWithTax", currencyColumnGenerator);
@@ -245,7 +249,29 @@ public class OrderList extends CustomComponent implements
 
     public void setOutlet(Outlet outlet) {
         this.outlet = outlet;
+        updateFilter();
     }
-    
-    
+
+    private void updateFilter() {
+        if (container instanceof FilterableContainer) {
+            Filter filter = null;
+            String value = chosenStatus;
+            if (LABEL_INPROCESS.equals(value)) {
+                filter = new CompareFilter("status", OrderStatus.Processing, CompareFilter.CompareType.Equals);
+            }
+            if (LABEL_COMPLETED.equals(value)) {
+                filter = new OrFilter(
+                        new CompareFilter("status", OrderStatus.Accepted, CompareFilter.CompareType.Equals),
+                        new CompareFilter("status", OrderStatus.Completed, CompareFilter.CompareType.Equals));
+            }
+            
+            if(outlet!=null) {
+                Filter outletFilter = new CompareFilter("outlet", outlet, CompareFilter.CompareType.Equals);
+                filter = filter == null ? outletFilter : new AndFilter(filter, outletFilter);
+            }
+            
+            ((FilterableContainer) container).setFilter(filter);
+        }
+
+    }
 }
