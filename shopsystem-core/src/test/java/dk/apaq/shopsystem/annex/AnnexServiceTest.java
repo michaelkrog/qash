@@ -207,8 +207,8 @@ public class AnnexServiceTest extends TestCase {
         Organisation org = getOrganisation();
         Order order = getOrder(1);
 
-        //ByteArrayOutputStream out = new ByteArrayOutputStream();
-        FileOutputStream out = new FileOutputStream("invoice.ps");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        //FileOutputStream out = new FileOutputStream("invoice.ps");
 
         CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
         Page page = new Page(PageSize.A4);
@@ -216,11 +216,11 @@ public class AnnexServiceTest extends TestCase {
         annexService.generateInvoice(context, OutputType.PostScript);
 
 
-        //String value = new String(out.toByteArray());
-        //assertNotSame(0, value.length());
+        String value = new String(out.toByteArray());
+        assertNotSame(0, value.length());
 
         //TODO Extract the images and ensure they are correct in size.
-        //out.close();
+        out.close();
     }
     
      public void testGenerateInvoicePngBundle() throws Exception{

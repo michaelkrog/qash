@@ -17,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Inheritance(strategy= InheritanceType.TABLE_PER_CLASS)
-public class Outlet implements Serializable, ContentEntity {
+public abstract class Outlet implements Serializable, ContentEntity {
     
     @Id
     @GeneratedValue(generator = "system-uuid")

@@ -1,15 +1,8 @@
 package dk.apaq.shopsystem.entity;
 
-import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Entity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Defines a physical store.

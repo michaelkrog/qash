@@ -61,6 +61,8 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     private ApplicationContext context;
     private FileSystem fs;
     private Organisation organisation;
+    private SequenceProcessor orderSequence = null;
+    private SequenceProcessor invoiceSequence = null;
     
 
     public OrganisationServiceImpl(Organisation org) {
@@ -74,7 +76,7 @@ public class OrganisationServiceImpl implements OrganisationService, Application
         Complete crud = crudMap.get(Order.class);
         if(crud==null) {
             InventoryManager im = (InventoryManager) context.getBean("inventoryManager", getProducts());
-            crud = (Crud.Complete<String, Payment>) context.getBean("orderCrud", em, organisation, im);
+            crud = (Crud.Complete<String, Payment>) context.getBean("orderCrud", em, this, organisation, im);
             ((CrudNotifier)crud).addListener(new SecurityHandler.ContentSecurity(organisation));
             crudMap.put(Order.class, crud);
         }
@@ -236,6 +238,22 @@ public class OrganisationServiceImpl implements OrganisationService, Application
             }
         }
         return fs;
+    }
+
+    @Override
+    public SequenceProcessor getInvoiceSequence() {
+        if(invoiceSequence == null) {
+           invoiceSequence = (SequenceProcessor) context.getBean("sequenceProcessor", organisation.getId() + "_InvoiceSequence"); 
+        }
+        return invoiceSequence;
+    }
+
+    @Override
+    public SequenceProcessor getOrderSequence() {
+        if(orderSequence == null) {
+           orderSequence = (SequenceProcessor) context.getBean("sequenceProcessor", organisation.getId() + "_OrderSequence"); 
+        }
+        return orderSequence;
     }
 
     @Override

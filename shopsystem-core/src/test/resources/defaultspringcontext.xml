@@ -55,6 +55,8 @@
     </bean>
 
     <bean id="inventoryManager" class="dk.apaq.shopsystem.service.crud.ProductCrudInventoryManager" scope="prototype"/>
+    
+    <bean id="sequenceProcessor" class="dk.apaq.shopsystem.service.SequenceProcessorImpl" scope="prototype"/>
 
     <bean id="filesystemPopulator" class="dk.apaq.shopsystem.service.DefaultFileSystemPopulator"/>
     

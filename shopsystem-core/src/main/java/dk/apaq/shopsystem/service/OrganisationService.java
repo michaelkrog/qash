@@ -11,7 +11,6 @@ import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.Website;
-import dk.apaq.shopsystem.entity.Module;
 import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.entity.ProductCategory;
 import dk.apaq.shopsystem.entity.Theme;
@@ -45,4 +44,8 @@ public interface OrganisationService extends Serializable {
     Crud.Complete<String,Page> getPages(Website website);
 
     FileSystem getFileSystem();
+    
+    SequenceProcessor getOrderSequence();
+    SequenceProcessor getInvoiceSequence();
+    
 }

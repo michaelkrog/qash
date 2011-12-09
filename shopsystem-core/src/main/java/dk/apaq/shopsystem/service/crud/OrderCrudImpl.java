@@ -5,6 +5,7 @@ import dk.apaq.shopsystem.entity.OrderLine;
 import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Sequence;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.ServiceException;
 import java.util.Date;
 import javax.persistence.EntityManager;
@@ -19,11 +20,13 @@ public class OrderCrudImpl extends ContentCrud<Order> {
     private final long DAYINMILLIS = 86400000L;
     private final InventoryManager inventoryManager;
     private final EntityManager em;
+    private final OrganisationService organisationService;
 
-    public OrderCrudImpl(EntityManager em, Organisation organisation, InventoryManager inventoryManager) {
+    public OrderCrudImpl(EntityManager em, OrganisationService organisationService, Organisation organisation, InventoryManager inventoryManager) {
         super(em, organisation, Order.class);
         this.em = em;
         this.inventoryManager = inventoryManager;
+        this.organisationService = organisationService;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class OrderCrudImpl extends ContentCrud<Order> {
     public String create() {
         String id = super.create();
         Order order = read(id);
-        order.setNumber(getNextSequence(em, organisation.getId() + "_OrderSequence", organisation.getInitialOrdernumber()));
+        order.setNumber(organisationService.getOrderSequence().increment());
         order.setCurrency(organisation.getCurrency());
         update(order);
         return id;
@@ -76,10 +79,8 @@ public class OrderCrudImpl extends ContentCrud<Order> {
                 }
             }
 
-            long invoicenumber = getNextSequence(em,
-                    organisation.getId() + "_InvoiceSequence",
-                    organisation.getInitialInvoiceNumber());
-
+            long invoicenumber = organisationService.getInvoiceSequence().increment();
+         
             Date invoiceDate = new Date();
             Date timelyPayment = new Date(invoiceDate.getTime() + (DAYINMILLIS * organisation.getDefaultPaymentPeriodInDays()));
 
