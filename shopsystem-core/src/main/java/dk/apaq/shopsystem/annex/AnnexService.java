@@ -11,9 +11,9 @@ import java.io.OutputStream;
 public interface AnnexService {
 
         void generate(AnnexContext<CommercialDocumentContent, OutputStream> context, AnnexType annexType, OutputType outputType) throws Exception;
-        Printable generatePrintable(AnnexContext<CommercialDocumentContent, Void> context, AnnexType annexType, OutputType outputType) throws Exception;
+        Printable generatePrintable(AnnexContext<CommercialDocumentContent, Void> context, AnnexType annexType) throws Exception;
 
-        @Deprecated
+        /*@Deprecated
         void generateReceipt(AnnexContext<CommercialDocumentContent, OutputStream> context, OutputType outputType) throws Exception ;
         @Deprecated
         Printable generatePrintableReceipt(AnnexContext<CommercialDocumentContent, Void> context) throws Exception ;
@@ -21,6 +21,6 @@ public interface AnnexService {
         @Deprecated
         void generateInvoice(AnnexContext<CommercialDocumentContent, OutputStream> context, OutputType outputType) throws Exception ;
         @Deprecated
-        Printable generatePrintableInvoice(AnnexContext<CommercialDocumentContent, Void> context) throws Exception ;
+        Printable generatePrintableInvoice(AnnexContext<CommercialDocumentContent, Void> context) throws Exception ;*/
         
 }

@@ -75,26 +75,26 @@ public class AnnexServiceImpl implements AnnexService {
     public void generate(AnnexContext<CommercialDocumentContent, OutputStream> context, AnnexType annexType, OutputType outputType) throws Exception {
         switch(annexType) {
             case Invoice:
-                generateInvoice(context, outputType);
+                generateCommercialDocument(context, outputType, invoiceTemplate);
             case Receipt:
-                generateReceipt(context, outputType);
+                generateCommercialDocument(context, outputType, receiptTemplate);
         }
     }
     
     
     @Override
-    public Printable generatePrintable(AnnexContext<CommercialDocumentContent, Void> context, AnnexType annexType, OutputType outputType) throws Exception {
+    public Printable generatePrintable(AnnexContext<CommercialDocumentContent, Void> context, AnnexType annexType) throws Exception {
         switch(annexType) {
             case Invoice:
-                return generatePrintableInvoice(context);
+                return printCommercialDocument(context, invoiceTemplate);
             case Receipt:
-                return generatePrintableReceipt(context);
+                return printCommercialDocument(context, receiptTemplate);
             default:
                 return null;
         }
     }
 
-    @Override
+    /*@Override
     public void generateReceipt(AnnexContext<CommercialDocumentContent, OutputStream> context, OutputType outputType) throws Exception {
         generateCommercialDocument(context, outputType, receiptTemplate);
     }
@@ -112,7 +112,7 @@ public class AnnexServiceImpl implements AnnexService {
     @Override
     public Printable generatePrintableInvoice(AnnexContext<CommercialDocumentContent, Void> context) throws Exception {
         return printCommercialDocument(context, invoiceTemplate);
-    }
+    }*/
 
 
 

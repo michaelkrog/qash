@@ -10,23 +10,23 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class AbstractController {
 
-    @Autowired
-    protected SystemService service;
-    protected Organisation org;
-    protected OrganisationService orgService;
+    private final SystemService service;
 
+    public AbstractController(SystemService service) {
+        this.service = service;
+    }
+    
+    
     /**
      * Retrieve organaistion from id.
      */
     protected OrganisationService getOrganisationService(String id) {
 
-        this.org = service.getOrganisationCrud().read(id);
-        if (this.org == null) {
+        Organisation org = service.getOrganisationCrud().read(id);
+        if (org == null) {
             throw new ResourceNotFoundException("Organisation not found. [id=" + id + "]");
         }
-        this.orgService = service.getOrganisationService(this.org);
-
-        return orgService;
+        return service.getOrganisationService(org);
     }
 
 

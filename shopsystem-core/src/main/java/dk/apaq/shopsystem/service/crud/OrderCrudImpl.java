@@ -9,6 +9,7 @@ import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.ServiceException;
 import java.util.Date;
 import javax.persistence.EntityManager;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -32,22 +33,26 @@ public class OrderCrudImpl extends ContentCrud<Order> {
     @Override
     @Transactional
     public String create() {
-        String id = super.create();
-        Order order = read(id);
-        order.setNumber(organisationService.getOrderSequence().increment());
-        order.setCurrency(organisation.getCurrency());
-        update(order);
-        return id;
+        return create(new Order());
     }
 
     @Override
+    public <E extends Order> String create(E order) {
+        order.setNumber(organisationService.getOrderSequence().increment());
+        order.setCurrency(organisation.getCurrency());
+        return super.create(order);
+    }
+
+    
+    @Override
     public Order read(String id) {
         Order order = super.read(id);
+        em.detach(order);
         return order;
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation= Isolation.REPEATABLE_READ)
     public void update(Order entity) {
         fireOnBeforeUpdate(entity.getId(), entity);
         if (entity.getStatus() == OrderStatus.New) {

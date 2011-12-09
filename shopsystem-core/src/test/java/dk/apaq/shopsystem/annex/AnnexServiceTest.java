@@ -121,7 +121,7 @@ public class AnnexServiceTest extends TestCase {
         CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
         Page page = new Page(PageSize.Receipt);
         AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
-        annexService.generateReceipt(context, OutputType.Html);
+        annexService.generate(context, AnnexType.Receipt, OutputType.Html);
         
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
@@ -140,7 +140,7 @@ public class AnnexServiceTest extends TestCase {
         CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
         Page page = new Page(PageSize.A4, 7, 7, 7, 7);
         AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
-        annexService.generateInvoice(context, OutputType.Html);
+        annexService.generate(context, AnnexType.Invoice, OutputType.Html);
         
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
@@ -167,7 +167,7 @@ public class AnnexServiceTest extends TestCase {
         CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
         Page page = new Page(PageSize.A4, 15, 15, 15, 15);
         AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
-        annexService.generateInvoice(context, OutputType.Pdf);
+        annexService.generate(context, AnnexType.Invoice, OutputType.Pdf);
         
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
@@ -184,7 +184,7 @@ public class AnnexServiceTest extends TestCase {
         Page page = new Page(PageSize.A4, 5, 5, 5, 5);
         
         AnnexContext<CommercialDocumentContent, Void> context = new AnnexContext<CommercialDocumentContent, Void>(content, null, page, Locale.getDefault());
-        Printable p = annexService.generatePrintableInvoice(context);
+        Printable p = annexService.generatePrintable(context, AnnexType.Invoice);
         
         int width = page.getSize().getWidth().getPixels();
         int height = page.getSize().getHeight().getPixels();
@@ -213,7 +213,7 @@ public class AnnexServiceTest extends TestCase {
         CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
         Page page = new Page(PageSize.A4);
         AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
-        annexService.generateInvoice(context, OutputType.PostScript);
+        annexService.generate(context, AnnexType.Invoice, OutputType.PostScript);
 
 
         String value = new String(out.toByteArray());
@@ -233,7 +233,7 @@ public class AnnexServiceTest extends TestCase {
         CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
         Page page = new Page(PageSize.A4, 7);
         AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
-        annexService.generateInvoice(context, OutputType.PngBundle);
+        annexService.generate(context, AnnexType.Invoice, OutputType.PngBundle);
 
 
         String value = new String(out.toByteArray());
