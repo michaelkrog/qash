@@ -31,6 +31,7 @@ public class SettingsDialogForAdmin extends Window {
     private final CurrencyAndTaxPanel currencyAndTaxPanel = new CurrencyAndTaxPanel();
     private final UserManagerPanel userManagerPanel = new UserManagerPanel();
     private final PrinterSettingPanel printerSettingPanel = new PrinterSettingPanel();
+    private final SalesSettings salesSettings = new SalesSettings();
     private Item datasource;
     private OrganisationService service;
 
@@ -57,9 +58,10 @@ public class SettingsDialogForAdmin extends Window {
         CategoryGridPanel.Category cat3 = gridPanel.addCategory("System");
         gridPanel.addComponent(cat1, new ThemeResource("img/home_48.png"), "Address", organisationForm);
         gridPanel.addComponent(cat1, new ThemeResource("img/taxes_48.png"), "Currency and taxes", currencyAndTaxPanel);
-        gridPanel.addComponent(cat3, new ThemeResource("img/user_48.png"), "Users", userManagerPanel);
         gridPanel.addComponent(cat1, new ThemeResource("img/receipt_48.png"), "Receipt", receiptForm);
+        gridPanel.addComponent(cat1, new ThemeResource("img/invoice_48.png"), "Sales", salesSettings);
         gridPanel.addComponent(cat2, new ThemeResource("img/printer_48.png"), "Printer", printerSettingPanel);
+        gridPanel.addComponent(cat3, new ThemeResource("img/user_48.png"), "Users", userManagerPanel);
         gridPanel.setSizeFull();
 
         layout.addComponent(topLayout);
@@ -77,9 +79,10 @@ public class SettingsDialogForAdmin extends Window {
 
     public void setOrganisationService(OrganisationService service) {
         this.service = service;
-        organisationForm.setService(service);
-        currencyAndTaxPanel.setService(service);
-        userManagerPanel.setOrgansiationService(service);
+        organisationForm.setOrganisationService(service);
+        currencyAndTaxPanel.setOrganisationService(service);
+        userManagerPanel.setOrganisationService(service);
+        salesSettings.setOrganisationService(service);
     }
 
     public void setDatasource(Item datasource) {

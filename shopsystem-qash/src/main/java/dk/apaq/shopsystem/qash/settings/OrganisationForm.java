@@ -185,7 +185,7 @@ public class OrganisationForm extends Form {
         field.setTabIndex(PROPERTIES.indexOf(propertyId) + 1);
     }
 
-    public void setService(OrganisationService service) {
+    public void setOrganisationService(OrganisationService service) {
         this.service = service;
         
     }

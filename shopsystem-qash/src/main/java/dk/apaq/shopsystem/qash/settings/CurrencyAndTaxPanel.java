@@ -204,7 +204,7 @@ public class CurrencyAndTaxPanel extends CustomComponent {
 
     }
 
-    public void setService(OrganisationService service) {
+    public void setOrganisationService(OrganisationService service) {
         this.service=service;
     }
 

@@ -183,7 +183,7 @@ public class UserManagerPanel extends CustomComponent {
 
     }
 
-    public void setOrgansiationService(OrganisationService organsiationService) {
+    public void setOrganisationService(OrganisationService organsiationService) {
         this.organsiationService = organsiationService;
     
         this.userList.setContainerDataSource(new CrudContainer(organsiationService.getUsers(), BaseUser.class));
