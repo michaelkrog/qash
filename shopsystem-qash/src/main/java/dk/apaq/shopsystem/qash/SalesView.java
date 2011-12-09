@@ -35,6 +35,7 @@ public class SalesView extends CustomComponent {
     private OrganisationService organisationService;
     private AnnexService annexService;
     private Outlet outlet;
+    private boolean autoOpenPaymentDialog = false;
     
     public SalesView() {
         
@@ -105,6 +106,7 @@ public class SalesView extends CustomComponent {
         editor.setOrganisationService(organisationService);
         editor.setAnnexService(annexService);
         editor.setItemDataSource(item);
+        editor.setAutoOpenPaymentDialog(autoOpenPaymentDialog);
         return editor;
     }
 
@@ -178,4 +180,7 @@ public class SalesView extends CustomComponent {
         this.annexService = annexService;
     }
     
+    public void setAutoOpenPaymentDialog(boolean value) {
+        this.autoOpenPaymentDialog = value;
+    }
 }

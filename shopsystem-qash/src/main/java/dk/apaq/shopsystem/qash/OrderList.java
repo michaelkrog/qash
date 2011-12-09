@@ -251,7 +251,7 @@ public class OrderList extends CustomComponent implements
         this.outlet = outlet;
         updateFilter();
     }
-
+    
     private void updateFilter() {
         if (container instanceof FilterableContainer) {
             Filter filter = null;

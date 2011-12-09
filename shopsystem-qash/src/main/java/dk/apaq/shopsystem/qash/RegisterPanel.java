@@ -49,6 +49,7 @@ public class RegisterPanel extends CustomComponent {
 
         salesView.setSizeFull();
         salesView.setAnnexService(annexService);
+        salesView.setAutoOpenPaymentDialog(true);
         
         siteHeader.addLink(linkDashboard);
         siteHeader.addButton(btnSettings);

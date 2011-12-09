@@ -135,6 +135,7 @@ public class OrderEditor extends CustomComponent implements
     private final OrderChangeListener orderChangeListener = new OrderChangeListener();
     private OrganisationService organisationService;
     private AnnexService annexService;
+    private boolean autoOpenPaymentDialog=false;
     
     private class OrderChangeListener implements Item.PropertySetChangeListener {
 
@@ -608,7 +609,7 @@ public class OrderEditor extends CustomComponent implements
                 OrderStatus status = (OrderStatus) propStatus.getValue();
 
                 if (!status.isConfirmedState()) {
-                    doComplete(true);
+                    doComplete(autoOpenPaymentDialog);
                 } else {
                     doPay();
                 }
@@ -1026,6 +1027,10 @@ public class OrderEditor extends CustomComponent implements
         update();
     }
 
+    public void setAutoOpenPaymentDialog(boolean autoOpenPaymentDialog) {
+        this.autoOpenPaymentDialog = autoOpenPaymentDialog;
+    }
+    
     private void doPrint() {
         if (annexService == null) {
             getApplication().getMainWindow().showNotification("AnnexService not available.", Window.Notification.TYPE_ERROR_MESSAGE);
@@ -1054,23 +1059,24 @@ public class OrderEditor extends CustomComponent implements
             //Generate document
             PrinterJob pj;
             CommercialDocumentContent cdc = new CommercialDocumentContent(organisationService.readOrganisation(), order, payments);
+            Page page;
+            Paper paper = Paper.A4;
+            AnnexContext<CommercialDocumentContent, Void> annexContext;
+            String jobName;
+            
             if(printType == AnnexType.Receipt) {
-                Page page = new Page(PageSize.A4, 2, 2, 2, 2);
-                AnnexContext<CommercialDocumentContent, Void> annexContext = new AnnexContext<CommercialDocumentContent, Void>(cdc, null, page, Locale.getDefault());
-                Printable printable =annexService.generatePrintableReceipt(annexContext);
-            
-                //Print the generated document
-                Paper paper = Paper.A4;
-                pj = PrinterJob.getBuilder(printer, printable).setPaper(paper).setName("Receipt_"+order.getNumber()).build();
+                page = new Page(PageSize.A4, 2, 2, 2, 2);
+                jobName = "Receipt_"+order.getNumber();
             } else {
-                Page page = new Page(PageSize.A4, 7, 7, 7, 7);
-                AnnexContext<CommercialDocumentContent, Void> annexContext = new AnnexContext<CommercialDocumentContent, Void>(cdc, null, page, Locale.getDefault());
-                Printable printable =annexService.generatePrintableInvoice(annexContext);
-            
-                //Print the generated document
-                pj = PrinterJob.getBuilder(printer, printable).setPaper(Paper.A4).setName("Invoice_"+order.getNumber()).build();
-
+                page = new Page(PageSize.A4, 7, 7, 7, 7);
+                jobName = "Invoice_"+order.getNumber();
             }
+            
+            annexContext = new AnnexContext<CommercialDocumentContent, Void>(cdc, null, page, Locale.getDefault());
+            Printable printable =annexService.generatePrintable(annexContext, printType);
+            
+            //Print the generated document
+            pj = PrinterJob.getBuilder(printer, printable).setPaper(paper).setName(jobName).build();
             PrintFacade.getManager(getApplication()).print(pj);
             
             
