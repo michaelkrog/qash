@@ -42,11 +42,7 @@ public class AdminPanel extends CustomComponent {
             SettingsDialogForAdmin settingsDialog = new SettingsDialogForAdmin();
             
             Organisation org = organisationService.readOrganisation();
-            Item datasource = new BeanItem(org);
-
             settingsDialog.setOrganisationService(organisationService);
-            settingsDialog.setDatasource(datasource);
-
             getApplication().getMainWindow().addWindow(settingsDialog);
         }
     }

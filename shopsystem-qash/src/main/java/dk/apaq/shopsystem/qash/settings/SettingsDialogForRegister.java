@@ -27,7 +27,6 @@ public class SettingsDialogForRegister extends Window {
     private final Button buttonShowAll = new Button("Show all");
     private final Spacer spacer = new Spacer();
     private final PrinterSettingPanel printerSettingPanel = new PrinterSettingPanel();
-    private Item datasource;
     private OrganisationService service;
 
     public SettingsDialogForRegister() {
@@ -66,11 +65,6 @@ public class SettingsDialogForRegister extends Window {
 
     public void setService(OrganisationService service) {
         this.service = service;
-    }
-
-    public void setDatasource(Item datasource) {
-        this.datasource = datasource;
-
         gridPanel.showGrid();
     }
 

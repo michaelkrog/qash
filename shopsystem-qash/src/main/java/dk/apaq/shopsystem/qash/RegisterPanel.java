@@ -38,11 +38,7 @@ public class RegisterPanel extends CustomComponent {
             SettingsDialogForRegister settingsDialog = new SettingsDialogForRegister();
             
             Organisation org = organisationService.readOrganisation();
-            Item datasource = new BeanItem(org);
-
             settingsDialog.setService(organisationService);
-            settingsDialog.setDatasource(datasource);
-
             getApplication().getMainWindow().addWindow(settingsDialog);
         }
     }
