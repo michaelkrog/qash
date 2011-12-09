@@ -22,7 +22,7 @@ public class SequenceProcessorImpl implements SequenceProcessor {
     @Override
     @Transactional(readOnly = true)
     public long getNext() {
-        return getNext(false);
+        return getNext(false) + 1;
     }
 
     @Override
@@ -35,10 +35,11 @@ public class SequenceProcessorImpl implements SequenceProcessor {
     @Transactional()
     public void setNext(long nextSequence) {
         Sequence sequence = readSequence();
+        
         if (nextSequence <= sequence.getSequence()) {
             throw new IllegalArgumentException("nextSequence should be a larger number than the current sequence.[current=" + sequence.getSequence() + "; nextSequence=" + nextSequence + "]");
         }
-        sequence.setSequence(nextSequence);
+        sequence.setSequence(nextSequence - 1);
         em.persist(sequence);
         em.flush();
 
