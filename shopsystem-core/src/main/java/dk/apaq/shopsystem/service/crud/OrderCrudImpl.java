@@ -52,7 +52,7 @@ public class OrderCrudImpl extends ContentCrud<Order> {
     }
 
     @Override
-    @Transactional(isolation= Isolation.REPEATABLE_READ)
+    @Transactional
     public void update(Order entity) {
         fireOnBeforeUpdate(entity.getId(), entity);
         if (entity.getStatus() == OrderStatus.New) {
