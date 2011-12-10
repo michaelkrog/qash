@@ -70,7 +70,7 @@ Locale locale = request.getLocale();
         <script type="text/javascript" src="lib/jquery-config.js"></script>
     </head>
 
-    <body onload="document.getElementById('username').focus()">
+    <body onload="document.getElementById('j_username').focus()">
          <!-- splash -->
         <div id="in-splash-container-small">
             <div class="in-splash">
@@ -97,7 +97,7 @@ Locale locale = request.getLocale();
                                 <form action="j_spring_security_check" method="POST">
                                     <table>
                                         <tr><td><label for="j_username"><%=res.getString("login.option1.username")%></label></td>
-                                            <td><input id="username" type="text" name="j_username" id="j_username"/></td>
+                                            <td><input type="text" name="j_username" id="j_username"/></td>
                                         </tr>
 
                                         <tr><td><label for="j_password"><%=res.getString("login.option1.password")%></label></td>
