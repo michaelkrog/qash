@@ -4,17 +4,30 @@ import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.terminal.DownloadStream;
 import com.vaadin.terminal.FileResource;
+import com.vaadin.terminal.StreamResource;
+import com.vaadin.terminal.StreamResource.StreamSource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.Window.Notification;
+import dk.apaq.filter.Filter;
+import dk.apaq.filter.core.AndFilter;
+import dk.apaq.filter.core.CompareFilter;
+import dk.apaq.shopsystem.data.DataExchange;
+import dk.apaq.shopsystem.entity.Order;
+import dk.apaq.shopsystem.qash.resource.DaybookSource;
+import dk.apaq.shopsystem.service.OrganisationService;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -22,17 +35,20 @@ import java.util.logging.Logger;
  */
 public class DaybookExportPanel extends CustomComponent {
     
+    private static final Logger LOG = LoggerFactory.getLogger(DaybookExportPanel.class);
+    
     private final Form form = new Form();
     private PostingsData data;
     private Button btnDownload = new Button("Download");
+    private OrganisationService organisationService;
     
     public static class PostingsData {
-        private Date dateFrom;
-        private Date dateTo;
-        private String account;
-        private String offsetAccount;
+        private Date dateFrom = new Date();;
+        private Date dateTo = new Date();;
+        private int account;
+        private int offsetAccount;
 
-        public String getAccount() {
+        public int getAccount() {
             return account;
         }
 
@@ -44,11 +60,11 @@ public class DaybookExportPanel extends CustomComponent {
             return dateTo;
         }
 
-        public String getOffsetAccount() {
+        public int getOffsetAccount() {
             return offsetAccount;
         }
 
-        public void setAccount(String account) {
+        public void setAccount(int account) {
             this.account = account;
         }
 
@@ -60,7 +76,7 @@ public class DaybookExportPanel extends CustomComponent {
             this.dateTo = dateTo;
         }
 
-        public void setOffsetAccount(String offsetAccount) {
+        public void setOffsetAccount(int offsetAccount) {
             this.offsetAccount = offsetAccount;
         }
         
@@ -68,26 +84,33 @@ public class DaybookExportPanel extends CustomComponent {
     }
 
     public DaybookExportPanel() {
+        form.getLayout().setMargin(true);
         form.getFooter().addComponent(btnDownload);
+        form.getFooter().setMargin(true);
+        
         setCompositionRoot(form);
         
         btnDownload.addListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                PipedInputStream inForReturn = null;
-                try {
-                    PipedOutputStream out = new PipedOutputStream();
-                    inForReturn = new PipedInputStream(out);
-                    DownloadStream downloadStream = new DownloadStream(inForReturn, "text/csv", "daybook.csv");
-                    getWindow().open(null);
-                } catch (IOException ex) {
-                    getWindow().showNotification(ex.getMessage(), Notification.TYPE_ERROR_MESSAGE);
-                } finally {
-                    try {
-                        inForReturn.close();
-                    } catch (IOException ex) {}
+                if(organisationService == null) {
+                    LOG.error("organsiationservice not set.");
+                    return;
                 }
+                Date from = data.dateFrom;
+                Date to = data.dateTo;
+                to.setHours(23);
+                to.setMinutes(59);
+                to.setSeconds(60);
+                
+                Filter filter = new AndFilter(new CompareFilter("dateInvoiced", from, CompareFilter.CompareType.GreaterThan),
+                                            new CompareFilter("dateInvoiced", to, CompareFilter.CompareType.LessThan));
+                List<Order> orders = organisationService.getOrders().list(filter, null);
+                StreamSource source = new DaybookSource(orders, data.account, data.offsetAccount);
+                StreamResource resource = new StreamResource(source, "daybook", getApplication());
+                resource.setMIMEType("text/csv");
+                getWindow().open(resource);
             }
         });
     }
@@ -102,6 +125,10 @@ public class DaybookExportPanel extends CustomComponent {
         form.setItemDataSource(item);
         form.setVisibleItemProperties(new String[]{"dateFrom", "dateTo", "account", "offsetAccount"});
        
+    }
+
+    public void setOrganisationService(OrganisationService organisationService) {
+        this.organisationService = organisationService;
     }
     
     

@@ -34,6 +34,7 @@ public class AdminPanel extends CustomComponent {
     private final Link linkLogout = new Link("Log out", new ExternalResource("/logout"));
     private final Link linkDashboard = new Link("Dashboard", new ExternalResource("/dashboard.jsp"));
     private final CategoryListPanel categoryListPanel = new CategoryListPanel();
+    private final DaybookExportPanel daybookExportPanel = new DaybookExportPanel();
 
     private class SettingsListener implements Button.ClickListener {
 
@@ -64,8 +65,8 @@ public class AdminPanel extends CustomComponent {
         categoryListPanel.addItem("STOCK", "Produkter", stockWidget);
         categoryListPanel.addItem("STORES", "Butikker", storeList);
 
-        categoryListPanel.addCategory("Export");
-        categoryListPanel.addItem("DAYBOOK", "Export Daybook", new Label("Daybook"));
+        categoryListPanel.addCategory("Data");
+        categoryListPanel.addItem("DAYBOOK", "Export Daybook", daybookExportPanel);
         
         categoryListPanel.setSizeFull();
 
@@ -101,6 +102,7 @@ public class AdminPanel extends CustomComponent {
 
         salesView.setOrganisationService(organisationService);
         
+        daybookExportPanel.setOrganisationService(organisationService);
 
     }
 

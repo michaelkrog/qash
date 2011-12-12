@@ -63,6 +63,8 @@
     
     <bean id="service" class="dk.apaq.shopsystem.service.SystemServiceImpl">
         <property name="fileSystemPopulator" ref="filesystemPopulator"/>
+        <property name="mailSender" ref="mailSender"/>
+        <property name="templateMessage" ref="templateMessage"/>
     </bean>
     <bean id="organisationService" class="dk.apaq.shopsystem.service.OrganisationServiceImpl" scope="prototype"/>
     <bean id="annexService" class="dk.apaq.shopsystem.annex.AnnexServiceImpl"/>
@@ -73,6 +75,17 @@
 
     <bean id="wicketApplication" class="dk.apaq.shopsystem.rendering.CmsApplication"/>
 
+    <!-- MESSAGING BEANS -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.dansknet.dk"/>
+    </bean>
+
+    <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="info@qashapp.com"/>
+    </bean>
+    
+    
+    <!-- DATA BEANS -->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="ShopSystem"/>
         <property name="jpaVendorAdapter">

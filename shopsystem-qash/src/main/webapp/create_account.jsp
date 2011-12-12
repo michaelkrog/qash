@@ -103,16 +103,14 @@ if(save) {
     if(error==null) {
         Organisation org = new Organisation();
         org.setCompanyName(company);
-        String orgId = service.getOrganisationCrud().create(org);
-        org = service.getOrganisationCrud().read(orgId);
-        OrganisationService orgService = service.getOrganisationService(org);
         
-        SystemUser account = (SystemUser)orgService.getUsers().read(orgService.getUsers().createSystemUser());
+        SystemUser account = new SystemUser();
         account.setName(username);
         account.setDisplayName(name);
         account.setEmail(email1);
         account.setPassword(password1);
-        orgService.getUsers().update(account);
+        
+        org = service.createOrganisation(account, org);
         
         //Login
         authenticateUserAndSetSession(am, account, request);
