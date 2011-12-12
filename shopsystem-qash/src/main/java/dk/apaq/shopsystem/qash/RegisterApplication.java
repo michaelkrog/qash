@@ -83,12 +83,12 @@ public class RegisterApplication extends Application implements HttpServletReque
         setTheme("shopsystem");
         Window mainWindow = new Window();
         mainWindow.setContent(outerLayout);
+        mainWindow.setStyleName("v-registerapplication");
         setMainWindow(mainWindow);
 
         PrintFacade.getManager(this).addPlugin(new VaadinPrintPdfPlugin(this));
         PrintFacade.getManager(this).addPlugin(new VaddinPrintAppletPlugin(this));
-        //PrintFacade.getManager(this).addPlugin(new VaadinGoogleCloudPrintPlugin(this, gcpClientId, gcpClientSecret));
-
+        
 
         outerLayout.setMargin(false);
         outerLayout.setSizeFull();

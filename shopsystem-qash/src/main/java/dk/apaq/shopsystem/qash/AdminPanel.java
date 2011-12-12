@@ -60,10 +60,10 @@ public class AdminPanel extends CustomComponent {
         storeList.setSizeFull();
 
         categoryListPanel.addCategory("General");
-        categoryListPanel.addItem("CUSTOMERS", "Kunder", customerList);
-        categoryListPanel.addItem("ORDERS", "Ordrer", salesView);
-        categoryListPanel.addItem("STOCK", "Produkter", stockWidget);
-        categoryListPanel.addItem("STORES", "Butikker", storeList);
+        categoryListPanel.addItem("CUSTOMERS", "Customers", customerList);
+        categoryListPanel.addItem("ORDERS", "Orders", salesView);
+        categoryListPanel.addItem("STOCK", "Products", stockWidget);
+        categoryListPanel.addItem("STORES", "Stores", storeList);
 
         categoryListPanel.addCategory("Data");
         categoryListPanel.addItem("DAYBOOK", "Export Daybook", daybookExportPanel);

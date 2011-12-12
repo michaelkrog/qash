@@ -69,7 +69,7 @@ public class StoreList extends CustomComponent {
 
         titleLabel.setStyleName(Reindeer.LABEL_H1);
 
-        searchField.setInputPrompt("search string");
+        searchField.setInputPrompt("Search, fx. 'Fifth Avenue'");
         searchField.setImmediate(true);
         searchField.addListener(new SearchFieldHandler());
 

@@ -72,8 +72,10 @@ public class AdminApplication extends Application implements HttpServletRequestL
         // Spring end
 
         setTheme("shopsystem");
+        
         Window mainWindow = new Window();
         mainWindow.setContent(outerLayout);
+        mainWindow.setStyleName("v-adminapplication");
         setMainWindow(mainWindow);
 
         PrintFacade.getManager(this).addPlugin(new VaadinPrintPdfPlugin(this));

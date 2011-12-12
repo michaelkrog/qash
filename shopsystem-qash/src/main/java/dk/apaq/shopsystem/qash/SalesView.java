@@ -144,7 +144,7 @@ public class SalesView extends CustomComponent {
 
     private void initOrderListView() {
         tabSheet.removeAllComponents();
-        tabSheet.addTab(orderList, "Sales Overview", null);
+        tabSheet.addTab(orderList, "Overview", null);
     }
 
     private void showEditor(Item item) {
@@ -167,6 +167,7 @@ public class SalesView extends CustomComponent {
         initOrderListView();
         this.orderContainer = new SortableCrudContainer(organisationService.getOrders(), Order.class);
         orderList.setContainerDataSource(orderContainer);
+        orderList.setOrganisationService(organisationService);
         
         this.paymentCrud = organisationService.getPayments();
     }
@@ -178,6 +179,7 @@ public class SalesView extends CustomComponent {
     
     public void setAnnexService(AnnexService annexService) {
         this.annexService = annexService;
+        orderList.setAnnexService(annexService);
     }
     
     public void setAutoOpenPaymentDialog(boolean value) {

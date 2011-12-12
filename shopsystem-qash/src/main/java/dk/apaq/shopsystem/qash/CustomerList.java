@@ -39,7 +39,7 @@ public class CustomerList extends CustomComponent implements Property, Property.
     private static final String[] COLUMNS = {"companyName", "contactName", "email"};
     private final Action editAction = new Action("Edit");
     private final Action deleteAction = new Action("Delete");
-    private Label titleLabel = new Label("Customer Management");
+    private Label titleLabel = new Label("Customers");
     private VerticalLayout layout = new VerticalLayout();
     private VerticalLayout topVLayout = new VerticalLayout();
     private HorizontalLayout topHLayout = new HorizontalLayout();
@@ -72,7 +72,7 @@ public class CustomerList extends CustomComponent implements Property, Property.
 
         titleLabel.setStyleName(Reindeer.LABEL_H1);
 
-        searchField.setInputPrompt("title, barcode, itemno");
+        searchField.setInputPrompt("Search, fx. 'John'");
         searchField.setImmediate(true);
         searchField.addListener(new SearchFieldHandler());
 

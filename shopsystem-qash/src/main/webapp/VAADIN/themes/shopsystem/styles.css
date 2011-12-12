@@ -229,15 +229,15 @@
 }
 
 /* Enhances the size of fields in orderlist an ordereditor to better suit touchscreens */
-.v-ordereditor .v-table-cell-content,
-.v-orderlist .v-table-cell-content{
+.v-registerapplication .v-ordereditor .v-table-cell-content,
+.v-registerapplication .v-orderlist .v-table-cell-content{
     font-size:18px;
     height:36px;
     vertical-align: middle;
 
 }
 
-.v-ordereditor .v-table-cell-content input{
+.v-registerapplication .v-ordereditor .v-table-cell-content input{
     font-size:18px;
 }
 

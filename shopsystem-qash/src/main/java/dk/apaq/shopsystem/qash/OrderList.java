@@ -28,13 +28,29 @@ import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.core.OrFilter;
 import dk.apaq.filter.sort.SortDirection;
 import dk.apaq.filter.sort.Sorter;
+import dk.apaq.printing.core.Printer;
+import dk.apaq.printing.core.PrinterJob;
+import dk.apaq.printing.core.PrinterManager;
+import dk.apaq.shopsystem.annex.AnnexContext;
+import dk.apaq.shopsystem.annex.AnnexService;
+import dk.apaq.shopsystem.annex.AnnexType;
+import dk.apaq.shopsystem.annex.AuditReportContent;
+import dk.apaq.shopsystem.annex.Page;
+import dk.apaq.shopsystem.annex.PageSize;
+import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Outlet;
+import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.shopsystem.qash.data.util.CurrencyColumnGenerator;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
+import java.awt.print.Printable;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -42,15 +58,20 @@ import java.util.Date;
 public class OrderList extends CustomComponent implements
         Property.ValueChangeNotifier, Container.Editor,
         ItemClickEvent.ItemClickNotifier, Property {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(OrderList.class);
 
     private static final String LABEL_INPROCESS = "In process";
+    private static final String LABEL_ACCEPTED = "Accepted";
     private static final String LABEL_COMPLETED = "Completed";
-    private final Label labelTitle = new Label("Order Overview");
+    private static final String LABEL_UNPAID = "Unpaid";
+    private final Label labelTitle = new Label("Orders");
     private final VerticalLayout topLayout = new VerticalLayout();
     private final VerticalLayout innerLayout = new VerticalLayout();
     private final HorizontalLayout filterLayout = new HorizontalLayout();
     private final Spacer filterSpacer = new Spacer();
     private final Button btnAdd = new Button("Add new order");
+    private final Button btnPrintAuditLog = new Button("Print Report");
     private final ComboBox cmbStatus = new ComboBox("Status");
     private final ComboBox cmbClerk = new ComboBox("Clerk");
     private final Table table = new Table();
@@ -62,7 +83,9 @@ public class OrderList extends CustomComponent implements
     private final Sorter sorter = new Sorter("number", SortDirection.Descending);
     private Outlet outlet;
     private String chosenStatus;
-
+    private AnnexService annexService;
+    private OrganisationService organisationService;
+    
     private class DeleteColumnGenerator implements Table.ColumnGenerator {
 
         public Component generateCell(Table source, final Object itemId, Object columnId) {
@@ -96,6 +119,24 @@ public class OrderList extends CustomComponent implements
             } else {
                 return new Label(outlet.getName());
             }
+        }
+    }
+    
+    private class StatusColumnGenerator implements Table.ColumnGenerator {
+
+        @Override
+        public Object generateCell(Table source, Object itemId, Object columnId) {
+            Item item = source.getItem(itemId);
+            OrderStatus status = (OrderStatus) item.getItemProperty("status").getValue();
+            Boolean paid = (Boolean) item.getItemProperty("paid").getValue();
+            
+            String text = status.name();
+            if(!paid) {
+                text+= " (Not paid)";
+            }
+            
+            return new Label(text);
+            
         }
     }
 
@@ -138,6 +179,7 @@ public class OrderList extends CustomComponent implements
         table.setImmediate(true);
         table.addGeneratedColumn("delete", new DeleteColumnGenerator());
         table.addGeneratedColumn("outlet", new OutletColumnGenerator());
+        table.addGeneratedColumn("status", new StatusColumnGenerator());
         table.setColumnAlignment("totalWithTax", Table.ALIGN_RIGHT);
 
         currencyColumnGenerator.setCurrencyPropertyId("currency");
@@ -145,15 +187,19 @@ public class OrderList extends CustomComponent implements
         filterLayout.addComponent(cmbStatus);
         //filterLayout.addComponent(cmbClerk);
         filterLayout.addComponent(filterSpacer);
+        filterLayout.addComponent(btnPrintAuditLog);
         filterLayout.addComponent(btnAdd);
         filterLayout.setExpandRatio(filterSpacer, 1.0F);
         filterLayout.setSpacing(true);
+        filterLayout.setComponentAlignment(btnPrintAuditLog, Alignment.BOTTOM_RIGHT);
         filterLayout.setComponentAlignment(btnAdd, Alignment.BOTTOM_RIGHT);
         filterLayout.setWidth(100, Component.UNITS_PERCENTAGE);
 
         cmbStatus.addItem("All");
-        cmbStatus.addItem("In process");
-        cmbStatus.addItem("Completed");
+        cmbStatus.addItem(LABEL_INPROCESS);
+        cmbStatus.addItem(LABEL_ACCEPTED);
+        cmbStatus.addItem(LABEL_COMPLETED);
+        cmbStatus.addItem(LABEL_UNPAID);
         cmbStatus.setNullSelectionAllowed(false);
         cmbStatus.setNewItemsAllowed(false);
         cmbStatus.setValue("All");
@@ -171,6 +217,41 @@ public class OrderList extends CustomComponent implements
             public void valueChange(ValueChangeEvent event) {
                 chosenStatus = (String) event.getProperty().getValue();
                 updateFilter();
+            }
+        });
+        
+        btnPrintAuditLog.addListener(new Button.ClickListener() {
+
+            @Override
+            public void buttonClick(ClickEvent event) {
+                if(annexService==null) {
+                   LOG.error("AnnexService missing.");
+                }
+            
+                PrinterManager printerManager = PrintFacade.getManager(getApplication());
+                Printer printer = printerManager.getDefaultPrinter();
+                
+                Date from = new Date();
+                from.setHours(0);
+                from.setMinutes(0);
+                from.setSeconds(0);
+                Date to = new Date();
+                Page page = new Page(PageSize.A4, 2, 2, 2, 2);
+                
+                Filter orderFilter = new AndFilter(new CompareFilter("dateInvoiced", from, CompareFilter.CompareType.GreaterOrEqual),
+                                            new CompareFilter("dateInvoiced", to, CompareFilter.CompareType.LessOrEqual));
+                List<Order> orders = organisationService.getOrders().list(orderFilter, null);
+                
+                Filter paymentFilter = new AndFilter(new CompareFilter("dateCreated", from, CompareFilter.CompareType.GreaterOrEqual),
+                                            new CompareFilter("dateCreated", to, CompareFilter.CompareType.LessOrEqual));
+                List<Payment> payments = organisationService.getPayments().list(paymentFilter, null);
+                
+                AuditReportContent auditReportContent = new AuditReportContent(organisationService.readOrganisation(), from, to, orders, payments);
+                AnnexContext<AuditReportContent, Void> annexContext = new AnnexContext<AuditReportContent, Void>(auditReportContent, null, page, getLocale());
+                Printable printable = annexService.generateAuditReportPrintable(annexContext, AnnexType.Receipt);
+                
+                PrinterJob printerJob =  PrinterJob.getBuilder(printer, printable).build();
+                printerManager.print(printerJob);
             }
         });
 
@@ -210,8 +291,8 @@ public class OrderList extends CustomComponent implements
     public void setContainerDataSource(Container newDataSource) {
         this.container = newDataSource;
         table.setContainerDataSource(newDataSource);
-        table.setVisibleColumns(new Object[]{"delete", "number", "status", "paid", "outlet", "dateChanged", "totalWithTax"});
-        table.setColumnHeaders(new String[]{"", "Number", "Status", "Paid", "Store", "Changed", "Total"});
+        table.setVisibleColumns(new Object[]{"delete", "number", "status", "dateChanged", "totalWithTax"});
+        table.setColumnHeaders(new String[]{"", "Number", "Status", "Changed", "Total"});
 
         if (newDataSource instanceof FilterableContainer) {
             ((FilterableContainer) newDataSource).setSorter(sorter);
@@ -251,6 +332,14 @@ public class OrderList extends CustomComponent implements
         this.outlet = outlet;
         updateFilter();
     }
+
+    public void setOrganisationService(OrganisationService organisationService) {
+        this.organisationService = organisationService;
+    }
+    
+    public void setAnnexService(AnnexService annexService) {
+        this.annexService = annexService;
+    }
     
     private void updateFilter() {
         if (container instanceof FilterableContainer) {
@@ -259,11 +348,18 @@ public class OrderList extends CustomComponent implements
             if (LABEL_INPROCESS.equals(value)) {
                 filter = new CompareFilter("status", OrderStatus.Processing, CompareFilter.CompareType.Equals);
             }
-            if (LABEL_COMPLETED.equals(value)) {
-                filter = new OrFilter(
-                        new CompareFilter("status", OrderStatus.Accepted, CompareFilter.CompareType.Equals),
-                        new CompareFilter("status", OrderStatus.Completed, CompareFilter.CompareType.Equals));
+            if (LABEL_ACCEPTED.equals(value)) {
+                filter = new CompareFilter("status", OrderStatus.Accepted, CompareFilter.CompareType.Equals);
             }
+            
+            if (LABEL_COMPLETED.equals(value)) {
+                filter = new CompareFilter("status", OrderStatus.Completed, CompareFilter.CompareType.Equals);
+            }
+            
+            if (LABEL_UNPAID.equals(value)) {
+                filter = new CompareFilter("paid", false, CompareFilter.CompareType.Equals);
+            }
+            
             
             if(outlet!=null) {
                 Filter outletFilter = new CompareFilter("outlet", outlet, CompareFilter.CompareType.Equals);
