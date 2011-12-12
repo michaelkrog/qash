@@ -5,6 +5,7 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
@@ -15,10 +16,15 @@ import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.Window.CloseEvent;
 import dk.apaq.shopsystem.entity.BaseUser;
+import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Tax;
+import dk.apaq.shopsystem.qash.common.CommonDialog;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.service.crud.UserCrud;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
 /**
@@ -67,6 +73,7 @@ public class UserManagerPanel extends CustomComponent {
         private PasswordField txtPasswordRepeat = new PasswordField();
         
         public CreateUserWindow() {
+            layout.setMargin(true);
             layout.addComponent(lblDisplayName, 0, 0);
             layout.addComponent(lblName, 0, 1);
             layout.addComponent(lblPassword, 0, 2);
@@ -75,6 +82,10 @@ public class UserManagerPanel extends CustomComponent {
             layout.addComponent(txtName, 1, 1);
             layout.addComponent(txtPassword, 1, 2);
             layout.addComponent(txtPasswordRepeat, 1, 3);
+            
+            txtDisplayName.addValidator(new StringLengthValidator("Must be at least 3 characters and no longer than 30.", 3, 30, false));
+            txtName.addValidator(new StringLengthValidator("Must be at least 3 characters long and no longer than 30.", 3, 30, false));
+            txtName.addValidator(new StringLengthValidator("Must be at least 5 characters long and no longer than 16.", 3, 30, false));
             
             setCompositionRoot(layout);
         }
@@ -144,7 +155,7 @@ public class UserManagerPanel extends CustomComponent {
         setSizeFull();
 
         userList.addListener(new ListSelectionHandler());
-/*
+
         btnNewUser.addListener(new Button.ClickListener() {
 
             public void buttonClick(ClickEvent event) {
@@ -157,13 +168,14 @@ public class UserManagerPanel extends CustomComponent {
                 getApplication().getMainWindow().addWindow(dialog);
                 dialog.addListener(new Window.CloseListener() {
 
+                    
                     @Override
                     public void windowClose(CloseEvent e) {
                         if(dialog.getResult() == CommonDialog.ButtonType.Ok) {
-                            UserCrud users = service.getUsers();
+                            UserCrud users = organsiationService.getUsers();
                             String id = users.createSystemUser();
                             SystemUser user = (SystemUser) users.read(id);
-                            user.setDisplayname(cuw.getDisplayName());
+                            user.setDisplayName(cuw.getDisplayName());
                             user.setName(cuw.getName());
                             user.setPassword(cuw.getPassword());
                             users.update(user);
@@ -172,7 +184,7 @@ public class UserManagerPanel extends CustomComponent {
                 });
             }
         });
-*/
+
         btnRemoveUser.addListener(new Button.ClickListener() {
 
             public void buttonClick(ClickEvent event) {

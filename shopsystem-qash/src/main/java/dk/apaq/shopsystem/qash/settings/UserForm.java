@@ -45,7 +45,7 @@ public class UserForm extends Form {
 
             if("name".equals(propertyId)) {
                 f.setReadOnly(true);
-            } else if("displayname".equals(propertyId)) {
+            } else if("displayName".equals(propertyId)) {
                 f.addValidator(new StringLengthValidator("Name should be at least one character.", 1, 30, true));
                 ((TextField)f).setInputPrompt("Fx. 'John Doe'");
             } else if("email".equals(propertyId)) {
@@ -110,7 +110,7 @@ public class UserForm extends Form {
     @Override
     protected void attachField(Object propertyId, Field field) {
         field.setCaption(null);
-        if (propertyId.equals("displayname")) {
+        if (propertyId.equals("displayName")) {
             ourLayout.addComponent(field, 1,0);
         } else if (propertyId.equals("name")) {
             ourLayout.addComponent(field, 1,1);
@@ -125,7 +125,7 @@ public class UserForm extends Form {
             ((Buffered)newDataSource).setWriteThrough(true);
         }
         super.setItemDataSource(newDataSource, Arrays.asList(new String[]{
-                    "displayname", "name", "email"}));
+                    "displayName", "name", "email"}));
     }
 
 
