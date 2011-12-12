@@ -29,6 +29,7 @@
         >
 
 
+        <!-- CRUD AND SERVICE BEANS -->
     <bean id="crud" class="dk.apaq.shopsystem.service.crud.EntityManagerCrudForSpring" scope="prototype">
         <property name="transactionsHandledByProvider" value="false"/>
     </bean>
@@ -65,6 +66,8 @@
     
     <bean id="service" class="dk.apaq.shopsystem.service.SystemServiceImpl">
         <property name="fileSystemPopulator" ref="filesystemPopulator"/>
+        <property name="mailSender" ref="mailSender"/>
+        <property name="templateMessage" ref="templateMessage"/>
     </bean>
         
     <bean id="organisationService" class="dk.apaq.shopsystem.service.OrganisationServiceImpl" scope="prototype"/>
@@ -73,6 +76,21 @@
     
     <bean id="wicketApplication" class="dk.apaq.shopsystem.rendering.CmsApplication" scope="prototype"/>
     
+    
+    <!-- MESSAGING BEANS -->
+    
+    <bean id="mailSender" class="dk.apaq.shopsystem.service.MockMailSender"/>
+
+
+<!-- this is a template message that we can pre-load with default state -->
+    <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="info@qashapp.com"/>
+    </bean>
+
+    
+
+    
+    <!-- HTML RENDERING BEANS -->
 <!--
     <bean id="webrenderer" class="dk.apaq.shopsystem.webrenderer.SeleniumWebRenderer" />
 -->
@@ -80,6 +98,7 @@
     <bean id="pdfrenderer"  class="dk.apaq.shopsystem.webrenderer.FlyingSaucerRenderer" />
 
     
+    <!-- DATA BEANS -->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="ShopSystem"/>
         <property name="jpaVendorAdapter">

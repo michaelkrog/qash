@@ -21,6 +21,10 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.vfs.FileSystem;
 import javax.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.transaction.annotation.Transactional;
 /**
  *
@@ -32,6 +36,9 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
 
     @PersistenceContext
     private EntityManager em;
+    
+    private MailSender mailSender;
+    private SimpleMailMessage templateMessage;
 
     private OrganisationCrud orgCrud;
     private Crud.Complete<String, SystemUser> systemUserCrud;
@@ -50,6 +57,14 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
         this.filesystemPopulator = populator;
     }
 
+    public void setMailSender(MailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    public void setTemplateMessage(SimpleMailMessage templateMessage) {
+        this.templateMessage = templateMessage;
+    }
+    
     @Override
     public OrganisationService getOrganisationService(Organisation org) {
         OrganisationService service = orgServiceMap.get(org.getId());
@@ -127,6 +142,26 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
 
         user.setOrganisation(organisation);
         getSystemUserCrud().create(user);
+        
+        if(mailSender!=null) { 
+            SimpleMailMessage msg = this.templateMessage == null ? new SimpleMailMessage() : new SimpleMailMessage(this.templateMessage);
+            msg.setSubject("New account");
+            msg.setTo(user.getEmail());
+            msg.setText(
+                "Dear " + user.getDisplayName()
+                    + ", thank you for creating a new account. \n\nYour credentials are:\n"
+                    + "username: " + user.getName() + "\n"
+                    + "password: " + user.getPassword() + "\n\n"
+                    + "Best Regards\n"
+                    + "The Qash team.");
+            try{
+                this.mailSender.send(msg);
+            }
+            catch(MailException ex) {
+                // simply log it and go on...
+                LOG.error("Unable to send mail.", ex);      
+            }
+        }
         return organisation;
     }
 

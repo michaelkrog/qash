@@ -51,10 +51,12 @@ public class SequenceProcessorImpl implements SequenceProcessor {
         if (sequence == null) {
             sequence = new Sequence();
             sequence.setId(sequenceId);
-            sequence.setSequence(1);
+            sequence.setSequence(0);
             em.persist(sequence);
             em.flush();
-        } else if (increment) {
+        } 
+        
+        if (increment) {
             sequence.incrementSequence();
             em.persist(sequence);
             em.flush();

@@ -269,18 +269,52 @@ public class AnnexServiceTest extends TestCase {
         Date to = new Date();
         
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        //FileOutputStream out = new FileOutputStream("invoice_png.zip");
-
+        
         AuditReportContent content = new AuditReportContent(org, from, to, orders, payments);
         Page page = new Page(PageSize.A4, 7);
         AnnexContext<AuditReportContent, OutputStream> context = new AnnexContext<AuditReportContent, OutputStream>(content, out, page, Locale.getDefault());
-        annexService.generateAuditReport(context, AnnexType.Invoice, OutputType.Html);
+        annexService.generateAuditReport(context, AnnexType.Receipt, OutputType.Html);
 
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
 
-        //TODO Extract the images and ensure they are correct in size.
         out.close();
+    }
+     
+     public void testGenerateAuditReportPrintable() throws Exception {
+        Organisation org = getOrganisation();
+        List<Order> orders = getOrderList(30);
+        List<Payment> payments = getPaymentList(40);
+        
+        Date from = new Date();
+        from.setHours(0);
+        from.setMinutes(0);
+        from.setSeconds(0);
+        Date to = new Date();
+        
+        //FileOutputStream out = new FileOutputStream("invoice.pdf");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        
+        AuditReportContent content = new AuditReportContent(org, from, to, orders, payments);
+        Page page = new Page(PageSize.A4, 5, 5, 5, 5);
+        
+        AnnexContext<AuditReportContent, Void> context = new AnnexContext<AuditReportContent, Void>(content, null, page, Locale.getDefault());
+        Printable p = annexService.generateAuditReportPrintable(context, AnnexType.Receipt);
+        
+        int width = page.getSize().getWidth().getPixels();
+        int height = page.getSize().getHeight().getPixels();
+        
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        PageFormat pf = new PageFormat();
+        Paper paper = new Paper();
+        paper.setSize(width, height);
+        paper.setImageableArea(0, 0, width, height);
+        pf.setPaper(paper);
+        p.print(img.createGraphics(), pf, 0);
+        
+        ImageIO.write(img, "png", out);
+        String value = new String(out.toByteArray());
+        assertNotSame(0, value.length());
     }
 
     /*public void testPrintReceiptHtml() throws Exception {

@@ -18,6 +18,12 @@ public class AuditReportContent {
     private final List<Payment> payments;
 
     public AuditReportContent(Organisation seller, Date dateFrom, Date dateTo, List<Order> orders, List<Payment> payments) {
+        checkNotNull(seller, "seller");
+        checkNotNull(dateFrom, "dateFrom");
+        checkNotNull(dateTo, "dateTo");
+        checkNotNull(orders, "orders");
+        checkNotNull(payments, "payments");
+        
         this.seller = seller;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
@@ -25,6 +31,12 @@ public class AuditReportContent {
         this.payments = payments;
     }
 
+    private void checkNotNull(Object o, String name) {
+        if(o == null) {
+            throw new NullPointerException(name + " must not be null");
+        }
+    }
+    
     public Organisation getSeller() {
         return seller;
     }

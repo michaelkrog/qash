@@ -69,9 +69,13 @@ public class AnnexServiceImpl implements AnnexService {
     }
     private VelocityEngine ve;
     private Template receiptTemplate, invoiceTemplate, auditReportTemplateSmall, auditReportTemplate;
-    
+
     @Override
     public void generatePurchaseDocument(AnnexContext<OrderDocumentContent, OutputStream> context, AnnexType annexType, OutputType outputType) throws Exception {
+        checkNull(context, "context");
+        checkNull(annexType, "annextType");
+        checkNull(outputType, "outputType");
+        
         switch (annexType) {
             case Invoice:
                 generatePurchaseDocument(context, outputType, invoiceTemplate);
@@ -84,6 +88,9 @@ public class AnnexServiceImpl implements AnnexService {
 
     @Override
     public Printable generatePurchaseDocumentPrintable(AnnexContext<OrderDocumentContent, Void> context, AnnexType annexType) throws Exception {
+        checkNull(context, "context");
+        checkNull(annexType, "annextType");
+        
         switch (annexType) {
             case Invoice:
                 return printPurchaseDocument(context, invoiceTemplate);
@@ -96,24 +103,42 @@ public class AnnexServiceImpl implements AnnexService {
 
     @Override
     public void generateAuditReport(AnnexContext<AuditReportContent, OutputStream> context, AnnexType annexType, OutputType outputType) {
+        checkNull(context, "context");
+        checkNull(annexType, "annextType");
+        checkNull(outputType, "outputType");
+        
         try {
-            switch(annexType) {
+            switch (annexType) {
                 case Invoice:
-                    generateAuditReportAnnex(context, auditReportTemplate);
+                    generateAuditReportDocument(context, outputType, auditReportTemplate);
                     break;
                 case Receipt:
-                    generateAuditReportAnnex(context, auditReportTemplateSmall);
+                    generateAuditReportDocument(context, outputType, auditReportTemplateSmall);
                     break;
             }
-            
+
         } catch (Exception ex) {
             throw new AnnexServiceException("Unable to generate audit report.", ex);
         }
     }
 
     @Override
-    public void generateAuditReportPrintable(AnnexContext<AuditReportContent, Void> context, AnnexType annexType) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Printable generateAuditReportPrintable(AnnexContext<AuditReportContent, Void> context, AnnexType annexType) {
+        checkNull(context, "context");
+        checkNull(annexType, "annextType");
+        
+        try {
+            switch (annexType) {
+                case Invoice:
+                    return printAuditReportDocument(context, auditReportTemplate);
+                case Receipt:
+                    return printAuditReportDocument(context, auditReportTemplateSmall);
+                default:
+                    return null;
+            }
+        } catch (Exception ex) {
+            throw new AnnexServiceException("Unable to create printable audit report.", ex);
+        }
     }
 
     private void generatePurchaseDocument(AnnexContext<OrderDocumentContent, OutputStream> context, OutputType outputType, Template template) throws Exception {
@@ -125,36 +150,30 @@ public class AnnexServiceImpl implements AnnexService {
             LOG.debug("Creating document [shop=" + organisation.getId() + "; order=" + order.getNumber() + "; format=" + outputType + "]");
         }
 
+        if(outputType == OutputType.Html) {
+            generateOrderDocumentAnnex(context, template);
+            return;
+        }
+        
         OutputStream orgOut = context.getOutput();
 
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        context = new AnnexContext<OrderDocumentContent, OutputStream>(context, baos);
+        generateOrderDocumentAnnex(context, template);
+         
         switch (outputType) {
-            case Html:
-                generateOrderDocumentAnnex(context, template);
-                break;
             case Pdf:
-                ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
-                context = new AnnexContext<OrderDocumentContent, OutputStream>(context, baos2);
-                generateOrderDocumentAnnex(context, template);
-                generatePdfFromHtml(baos2.toByteArray(), orgOut);
+                generatePdfFromHtml(baos.toByteArray(), orgOut);
                 break;
             case Png:
-                ByteArrayOutputStream baos4 = new ByteArrayOutputStream();
-                context = new AnnexContext<OrderDocumentContent, OutputStream>(context, baos4);
-                generateOrderDocumentAnnex(context, template);
-                generatePngFromHtml(baos4.toByteArray(), page.getSize().getWidth().getPixels(), orgOut);
+                generatePngFromHtml(baos.toByteArray(), page.getSize().getWidth().getPixels(), orgOut);
                 break;
             case PngBundle:
             case PostScript:
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                context = new AnnexContext<OrderDocumentContent, OutputStream>(context, baos);
-                generateOrderDocumentAnnex(context, template);
                 generatePostScriptFromHtml(baos.toByteArray(), page.getSize(), orgOut);
                 break;
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Document created. [shop=" + organisation.getId() + "]");
-        }
     }
 
     private Printable printPurchaseDocument(AnnexContext<OrderDocumentContent, Void> context, Template template) throws Exception {
@@ -168,6 +187,55 @@ public class AnnexServiceImpl implements AnnexService {
         Page page = context.getPage();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         generateOrderDocumentAnnex(new AnnexContext<OrderDocumentContent, OutputStream>(context, baos), template);
+
+        return generatePrintableFromHtml(baos.toByteArray(), page.getSize());
+
+    }
+
+    private void generateAuditReportDocument(AnnexContext<AuditReportContent, OutputStream> context, OutputType outputType, Template template) throws Exception {
+        Organisation organisation = context.getInput().getSeller();
+        Page page = context.getPage();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Creating document [Organisation=" + organisation.getId() + "; format=" + outputType + "]");
+        }
+
+        if(outputType == OutputType.Html) {
+            generateAuditReportAnnex(context, template);
+            return;
+        }
+        
+        OutputStream orgOut = context.getOutput();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        context = new AnnexContext<AuditReportContent, OutputStream>(context, baos);
+        generateAuditReportAnnex(context, template);
+            
+
+        switch (outputType) {
+            case Pdf:
+                generatePdfFromHtml(baos.toByteArray(), orgOut);
+                break;
+            case Png:
+                generatePngFromHtml(baos.toByteArray(), page.getSize().getWidth().getPixels(), orgOut);
+                break;
+            case PngBundle:
+            case PostScript:
+                generatePostScriptFromHtml(baos.toByteArray(), page.getSize(), orgOut);
+                break;
+        }
+
+    }
+
+    private Printable printAuditReportDocument(AnnexContext<AuditReportContent, Void> context, Template template) throws Exception {
+        Organisation organisation = context.getInput().getSeller();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Printing document [organisation=" + organisation.getId() + "]");
+        }
+
+        Page page = context.getPage();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        generateAuditReportAnnex(new AnnexContext<AuditReportContent, OutputStream>(context, baos), template);
 
         return generatePrintableFromHtml(baos.toByteArray(), page.getSize());
 
@@ -194,40 +262,38 @@ public class AnnexServiceImpl implements AnnexService {
 
         context.put("organisation", organisation);
         writeGenericAnnex(context, locale, Currency.getInstance(order.getCurrency()), page, template, annexcontext.getOutput());
-               
+
 
     }
-    
-    
-    
+
     private void generateAuditReportAnnex(AnnexContext<AuditReportContent, OutputStream> annexcontext, Template template) throws Exception {
 
-        Date dateFrom = annexcontext.getInput().getDateFrom(); 
+        Date dateFrom = annexcontext.getInput().getDateFrom();
         Date dateTo = annexcontext.getInput().getDateTo();
         List<Order> orders = annexcontext.getInput().getOrders();
         List<Payment> payments = annexcontext.getInput().getPayments();
         Organisation organisation = annexcontext.getInput().getSeller();
         Page page = annexcontext.getPage();
         Locale locale = annexcontext.getLocale();
-        
+
         double salesSum = 0;
         double salesVat = 0;
         double paymentsCash = 0;
         double paymentsCard = 0;
         double paymentsBank = 0;
         double paymentsChange = 0;
-        
+
 
         /*  create a context and add data */
         VelocityContext context = new VelocityContext();
 
-        for(Order order : orders) {
+        for (Order order : orders) {
             salesSum += order.getTotal();
             salesVat += order.getTotalTax();
         }
-        
-        for(Payment payment : payments) {
-            switch(payment.getPaymentType()) {
+
+        for (Payment payment : payments) {
+            switch (payment.getPaymentType()) {
                 case Card:
                     paymentsCard += payment.getAmount();
                     break;
@@ -249,7 +315,7 @@ public class AnnexServiceImpl implements AnnexService {
 
         context.put("salesSum", salesSum);
         context.put("salesVat", salesVat);
-        
+
         context.put("paymentsCash", paymentsCash);
         context.put("paymentsCard", paymentsCard);
         context.put("paymentsBank", paymentsBank);
@@ -257,11 +323,11 @@ public class AnnexServiceImpl implements AnnexService {
         context.put("paymentsDifference", paymentsBank + paymentsCard + paymentsCash + paymentsChange);
 
         context.put("organisation", organisation);
-        
+
         writeGenericAnnex(context, locale, Currency.getInstance(organisation.getCurrency()), page, template, annexcontext.getOutput());
 
     }
-    
+
     private void writeGenericAnnex(VelocityContext context, Locale locale, Currency currency, Page page, Template template, OutputStream out) throws IOException {
         NumberFormat cf = NumberFormat.getCurrencyInstance(locale);
         NumberFormat cf2 = NumberFormat.getNumberInstance(locale);
@@ -339,13 +405,19 @@ public class AnnexServiceImpl implements AnnexService {
         Printable printable = generatePrintableFromHtml(htmlData, pageSize);
         getPrinter(OutputType.PostScript).print(printable, pageSize, out);
     }
-    
+
     private Printable generatePrintableFromHtml(byte[] htmlData, PageSize pageSize) throws Exception {
         XHTMLPanel panel = new XHTMLPanel();
         panel.setSize(pageSize.getWidth().getPixels(), pageSize.getHeight().getPixels());
         panel.setDocument(new ByteArrayInputStream(htmlData), "");
 
         return new ExtendedXHtmlPrintable(panel);
-        
+
+    }
+    
+    private void checkNull(Object o, String name) {
+        if(o == null) {
+            throw new NullPointerException(name + " must not be null.");
+        }
     }
 }

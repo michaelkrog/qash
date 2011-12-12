@@ -14,6 +14,6 @@ public interface AnnexService {
         Printable generatePurchaseDocumentPrintable(AnnexContext<OrderDocumentContent, Void> context, AnnexType annexType) throws Exception;
 
         void generateAuditReport(AnnexContext<AuditReportContent, OutputStream> context, AnnexType annexType, OutputType outputType);
-        void generateAuditReportPrintable(AnnexContext<AuditReportContent, Void> context, AnnexType annexType);
+        Printable generateAuditReportPrintable(AnnexContext<AuditReportContent, Void> context, AnnexType annexType);
         
 }

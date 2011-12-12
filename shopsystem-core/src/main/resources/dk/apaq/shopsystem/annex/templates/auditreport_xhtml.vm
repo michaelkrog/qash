@@ -124,7 +124,7 @@
             </tr>
             <tr>
                 <td class="left">$tool.html($resource.getString("Card"))</td>
-                <td class="right">$cf2.format($paymentsCash)</td>
+                <td class="right">$cf2.format($paymentsCard)</td>
             </tr>
             <tr>
                 <td class="left">$tool.html($resource.getString("Transfer"))</td>
