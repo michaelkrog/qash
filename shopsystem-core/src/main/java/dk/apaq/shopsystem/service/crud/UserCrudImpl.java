@@ -12,26 +12,29 @@ import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.limit.Limit;
 import dk.apaq.filter.sort.Sorter;
 import dk.apaq.shopsystem.entity.BaseUser;
+import dk.apaq.shopsystem.entity.ContentEntity;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.SystemUserReference;
+import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.service.SystemService;
 import javax.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author michaelzachariassenkrog
  */
-public class UserCrudImpl extends EntityManagerCrudForSpring<String, BaseUser> implements UserCrud {
+public class UserCrudImpl extends ContentCrud<BaseUser> implements UserCrud {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserCrudImpl.class);
-    protected final Organisation organisation;
-    private final Filter orgFilter;
+    
+    @Autowired
+    private SystemService service;
     
     public UserCrudImpl(EntityManager em, Organisation organisation) {
-        super(em, BaseUser.class);
-        this.organisation = organisation;
-        this.orgFilter = new CompareFilter("organisation", organisation, CompareFilter.CompareType.Equals);
+        super(em, organisation, BaseUser.class);
     }
 
     @Override
@@ -64,17 +67,31 @@ public class UserCrudImpl extends EntityManagerCrudForSpring<String, BaseUser> i
     }
 
     @Override
-    public List<String> listIds(Filter filter, Sorter sorter, Limit limit) {
-        Filter wrapFilter;
-        if(filter==null) {
-            wrapFilter = orgFilter;
-        } else {
-            wrapFilter = new AndFilter(orgFilter, filter);
+    @Transactional
+    public void delete(String id) {
+        
+        BaseUser user = read(id);
+        Organisation org = user.getOrganisation();
+        
+        //org should never be null, but we cant be 100% sure so we check anyway
+        if(user instanceof SystemUser && org!=null) {
+            OrganisationService organisationService = service.getOrganisationService(org);
+            List<BaseUser> users = organisationService.getUsers().list();
+            
+            int realUserCount = 0;
+            for(BaseUser current: users) {
+                if(current instanceof SystemUser) {
+                    realUserCount++;
+                }
+            }
+            
+            if(realUserCount<2) {
+                throw new RuntimeException("Unable to delete user because it is the last user owned by the organisation.");
+            }
         }
-
-        return super.listIds(wrapFilter, sorter, limit);
+        
+        super.delete(id);
     }
-
 
 
 }

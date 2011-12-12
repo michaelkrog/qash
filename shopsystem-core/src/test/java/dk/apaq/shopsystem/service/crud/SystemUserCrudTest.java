@@ -5,6 +5,8 @@ import dk.apaq.filter.Filter;
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.core.ContainsFilter;
 import dk.apaq.filter.core.LikeFilter;
+import dk.apaq.shopsystem.entity.BaseUser;
+import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.SystemService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.apaq.shopsystem.entity.SystemUser;
+import dk.apaq.shopsystem.entity.SystemUserReference;
+import dk.apaq.shopsystem.service.OrganisationService;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -111,6 +115,45 @@ public class SystemUserCrudTest {
         result = service.getSystemUserCrud().read(id);
         assertNull(result);
     }
+    
+    @Test
+    public void testDeleteConnectedToOrganisation() {
+        System.out.println("delete");
+        
+        SystemUser user = new SystemUser();
+        user.setName("john");
+        user.setPassword("doe");
+        
+        Organisation org = new Organisation();
+        org.setCompanyName("Apaq");
+        
+        org = service.createOrganisation(user, org);
+        OrganisationService organisationService = service.getOrganisationService(org);
+        
+        List<BaseUser> users = organisationService.getUsers().list();
+        assertEquals(1, users.size());
+        
+        try{
+            organisationService.getUsers().delete(users.get(0).getId());
+            fail("Should not be able to delete");
+        } catch(Exception ex) {}
+        
+        BaseUser userReference = organisationService.getUsers().read(organisationService.getUsers().createSystemUserReference((SystemUser)users.get(0)));
+        try{
+            organisationService.getUsers().delete(users.get(0).getId());
+            fail("Should not be able to delete");
+        } catch(Exception ex) {}
+        
+        BaseUser realUser2 = organisationService.getUsers().read(organisationService.getUsers().createSystemUser());
+        try{
+            organisationService.getUsers().delete(users.get(0).getId());
+        } catch(Exception ex) {
+            fail("Should be able to delete. " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        
+    }
+
 
     /**
      * Test of read method, of class service.getAccountCrud().

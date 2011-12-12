@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.entity;
 
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 

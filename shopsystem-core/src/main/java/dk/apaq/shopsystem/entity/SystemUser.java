@@ -1,7 +1,9 @@
 package dk.apaq.shopsystem.entity;
 
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 
 /**
@@ -25,6 +27,8 @@ public class SystemUser extends BaseUser {
     
     private String phone;
 
+    @OneToOne(mappedBy="user",cascade= CascadeType.REMOVE)
+    private SystemUserReference reference;
     
 
     @Override

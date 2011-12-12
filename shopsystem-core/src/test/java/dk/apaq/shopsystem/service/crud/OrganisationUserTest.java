@@ -51,6 +51,8 @@ public class OrganisationUserTest {
             String orgid = service.getOrganisationCrud().create();
             org = service.getOrganisationCrud().read(orgid);
             orgService = service.getOrganisationService(org);
+            String orgOwnerId = orgService.getUsers().createSystemUser();
+            orgOwner = (SystemUser)orgService.getUsers().read(orgOwnerId);
         }
     }
 
@@ -63,6 +65,8 @@ public class OrganisationUserTest {
     private OrganisationService orgService;
 
     private Organisation org;
+    
+    private SystemUser orgOwner;
 
     /**
      * Test of create method, of class service.getAccountCrud().
