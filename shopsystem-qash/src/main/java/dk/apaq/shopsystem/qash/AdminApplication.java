@@ -5,6 +5,11 @@ import com.vaadin.terminal.gwt.server.HttpServletRequestListener;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
+import dk.apaq.printing.core.DefaultPrinterDecisionMaker;
+import dk.apaq.printing.core.Printer;
+import dk.apaq.printing.core.PrinterManager;
+import dk.apaq.printing.core.PrinterManagerPlugin;
+import dk.apaq.printing.remoteclient.RemoteClientPlugin;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.OrganisationService;
@@ -78,6 +83,7 @@ public class AdminApplication extends Application implements HttpServletRequestL
         mainWindow.setStyleName("v-adminapplication");
         setMainWindow(mainWindow);
 
+        PrintFacade.getManager(this).setDefaultPrinterDecisionMaker(new RemoteDefaultDecisionMaker());
         PrintFacade.getManager(this).addPlugin(new VaadinPrintPdfPlugin(this));
         PrintFacade.getManager(this).addPlugin(new VaddinPrintAppletPlugin(this));
         //PrintFacade.getManager(this).addPlugin(new VaadinGoogleCloudPrintPlugin(this, gcpClientId, gcpClientSecret));
