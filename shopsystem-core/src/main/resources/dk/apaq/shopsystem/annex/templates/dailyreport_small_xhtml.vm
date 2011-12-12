@@ -1,0 +1,135 @@
+#set($bodyWidth = $pixelWidth - $pixelMarginLeft)
+#set($bodyWidth = $bodyWidth - $pixelMarginRight)
+#set($normal-font-size = 20)
+#set($h1-font-size = 30)
+#set($h2-font-size = 24)
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Receipt for $order.getNumber()</title>
+        <style type="text/css">
+                @page {
+                    size: ${pageWidth}mm ${pageHeight}mm;
+                    margin: 0.0mm;
+                }
+
+                body{
+                    font-family:verdana;
+                    font-size:${normal-font-size}px;
+                    width:${bodyWidth}px;
+                    margin-top: ${pixelMarginTop}px;
+                    margin-right: ${pixelMarginRight}px;
+                    margin-bottom: ${pixelMarginBottom}px;
+                    margin-left: ${pixelMarginLeft}px;
+                    padding: 0;
+                }
+
+                .addresslabel{
+        		text-align:center;
+        		margin: 15px 15px 30px 15px;
+                        width:100%;
+                        overflow:hidden;
+                        font-size:${h1-font-size}px;
+
+        	}
+
+                .addresslabel div{
+                }
+
+        	.datelabel{
+        	}
+
+        	.orderNolabel{
+                    text-align:right;
+        	}
+
+        	.header{
+                    margin-bottom:4px;
+                    width:100%;
+                    border-bottom:1px solid black;
+        	}
+
+                .lines{
+                    width:100%;
+                    table-layout:fixed;
+                }
+
+        	.orderline_title,
+                .totalline_title{
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+
+        	.totalline_value,
+                .orderline_total{
+                    text-align:right;
+                    width:40px;
+                }
+
+                .totalline_title,
+                .totalline_value {
+                    font-size:${h2-font-size}px;
+                }
+
+                .with-top-padding {
+                    padding-top:10px;
+                }
+    
+                .with-bottom-padding {
+                    padding-bottom:10px;
+                }
+
+        	.receiptNote{
+                    margin:30px 15px;
+                    text-align:center;
+        	}
+
+        </style>
+    </head>
+    <body>
+    
+    	<div class="addresslabel">
+    		<div>#if($organisation.getCompanyName())$tool.html($organisation.getCompanyName())#end</div>
+    		<div>#if($organisation.getStreet())$tool.html($organisation.getStreet())#end</div>
+       		<div>#if($organisation.getPostalCode())$tool.html($organisation.getPostalCode())#end #if($organisation.getCity())$tool.html($organisation.getCity())#end</div>
+        </div>
+
+        <table class="header" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="datelabel">$tool.html($resource.getString("date")): $df.format($order.getDateChanged())</td>
+                <td class="orderNolabel">$tool.html($resource.getString("order_number")): $order.getNumber()</td>
+            </tr>
+        </table>
+
+
+        <table class="lines" cellpadding="0" cellspacing="0">
+        #foreach($orderline in $orderlines)
+            <tr>
+                <td class="orderline_title"><div class="orderline_title">$nf.format($orderline.quantity) x $tool.html($orderline.title)</div></td>
+                <td class="orderline_total">$cf2.format($orderline.getTotalWithTax())</td>
+            </tr>
+
+        #end
+            <tr>
+                <td class="totalline_title with-top-padding with-bottom-padding">$tool.html($resource.getString("total")) ($tool.html($resource.getString("including_tax")) $cf2.format($order.getTotalTax()))</td>
+                <td class="totalline_value with-top-padding with-bottom-padding">$cf2.format($order.getTotalWithTax())</td>
+            </tr>
+
+        #foreach($payment in $payments)
+            <tr>
+                <td class="orderline_title"><div class="orderline_title">$tool.html($resource.getString($payment.getPaymentType().name()))</div></td>
+                <td class="orderline_total">$cf2.format($payment.getAmount())</td>
+            </tr>
+        #end
+
+
+        </table>
+        #if($organisation.getAnnexNote())
+        <div class="receiptNote">$tool.html($organisation.getAnnexNote()).replaceAll("\n","<br/>")</div>
+        #end
+    </body>
+</html>

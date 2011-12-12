@@ -118,10 +118,10 @@ public class AnnexServiceTest extends TestCase {
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         
-        CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
+        OrderDocumentContent content = new OrderDocumentContent(org, order, null);
         Page page = new Page(PageSize.Receipt);
-        AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
-        annexService.generate(context, AnnexType.Receipt, OutputType.Html);
+        AnnexContext<OrderDocumentContent, OutputStream> context = new AnnexContext<OrderDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
+        annexService.generatePurchaseDocument(context, AnnexType.Receipt, OutputType.Html);
         
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
@@ -137,10 +137,10 @@ public class AnnexServiceTest extends TestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         //FileOutputStream out = new FileOutputStream("invoice.html");
         
-        CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
+        OrderDocumentContent content = new OrderDocumentContent(org, order, null);
         Page page = new Page(PageSize.A4, 7, 7, 7, 7);
-        AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
-        annexService.generate(context, AnnexType.Invoice, OutputType.Html);
+        AnnexContext<OrderDocumentContent, OutputStream> context = new AnnexContext<OrderDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
+        annexService.generatePurchaseDocument(context, AnnexType.Invoice, OutputType.Html);
         
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
@@ -164,10 +164,10 @@ public class AnnexServiceTest extends TestCase {
         //FileOutputStream out = new FileOutputStream("invoice.pdf");
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         
-        CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
+        OrderDocumentContent content = new OrderDocumentContent(org, order, null);
         Page page = new Page(PageSize.A4, 15, 15, 15, 15);
-        AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
-        annexService.generate(context, AnnexType.Invoice, OutputType.Pdf);
+        AnnexContext<OrderDocumentContent, OutputStream> context = new AnnexContext<OrderDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
+        annexService.generatePurchaseDocument(context, AnnexType.Invoice, OutputType.Pdf);
         
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
@@ -180,11 +180,11 @@ public class AnnexServiceTest extends TestCase {
         //FileOutputStream out = new FileOutputStream("invoice.pdf");
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         
-        CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
+        OrderDocumentContent content = new OrderDocumentContent(org, order, null);
         Page page = new Page(PageSize.A4, 5, 5, 5, 5);
         
-        AnnexContext<CommercialDocumentContent, Void> context = new AnnexContext<CommercialDocumentContent, Void>(content, null, page, Locale.getDefault());
-        Printable p = annexService.generatePrintable(context, AnnexType.Invoice);
+        AnnexContext<OrderDocumentContent, Void> context = new AnnexContext<OrderDocumentContent, Void>(content, null, page, Locale.getDefault());
+        Printable p = annexService.generatePurchaseDocumentPrintable(context, AnnexType.Invoice);
         
         int width = page.getSize().getWidth().getPixels();
         int height = page.getSize().getHeight().getPixels();
@@ -210,10 +210,10 @@ public class AnnexServiceTest extends TestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         //FileOutputStream out = new FileOutputStream("invoice.ps");
 
-        CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
+        OrderDocumentContent content = new OrderDocumentContent(org, order, null);
         Page page = new Page(PageSize.A4);
-        AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
-        annexService.generate(context, AnnexType.Invoice, OutputType.PostScript);
+        AnnexContext<OrderDocumentContent, OutputStream> context = new AnnexContext<OrderDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
+        annexService.generatePurchaseDocument(context, AnnexType.Invoice, OutputType.PostScript);
 
 
         String value = new String(out.toByteArray());
@@ -230,10 +230,10 @@ public class AnnexServiceTest extends TestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         //FileOutputStream out = new FileOutputStream("invoice_png.zip");
 
-        CommercialDocumentContent content = new CommercialDocumentContent(org, order, null);
+        OrderDocumentContent content = new OrderDocumentContent(org, order, null);
         Page page = new Page(PageSize.A4, 7);
-        AnnexContext<CommercialDocumentContent, OutputStream> context = new AnnexContext<CommercialDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
-        annexService.generate(context, AnnexType.Invoice, OutputType.PngBundle);
+        AnnexContext<OrderDocumentContent, OutputStream> context = new AnnexContext<OrderDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
+        annexService.generatePurchaseDocument(context, AnnexType.Invoice, OutputType.PngBundle);
 
 
         String value = new String(out.toByteArray());
