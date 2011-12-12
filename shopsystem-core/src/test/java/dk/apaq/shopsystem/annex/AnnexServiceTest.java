@@ -1,6 +1,5 @@
 package dk.apaq.shopsystem.annex;
 
-import dk.apaq.shopsystem.entity.Address;
 import dk.apaq.shopsystem.entity.ContactInformation;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,20 +7,18 @@ import java.util.List;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.Store;
+import dk.apaq.shopsystem.entity.Payment;
+import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.entity.Tax;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.Printable;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import javax.imageio.ImageIO;
 import junit.framework.TestCase;
 
@@ -70,12 +67,12 @@ public class AnnexServiceTest extends TestCase {
         return order;
     }
 
-    private List<Order> getOrderList(){
+    private List<Order> getOrderList(int count){
         Tax tax = getTax();
         
         List<Order> orderlist = new ArrayList<Order>();
 
-        for (int i = 0; i < 3000; i++) {
+        for (int i = 0; i < count; i++) {
             Order order = new Order();
             order.setCurrency("DKK");
             order.setNumber(i + 1);
@@ -85,6 +82,23 @@ public class AnnexServiceTest extends TestCase {
 
         }
         return orderlist;
+    }
+    
+    private List<Payment> getPaymentList(int count) {
+        List<Payment> payments = new ArrayList();
+        
+        for(int i=0;i<count;i++) {
+            Payment p = new Payment();
+            if(i % 4 == 0) {
+                p.setAmount(100);
+                p.setPaymentType(PaymentType.Cash);
+            } else {
+                p.setAmount(-10);
+                p.setPaymentType(PaymentType.Change); 
+            }
+            payments.add(p);
+        }
+        return payments;
     }
 
     private Tax getTax(){
@@ -243,6 +257,31 @@ public class AnnexServiceTest extends TestCase {
         out.close();
     }
 
+     public void testGenerateAuditReportHtml() throws Exception{
+        Organisation org = getOrganisation();
+        List<Order> orders = getOrderList(30);
+        List<Payment> payments = getPaymentList(40);
+        
+        Date from = new Date();
+        from.setHours(0);
+        from.setMinutes(0);
+        from.setSeconds(0);
+        Date to = new Date();
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        //FileOutputStream out = new FileOutputStream("invoice_png.zip");
+
+        AuditReportContent content = new AuditReportContent(org, from, to, orders, payments);
+        Page page = new Page(PageSize.A4, 7);
+        AnnexContext<AuditReportContent, OutputStream> context = new AnnexContext<AuditReportContent, OutputStream>(content, out, page, Locale.getDefault());
+        annexService.generateAuditReport(context, AnnexType.Invoice, OutputType.Html);
+
+        String value = new String(out.toByteArray());
+        assertNotSame(0, value.length());
+
+        //TODO Extract the images and ensure they are correct in size.
+        out.close();
+    }
 
     /*public void testPrintReceiptHtml() throws Exception {
         Shop shop = getShop();

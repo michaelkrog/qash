@@ -1,0 +1,147 @@
+#set($bodyWidth = $pixelWidth - $pixelMarginLeft)
+#set($bodyWidth = $bodyWidth - $pixelMarginRight)
+#set($normal-font-size = 20)
+#set($h1-font-size = 30)
+#set($h2-font-size = 24)
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Receipt for $order.getNumber()</title>
+        <style type="text/css">
+                @page {
+                    size: ${pageWidth}mm ${pageHeight}mm;
+                    margin: 0.0mm;
+                }
+
+                body{
+                    font-family:verdana;
+                    font-size:${normal-font-size}px;
+                    width:${bodyWidth}px;
+                    margin-top: ${pixelMarginTop}px;
+                    margin-right: ${pixelMarginRight}px;
+                    margin-bottom: ${pixelMarginBottom}px;
+                    margin-left: ${pixelMarginLeft}px;
+                    padding: 0;
+                }
+
+                .header{
+        		text-align:center;
+        		margin: 15px 15px 30px 15px;
+                        width:100%;
+                        overflow:hidden;
+                        font-size:${h1-font-size}px;
+
+        	}
+
+                .header div{
+                }
+
+        	.datelabel{
+        	}
+
+        	.orderNolabel{
+                    text-align:right;
+        	}
+
+        	.header{
+                    margin-bottom:4px;
+                    width:100%;
+                    border-bottom:1px solid black;
+        	}
+
+                .lines{
+                    width:100%;
+                    table-layout:fixed;
+                }
+
+        	.lines .left{
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+
+        	.lines .right{
+                    text-align:right;
+                    width:40px;
+                }
+
+                .title {
+                    font-size:${h2-font-size}px;
+                }
+
+                .with-top-padding {
+                    padding-top:10px;
+                }
+    
+                .with-bottom-padding {
+                    padding-bottom:10px;
+                }
+
+        	.receiptNote{
+                    margin:30px 15px;
+                    text-align:center;
+        	}
+
+        </style>
+    </head>
+    <body>
+    	<div class="header">
+    		<div>$tool.html($resource.getString("audit_report_title"))</div>
+        </div>
+    
+    	<table class="lines" cellpadding="0" cellspacing="0">
+            <!-- PERIOD -->
+            <tr>
+                <td class="title left with-top-padding with-bottom-padding" colspan="2">$tool.html($resource.getString("period"))</td>
+            </tr>
+            <tr>
+                <td class="left" colspan="2">$df.format($periodFrom) - $df.format($periodTo)</td>
+            </tr>
+
+            <!-- SUM -->
+            <tr>
+                <td class="title left with-top-padding with-bottom-padding" colspan="2">$tool.html($resource.getString("sales"))</td>
+            </tr>
+            <tr>
+                <td class="left">$tool.html($resource.getString("total"))</td>
+                <td class="right">$cf2.format($salesSum)</td>
+            </tr>
+            <tr>
+                <td class="left">$tool.html($resource.getString("including_tax"))</td>
+                <td class="right">$cf2.format($salesVat)</td>
+            </tr>
+
+            <!-- PAYMENTS -->
+            <tr>
+                <td class="title left with-top-padding with-bottom-padding" colspan="2">$tool.html($resource.getString("payments"))</td>
+            </tr>
+            <tr>
+                <td class="left">$tool.html($resource.getString("Cash"))</td>
+                <td class="right">$cf2.format($paymentsCash)</td>
+            </tr>
+            <tr>
+                <td class="left">$tool.html($resource.getString("Card"))</td>
+                <td class="right">$cf2.format($paymentsCash)</td>
+            </tr>
+            <tr>
+                <td class="left">$tool.html($resource.getString("Transfer"))</td>
+                <td class="right">$cf2.format($paymentsBank)</td>
+            </tr>
+            <tr>
+                <td class="left">$tool.html($resource.getString("Change"))</td>
+                <td class="right">$cf2.format($paymentsChange)</td>
+            </tr>
+
+            <!-- DIFFERENCE -->
+            <tr>
+                <td class="title left with-top-padding with-bottom-padding" >$tool.html($resource.getString("difference"))</td>
+                <td class="title right with-top-padding with-bottom-padding">$cf2.format($paymentsDifference)</td>
+            </tr>
+
+        </table>
+
+    </body>
+</html>

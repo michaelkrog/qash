@@ -51,7 +51,7 @@ import dk.apaq.printing.core.PrinterManager;
 import dk.apaq.shopsystem.annex.AnnexContext;
 import dk.apaq.shopsystem.annex.AnnexService;
 import dk.apaq.shopsystem.annex.AnnexType;
-import dk.apaq.shopsystem.annex.CommercialDocumentContent;
+import dk.apaq.shopsystem.annex.OrderDocumentContent;
 import dk.apaq.shopsystem.annex.Page;
 import dk.apaq.shopsystem.annex.PageSize;
 import dk.apaq.shopsystem.entity.ContactInformation;
@@ -1058,10 +1058,10 @@ public class OrderEditor extends CustomComponent implements
             
             //Generate document
             PrinterJob pj;
-            CommercialDocumentContent cdc = new CommercialDocumentContent(organisationService.readOrganisation(), order, payments);
+            OrderDocumentContent cdc = new OrderDocumentContent(organisationService.readOrganisation(), order, payments);
             Page page;
             Paper paper = Paper.A4;
-            AnnexContext<CommercialDocumentContent, Void> annexContext;
+            AnnexContext<OrderDocumentContent, Void> annexContext;
             String jobName;
             
             if(printType == AnnexType.Receipt) {
@@ -1072,8 +1072,8 @@ public class OrderEditor extends CustomComponent implements
                 jobName = "Invoice_"+order.getNumber();
             }
             
-            annexContext = new AnnexContext<CommercialDocumentContent, Void>(cdc, null, page, Locale.getDefault());
-            Printable printable =annexService.generatePrintable(annexContext, printType);
+            annexContext = new AnnexContext<OrderDocumentContent, Void>(cdc, null, page, Locale.getDefault());
+            Printable printable =annexService.generatePurchaseDocumentPrintable(annexContext, printType);
             
             //Print the generated document
             pj = PrinterJob.getBuilder(printer, printable).setPaper(paper).setName(jobName).build();

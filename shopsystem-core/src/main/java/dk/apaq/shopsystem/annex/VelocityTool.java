@@ -9,11 +9,11 @@ import org.apache.commons.lang.StringEscapeUtils;
 public class VelocityTool {
 
     public String html(String input) {
-        String string = StringEscapeUtils.escapeHtml(input);
-        if(string!=null) {
-            string = string.replace("\\n", "<br/>");
+        if(input!=null) {
+            input = StringEscapeUtils.escapeHtml(input);
+            input = input.replace("\\n", "<br/>");
         }
-        return string;
+        return input;
     }
 
 

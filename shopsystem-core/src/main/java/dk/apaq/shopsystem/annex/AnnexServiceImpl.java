@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import java.util.logging.Level;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -27,6 +28,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Currency;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import org.slf4j.Logger;
@@ -45,9 +47,6 @@ public class AnnexServiceImpl implements AnnexService {
     public AnnexServiceImpl() {
         try {
             LOG.info("Initializing AnnexService.");
-            usNumberFormat.setMinimumFractionDigits(2);
-            usNumberFormat.setMaximumFractionDigits(2);
-
             Properties properties = new Properties();
             properties.load(getClass().getResourceAsStream("/META-INF/resource.loader"));
             ve = new VelocityEngine(properties);
@@ -56,7 +55,8 @@ public class AnnexServiceImpl implements AnnexService {
             LOG.info("Properties for velocitoy loaded.");
 
             receiptTemplate = ve.getTemplate("/dk/apaq/shopsystem/annex/templates/receipt_xhtml.vm");
-            postingsTemplate = ve.getTemplate("/dk/apaq/shopsystem/annex/templates/postings_csv.vm");
+            auditReportTemplate = ve.getTemplate("/dk/apaq/shopsystem/annex/templates/auditreport_xhtml.vm");
+            auditReportTemplateSmall = ve.getTemplate("/dk/apaq/shopsystem/annex/templates/auditreport_small_xhtml.vm");
             invoiceTemplate = ve.getTemplate("/dk/apaq/shopsystem/annex/templates/invoice_xhtml.vm", "utf-8");
 
             LOG.info("Templates loaded.");
@@ -68,10 +68,8 @@ public class AnnexServiceImpl implements AnnexService {
         }
     }
     private VelocityEngine ve;
-    private Template receiptTemplate, invoiceTemplate, postingsTemplate;
-    private DateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private NumberFormat usNumberFormat = NumberFormat.getNumberInstance(Locale.US);
-
+    private Template receiptTemplate, invoiceTemplate, auditReportTemplateSmall, auditReportTemplate;
+    
     @Override
     public void generatePurchaseDocument(AnnexContext<OrderDocumentContent, OutputStream> context, AnnexType annexType, OutputType outputType) throws Exception {
         switch (annexType) {
@@ -98,7 +96,19 @@ public class AnnexServiceImpl implements AnnexService {
 
     @Override
     public void generateAuditReport(AnnexContext<AuditReportContent, OutputStream> context, AnnexType annexType, OutputType outputType) {
-        
+        try {
+            switch(annexType) {
+                case Invoice:
+                    generateAuditReportAnnex(context, auditReportTemplate);
+                    break;
+                case Receipt:
+                    generateAuditReportAnnex(context, auditReportTemplateSmall);
+                    break;
+            }
+            
+        } catch (Exception ex) {
+            throw new AnnexServiceException("Unable to generate audit report.", ex);
+        }
     }
 
     @Override
@@ -171,10 +181,6 @@ public class AnnexServiceImpl implements AnnexService {
         Page page = annexcontext.getPage();
 
         Locale locale = annexcontext.getLocale();
-
-        ResourceBundle rb = LocaleUtil.getResourceBundle(LocaleUtil.SYSTEM_I18N_BASE_NAME, locale);
-
-        /*  create a context and add data */
         VelocityContext context = new VelocityContext();
 
         List<OrderLine> orderlineList = new ArrayList<OrderLine>();
@@ -182,61 +188,27 @@ public class AnnexServiceImpl implements AnnexService {
             orderlineList.add(order.getOrderLine(i));
         }
 
-        NumberFormat cf = NumberFormat.getCurrencyInstance(locale);
-        NumberFormat cf2 = NumberFormat.getNumberInstance(locale);
-        NumberFormat nf = NumberFormat.getNumberInstance(locale);
-        NumberFormat pf = NumberFormat.getPercentInstance(locale);
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
-
-        cf.setCurrency(Currency.getInstance(order.getCurrency()));
-        cf2.setMinimumFractionDigits(2);
-        cf2.setMaximumFractionDigits(2);
-        nf.setMinimumFractionDigits(0);
-        nf.setMaximumFractionDigits(1);
-
         context.put("order", order);
         context.put("orderlines", orderlineList);
         context.put("payments", payments);
 
         context.put("organisation", organisation);
-        context.put("nf", nf);
-        context.put("cf", cf);
-        context.put("cf2", cf2);
-        context.put("df", df);
-        context.put("pf", pf);
-        context.put("resource", rb);
-        context.put("locale", locale);
-        context.put("tool", new VelocityTool());
-
-        context.put("pageWidth", page.getSize().getWidth().getMillimetres());
-        context.put("pageHeight", page.getSize().getHeight().getMillimetres());
-        context.put("pageMarginTop", page.getTopMargin().getMillimetres());
-        context.put("pageMarginRight", page.getRightMargin().getMillimetres());
-        context.put("pageMarginBottom", page.getBottomMargin().getMillimetres());
-        context.put("pageMarginLeft", page.getLeftMargin().getMillimetres());
-
-        context.put("pixelWidth", page.getSize().getWidth().getPixels());
-        context.put("pixelHeight", page.getSize().getHeight().getPixels());
-        context.put("pixelMarginTop", page.getTopMargin().getPixels());
-        context.put("pixelMarginRight", page.getRightMargin().getPixels());
-        context.put("pixelMarginBottom", page.getBottomMargin().getPixels());
-        context.put("pixelMarginLeft", page.getLeftMargin().getPixels());
-
-        Writer writer = new OutputStreamWriter(annexcontext.getOutput(), "utf-8");
-
-        template.merge(context, writer);
-        writer.flush();
+        writeGenericAnnex(context, locale, Currency.getInstance(order.getCurrency()), page, template, annexcontext.getOutput());
+               
 
     }
     
+    
+    
     private void generateAuditReportAnnex(AnnexContext<AuditReportContent, OutputStream> annexcontext, Template template) throws Exception {
 
+        Date dateFrom = annexcontext.getInput().getDateFrom(); 
+        Date dateTo = annexcontext.getInput().getDateTo();
         List<Order> orders = annexcontext.getInput().getOrders();
         List<Payment> payments = annexcontext.getInput().getPayments();
         Organisation organisation = annexcontext.getInput().getSeller();
         Page page = annexcontext.getPage();
         Locale locale = annexcontext.getLocale();
-        ResourceBundle rb = LocaleUtil.getResourceBundle(LocaleUtil.SYSTEM_I18N_BASE_NAME, locale);
         
         double salesSum = 0;
         double salesVat = 0;
@@ -271,18 +243,9 @@ public class AnnexServiceImpl implements AnnexService {
             }
         }
 
-        
-        NumberFormat cf = NumberFormat.getCurrencyInstance(locale);
-        NumberFormat cf2 = NumberFormat.getNumberInstance(locale);
-        NumberFormat nf = NumberFormat.getNumberInstance(locale);
-        NumberFormat pf = NumberFormat.getPercentInstance(locale);
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 
-        cf.setCurrency(Currency.getInstance(organisation.getCurrency()));
-        cf2.setMinimumFractionDigits(2);
-        cf2.setMaximumFractionDigits(2);
-        nf.setMinimumFractionDigits(0);
-        nf.setMaximumFractionDigits(1);
+        context.put("periodFrom", dateFrom);
+        context.put("periodTo", dateTo);
 
         context.put("salesSum", salesSum);
         context.put("salesVat", salesVat);
@@ -294,6 +257,25 @@ public class AnnexServiceImpl implements AnnexService {
         context.put("paymentsDifference", paymentsBank + paymentsCard + paymentsCash + paymentsChange);
 
         context.put("organisation", organisation);
+        
+        writeGenericAnnex(context, locale, Currency.getInstance(organisation.getCurrency()), page, template, annexcontext.getOutput());
+
+    }
+    
+    private void writeGenericAnnex(VelocityContext context, Locale locale, Currency currency, Page page, Template template, OutputStream out) throws IOException {
+        NumberFormat cf = NumberFormat.getCurrencyInstance(locale);
+        NumberFormat cf2 = NumberFormat.getNumberInstance(locale);
+        NumberFormat nf = NumberFormat.getNumberInstance(locale);
+        NumberFormat pf = NumberFormat.getPercentInstance(locale);
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+        ResourceBundle rb = LocaleUtil.getResourceBundle(LocaleUtil.SYSTEM_I18N_BASE_NAME, locale);
+
+        cf.setCurrency(currency);
+        cf2.setMinimumFractionDigits(2);
+        cf2.setMaximumFractionDigits(2);
+        nf.setMinimumFractionDigits(0);
+        nf.setMaximumFractionDigits(1);
+
         context.put("nf", nf);
         context.put("cf", cf);
         context.put("cf2", cf2);
@@ -317,7 +299,7 @@ public class AnnexServiceImpl implements AnnexService {
         context.put("pixelMarginBottom", page.getBottomMargin().getPixels());
         context.put("pixelMarginLeft", page.getLeftMargin().getPixels());
 
-        Writer writer = new OutputStreamWriter(annexcontext.getOutput(), "utf-8");
+        Writer writer = new OutputStreamWriter(out, "utf-8");
 
         template.merge(context, writer);
         writer.flush();

@@ -27,7 +27,7 @@
                     padding: 0;
                 }
 
-                .addresslabel{
+                .header{
         		text-align:center;
         		margin: 15px 15px 30px 15px;
                         width:100%;
@@ -36,7 +36,7 @@
 
         	}
 
-                .addresslabel div{
+                .header div{
                 }
 
         	.datelabel{
@@ -57,21 +57,18 @@
                     table-layout:fixed;
                 }
 
-        	.orderline_title,
-                .totalline_title{
+        	.lines .left{
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     overflow: hidden;
                 }
 
-        	.totalline_value,
-                .orderline_total{
+        	.lines .right{
                     text-align:right;
                     width:40px;
                 }
 
-                .totalline_title,
-                .totalline_value {
+                .title {
                     font-size:${h2-font-size}px;
                 }
 
@@ -91,45 +88,60 @@
         </style>
     </head>
     <body>
-    
-    	<div class="addresslabel">
-    		<div>#if($organisation.getCompanyName())$tool.html($organisation.getCompanyName())#end</div>
-    		<div>#if($organisation.getStreet())$tool.html($organisation.getStreet())#end</div>
-       		<div>#if($organisation.getPostalCode())$tool.html($organisation.getPostalCode())#end #if($organisation.getCity())$tool.html($organisation.getCity())#end</div>
+    	<div class="header">
+    		<div>$tool.html($resource.getString("audit_report_title"))</div>
         </div>
-
-        <table class="header" cellpadding="0" cellspacing="0">
+    
+    	<table class="lines" cellpadding="0" cellspacing="0">
+            <!-- PERIOD -->
             <tr>
-                <td class="datelabel">$tool.html($resource.getString("date")): $df.format($order.getDateChanged())</td>
-                <td class="orderNolabel">$tool.html($resource.getString("order_number")): $order.getNumber()</td>
+                <td class="title left with-top-padding with-bottom-padding" colspan="2">$tool.html($resource.getString("period"))</td>
             </tr>
+            <tr>
+                <td class="left" colspan="2">$df.format($periodFrom) - $df.format($periodTo)</td>
+            </tr>
+
+            <!-- SUM -->
+            <tr>
+                <td class="title left with-top-padding with-bottom-padding" colspan="2">$tool.html($resource.getString("sales"))</td>
+            </tr>
+            <tr>
+                <td class="left">$tool.html($resource.getString("total"))</td>
+                <td class="right">$cf2.format($salesSum)</td>
+            </tr>
+            <tr>
+                <td class="left">$tool.html($resource.getString("including_tax"))</td>
+                <td class="right">$cf2.format($salesVat)</td>
+            </tr>
+
+            <!-- PAYMENTS -->
+            <tr>
+                <td class="title left with-top-padding with-bottom-padding" colspan="2">$tool.html($resource.getString("payments"))</td>
+            </tr>
+            <tr>
+                <td class="left">$tool.html($resource.getString("Cash"))</td>
+                <td class="right">$cf2.format($paymentsCash)</td>
+            </tr>
+            <tr>
+                <td class="left">$tool.html($resource.getString("Card"))</td>
+                <td class="right">$cf2.format($paymentsCard)</td>
+            </tr>
+            <tr>
+                <td class="left">$tool.html($resource.getString("Transfer"))</td>
+                <td class="right">$cf2.format($paymentsBank)</td>
+            </tr>
+            <tr>
+                <td class="left">$tool.html($resource.getString("Change"))</td>
+                <td class="right">$cf2.format($paymentsChange)</td>
+            </tr>
+
+            <!-- DIFFERENCE -->
+            <tr>
+                <td class="title left with-top-padding with-bottom-padding" >$tool.html($resource.getString("difference"))</td>
+                <td class="title right with-top-padding with-bottom-padding">$cf2.format($paymentsDifference)</td>
+            </tr>
+
         </table>
 
-
-        <table class="lines" cellpadding="0" cellspacing="0">
-        #foreach($orderline in $orderlines)
-            <tr>
-                <td class="orderline_title"><div class="orderline_title">$nf.format($orderline.quantity) x $tool.html($orderline.title)</div></td>
-                <td class="orderline_total">$cf2.format($orderline.getTotalWithTax())</td>
-            </tr>
-
-        #end
-            <tr>
-                <td class="totalline_title with-top-padding with-bottom-padding">$tool.html($resource.getString("total")) ($tool.html($resource.getString("including_tax")) $cf2.format($order.getTotalTax()))</td>
-                <td class="totalline_value with-top-padding with-bottom-padding">$cf2.format($order.getTotalWithTax())</td>
-            </tr>
-
-        #foreach($payment in $payments)
-            <tr>
-                <td class="orderline_title"><div class="orderline_title">$tool.html($resource.getString($payment.getPaymentType().name()))</div></td>
-                <td class="orderline_total">$cf2.format($payment.getAmount())</td>
-            </tr>
-        #end
-
-
-        </table>
-        #if($organisation.getAnnexNote())
-        <div class="receiptNote">$tool.html($organisation.getAnnexNote()).replaceAll("\n","<br/>")</div>
-        #end
     </body>
 </html>
