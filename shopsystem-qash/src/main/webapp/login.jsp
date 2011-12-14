@@ -89,7 +89,7 @@ Locale locale = request.getLocale();
                 <ul>
 
                     <!-- benefit item -->
-                    <li style="width:430px">
+                    <li style="width:430px; height:105px">
                         <span class="benefits-icon"><img src="images/account/login.png" alt="Login" width="70" height="70" /></span>
                         <div class="benefits-text" style="width:315px;padding-right:45px;">
                             <h2><%=res.getString("login.option1.title")%></h2>
@@ -101,9 +101,13 @@ Locale locale = request.getLocale();
                                         </tr>
 
                                         <tr><td><label for="j_password"><%=res.getString("login.option1.password")%></label></td>
-                                            <td> <input type="password" name="j_password" id="j_password"/></td><td><input type="submit" value="<%=res.getString("login.option1.login")%>" class="button-standard"/></td>
+                                            <td> <input type="password" name="j_password" id="j_password"/></td>
                                         </tr>
-
+                                            <tr>
+                                            <td colspan="2"><input type="submit" value="<%=res.getString("login.option1.login")%>" class="button-standard"/>
+                                                &nbsp;<a href="forgot_password.jsp" class="button-standard"><%=res.getString("login.option1.forgotpassword")%></a>
+                                            </td>
+                                            </tr>
                                     </table>
 
                                 </form>
@@ -113,7 +117,7 @@ Locale locale = request.getLocale();
                     </li>
                     <!-- /benefit item -->
 
-                    <li style="width:430px" class="endbenefits">
+                    <li style="width:430px; height:105px" class="endbenefits">
                         <span class="benefits-icon"><img src="images/account/signup.png" alt="Sign up" width="70" height="70" /></span>
                         <div class="benefits-text" style="width:315px;padding-right:45px">
                             <h2><%=res.getString("login.option2.title")%></h2>
@@ -127,7 +131,7 @@ Locale locale = request.getLocale();
                     </li>
                     
 
-                    <li style="width:430px">
+                    <li style="width:430px; height:105px">
                         <span class="benefits-icon"><img src="images/account/social.png" alt="Login" width="70" height="70" /></span>
                         <div class="benefits-text" style="width:315px;padding-right:45px;">
                             <h2><%=res.getString("login.option3.title")%></h2>

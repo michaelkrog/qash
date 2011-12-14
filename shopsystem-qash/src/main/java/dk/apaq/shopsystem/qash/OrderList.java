@@ -60,7 +60,11 @@ public class OrderList extends CustomComponent implements
         ItemClickEvent.ItemClickNotifier, Property {
     
     private static final Logger LOG = LoggerFactory.getLogger(OrderList.class);
-
+    private static final String[] COLUMNS_STORE = {"delete", "number", "status", "dateChanged", "totalWithTax"};
+    private static final String[] COLUMNS_NOSTORE = {"delete", "number", "outlet", "status", "dateChanged", "totalWithTax"};
+    private static final String[] COLUMNCAPTIONS_STORE = {"", "Number", "Status", "Changed", "Total"};
+    private static final String[] COLUMNCAPTIONS_NOSTORE = {"", "Number", "Store", "Status", "Changed", "Total"};
+    
     private static final String LABEL_INPROCESS = "In process";
     private static final String LABEL_ACCEPTED = "Accepted";
     private static final String LABEL_COMPLETED = "Completed";
@@ -291,9 +295,9 @@ public class OrderList extends CustomComponent implements
     public void setContainerDataSource(Container newDataSource) {
         this.container = newDataSource;
         table.setContainerDataSource(newDataSource);
-        table.setVisibleColumns(new Object[]{"delete", "number", "status", "dateChanged", "totalWithTax"});
-        table.setColumnHeaders(new String[]{"", "Number", "Status", "Changed", "Total"});
-
+        
+        updateColumns();
+        
         if (newDataSource instanceof FilterableContainer) {
             ((FilterableContainer) newDataSource).setSorter(sorter);
         }
@@ -330,7 +334,9 @@ public class OrderList extends CustomComponent implements
 
     public void setOutlet(Outlet outlet) {
         this.outlet = outlet;
+        updateColumns();
         updateFilter();
+       
     }
 
     public void setOrganisationService(OrganisationService organisationService) {
@@ -369,5 +375,17 @@ public class OrderList extends CustomComponent implements
             ((FilterableContainer) container).setFilter(filter);
         }
 
+    }
+    
+    private void updateColumns() {
+        if(container!=null) {
+            if(outlet==null) {
+                table.setVisibleColumns(COLUMNS_NOSTORE);
+                table.setColumnHeaders(COLUMNCAPTIONS_NOSTORE);
+            } else {
+                table.setVisibleColumns(COLUMNS_STORE);
+                table.setColumnHeaders(COLUMNCAPTIONS_STORE);
+            }
+        }
     }
 }
