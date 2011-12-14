@@ -18,6 +18,7 @@ import dk.apaq.crud.CrudNotifier;
 import dk.apaq.filter.jpa.FilterTranslatorForJPA;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.OrganisationUser;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.vfs.FileSystem;
 import javax.persistence.PersistenceContext;
@@ -139,10 +140,16 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
 
         String orgId = getOrganisationCrud().create(organisation);
         organisation = getOrganisationCrud().read(orgId);
-
-        user.setOrganisation(organisation);
-        getSystemUserCrud().create(user);
         
+        String userId = getSystemUserCrud().create(user);
+        user = getSystemUserCrud().read(userId);
+
+        OrganisationService organisationService = getOrganisationService(organisation);
+        OrganisationUser orgUser = new OrganisationUser();
+        orgUser.setOrganisation(organisation);
+        orgUser.setUser(user);
+        organisationService.getUsers().create(orgUser);
+
         if(mailSender!=null) { 
             SimpleMailMessage msg = this.templateMessage == null ? new SimpleMailMessage() : new SimpleMailMessage(this.templateMessage);
             msg.setSubject("New account");

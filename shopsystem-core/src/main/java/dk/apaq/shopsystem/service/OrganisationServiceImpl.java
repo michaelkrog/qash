@@ -15,14 +15,12 @@ import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.Website;
-import dk.apaq.shopsystem.entity.Module;
+import dk.apaq.shopsystem.entity.OrganisationUser;
 import dk.apaq.shopsystem.entity.ProductCategory;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.crud.InventoryManager;
-import dk.apaq.shopsystem.service.crud.ModuleCrud;
 import dk.apaq.shopsystem.service.crud.SecurityHandler;
 import dk.apaq.shopsystem.service.crud.ThemeCrud;
-import dk.apaq.shopsystem.service.crud.UserCrud;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.FileSystem;
 import dk.apaq.vfs.Path;
@@ -55,7 +53,6 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     @Autowired
     private SystemService service;
 
-    private UserCrud userCrud = null;
     private final Map<Class, Complete<String, Order>> crudMap = new WeakHashMap<Class, Complete<String, Order>>();
     private final Map<String, Map<Class, Complete>> webcontentCrudMap = new WeakHashMap<String, Map<Class, Complete>>();
     private ApplicationContext context;
@@ -184,13 +181,8 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
 
     @Override
-    public UserCrud getUsers() {
-        Organisation organisation = readOrganisation();
-        if(userCrud==null) {
-            userCrud =  (UserCrud) context.getBean("userCrud", em, organisation);
-            ((CrudNotifier)userCrud).addListener(new SecurityHandler.ContentSecurity(organisation));
-        }
-        return userCrud;
+    public Crud.Complete<String, OrganisationUser> getUsers() {
+        return getGenericContentCrud(OrganisationUser.class);
     }
 
     @Override

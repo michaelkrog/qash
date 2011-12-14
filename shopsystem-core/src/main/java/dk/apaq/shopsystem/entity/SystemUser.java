@@ -1,10 +1,19 @@
 package dk.apaq.shopsystem.entity;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
-import javax.persistence.CascadeType;
+import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Defines a System User. A SystemUser is unique across the system, but can be
@@ -13,8 +22,25 @@ import javax.persistence.Temporal;
  * @author michael
  */
 @Entity
-public class SystemUser extends BaseUser {
+public class SystemUser implements User, Serializable, BasicEntity {
 
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    protected String id;
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateCreated = new Date();
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateChanged = new Date();
+    
+    private String identifier;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<String> roles = new ArrayList<String>();
+    
     private String displayname;
     private String email;
     private boolean emailVerified = false;
@@ -27,9 +53,42 @@ public class SystemUser extends BaseUser {
     
     private String phone;
 
-    @OneToOne(mappedBy="user",cascade= CascadeType.REMOVE)
-    private SystemUserReference reference;
-    
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date date) {
+        this.dateCreated = date;
+    }
+
+    public Date getDateChanged() {
+        return dateChanged;
+    }
+
+    public void setDateChanged(Date dateChanged) {
+        this.dateChanged = dateChanged;
+    }
+
+    @Override
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
 
     @Override
     public String getDisplayName() {

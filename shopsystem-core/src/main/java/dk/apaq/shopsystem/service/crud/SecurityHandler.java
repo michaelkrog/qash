@@ -3,10 +3,10 @@ package dk.apaq.shopsystem.service.crud;
 import dk.apaq.crud.CrudEvent.WithEntity;
 import dk.apaq.crud.CrudEvent.WithId;
 import dk.apaq.crud.core.BaseCrudListener;
-import dk.apaq.shopsystem.entity.BaseUser;
 import dk.apaq.shopsystem.entity.ContentEntity;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.OrganisationUser;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import java.util.List;
@@ -51,9 +51,9 @@ public final class SecurityHandler {
         return false;
     }
 
-    private static boolean isInUserList(Authentication auth, List<BaseUser> users) {
-        for(BaseUser user : users) {
-            if(auth.getName().equals(user.getName())) {
+    private static boolean isInUserList(Authentication auth, List<OrganisationUser> users) {
+        for(OrganisationUser user : users) {
+            if(auth.getName().equals(user.getUser().getName())) {
                 return true;
             }
         }
@@ -86,7 +86,7 @@ public final class SecurityHandler {
         private void handleEdit(Organisation organisation) {
             if(organisation!=null) {
                 OrganisationService orgService = service.getOrganisationService(organisation);
-                List<BaseUser> users = orgService.getUsers().list();
+                List<OrganisationUser> users = orgService.getUsers().list();
 
 
                 Authentication auth = getAuthentication();

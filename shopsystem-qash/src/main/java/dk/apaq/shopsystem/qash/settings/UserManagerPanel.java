@@ -18,13 +18,12 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.CloseEvent;
-import dk.apaq.shopsystem.entity.BaseUser;
-import dk.apaq.shopsystem.entity.SystemUser;
+import dk.apaq.crud.Crud;
+import dk.apaq.shopsystem.entity.OrganisationUser;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.qash.common.CommonDialog;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.shopsystem.service.OrganisationService;
-import dk.apaq.shopsystem.service.crud.UserCrud;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
 /**
@@ -172,13 +171,17 @@ public class UserManagerPanel extends CustomComponent {
                     @Override
                     public void windowClose(CloseEvent e) {
                         if(dialog.getResult() == CommonDialog.ButtonType.Ok) {
-                            UserCrud users = organsiationService.getUsers();
-                            String id = users.createSystemUser();
+                            Crud.Complete<String, OrganisationUser> users = organsiationService.getUsers();
+                            
+                            //Create system user
+                            
+                            //Create organisation user using the created systemuser.
+                            /*String id = users.createSystemUser();
                             SystemUser user = (SystemUser) users.read(id);
                             user.setDisplayName(cuw.getDisplayName());
                             user.setName(cuw.getName());
                             user.setPassword(cuw.getPassword());
-                            users.update(user);
+                            users.update(user);*/
                         }
                     }
                 });
@@ -198,7 +201,7 @@ public class UserManagerPanel extends CustomComponent {
     public void setOrganisationService(OrganisationService organsiationService) {
         this.organsiationService = organsiationService;
     
-        this.userList.setContainerDataSource(new CrudContainer(organsiationService.getUsers(), BaseUser.class));
+        this.userList.setContainerDataSource(new CrudContainer(organsiationService.getUsers(), OrganisationUser.class));
     }
 
 

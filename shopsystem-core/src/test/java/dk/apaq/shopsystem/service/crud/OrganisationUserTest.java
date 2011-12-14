@@ -1,10 +1,8 @@
 package dk.apaq.shopsystem.service.crud;
 
-import dk.apaq.filter.Filter;
-import dk.apaq.filter.core.CompareFilter;
-import dk.apaq.filter.core.LikeFilter;
-import dk.apaq.shopsystem.entity.BaseUser;
+import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.OrganisationUser;
 import dk.apaq.shopsystem.service.SystemService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.apaq.shopsystem.entity.SystemUser;
-import dk.apaq.shopsystem.entity.SystemUserReference;
 import dk.apaq.shopsystem.service.OrganisationService;
 import java.util.List;
 import org.junit.After;
@@ -51,8 +48,16 @@ public class OrganisationUserTest {
             String orgid = service.getOrganisationCrud().create();
             org = service.getOrganisationCrud().read(orgid);
             orgService = service.getOrganisationService(org);
-            String orgOwnerId = orgService.getUsers().createSystemUser();
-            orgOwner = (SystemUser)orgService.getUsers().read(orgOwnerId);
+            
+            systemUser = new SystemUser();
+            String userId = service.getSystemUserCrud().create(systemUser);
+            systemUser = service.getSystemUserCrud().read(userId);
+            
+            orgUser = new OrganisationUser();
+            orgUser.setUser(systemUser);
+            
+            String orgOwnerId = orgService.getUsers().create(orgUser);
+            orgUser = (OrganisationUser)orgService.getUsers().read(orgOwnerId);
         }
     }
 
@@ -66,7 +71,9 @@ public class OrganisationUserTest {
 
     private Organisation org;
     
-    private SystemUser orgOwner;
+    private SystemUser systemUser;
+    
+    private OrganisationUser orgUser;
 
     /**
      * Test of create method, of class service.getAccountCrud().
@@ -74,9 +81,9 @@ public class OrganisationUserTest {
     @Test
     public void testCreate() {
         System.out.println("create");
-        UserCrud crud = orgService.getUsers();
+        Crud.Complete<String, OrganisationUser> crud = orgService.getUsers();
 
-        BaseUser result = crud.read(crud.createSystemUser());
+        OrganisationUser result = crud.read(crud.create(new OrganisationUser(systemUser)));
         assertNotNull(result);
         assertNotNull(result.getId());
     }
@@ -87,24 +94,18 @@ public class OrganisationUserTest {
     @Test
     public void testUpdate() {
         System.out.println("update");
-        UserCrud crud = orgService.getUsers();
-        SystemUser result = (SystemUser) crud.read(crud.createSystemUser());
+        Crud.Complete<String, OrganisationUser> crud = orgService.getUsers();
+        OrganisationUser result = (OrganisationUser) crud.read(crud.create(new OrganisationUser(systemUser)));
 
         assertNotNull(result);
         assertNotNull(result.getId());
 
         String id = result.getId();
 
-        result.setName("michael.krog");
-        result.setDisplayName("Michael Krog");
-
+       
         crud.update(result);
 
-        result = (SystemUser) crud.read(id);
-
-        assertEquals("michael.krog", result.getName());
-        assertEquals("Michael Krog", result.getDisplayName());
-    }
+       }
 
     /**
      * Test of delete method, of class service.getAccountCrud().
@@ -112,21 +113,23 @@ public class OrganisationUserTest {
     @Test
     public void testDelete() {
         System.out.println("delete");
-        UserCrud crud = orgService.getUsers();
-        SystemUser result = (SystemUser) crud.read(crud.createSystemUser());
+        Crud.Complete<String, OrganisationUser> crud = orgService.getUsers();
+        OrganisationUser organisationUser = new OrganisationUser();
+        organisationUser.setUser(systemUser);
+        organisationUser = crud.read(crud.create(organisationUser));
 
-        assertNotNull(result);
-        assertNotNull(result.getId());
+        assertNotNull(organisationUser);
+        assertNotNull(organisationUser.getId());
 
-        String id = result.getId();
+        String id = organisationUser.getId();
 
-        result = (SystemUser) crud.read(id);
-        assertNotNull(result);
+        organisationUser = crud.read(id);
+        assertNotNull(organisationUser);
 
         crud.delete(id);
 
-        result = (SystemUser) crud.read(id);
-        assertNull(result);
+        organisationUser = crud.read(id);
+        assertNull(organisationUser);
     }
 
     /**
@@ -135,28 +138,29 @@ public class OrganisationUserTest {
     @Test
     public void testRead() {
         System.out.println("read");
-        UserCrud crud = orgService.getUsers();
-        SystemUser result = (SystemUser) crud.read(crud.createSystemUser());
+        Crud.Complete<String, OrganisationUser> crud = orgService.getUsers();
+        OrganisationUser organisationUser = new OrganisationUser();
+        organisationUser.setUser(systemUser);
+        organisationUser = crud.read(crud.create(organisationUser));
 
-        assertNotNull(result);
-        assertNotNull(result.getId());
+        assertNotNull(organisationUser);
+        assertNotNull(organisationUser.getId());
 
-        String id = result.getId();
+        String id = organisationUser.getId();
 
-        result = (SystemUser) crud.read(id);
-        assertNotNull(result);
+        assertNotNull(organisationUser);
 
         crud.delete(id);
 
-        result = (SystemUser) crud.read(id);
-        assertNull(result);
+        organisationUser = crud.read(id);
+        assertNull(organisationUser);
     }
 
     @Test
     public void testReference() {
         System.out.println("reference");
 
-        UserCrud crud = orgService.getUsers();
+        Crud.Complete<String, OrganisationUser> crud = orgService.getUsers();
 
         //Create a systemuser through service
         SystemUser user = service.getSystemUserCrud().read(service.getSystemUserCrud().create());
@@ -165,21 +169,21 @@ public class OrganisationUserTest {
         service.getSystemUserCrud().update(user);
 
         //create af reference through orgservice.
-        SystemUserReference userRef = (SystemUserReference) crud.read(crud.createSystemUserReference(user));
+        OrganisationUser userRef = crud.read(crud.create(new OrganisationUser(user)));
         userRef.getRoles().add("ROLE_ORGUSER");
+        userRef.setUser(user);
         crud.update(userRef);
 
         //Check that both are ok and that the reference works.
         assertNotNull(user);
         assertNotNull(userRef);
         assertEquals("michael", user.getName());
-        assertEquals("michael", userRef.getName());
         assertEquals("ROLE_ORGADMIN", user.getRoles().get(0));
         assertEquals("ROLE_ORGUSER", userRef.getRoles().get(0));
         
         //delete the reference
         crud.delete(userRef.getId());
-        userRef = (SystemUserReference) crud.read(userRef.getId());
+        userRef = crud.read(userRef.getId());
         assertNull(userRef);
 
         //Ensure the original user is not deleted.
@@ -194,58 +198,15 @@ public class OrganisationUserTest {
     @Test
     public void testListIds() {
         System.out.println("listIds");
-        UserCrud crud = orgService.getUsers();
+        Crud.Complete<String, OrganisationUser> crud = orgService.getUsers();
 
         for (int i = 0; i < 10; i++) {
-            crud.createSystemUser();
+            crud.create(new OrganisationUser(systemUser));
         }
 
         List<String> idlist = crud.listIds();
         assertTrue(idlist.size() >= 10);
     }
 
-    @Test
-    public void testListIdsWithParams() {
-        System.out.println("listIds");
-        UserCrud crud = orgService.getUsers();
-            
-        for (int i = 0; i < 10; i++) {
-            SystemUser account = (SystemUser) crud.read(crud.createSystemUser());
-            account.setName(Integer.toString(i));
-            account.setEmail(i + "@gmail.com");
-            crud.update(account);
-        }
-
-        Filter filter = new CompareFilter("name", "5", CompareFilter.CompareType.Equals);
-        List<String> idlist = crud.listIds(filter, null, null);
-        assertEquals(1, idlist.size());
-
-        filter = new LikeFilter("email", "*@gmail.com");
-        idlist = crud.listIds(filter, null, null);
-        assertEquals(10, idlist.size());
-
-    }
-
-    /*@Test
-    public void testSecurity() {
-        UserCrud crud = orgService.getUsers();
-        SystemUser user = crud.read(crud.create());
-        String id = user.getId();
-        user.setName(SecurityContextHolder.getContext().getAuthentication().getName());
-        service.getSystemUserCrud().update(user);
-
-        //Allowed
-        service.getOrganisationCrud().read(id);
-
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("Jane", "Doe"));
-
-
-        try {
-            //Not allowed
-            service.getSystemUserCrud().update(user);
-            fail("Should not be allowed");
-        }
-        catch (SecurityException ex) {
-        }
-    }*/
+    
 }

@@ -9,13 +9,13 @@
     <class>dk.apaq.shopsystem.entity.OrderLine</class>
     <class>dk.apaq.shopsystem.entity.OrderLineTax</class>
     <class>dk.apaq.shopsystem.entity.Organisation</class>
+    <class>dk.apaq.shopsystem.entity.OrganisationUser</class>
     <class>dk.apaq.shopsystem.entity.Page</class>
     <class>dk.apaq.shopsystem.entity.Payment</class>
     <class>dk.apaq.shopsystem.entity.Product</class>
     <class>dk.apaq.shopsystem.entity.Sequence</class>
     <class>dk.apaq.shopsystem.entity.Store</class>
     <class>dk.apaq.shopsystem.entity.SystemUser</class>
-    <class>dk.apaq.shopsystem.entity.SystemUserReference</class>
     <class>dk.apaq.shopsystem.entity.Tax</class>
     <class>dk.apaq.shopsystem.entity.Website</class>
     <class>dk.apaq.shopsystem.entity.ProductGroup</class>
