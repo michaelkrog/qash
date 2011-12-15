@@ -4,6 +4,7 @@ import dk.apaq.shopsystem.service.sequence.SequenceProcessor;
 import dk.apaq.crud.Crud;
 import dk.apaq.crud.Crud.Complete;
 import dk.apaq.crud.Crud.Editable;
+import dk.apaq.crud.CrudListener;
 import dk.apaq.crud.CrudNotifier;
 import dk.apaq.shopsystem.entity.Customer;
 import dk.apaq.shopsystem.entity.ProductGroup;
@@ -61,6 +62,7 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     private Organisation organisation;
     private SequenceProcessor orderSequence = null;
     private SequenceProcessor invoiceSequence = null;
+    private SecurityHandler.OrganisationUserReferenceSecurity userReferenceSecurity = new SecurityHandler.OrganisationUserReferenceSecurity();
     
 
     public OrganisationServiceImpl(Organisation org) {
@@ -140,12 +142,16 @@ public class OrganisationServiceImpl implements OrganisationService, Application
 
     
 
-    private <T> Complete<String, T> getGenericContentCrud(Class<T> clazz) {
+    private <T> Complete<String, T> getGenericContentCrud(Class<T> clazz, CrudListener ... listeners) {
         Organisation organisation = readOrganisation();
         Complete crud = crudMap.get(clazz);
         if(crud==null) {
             crud = (Crud.Complete<String, T>) context.getBean("contentCrud", em, organisation, clazz);
             ((CrudNotifier)crud).addListener(new SecurityHandler.ContentSecurity(organisation));
+            
+            for(CrudListener listener : listeners) {
+                ((CrudNotifier)crud).addListener(listener);
+            }
             crudMap.put(clazz, crud);
         }
         return crud;
@@ -183,7 +189,7 @@ public class OrganisationServiceImpl implements OrganisationService, Application
 
     @Override
     public Crud.Complete<String, OrganisationUser> getUsers() {
-        return getGenericContentCrud(OrganisationUser.class);
+        return getGenericContentCrud(OrganisationUser.class, userReferenceSecurity);
     }
 
     @Override

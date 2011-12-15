@@ -3,12 +3,17 @@ package dk.apaq.shopsystem.service.crud;
 import dk.apaq.crud.CrudEvent.WithEntity;
 import dk.apaq.crud.CrudEvent.WithId;
 import dk.apaq.crud.core.BaseCrudListener;
+import dk.apaq.filter.core.CompareFilter;
+import dk.apaq.filter.core.NotFilter;
 import dk.apaq.shopsystem.entity.ContentEntity;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.OrganisationUser;
+import dk.apaq.shopsystem.security.SystemUserDetails;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.service.ServiceException;
 import dk.apaq.shopsystem.service.SystemService;
+import dk.apaq.shopsystem.service.SystemServiceHolder;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +30,14 @@ public final class SecurityHandler {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityHandler.class);
 
     private SecurityHandler() {
+    }
+    
+    public static SystemService getSystemService() {
+        SystemService service = SystemServiceHolder.getSystemService();
+        if(service==null) {
+            throw new ServiceException("SystemService not available.");
+        }
+        return service;
     }
 
     public static Authentication getAuthentication() {
@@ -97,7 +110,7 @@ public final class SecurityHandler {
         }
     }
 
-    public static class AccountSecurity extends BaseCrudListener<String, SystemUser> {
+    public static class SystemUserSecurity extends BaseCrudListener<String, SystemUser> {
 
         /*
         @Override
@@ -128,6 +141,54 @@ public final class SecurityHandler {
             if (account.getName() != null && !isAdministrator(auth)
                     && !auth.getName().equals(account.getName())) {
                 throw new SecurityException("User is not administrator or owner of account. Cannot edit account.");
+            }
+        }
+    }
+    
+    public static class OrganisationUserReferenceSecurity extends BaseCrudListener<String, OrganisationUser> {
+
+        
+        @Override
+        public void onBeforeEntityUpdate(WithEntity<String, OrganisationUser> event) {
+            handleEdit(event.getCrud().read(event.getEntity().getId()));
+        }
+
+        @Override
+        public void onBeforeEntityDelete(WithId<String, OrganisationUser> event) {
+            OrganisationUser entityFromPersistence = event.getCrud().read(event.getEntityId());
+            handleEdit(entityFromPersistence);
+            
+            //In order to delete the Organisation must have other OrganisationUsers
+            OrganisationService service = getSystemService().getOrganisationService(entityFromPersistence.getOrganisation());
+            List<String> ids = service.getUsers().listIds(new NotFilter(new CompareFilter("id", entityFromPersistence.getId(), CompareFilter.CompareType.Equals)), null);
+            if(ids.isEmpty()) {
+                throw new ServiceException("Cannot delete the OrganisationUSer because it is the last one.");
+            }
+        }
+
+        private void handleEdit(OrganisationUser user) {
+            Authentication auth = getAuthentication();
+            if(!(auth.getPrincipal() instanceof SystemUserDetails)) {
+                throw new ServiceException("Authentication does not have SystemUserDetails as principal.");
+            }
+            
+            SystemUserDetails sud = (SystemUserDetails) auth.getPrincipal();
+            OrganisationService service = getSystemService().getOrganisationService(user.getOrganisation());
+            
+            //In order to edit the prinipal must:
+            //- Have an OrganisationUser in the same Organisation.
+            //- That OrganisationUser must have the Adminstrator role.
+            boolean allowed = false;
+            List<OrganisationUser> orgUsers = service.getUsers().list(new CompareFilter("user", sud.getUser(), CompareFilter.CompareType.Equals), null);
+            for(OrganisationUser current : orgUsers) {
+                if(current.getRoles().contains("ROLE_ADMINISTRATOR")) {
+                    allowed = true;
+                    break;
+                }
+            }
+            
+            if(!allowed) {
+                throw new SecurityException("Cannot edit the organisationuser because principal is not administrator of the organisation");
             }
         }
     }

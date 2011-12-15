@@ -94,7 +94,7 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
         LOG.debug("Retrieving AccountCrud");
         if(systemUserCrud==null) {
             systemUserCrud = (Crud.Complete<String, SystemUser>) context.getBean("crud", em, SystemUser.class);
-            ((CrudNotifier)systemUserCrud).addListener(new SecurityHandler.AccountSecurity());
+            ((CrudNotifier)systemUserCrud).addListener(new SecurityHandler.SystemUserSecurity());
         }
         return systemUserCrud;
     }

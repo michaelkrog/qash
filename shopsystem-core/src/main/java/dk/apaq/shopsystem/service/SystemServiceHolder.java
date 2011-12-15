@@ -20,7 +20,7 @@ public class SystemServiceHolder {
         return threadLocal.get();
     }
     
-    public void setSystemService(SystemService service) {
+    public static void setSystemService(SystemService service) {
         threadLocal.set(service);
     }
 }

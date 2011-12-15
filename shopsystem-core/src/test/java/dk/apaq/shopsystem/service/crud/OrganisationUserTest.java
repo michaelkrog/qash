@@ -10,7 +10,9 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.apaq.shopsystem.entity.SystemUser;
+import dk.apaq.shopsystem.security.SystemUserDetails;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.service.SystemServiceHolder;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,6 +20,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.jaas.JaasAuthenticationToken;
 import static org.junit.Assert.*;
 
 /**
@@ -41,8 +44,6 @@ public class OrganisationUserTest {
 
     @Before
     public void setUp() {
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("michael.krog", "Doe"));
-
         if(orgService==null)
         {
             String orgid = service.getOrganisationCrud().create();
@@ -55,10 +56,18 @@ public class OrganisationUserTest {
             
             orgUser = new OrganisationUser();
             orgUser.setUser(systemUser);
+            orgUser.getRoles().add("ROLE_ADMINISTRATOR");
             
             String orgOwnerId = orgService.getUsers().create(orgUser);
             orgUser = (OrganisationUser)orgService.getUsers().read(orgOwnerId);
         }
+        
+        SystemServiceHolder.setSystemService(service);
+        SystemUserDetails details = new SystemUserDetails(systemUser);
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details, "doe");
+        SecurityContextHolder.getContext().setAuthentication(token);
+
+        
     }
 
     @After
