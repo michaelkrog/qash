@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.service;
+package dk.apaq.shopsystem.file;
 
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;

@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.service;
+package dk.apaq.shopsystem.service.sequence;
 
 import dk.apaq.shopsystem.entity.Sequence;
 import javax.persistence.EntityManager;

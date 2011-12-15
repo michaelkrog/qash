@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.service;
 
+import dk.apaq.shopsystem.service.sequence.SequenceProcessor;
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.Customer;
 import dk.apaq.shopsystem.entity.ProductGroup;
