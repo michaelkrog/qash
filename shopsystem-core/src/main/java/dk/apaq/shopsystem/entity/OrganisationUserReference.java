@@ -21,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author michael
  */
 @Entity
-public class OrganisationUserReference implements ContentEntity {
+public class OrganisationUserReference implements ContentEntity, User {
  
     @Id
     @GeneratedValue(generator="system-uuid")
@@ -95,6 +95,61 @@ public class OrganisationUserReference implements ContentEntity {
 
     public void setUser(SystemUser user) {
         this.user = user;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return user.getDisplayName();
+    }
+
+    public void setDisplayName(String displayName) {
+        user.setDisplayName(displayName);
+    }
+    
+    @Override
+    public String getEmail() {
+        return user.getEmail();
+    }
+    
+    public void setEmail(String email) {
+        user.setEmail(email);
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
+    
+    public void setPasswod(String password) {
+        user.setPassword(password);
+    }
+
+    @Override
+    public boolean isEmailVerified() {
+        return user.isEmailVerified();
+    }
+    
+    @Override
+    public boolean isLocked() {
+        return user.isLocked();
+    }
+
+    @Override
+    public String getTelephone() {
+        return user.getTelephone();
+    }
+    
+    public void setTelephone(String telephone) {
+        user.setTelephone(telephone);
+    }
+
+    @Override
+    public String getName() {
+        return user.getName();
+    }
+    
+    public void setName(String name) {
+        user.setName(name);
     }
 
     

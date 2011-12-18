@@ -13,6 +13,7 @@ import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.security.SystemUserDetails;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemServiceHolder;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -21,6 +22,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.jaas.JaasAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import static org.junit.Assert.*;
 
 /**
@@ -56,7 +59,7 @@ public class OrganisationUserTest {
             
             orgUser = new OrganisationUserReference();
             orgUser.setUser(systemUser);
-            orgUser.getRoles().add("ROLE_ADMINISTRATOR");
+            orgUser.getRoles().add("ROLE_ADMIN");
             
             String orgOwnerId = orgService.getUsers().create(orgUser);
             orgUser = (OrganisationUserReference)orgService.getUsers().read(orgOwnerId);
@@ -64,6 +67,7 @@ public class OrganisationUserTest {
         
         SystemServiceHolder.setSystemService(service);
         SystemUserDetails details = new SystemUserDetails(systemUser);
+        //List<GrantedAuthority> auths = Arrays.asList(new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ADMIN")});
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details, "doe");
         SecurityContextHolder.getContext().setAuthentication(token);
 
@@ -174,12 +178,12 @@ public class OrganisationUserTest {
         //Create a systemuser through service
         SystemUser user = service.getSystemUserCrud().read(service.getSystemUserCrud().create());
         user.setName("michael");
-        user.getRoles().add("ROLE_ORGADMIN");
+        user.getRoles().add("ROLE_ADMIN");
         service.getSystemUserCrud().update(user);
 
         //create af reference through orgservice.
         OrganisationUserReference userRef = crud.read(crud.create(new OrganisationUserReference(user)));
-        userRef.getRoles().add("ROLE_ORGUSER");
+        userRef.getRoles().add("ROLE_USER");
         userRef.setUser(user);
         crud.update(userRef);
 
@@ -187,8 +191,8 @@ public class OrganisationUserTest {
         assertNotNull(user);
         assertNotNull(userRef);
         assertEquals("michael", user.getName());
-        assertEquals("ROLE_ORGADMIN", user.getRoles().get(0));
-        assertEquals("ROLE_ORGUSER", userRef.getRoles().get(0));
+        assertEquals("ROLE_ADMIN", user.getRoles().get(0));
+        assertEquals("ROLE_USER", userRef.getRoles().get(0));
         
         //delete the reference
         crud.delete(userRef.getId());

@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.service.OrganisationService;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -21,6 +22,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.*;
 
 /**
@@ -29,6 +33,7 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"/defaultspringcontext.xml"})
+@Transactional
 public class SystemUserCrudTest {
 
     public SystemUserCrudTest() {
@@ -44,7 +49,8 @@ public class SystemUserCrudTest {
 
     @Before
     public void setUp() {
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("michael.krog", "Doe"));
+        List<GrantedAuthority> auths = Arrays.asList(new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ADMIN")});
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("michael.krog", "Doe", auths));
 
     }
 
@@ -119,7 +125,7 @@ public class SystemUserCrudTest {
         System.out.println("delete");
         
         SystemUser user = new SystemUser();
-        user.setName("john");
+        user.setName("john"+System.currentTimeMillis());
         user.setPassword("doe");
         
         Organisation org = new Organisation();
@@ -218,7 +224,7 @@ public class SystemUserCrudTest {
         Crud.Editable<String, SystemUser> crud = service.getSystemUserCrud();
         SystemUser user = crud.read(crud.create());
         String id = user.getId();
-        user.setName(SecurityContextHolder.getContext().getAuthentication().getName());
+        user.setName("michael123");
         service.getSystemUserCrud().update(user);
 
         //Allowed
@@ -226,12 +232,7 @@ public class SystemUserCrudTest {
 
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("Jane", "Doe"));
 
-        /*try {
-        //Not allowed
-        service.getAccountCrud().read(id);
-        fail("Should not be allowed");
-        } catch(SecurityException ex) {}
-         */
+
         try {
             //Not allowed
             service.getSystemUserCrud().update(user);

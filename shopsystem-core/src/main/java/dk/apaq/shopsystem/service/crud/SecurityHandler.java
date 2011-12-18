@@ -181,7 +181,7 @@ public final class SecurityHandler {
             boolean allowed = false;
             List<OrganisationUserReference> orgUsers = service.getUsers().list(new CompareFilter("user", sud.getUser(), CompareFilter.CompareType.Equals), null);
             for(OrganisationUserReference current : orgUsers) {
-                if(current.getRoles().contains("ROLE_ADMINISTRATOR")) {
+                if(current.getRoles().contains("ROLE_ADMIN")) {
                     allowed = true;
                     break;
                 }

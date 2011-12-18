@@ -112,7 +112,7 @@ public class SystemServiceImplTest {
         mailSender.reset();
         
         SystemUser user = new SystemUser();
-        user.setName("john");
+        user.setName("john"+System.currentTimeMillis());
         user.setPassword("doe");
         user.setEmail("john@doe.com");
         

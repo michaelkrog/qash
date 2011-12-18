@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -44,6 +45,8 @@ public class SystemUser implements User, Serializable, BasicEntity {
     private String displayname;
     private String email;
     private boolean emailVerified = false;
+    
+    @Column(unique=true)
     private String name;
     private String password;
     private boolean locked;
