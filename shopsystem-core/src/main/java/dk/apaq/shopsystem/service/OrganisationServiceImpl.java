@@ -17,7 +17,7 @@ import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.Website;
-import dk.apaq.shopsystem.entity.OrganisationUser;
+import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.entity.ProductCategory;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.crud.InventoryManager;
@@ -188,8 +188,8 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
 
     @Override
-    public Crud.Complete<String, OrganisationUser> getUsers() {
-        return getGenericContentCrud(OrganisationUser.class, userReferenceSecurity);
+    public Crud.Complete<String, OrganisationUserReference> getUsers() {
+        return getGenericContentCrud(OrganisationUserReference.class, userReferenceSecurity);
     }
 
     @Override

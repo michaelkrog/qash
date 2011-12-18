@@ -27,6 +27,7 @@ import dk.apaq.filter.sort.Sorter;
 import dk.apaq.shopsystem.entity.Customer;
 import dk.apaq.shopsystem.qash.common.CustomerFilterGenerator;
 import dk.apaq.shopsystem.qash.common.Spacer;
+import dk.apaq.shopsystem.qash.listeners.RemoveSelectedOnClickListener;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
 import java.util.Collection;
@@ -134,13 +135,7 @@ public class CustomerList extends CustomComponent implements Property, Property.
             }
         });
 
-        removeButton.addListener(new Button.ClickListener() {
-
-            public void buttonClick(ClickEvent event) {
-                Object id = table.getValue();
-                table.removeItem(id);
-            }
-        });
+        removeButton.addListener(new RemoveSelectedOnClickListener(table));
 
         layout.setMargin(false);
         layout.setExpandRatio(table, 1.0F);

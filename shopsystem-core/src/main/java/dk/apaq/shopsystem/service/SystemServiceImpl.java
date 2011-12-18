@@ -19,7 +19,7 @@ import dk.apaq.crud.CrudNotifier;
 import dk.apaq.filter.jpa.FilterTranslatorForJPA;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.OrganisationUser;
+import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.vfs.FileSystem;
 import javax.persistence.PersistenceContext;
@@ -146,7 +146,7 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
         user = getSystemUserCrud().read(userId);
 
         OrganisationService organisationService = getOrganisationService(organisation);
-        OrganisationUser orgUser = new OrganisationUser();
+        OrganisationUserReference orgUser = new OrganisationUserReference();
         orgUser.setOrganisation(organisation);
         orgUser.setUser(user);
         organisationService.getUsers().create(orgUser);

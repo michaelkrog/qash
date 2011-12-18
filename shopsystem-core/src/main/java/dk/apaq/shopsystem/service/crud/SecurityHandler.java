@@ -8,7 +8,7 @@ import dk.apaq.filter.core.NotFilter;
 import dk.apaq.shopsystem.entity.ContentEntity;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.OrganisationUser;
+import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.security.SystemUserDetails;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.ServiceException;
@@ -64,8 +64,8 @@ public final class SecurityHandler {
         return false;
     }
 
-    private static boolean isInUserList(Authentication auth, List<OrganisationUser> users) {
-        for(OrganisationUser user : users) {
+    private static boolean isInUserList(Authentication auth, List<OrganisationUserReference> users) {
+        for(OrganisationUserReference user : users) {
             if(auth.getName().equals(user.getUser().getName())) {
                 return true;
             }
@@ -99,7 +99,7 @@ public final class SecurityHandler {
         private void handleEdit(Organisation organisation) {
             if(organisation!=null) {
                 OrganisationService orgService = service.getOrganisationService(organisation);
-                List<OrganisationUser> users = orgService.getUsers().list();
+                List<OrganisationUserReference> users = orgService.getUsers().list();
 
 
                 Authentication auth = getAuthentication();
@@ -145,17 +145,17 @@ public final class SecurityHandler {
         }
     }
     
-    public static class OrganisationUserReferenceSecurity extends BaseCrudListener<String, OrganisationUser> {
+    public static class OrganisationUserReferenceSecurity extends BaseCrudListener<String, OrganisationUserReference> {
 
         
         @Override
-        public void onBeforeEntityUpdate(WithEntity<String, OrganisationUser> event) {
+        public void onBeforeEntityUpdate(WithEntity<String, OrganisationUserReference> event) {
             handleEdit(event.getCrud().read(event.getEntity().getId()));
         }
 
         @Override
-        public void onBeforeEntityDelete(WithId<String, OrganisationUser> event) {
-            OrganisationUser entityFromPersistence = event.getCrud().read(event.getEntityId());
+        public void onBeforeEntityDelete(WithId<String, OrganisationUserReference> event) {
+            OrganisationUserReference entityFromPersistence = event.getCrud().read(event.getEntityId());
             handleEdit(entityFromPersistence);
             
             //In order to delete the Organisation must have other OrganisationUsers
@@ -166,7 +166,7 @@ public final class SecurityHandler {
             }
         }
 
-        private void handleEdit(OrganisationUser user) {
+        private void handleEdit(OrganisationUserReference user) {
             Authentication auth = getAuthentication();
             if(!(auth.getPrincipal() instanceof SystemUserDetails)) {
                 throw new ServiceException("Authentication does not have SystemUserDetails as principal.");
@@ -179,8 +179,8 @@ public final class SecurityHandler {
             //- Have an OrganisationUser in the same Organisation.
             //- That OrganisationUser must have the Adminstrator role.
             boolean allowed = false;
-            List<OrganisationUser> orgUsers = service.getUsers().list(new CompareFilter("user", sud.getUser(), CompareFilter.CompareType.Equals), null);
-            for(OrganisationUser current : orgUsers) {
+            List<OrganisationUserReference> orgUsers = service.getUsers().list(new CompareFilter("user", sud.getUser(), CompareFilter.CompareType.Equals), null);
+            for(OrganisationUserReference current : orgUsers) {
                 if(current.getRoles().contains("ROLE_ADMINISTRATOR")) {
                     allowed = true;
                     break;

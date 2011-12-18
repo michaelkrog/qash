@@ -51,15 +51,11 @@
         <property name="transactionsHandledByProvider" value="false"/>
     </bean>
 
-    <bean id="userCrud" class="dk.apaq.shopsystem.service.crud.UserCrudImpl" scope="prototype">
-        <property name="transactionsHandledByProvider" value="false"/>
-    </bean>
-
     <bean id="inventoryManager" class="dk.apaq.shopsystem.service.crud.ProductCrudInventoryManager" scope="prototype"/>
 
-    <bean id="sequenceProcessor" class="dk.apaq.shopsystem.service.SequenceProcessorImpl" scope="prototype"/>
+    <bean id="sequenceProcessor" class="dk.apaq.shopsystem.service.sequence.SequenceProcessorImpl" scope="prototype"/>
 
-    <bean id="filesystemPopulator" class="dk.apaq.shopsystem.service.DefaultFileSystemPopulator"/>
+    <bean id="filesystemPopulator" class="dk.apaq.shopsystem.file.DefaultFileSystemPopulator"/>
     
     <bean id="service" class="dk.apaq.shopsystem.service.SystemServiceImpl">
         <property name="fileSystemPopulator" ref="filesystemPopulator"/>

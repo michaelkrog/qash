@@ -19,7 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.CloseEvent;
 import dk.apaq.crud.Crud;
-import dk.apaq.shopsystem.entity.OrganisationUser;
+import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.qash.common.CommonDialog;
 import dk.apaq.shopsystem.qash.common.Spacer;
@@ -171,7 +171,7 @@ public class UserManagerPanel extends CustomComponent {
                     @Override
                     public void windowClose(CloseEvent e) {
                         if(dialog.getResult() == CommonDialog.ButtonType.Ok) {
-                            Crud.Complete<String, OrganisationUser> users = organsiationService.getUsers();
+                            Crud.Complete<String, OrganisationUserReference> users = organsiationService.getUsers();
                             
                             //Create system user
                             
@@ -201,7 +201,7 @@ public class UserManagerPanel extends CustomComponent {
     public void setOrganisationService(OrganisationService organsiationService) {
         this.organsiationService = organsiationService;
     
-        this.userList.setContainerDataSource(new CrudContainer(organsiationService.getUsers(), OrganisationUser.class));
+        this.userList.setContainerDataSource(new CrudContainer(organsiationService.getUsers(), OrganisationUserReference.class));
     }
 
 

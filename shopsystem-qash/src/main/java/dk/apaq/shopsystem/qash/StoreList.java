@@ -25,6 +25,7 @@ import dk.apaq.filter.sort.Sorter;
 import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.shopsystem.qash.common.StoreFilterGenerator;
+import dk.apaq.shopsystem.qash.listeners.RemoveSelectedOnClickListener;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
 
@@ -130,13 +131,7 @@ public class StoreList extends CustomComponent {
             }
         });
 
-        removeButton.addListener(new Button.ClickListener() {
-
-            public void buttonClick(ClickEvent event) {
-                Object id = table.getValue();
-                table.removeItem(id);
-            }
-        });
+        removeButton.addListener(new RemoveSelectedOnClickListener(table));
 
         layout.setMargin(false);
         layout.setExpandRatio(table, 1.0F);

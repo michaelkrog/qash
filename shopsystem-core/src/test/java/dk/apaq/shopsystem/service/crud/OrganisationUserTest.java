@@ -2,7 +2,7 @@ package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.OrganisationUser;
+import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.service.SystemService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,12 +54,12 @@ public class OrganisationUserTest {
             String userId = service.getSystemUserCrud().create(systemUser);
             systemUser = service.getSystemUserCrud().read(userId);
             
-            orgUser = new OrganisationUser();
+            orgUser = new OrganisationUserReference();
             orgUser.setUser(systemUser);
             orgUser.getRoles().add("ROLE_ADMINISTRATOR");
             
             String orgOwnerId = orgService.getUsers().create(orgUser);
-            orgUser = (OrganisationUser)orgService.getUsers().read(orgOwnerId);
+            orgUser = (OrganisationUserReference)orgService.getUsers().read(orgOwnerId);
         }
         
         SystemServiceHolder.setSystemService(service);
@@ -82,7 +82,7 @@ public class OrganisationUserTest {
     
     private SystemUser systemUser;
     
-    private OrganisationUser orgUser;
+    private OrganisationUserReference orgUser;
 
     /**
      * Test of create method, of class service.getAccountCrud().
@@ -90,9 +90,9 @@ public class OrganisationUserTest {
     @Test
     public void testCreate() {
         System.out.println("create");
-        Crud.Complete<String, OrganisationUser> crud = orgService.getUsers();
+        Crud.Complete<String, OrganisationUserReference> crud = orgService.getUsers();
 
-        OrganisationUser result = crud.read(crud.create(new OrganisationUser(systemUser)));
+        OrganisationUserReference result = crud.read(crud.create(new OrganisationUserReference(systemUser)));
         assertNotNull(result);
         assertNotNull(result.getId());
     }
@@ -103,8 +103,8 @@ public class OrganisationUserTest {
     @Test
     public void testUpdate() {
         System.out.println("update");
-        Crud.Complete<String, OrganisationUser> crud = orgService.getUsers();
-        OrganisationUser result = (OrganisationUser) crud.read(crud.create(new OrganisationUser(systemUser)));
+        Crud.Complete<String, OrganisationUserReference> crud = orgService.getUsers();
+        OrganisationUserReference result = (OrganisationUserReference) crud.read(crud.create(new OrganisationUserReference(systemUser)));
 
         assertNotNull(result);
         assertNotNull(result.getId());
@@ -122,8 +122,8 @@ public class OrganisationUserTest {
     @Test
     public void testDelete() {
         System.out.println("delete");
-        Crud.Complete<String, OrganisationUser> crud = orgService.getUsers();
-        OrganisationUser organisationUser = new OrganisationUser();
+        Crud.Complete<String, OrganisationUserReference> crud = orgService.getUsers();
+        OrganisationUserReference organisationUser = new OrganisationUserReference();
         organisationUser.setUser(systemUser);
         organisationUser = crud.read(crud.create(organisationUser));
 
@@ -147,8 +147,8 @@ public class OrganisationUserTest {
     @Test
     public void testRead() {
         System.out.println("read");
-        Crud.Complete<String, OrganisationUser> crud = orgService.getUsers();
-        OrganisationUser organisationUser = new OrganisationUser();
+        Crud.Complete<String, OrganisationUserReference> crud = orgService.getUsers();
+        OrganisationUserReference organisationUser = new OrganisationUserReference();
         organisationUser.setUser(systemUser);
         organisationUser = crud.read(crud.create(organisationUser));
 
@@ -169,7 +169,7 @@ public class OrganisationUserTest {
     public void testReference() {
         System.out.println("reference");
 
-        Crud.Complete<String, OrganisationUser> crud = orgService.getUsers();
+        Crud.Complete<String, OrganisationUserReference> crud = orgService.getUsers();
 
         //Create a systemuser through service
         SystemUser user = service.getSystemUserCrud().read(service.getSystemUserCrud().create());
@@ -178,7 +178,7 @@ public class OrganisationUserTest {
         service.getSystemUserCrud().update(user);
 
         //create af reference through orgservice.
-        OrganisationUser userRef = crud.read(crud.create(new OrganisationUser(user)));
+        OrganisationUserReference userRef = crud.read(crud.create(new OrganisationUserReference(user)));
         userRef.getRoles().add("ROLE_ORGUSER");
         userRef.setUser(user);
         crud.update(userRef);
@@ -207,10 +207,10 @@ public class OrganisationUserTest {
     @Test
     public void testListIds() {
         System.out.println("listIds");
-        Crud.Complete<String, OrganisationUser> crud = orgService.getUsers();
+        Crud.Complete<String, OrganisationUserReference> crud = orgService.getUsers();
 
         for (int i = 0; i < 10; i++) {
-            crud.create(new OrganisationUser(systemUser));
+            crud.create(new OrganisationUserReference(systemUser));
         }
 
         List<String> idlist = crud.listIds();

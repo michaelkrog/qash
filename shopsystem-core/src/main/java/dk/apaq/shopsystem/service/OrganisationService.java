@@ -7,7 +7,7 @@ import dk.apaq.shopsystem.entity.ProductGroup;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.OrganisationUser;
+import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Store;
@@ -28,7 +28,7 @@ public interface OrganisationService extends Serializable {
     public Organisation readOrganisation();
     public void updateOrganisation(Organisation organisation);
 
-    Crud.Complete<String, OrganisationUser> getUsers();
+    Crud.Complete<String, OrganisationUserReference> getUsers();
 
     Crud.Editable<String, Store> getStores();
     Crud.Complete<String, Customer> getCustomers();

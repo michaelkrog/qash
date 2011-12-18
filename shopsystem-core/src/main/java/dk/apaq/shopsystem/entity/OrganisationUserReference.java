@@ -21,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author michael
  */
 @Entity
-public class OrganisationUser implements ContentEntity {
+public class OrganisationUserReference implements ContentEntity {
  
     @Id
     @GeneratedValue(generator="system-uuid")
@@ -46,10 +46,10 @@ public class OrganisationUser implements ContentEntity {
     @Fetch(FetchMode.SUBSELECT)
     private List<String> roles = new ArrayList<String>();
 
-    public OrganisationUser() {
+    public OrganisationUserReference() {
     }
 
-    public OrganisationUser(SystemUser systemUser) {
+    public OrganisationUserReference(SystemUser systemUser) {
         this.user = systemUser;
     }
 

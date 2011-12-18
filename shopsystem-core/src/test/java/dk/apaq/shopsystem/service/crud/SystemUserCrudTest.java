@@ -5,7 +5,7 @@ import dk.apaq.filter.Filter;
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.core.LikeFilter;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.OrganisationUser;
+import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.service.SystemService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -128,7 +128,7 @@ public class SystemUserCrudTest {
         org = service.createOrganisation(user, org);
         OrganisationService organisationService = service.getOrganisationService(org);
         
-        List<OrganisationUser> users = organisationService.getUsers().list();
+        List<OrganisationUserReference> users = organisationService.getUsers().list();
         assertEquals(1, users.size());
         
         try{

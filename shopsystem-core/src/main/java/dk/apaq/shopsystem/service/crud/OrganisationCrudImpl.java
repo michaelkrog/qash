@@ -2,6 +2,7 @@ package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.filter.limit.Limit;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.entity.SystemUser;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class OrganisationCrudImpl extends EntityManagerCrudForSpring<String, Org
     }
 
     private List<String> generateOrganisationIdList(SystemUser user) {
-        Query q = em.createQuery("select userref.organisation.id from OrganisationUser userref where userref.user=:user");
+        Query q = em.createQuery("select userref.organisation.id from " + OrganisationUserReference.class.getSimpleName() + " userref where userref.user=:user");
         q.setParameter("user", user);
         List list = q.getResultList();
 

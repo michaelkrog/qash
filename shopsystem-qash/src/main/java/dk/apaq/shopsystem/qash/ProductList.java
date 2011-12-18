@@ -33,6 +33,7 @@ import dk.apaq.shopsystem.qash.common.ProductFilterGenerator;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.shopsystem.qash.data.ProductContainer;
 import dk.apaq.shopsystem.qash.data.util.NumberColumnGenerator;
+import dk.apaq.shopsystem.qash.listeners.RemoveSelectedOnClickListener;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
 import dk.apaq.vaadin.addon.crudcontainer.HasBean;
@@ -150,13 +151,8 @@ public class ProductList extends CustomComponent {
             }
         });
 
-        removeButton.addListener(new Button.ClickListener() {
+        removeButton.addListener(new RemoveSelectedOnClickListener(table));
 
-            public void buttonClick(ClickEvent event) {
-                Object id = table.getValue();
-                table.removeItem(id);
-            }
-        });
 
         table.setColumnHeader("quantityInStock", "quantity");
         table.setColumnAlignment("price", Table.ALIGN_RIGHT);
