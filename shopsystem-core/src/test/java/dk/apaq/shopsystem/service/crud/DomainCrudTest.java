@@ -129,7 +129,7 @@ public class DomainCrudTest {
         List<String> ids = domainCrud.listIds(new CompareFilter("name", "www.blabla.dk", CompareFilter.CompareType.Equals), null);
         long endTime = System.currentTimeMillis();
         assertFalse(ids.isEmpty());
-        assertTrue("Searching by domain took more than 25 msec(time:"+(endTime-startTime)+"ms.)", endTime-startTime<25);
+        assertTrue("Searching by domain took more than 50 msec(time:"+(endTime-startTime)+"ms.)", endTime-startTime<50);
         System.out.println("Searching by domain took more "+(endTime-startTime)+"ms.");
 
         ids = domainCrud.listIds(new CompareFilter("name", "blabla.dk", CompareFilter.CompareType.Equals), null);

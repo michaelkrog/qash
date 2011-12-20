@@ -42,14 +42,14 @@ public class CachingWebRendererTest {
         
         String url = "";
         MockWebRenderer mockWebRenderer = new MockWebRenderer();
-        CachingImageRenderer instance = new CachingImageRenderer(mockWebRenderer, fs.getRoot(), 500);
+        CachingImageRenderer instance = new CachingImageRenderer(mockWebRenderer, fs.getRoot(), 1000);
         BufferedImage result = instance.renderWebpageToImage(url);
         
         assertEquals(1, fs.getRoot().getChildren().size());
         
         result = instance.renderWebpageToImage(url);
         
-        Thread.sleep(600);
+        Thread.sleep(1500);
         
         result = instance.renderWebpageToImage(url);
         assertEquals(2, mockWebRenderer.getCalls());
