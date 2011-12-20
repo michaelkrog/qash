@@ -27,6 +27,14 @@
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"
         >
 
+    <bean  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+        <property name="locations">  
+            <list>  
+                <value>classpath:qash_default.properties</value>  
+            </list>  
+        </property>  
+    </bean>  
+
     <bean id="crud" class="dk.apaq.shopsystem.service.crud.EntityManagerCrudForSpring" scope="prototype">
         <property name="transactionsHandledByProvider" value="false"/>
     </bean>
@@ -73,11 +81,11 @@
 
     <!-- MESSAGING BEANS -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="smtp.dansknet.dk"/>
+        <property name="host" value="${mail.smtp}"/>
     </bean>
 
     <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
-        <property name="from" value="info@qashapp.com"/>
+        <property name="from" value="${mail.from}"/>
     </bean>
     
     
@@ -87,24 +95,23 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="showSql" value="true" />
-                <property name="generateDdl" value="true" />
-                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+                <property name="showSql" value="${data.showSql}" />
+                <property name="generateDdl" value="${data.generateDdl}" />
+                <property name="databasePlatform" value="${data.dialect}" />
             </bean>
         </property>
         <property name="jpaProperties">
             <props>
-                <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
                 <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.DefaultComponentSafeNamingStrategy</prop>
             </props>
         </property>
     </bean>
 
     <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
-        <property name="driverClass" value="com.mysql.jdbc.Driver" />
-        <property name="jdbcUrl" value="jdbc:mysql://localhost/shopsystem" />
-        <property name="username" value="root" />
-        <property name="password" value="" />
+        <property name="driverClass" value="${data.driverClass}" />
+        <property name="jdbcUrl" value="${data.jdbcUrl}" />
+        <property name="username" value="${data.username}" />
+        <property name="password" value="${data.password}" />
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
