@@ -59,10 +59,12 @@ import dk.apaq.shopsystem.entity.Customer;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderLineTax;
 import dk.apaq.shopsystem.entity.OrderStatus;
+import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Tax;
+import dk.apaq.shopsystem.i18n.LocaleUtil;
 import dk.apaq.shopsystem.qash.common.AddressLabel;
 import dk.apaq.shopsystem.qash.common.CommonDialog;
 import dk.apaq.shopsystem.qash.common.ProductFilterGenerator;
@@ -89,6 +91,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.LocaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1072,7 +1075,12 @@ public class OrderEditor extends CustomComponent implements
                 jobName = "Invoice_"+order.getNumber();
             }
             
-            annexContext = new AnnexContext<OrderDocumentContent, Void>(cdc, null, page, Locale.getDefault());
+            Organisation organisation = organisationService.readOrganisation();
+            Locale locale = LocaleUtil.getLocaleFromCountryCode(organisation.getCountryCode());
+            if(locale == null) {
+                locale = Locale.getDefault();
+            }
+            annexContext = new AnnexContext<OrderDocumentContent, Void>(cdc, null, page, locale);
             Printable printable =annexService.generatePurchaseDocumentPrintable(annexContext, printType);
             
             //Print the generated document

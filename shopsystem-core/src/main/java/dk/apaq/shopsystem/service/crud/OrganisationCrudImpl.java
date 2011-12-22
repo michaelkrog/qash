@@ -41,9 +41,7 @@ public class OrganisationCrudImpl extends EntityManagerCrudForSpring<String, Org
     private List<String> generateOrganisationIdList(SystemUser user) {
         Query q = em.createQuery("select userref.organisation.id from " + OrganisationUserReference.class.getSimpleName() + " userref where userref.user=:user");
         q.setParameter("user", user);
-        List list = q.getResultList();
-
-        return list;
+        return q.getResultList();
     }
 
 }

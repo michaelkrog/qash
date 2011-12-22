@@ -31,4 +31,18 @@ public class LocaleUtil {
         }
 
     }
+    
+    /**
+     * Retrieves the first locale in the system found with the given 2-letter countrycode.
+     * Returns null if nons found.
+     * @return Locale or null.
+     */
+    public static Locale getLocaleFromCountryCode(String countryCode) {
+        for(Locale l : Locale.getAvailableLocales()) {
+            if(l.getCountry().equalsIgnoreCase(countryCode)) {
+                return l;
+            }
+        }
+        return null;
+    }
 }

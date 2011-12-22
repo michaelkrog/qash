@@ -18,6 +18,7 @@ import dk.apaq.shopsystem.data.DataExchange;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.qash.resource.DaybookSource;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.util.DateUtil;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -98,11 +99,8 @@ public class DaybookExportPanel extends CustomComponent {
                     LOG.error("organsiationservice not set.");
                     return;
                 }
-                Date from = data.dateFrom;
-                Date to = data.dateTo;
-                to.setHours(23);
-                to.setMinutes(59);
-                to.setSeconds(60);
+                Date from = DateUtil.getBeginningOfDay(data.dateFrom);
+                Date to = DateUtil.getEndOfDay(data.dateTo);
                 
                 Filter filter = new AndFilter(new CompareFilter("dateInvoiced", from, CompareFilter.CompareType.GreaterThan),
                                             new CompareFilter("dateInvoiced", to, CompareFilter.CompareType.LessThan));
