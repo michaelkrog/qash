@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -40,6 +42,7 @@ public class OrganisationUserReference implements ContentEntity, User {
     private Organisation organisation;
     
     @ManyToOne(optional=false)
+    @Cascade(CascadeType.SAVE_UPDATE)
     private SystemUser user; 
     
     @ElementCollection(fetch = FetchType.EAGER)
