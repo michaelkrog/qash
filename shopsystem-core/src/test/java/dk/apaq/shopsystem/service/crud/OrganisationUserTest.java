@@ -194,6 +194,15 @@ public class OrganisationUserTest {
         assertEquals("ROLE_ADMIN", user.getRoles().get(0));
         assertEquals("ROLE_USER", userRef.getRoles().get(0));
         
+        //Check that we can change through the reference, persist it and then read the data all over.
+        userRef.setEmail("my@email.com");
+        crud.update(userRef);
+        
+        user = service.getSystemUserCrud().read(user.getId());
+        userRef = crud.read(userRef.getId());
+        assertEquals("my@email.com", user.getEmail());
+        assertEquals("my@email.com", userRef.getEmail());
+        
         //delete the reference
         crud.delete(userRef.getId());
         userRef = crud.read(userRef.getId());
