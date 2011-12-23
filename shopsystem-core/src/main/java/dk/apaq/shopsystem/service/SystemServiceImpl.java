@@ -2,7 +2,6 @@ package dk.apaq.shopsystem.service;
 
 import dk.apaq.shopsystem.file.FileSystemPopulator;
 import dk.apaq.crud.Crud;
-import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.service.crud.SecurityHandler;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Order;
@@ -16,14 +15,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import dk.apaq.crud.Crud.*;
 import dk.apaq.crud.CrudNotifier;
-import dk.apaq.filter.jpa.FilterTranslatorForJPA;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.vfs.FileSystem;
 import javax.persistence.PersistenceContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -131,10 +128,6 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
     @Override
     @Transactional
     public Organisation createOrganisation(SystemUser user, Organisation organisation) {
-        if(user.getId()!=null) {
-            throw new IllegalArgumentException("User has already been persisted.");
-        }
-
         if(organisation.getId()!=null) {
             throw new IllegalArgumentException("Organisation has already been persisted.");
         }
@@ -142,13 +135,16 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
         String orgId = getOrganisationCrud().create(organisation);
         organisation = getOrganisationCrud().read(orgId);
         
-        String userId = getSystemUserCrud().create(user);
-        user = getSystemUserCrud().read(userId);
-
+        if(user.getId() == null) {
+            String userId = getSystemUserCrud().create(user) ;
+            user = getSystemUserCrud().read(userId);
+        }
+        
         OrganisationService organisationService = getOrganisationService(organisation);
         OrganisationUserReference orgUser = new OrganisationUserReference();
         orgUser.setOrganisation(organisation);
         orgUser.setUser(user);
+        orgUser.getRoles().add("ROLE_ADMIN");
         organisationService.getUsers().create(orgUser);
 
         if(mailSender!=null) { 

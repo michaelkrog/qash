@@ -39,7 +39,7 @@ public class OrganisationUserReference implements ContentEntity, User {
     @ManyToOne(optional=false)
     private Organisation organisation;
     
-    @ManyToOne(optional=false, cascade=CascadeType.MERGE)
+    @ManyToOne(optional=false, cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private SystemUser user; 
     
     @ElementCollection(fetch = FetchType.EAGER)
