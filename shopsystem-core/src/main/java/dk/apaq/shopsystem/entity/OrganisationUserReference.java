@@ -120,7 +120,7 @@ public class OrganisationUserReference implements ContentEntity, User {
         return user.getPassword();
     }
     
-    public void setPasswod(String password) {
+    public void setPassword(String password) {
         user.setPassword(password);
     }
 
@@ -150,6 +150,14 @@ public class OrganisationUserReference implements ContentEntity, User {
     
     public void setName(String name) {
         user.setName(name);
+    }
+
+    public Date getBirthDay() {
+        return user.getBirthDay();
+    }
+    
+    public void setBirthDay(Date birthDay) {
+        user.setBirthDay(birthDay);
     }
 
     
