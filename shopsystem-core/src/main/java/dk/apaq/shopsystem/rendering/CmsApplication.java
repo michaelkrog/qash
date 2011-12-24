@@ -58,8 +58,6 @@ public class CmsApplication extends WebApplication {
         contentResourceReference = new ContentResourceReference(service);
         
         
-        mount(new CmsPageMapper(service));
-        
         mountResource("/_/themes/${themename}", themeResourceReference);
         mountResource("/" + SYSTEMSITE_PREFIX + "/${orgid}/sites/${contextid}/_/themes/${themename}", themeResourceReference);
         mountResource("/" + SYSTEMSITE_PREFIX + "/${orgid}/documents/${contextid}/_/themes/${themename}", themeResourceReference);
@@ -67,6 +65,8 @@ public class CmsApplication extends WebApplication {
         mountResource("/_/content", contentResourceReference);
         mountResource("/" + SYSTEMSITE_PREFIX + "/${orgid}/sites/${contextid}/_/content", contentResourceReference);
         mountResource("/" + SYSTEMSITE_PREFIX + "/${orgid}/documents/${contextid}/_/content", contentResourceReference);
+        
+        mount(new CmsPageMapper(service));
         
         //Removes unneeded wickets tags in renderings output
         getMarkupSettings().setStripWicketTags(true);

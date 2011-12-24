@@ -72,15 +72,16 @@ public class CmsPageMapper extends AbstractMapper implements IRequestMapper {
             
         } else if (systemRequest) {
             page = CmsUtil.getDocument(service, request);
-
-            if (page == null) {
+            List<String> segments = request.getUrl().getSegments();
+            String leaf = segments.isEmpty() ? null : segments.get(segments.size()-1);
+            if (page == null || !"index".equals(leaf)) {
                 return null;
             }
             
             contextId = page.getId();
 
             pageParameters = extractPageParameters(request, 5, parametersEncoder);
-            contextType = RenderContextType.WebPage;
+            contextType = RenderContextType.Document;
         } else {
             return null;
         }

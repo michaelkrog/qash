@@ -14,6 +14,8 @@ import java.io.IOException;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.util.time.Time;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -21,6 +23,7 @@ import org.apache.wicket.util.time.Time;
  */
 public class ThemeResource extends AbstractResource {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ThemeResource.class);
     private final SystemService service;
 
     public ThemeResource(SystemService service) {
@@ -32,12 +35,11 @@ public class ThemeResource extends AbstractResource {
     protected ResourceResponse newResourceResponse(Attributes attributes) {
         File file = null;
         ResourceResponse rr = new ResourceResponse();
-        Website site = CmsUtil.getWebsite(service, attributes.getRequest());
-        if(site==null) {
-            return null;
+        OrganisationService organisationService = CmsUtil.getOrganisationService(service, attributes.getRequest());
+        if (organisationService == null) {
+            LOG.error("organisationservice not found.");
+            return new ResourceResponse();
         }
-        
-        OrganisationService organisationService = service.getOrganisationService(site.getOrganisation());
         
         String themeName = attributes.getParameters().get("themename").toString();
         

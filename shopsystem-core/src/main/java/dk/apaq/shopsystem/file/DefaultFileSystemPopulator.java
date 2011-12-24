@@ -270,6 +270,7 @@ public class DefaultFileSystemPopulator implements FileSystemPopulator {
             File imageFile = contentDir.getFile("monologo.png", true);
             OutputStream imageOs = imageFile.getOutputStream();
             imageOs.write(Base64.decodeBase64(imageData));
+            imageOs.flush();
             imageOs.close();
 
 

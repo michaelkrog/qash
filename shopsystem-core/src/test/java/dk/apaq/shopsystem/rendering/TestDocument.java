@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import junit.framework.Assert;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
@@ -105,6 +106,8 @@ public class TestDocument extends AbstractJUnit4SpringContextTests {
         tester.executeUrl("http://localhost/context/servlet/_render/" + org.getId() + "/documents/" + document.getId() + "/_/content/monologo.png");
         byte[] bytes = tester.getLastResponse().getDocument().getBytes();
         BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+        //Assert.assertNotNull(img);
+        //Assert.assertNotSame(0, img.getWidth());
     }
     
 }
