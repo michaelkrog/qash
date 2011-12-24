@@ -9,7 +9,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.ComponentParameter;
-import dk.apaq.shopsystem.entity.Page;
+import dk.apaq.shopsystem.entity.WebPage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
