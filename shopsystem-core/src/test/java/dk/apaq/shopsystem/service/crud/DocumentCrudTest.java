@@ -1,15 +1,18 @@
 package dk.apaq.shopsystem.service.crud;
 
+import org.dom4j.DocumentType;
 import dk.apaq.crud.Crud;
-import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.WebPage;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.apaq.shopsystem.service.SystemService;
-import dk.apaq.shopsystem.entity.Website;
+import dk.apaq.shopsystem.entity.Order;
+import dk.apaq.shopsystem.entity.OrderStatus;
+import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.Document;
+import java.util.Date;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -25,9 +28,9 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/defaultspringcontext.xml"})
-public class WebsiteCrudTest {
+public class DocumentCrudTest {
 
-    public WebsiteCrudTest() {
+    public DocumentCrudTest() {
     }
 
     @BeforeClass
@@ -54,10 +57,11 @@ public class WebsiteCrudTest {
     @Test
     public void testRead() {
         System.out.println("read");
+
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Website> crud = service.getOrganisationService(org).getWebsites();
-        Website result = crud.read(crud.create());
+        Crud.Complete<String, Document> crud = service.getOrganisationService(org).getDocuments();
+        Document result = crud.read(crud.create());
 
         assertNotNull(result);
         assertNotNull(result.getId());
@@ -73,12 +77,12 @@ public class WebsiteCrudTest {
         assertNull(result);
     }
 
-     @Test
+    @Test
     public void testListIds() {
         System.out.println("listIds");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Website> crud = service.getOrganisationService(org).getWebsites();
+        Crud.Complete<String, Document> crud = service.getOrganisationService(org).getDocuments();
 
         for(int i=0;i<10;i++)
             crud.create();
@@ -92,10 +96,9 @@ public class WebsiteCrudTest {
         System.out.println("create");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Website> crud = service.getOrganisationService(org).getWebsites();
-        Website Website = crud.read(crud.create());
-
-        assertNotNull(Website);
+        Crud.Complete<String, Document> crud = service.getOrganisationService(org).getDocuments();
+        Document result = crud.read(crud.create());
+        assertNotNull(result);
     }
 
     @Test
@@ -103,20 +106,21 @@ public class WebsiteCrudTest {
         System.out.println("update");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Website> crud = service.getOrganisationService(org).getWebsites();
-        Website result = crud.read(crud.create());
 
+       
+        Crud.Complete<String, Document> crud = service.getOrganisationService(org).getDocuments();
+        Document result = crud.read(crud.create());
+        result.setName("name");
+        crud.update(result);
+        
+        result = crud.read(result.getId());
+        
         assertNotNull(result);
         assertNotNull(result.getId());
 
-        String id = result.getId();
-
-        result.setName("My Site");
-        crud.update(result);
-
-        result = crud.read(id);
-        assertEquals("My Site", result.getName());
         
+        assertEquals("name", result.getName());
+
     }
 
     @Test
@@ -124,61 +128,24 @@ public class WebsiteCrudTest {
         System.out.println("delete");
         OrganisationCrud orgcrud = service.getOrganisationCrud();
         Organisation org = orgcrud.read(orgcrud.create());
-        Crud.Editable<String, Website> websiteCrud = service.getOrganisationService(org).getWebsites();
-        Website website = websiteCrud.read(websiteCrud.create());
-        
-        Crud.Complete<String, WebPage> pageCrud = service.getOrganisationService(org).getPages(website);
-        WebPage page = pageCrud.read(pageCrud.create());
-        assertNotNull(page);
-        assertEquals(website.getId(), page.getWebsite().getId());
-        
+        Crud.Complete<String, Document> crud = service.getOrganisationService(org).getDocuments();
+        Document result = crud.read(crud.create());
 
-        assertNotNull(website);
-        assertNotNull(website.getId());
+        assertNotNull(result);
+        assertNotNull(result.getId());
 
-        String id = website.getId();
+        String id = result.getId();
 
-        website = websiteCrud.read(id);
-        assertNotNull(website);
+        result = crud.read(id);
+        assertNotNull(result);
 
-        websiteCrud.delete(id);
+        crud.delete(id);
 
-        website = websiteCrud.read(id);
-        assertNull(website);
-
-        page = pageCrud.read(page.getId());
-        assertNull(page);
-
+        result = crud.read(id);
+        assertNull(result);
     }
 
-    @Test
-    public void testSecurity() {
-        OrganisationCrud orgcrud = service.getOrganisationCrud();
-        Organisation org1 = orgcrud.read(orgcrud.create());
-        Organisation org2 = orgcrud.read(orgcrud.create());
-
-        Crud.Editable<String, Website> WebsiteCrud1 = service.getOrganisationService(org1).getWebsites();
-        Crud.Editable<String, Website> WebsiteCrud2 = service.getOrganisationService(org2).getWebsites();
-
-        Website Website1 = WebsiteCrud1.read(WebsiteCrud1.create());
-        Website Website2 = WebsiteCrud2.read(WebsiteCrud2.create());
-
-        //Allowed
-        WebsiteCrud1.read(Website1.getId());
-        WebsiteCrud2.update(Website2);
-
-        try {
-            WebsiteCrud1.read(Website2.getId());
-            fail("Should not be allowed");
-        } catch(SecurityException ex) { }
+   
 
 
-        try {
-            WebsiteCrud2.update(Website1);
-            fail("Should not be allowed");
-        } catch(SecurityException ex) { }
-
-    }
-     
-     
 }

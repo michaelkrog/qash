@@ -1,9 +1,9 @@
 package dk.apaq.shopsystem.rendering;
 
+import dk.apaq.shopsystem.entity.AbstractDocument;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.entity.Template;
 import dk.apaq.shopsystem.entity.ComponentInformation;
-import dk.apaq.shopsystem.entity.Page;
 import dk.apaq.shopsystem.entity.Placeholder;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.rendering.module.CmsModule;
@@ -35,11 +35,11 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
     private static final Logger LOG = LoggerFactory.getLogger(CmsPage.class);
     private final Template template;
     private final Theme theme;
-    private final Page page;
+    private final AbstractDocument page;
     private boolean failed;
     private String error;
     
-    public CmsPage(OrganisationService organisationService, Website site, Page page, PageParameters pageParameters) {
+    public CmsPage(OrganisationService organisationService, String contextId, AbstractDocument page, PageParameters pageParameters) {
         super(pageParameters);
         this.page = page;
         
@@ -81,7 +81,7 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
                     LOG.debug("Retrieving module for ComponentInformation [moduleName={}]", info.getModuleName());
                     CmsModule module = CmsModule.create("placeholder", info.getModuleName());
                     module.setParameters(info.getParameterMap());
-                    module.setWebSite(site);
+                    module.setContextId(contextId);
                     module.add(new ModuleMarkerBehavior(info));
                     module.compose();
 
@@ -104,7 +104,7 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
         
     }
     
-    public Page getPageData() {
+    public AbstractDocument getPageData() {
         return page;
     }
     

@@ -25,7 +25,7 @@ public class Website extends Outlet implements HasEnable {
 
     //This is only mapped here to allow cascading upon website removal..
     @OneToMany(mappedBy = "website", cascade=CascadeType.REMOVE)
-    private List<Page> pages;
+    private List<WebPage> pages;
 
     private String themeName;
     private boolean enabled = true;

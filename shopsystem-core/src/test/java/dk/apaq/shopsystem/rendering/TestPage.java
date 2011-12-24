@@ -4,7 +4,7 @@ import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.Page;
+import dk.apaq.shopsystem.entity.WebPage;
 import dk.apaq.shopsystem.entity.Template;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.entity.Website;
@@ -37,7 +37,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
     private WicketTester tester;
     @Autowired
     private SystemService service;
-    private Page page;
+    private WebPage page;
     private Organisation org;
     private Website site;
 
@@ -55,7 +55,7 @@ public class TestPage extends AbstractJUnit4SpringContextTests {
         Theme theme = orgService.getThemes().read("Basic");
         Template template = theme.getTemplate("Simple");
 
-        Crud.Complete<String, Page> pageCrud = orgService.getPages(site);
+        Crud.Complete<String, WebPage> pageCrud = orgService.getPages(site);
         page = pageCrud.read(pageCrud.create());
         page.setName("test");
         page.setThemeName(theme.getName());

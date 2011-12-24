@@ -7,11 +7,12 @@ import dk.apaq.crud.Crud.Editable;
 import dk.apaq.crud.CrudListener;
 import dk.apaq.crud.CrudNotifier;
 import dk.apaq.shopsystem.entity.Customer;
+import dk.apaq.shopsystem.entity.Document;
 import dk.apaq.shopsystem.entity.ProductGroup;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.Page;
+import dk.apaq.shopsystem.entity.WebPage;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Store;
@@ -87,6 +88,11 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     public Complete<String, Product> getProducts() {
         return getGenericContentCrud(Product.class);
     }
+    
+    @Override
+    public Complete<String, Document> getDocuments() {
+        return getGenericContentCrud(Document.class);
+    }
 
     @Override
     public Editable<String, Tax> getTaxes() {
@@ -136,8 +142,8 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
 
     @Override
-    public Complete<String, Page> getPages(Website website) {
-        return getWebContentCrud(website, Page.class);
+    public Complete<String, WebPage> getPages(Website website) {
+        return getWebContentCrud(website, WebPage.class);
     }
 
     

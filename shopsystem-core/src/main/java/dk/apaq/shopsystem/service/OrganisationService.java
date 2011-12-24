@@ -3,6 +3,7 @@ package dk.apaq.shopsystem.service;
 import dk.apaq.shopsystem.service.sequence.SequenceProcessor;
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.Customer;
+import dk.apaq.shopsystem.entity.Document;
 import dk.apaq.shopsystem.entity.ProductGroup;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Order;
@@ -13,7 +14,7 @@ import dk.apaq.shopsystem.entity.Product;
 import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.Website;
-import dk.apaq.shopsystem.entity.Page;
+import dk.apaq.shopsystem.entity.WebPage;
 import dk.apaq.shopsystem.entity.ProductCategory;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.vfs.FileSystem;
@@ -40,9 +41,10 @@ public interface OrganisationService extends Serializable {
     Crud.Complete<String, Payment> getPayments();
 
     Crud.Complete<String, Domain> getDomains();
+    Crud.Complete<String, Document> getDocuments();
     Crud.Complete<String, Website> getWebsites();
     Crud<String,Theme> getThemes();
-    Crud.Complete<String,Page> getPages(Website website);
+    Crud.Complete<String,WebPage> getPages(Website website);
 
     FileSystem getFileSystem();
     

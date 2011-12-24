@@ -2,7 +2,6 @@ package dk.apaq.shopsystem.rendering.module;
 
 import dk.apaq.shopsystem.entity.ComponentParameter;
 import dk.apaq.shopsystem.entity.Website;
-import dk.apaq.shopsystem.service.OrganisationService;
 import java.util.Map;
 import org.apache.wicket.markup.html.panel.Panel;
 
@@ -12,15 +11,15 @@ import org.apache.wicket.markup.html.panel.Panel;
  */
 public abstract class CmsModule extends Panel {
 
-    protected Website webSite;
+    protected String contextId;
     protected Map<String, ComponentParameter> parameters;
     
     public CmsModule(String id) {
         super(id);
     }
 
-    public void setWebSite(Website webSite) {
-        this.webSite = webSite;
+    public void setContextId(String contextId) {
+        this.contextId = contextId;
     }
 
     public void setParameters(Map<String, ComponentParameter> parameters) {
