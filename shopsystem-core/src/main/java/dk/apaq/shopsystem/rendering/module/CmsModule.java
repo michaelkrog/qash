@@ -1,7 +1,6 @@
 package dk.apaq.shopsystem.rendering.module;
 
 import dk.apaq.shopsystem.entity.ComponentParameter;
-import dk.apaq.shopsystem.entity.Website;
 import java.util.Map;
 import org.apache.wicket.markup.html.panel.Panel;
 

@@ -5,13 +5,11 @@ import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.entity.Template;
 import dk.apaq.shopsystem.entity.ComponentInformation;
 import dk.apaq.shopsystem.entity.Placeholder;
-import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.rendering.module.CmsModule;
 import dk.apaq.shopsystem.service.OrganisationService;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
@@ -42,8 +40,6 @@ public class CmsPage extends WebPage implements IMarkupCacheKeyProvider, IMarkup
     public CmsPage(OrganisationService organisationService, String contextId, AbstractDocument page, PageParameters pageParameters) {
         super(pageParameters);
         this.page = page;
-        
-        CmsApplication application = (CmsApplication) Application.get();
         
         String themeName = page.getThemeName();
         String templateName = page.getTemplateName();
