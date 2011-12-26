@@ -36,52 +36,34 @@ public class PaymentCrudImpl extends ContentCrud<Payment> {
 
     @Override
     @Transactional
-    public void update(Payment entity) {
-        Order order = orderCrud.read(entity.getOrderId());
-        //we need to detach it to prevent our changes on the order to persist it self
-        em.detach(order);
-
-        update(entity, order);
-
+    public <E extends Payment> String create(E entity) {
+        LOG.debug("Persisting payment.");
+        ensurePaymentOk(entity);
+        Order order = getDetachedOrder(entity);
+        if(order!=null) {
+            ensurePaymentOrderOk(entity, order);
+            updateOrderAccordingToPayment(entity, order);
+        }
+        
+        return super.create(entity);
     }
 
-    private void update(Payment entity, Order order) {
+    
+    @Override
+    @Transactional
+    public void update(Payment entity) {
         LOG.debug("Updating payment [id={}]", entity.getId());
 
-        Payment existingPayment = read(entity.getId());
-        boolean firstPersist = existingPayment.getOrderId() == null;
-        if(!firstPersist) {
-            throw new IllegalStateException("Persisting a payment twice is not allowed.");
-        }
-
+        ensurePaymentOk(entity);
         if(entity.getOrderId()==null) {
             throw new NullPointerException("Payment has no order specified, which is required.");
         }
-
-        //Get total from a fresh order
-        double total = order.getTotalWithTax();
-
-        if(!order.getStatus().isConfirmedState()) {
-            throw new IllegalStateException("Payments only possible for accepted orders.");
-        }
-
-        if(entity.getPaymentType() == PaymentType.Change && order.getStatus() != OrderStatus.Completed) {
-            throw new IllegalStateException("Change can only be registered for an order when it is complete.");
-        }
-
-        if(entity.getPaymentType() != PaymentType.Change && order.getStatus() == OrderStatus.Completed) {
-            throw new IllegalStateException("Ordinary payments can only be registered for an order when it is NOT complete.");
-        }
-
-        //Calculate due
-        double payments = getTotalPayment(order.getId());
-        double due = total - payments;
-
-        if(due - entity.getAmount() <=0 && order.getStatus()!=OrderStatus.Completed) {
-            order.setStatus(OrderStatus.Completed);
-            order.setPaid(true);
-            orderCrud.update(order);
-        }
+        
+        Order order = getDetachedOrder(entity);
+        ensurePaymentOrderOk(entity, order);
+        
+        
+        updateOrderAccordingToPayment(entity, order);
 
         fireOnBeforeUpdate(entity.getId(), entity);
 
@@ -108,5 +90,52 @@ public class PaymentCrudImpl extends ContentCrud<Payment> {
 
     }
 
+    private void ensurePaymentOk(Payment entity) {
+        Payment existingPayment = entity.getId() == null ? null : read(entity.getId());
+        boolean firstPersist = existingPayment == null ? true : existingPayment.getOrderId() == null;
+        if(!firstPersist) {
+            throw new IllegalStateException("Persisting a payment twice is not allowed.");
+        }
+
+    }
+    
+    private void ensurePaymentOrderOk(Payment entity, Order order) {
+        if(!order.getStatus().isConfirmedState()) {
+            throw new IllegalStateException("Payments only possible for accepted orders.");
+        }
+
+        if(entity.getPaymentType() == PaymentType.Change && order.getStatus() != OrderStatus.Completed) {
+            throw new IllegalStateException("Change can only be registered for an order when it is complete.");
+        }
+
+        if(entity.getPaymentType() != PaymentType.Change && order.getStatus() == OrderStatus.Completed) {
+            throw new IllegalStateException("Ordinary payments can only be registered for an order when it is NOT complete.");
+        }
+    }
+    
+    private void updateOrderAccordingToPayment(Payment entity, Order order) {
+        if(order==null) return;
+        //Get total from a fresh order
+        double total = order.getTotalWithTax();
+
+        //Calculate due
+        double payments = getTotalPayment(order.getId());
+        double due = total - payments;
+
+        if(due - entity.getAmount() <=0 && order.getStatus()!=OrderStatus.Completed) {
+            order.setStatus(OrderStatus.Completed);
+            order.setPaid(true);
+            orderCrud.update(order);
+        }
+    }
+    
+    private Order getDetachedOrder(Payment entity) {
+        if(entity.getOrderId() == null) return null;
+        
+        Order order = orderCrud.read(entity.getOrderId());
+        //we need to detach it to prevent our changes on the order to persist it self
+        em.detach(order);
+        return order;
+    }
 
 }
