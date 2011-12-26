@@ -3,6 +3,7 @@
     Created on : 16-05-2011, 11:20:51
     Author     : michaelzachariassenkrog
 --%>
+<%@page import="dk.apaq.shopsystem.entity.Plan"%>
 <%@page import="dk.apaq.shopsystem.security.SystemUserDetails"%>
 <%@page import="dk.apaq.shopsystem.util.AddressUtil"%>
 <%@page import="dk.apaq.shopsystem.entity.Store"%>
@@ -52,6 +53,8 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
 DateFormat df = new SimpleDateFormat("yyyyMMdd");
 Date since30Days = DateUtils.addDays(new Date(), -30);
 String since30DaysString = df.format(since30Days);
+
+String paypalUrl = "https://wwwsandbox.paypal.com/cgi-bin/webscr";
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -107,6 +110,8 @@ String since30DaysString = df.format(since30Days);
             <div class="in-benefits" style="padding-bottom:44px">
                 <h1><%=res.getString("dashboard.title")%></h1>
             <p>
+                
+
                 <table class="table-minimalistic table-minimalistic-lined" style="width:950px" summary="Shop list">
                     <thead>
                         <tr>
@@ -118,8 +123,11 @@ String since30DaysString = df.format(since30Days);
                         </tr>
                     </thead>
                     <tbody>
+                        
                         <%
                         String noLimit = res.getString("dashboard.noLimit");
+                        String freeLimitOrders = res.getString("dashboard.free_limit_orders");
+                        String freeLimitProducts = res.getString("dashboard.free_limit_products");
                         for(String id : idlist) {
                             Organisation org = orgCrud.read(id);
                             OrganisationService orgService = service.getOrganisationService(org);
@@ -131,11 +139,34 @@ String since30DaysString = df.format(since30Days);
                             out.println(StringEscapeUtils.escapeHtml(org.getCompanyName()));
                             out.println("</td>");
                             out.println("<td>");
-                            out.println("Gratis");
-                            out.println("&nbsp;<a href=\"change_plan.jsp?shopid=" + org.getId() + "\" class=\"button-small\">"+res.getString("dashboard.changeplan")+"</a>");
+                            
+                            if(org.getPlan() == Plan.Free) {
+                                out.println("<FORM name=\"paypalform\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">");
+                                out.println(res.getString("dashboard.plan_free"));
+                                out.println("<INPUT TYPE=\"hidden\" name=\"cmd\" value=\"_xclick\"/> "
+                                    +"<INPUT TYPE=\"hidden\" name=\"pal\" value=\"YS72397FYJSWL\"/> "
+                                    +"<INPUT TYPE=\"hidden\" name=\"invoice\" value=\"\"/>"
+                                    +"<INPUT TYPE=\"hidden\" NAME=\"return\" value=\"http://qashapp.com/paypal/success.jsp\"/>"
+                                    +"<input type=\"hidden\" name=\"cancel_return\" value=\"http://qashapp.com/dashboard.jsp\"/>"
+                                    +"<input type=\"hidden\" name=\"notify_url\" value=\"http://qashapp.com/paypal/success.jsp\"/>"
+                                    +"<INPUT TYPE=\"hidden\" NAME=\"currency_code\" value=\"DKK\"/>"
+                                    +"<input type=\"hidden\" name=\"business\" value=\"michael.krog@gmail.com\"/>"
+                                    +"<input type=\"hidden\" name=\"item_name\" value=\""+res.getString("dashboard.payment_item_name")+"\"/> "
+                                    +"<input type=\"hidden\" name=\"amount\" value=\"79\"/>" 
+                                    +"<input type=\"hidden\" name=\"undefined_quantity\" value=\"1\"/> "
+                                    +"<input type=\"submit\" class=\"button-standard\" value=\""+res.getString("dashboard.subscribe_basic_plan")+"\"/> "
+                                    +"</form>");
+                            } else {
+                                out.println(res.getString("dashboard.plan_basic"));
+                            }
                             out.println("</td>");
-                            out.println("<td>" + orderCount + " <span class=\"light\">(" + noLimit+ ")</span> </td>");
-                            out.println("<td>" + itemCount + " <span class=\"light\">(" + noLimit+ ")</span></td>");
+                            if(org.getPlan() == Plan.Free) {
+                                out.println("<td>" + orderCount + " <span class=\"light\">(" + freeLimitOrders + ")</span> </td>");
+                                out.println("<td>" + itemCount + " <span class=\"light\">(" + freeLimitProducts + ")</span></td>");
+                            } else {
+                                out.println("<td>" + orderCount + " <span class=\"light\">(" + noLimit+ ")</span> </td>");
+                                out.println("<td>" + itemCount + " <span class=\"light\">(" + noLimit+ ")</span></td>");
+                            }
                             out.println("<td>");
                             out.println("<a icon=\"hyperlink\" href=\"/admin/org/" + org.getId() + "\">");
                             out.println(res.getString("dashboard.administer"));
