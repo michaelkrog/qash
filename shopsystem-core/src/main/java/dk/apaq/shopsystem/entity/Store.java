@@ -19,6 +19,7 @@ public class Store extends Outlet implements HasAddress {
     private String email;
     private String countryCode = "US";
     private String stateOrProvince;
+
     
     public String getCountryCode() {
         return countryCode;
@@ -87,5 +88,7 @@ public class Store extends Outlet implements HasAddress {
         this.stateOrProvince = stateOrProvince;
     }
 
+
+    
     
 }
