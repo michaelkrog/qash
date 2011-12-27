@@ -82,6 +82,12 @@
 
     <bean id="wicketApplication" class="dk.apaq.shopsystem.rendering.CmsApplication"/>
 
+    <!-- PAYMENT -->
+    <bean id="paymentGatewayHandler" class="dk.apaq.shopsystem.api.PaypalGatewayHandler">
+        <property name="gatewayUrl" value="https://www.sandbox.paypal.com/cgi-bin/webscr"/>
+    </bean>
+    
+    
     <!-- MESSAGING BEANS -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${mail.smtp}"/>
