@@ -9,7 +9,7 @@
     </parent>
     <groupId>dk.apaq.shopsystem</groupId>
     <artifactId>shopsystem-core</artifactId>
-    <url>http://maven.apache.org</url>
+    <url>http://qashapp.com</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -173,6 +173,21 @@
             <artifactId>filters</artifactId>
             <version>2.0.235</version>
         </dependency>
+        
+        <!-- APCAHE HTTPCLIENT --> 
+      <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        
 
         <!-- LOG -->
         <dependency>

@@ -18,6 +18,8 @@ public class Organisation extends AbstractCompany {
     private Date planExpireDate = null;
     private Plan plan = Plan.Free;
     
+    private String paymentGateWayIdentifier;
+    
     
     public String getCurrency() {
         return currency;
@@ -54,10 +56,17 @@ public class Organisation extends AbstractCompany {
     public Plan getPlan() {
         return plan;
     }
-
     
     public void setPlan(Plan plan) {
         this.plan = plan;
+    }
+
+    public String getPaymentGateWayIdentifier() {
+        return paymentGateWayIdentifier;
+    }
+
+    public void setPaymentGateWayIdentifier(String paymentGateWayIdentifier) {
+        this.paymentGateWayIdentifier = paymentGateWayIdentifier;
     }
     
 }
