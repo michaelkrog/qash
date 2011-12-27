@@ -24,7 +24,12 @@ import org.slf4j.LoggerFactory;
 public class PaypalGatewayHandler implements PaymentGatewayHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(PaypalGatewayHandler.class);
+    private String gatewayUrl;
 
+    public void setGatewayUrl(String gatewayUrl) {
+        this.gatewayUrl = gatewayUrl;
+    }
+    
     @Override
     public String getOrganisationId(HttpServletRequest request) {
         return request.getParameter("custom");
@@ -48,7 +53,6 @@ public class PaypalGatewayHandler implements PaymentGatewayHandler {
     @Override
     public void validate(HttpServletRequest request, HttpServletResponse response, Order order) throws IOException {
         LOG.debug("Got callback from Paypal Gateway");
-        String gatewayUrl = "WHAT?";
 
         Map<String, String> map = request.getParameterMap();
         String receiverEmail = map.get("receiver_email");
