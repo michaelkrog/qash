@@ -15,10 +15,10 @@ public class Organisation extends AbstractCompany {
     private String annexNote;
     
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date planExpireDate = null;
-    private Plan plan = Plan.Free;
+    private Date subscriptionChangeDate = new Date();
+    private boolean subscriber = false;
     
-    private String paymentGateWayIdentifier;
+    private String merchantId;
     
     
     public String getCurrency() {
@@ -45,28 +45,25 @@ public class Organisation extends AbstractCompany {
         this.annexNote = annexNote;
     }
 
-    public Date getPlanExpireDate() {
-        return planExpireDate;
+    public boolean isSubscriber() {
+        return subscriber;
     }
 
-    public void setPlanExpireDate(Date planExpireDate) {
-        this.planExpireDate = planExpireDate;
+    public void setSubscriber(boolean subscriber) {
+        this.subscriber = subscriber;
+        this.subscriptionChangeDate = new Date();
     }
 
-    public Plan getPlan() {
-        return plan;
-    }
-    
-    public void setPlan(Plan plan) {
-        this.plan = plan;
+    public Date getSubscriptionChangeDate() {
+        return subscriptionChangeDate;
     }
 
-    public String getPaymentGateWayIdentifier() {
-        return paymentGateWayIdentifier;
+    public String getMerchantId() {
+        return merchantId;
     }
 
-    public void setPaymentGateWayIdentifier(String paymentGateWayIdentifier) {
-        this.paymentGateWayIdentifier = paymentGateWayIdentifier;
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
     }
-    
+
 }

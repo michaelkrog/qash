@@ -141,13 +141,13 @@ String paypalUrl = "https://wwwsandbox.paypal.com/cgi-bin/webscr";
                             out.println("</td>");
                             out.println("<td>");
                             
-                            if(org.getPlan() == Plan.Free) {
+                            if(!org.isSubscriber()) {
                                 out.println(res.getString("dashboard.plan_free"));
                             } else {
                                 out.println(res.getString("dashboard.plan_basic"));
                             }
                             out.println("</td>");
-                            if(org.getPlan() == Plan.Free) {
+                            if(!org.isSubscriber()) {
                                 out.println("<td>" + orderCount + " <span class=\"light\">(" + freeLimitOrders + ")</span> </td>");
                                 out.println("<td>" + itemCount + " <span class=\"light\">(" + freeLimitProducts + ")</span></td>");
                             } else {
@@ -161,7 +161,7 @@ String paypalUrl = "https://wwwsandbox.paypal.com/cgi-bin/webscr";
                             out.println("</td>");
                             
                             out.println("<td>");
-                            if(org.getPlan() == Plan.Free) {
+                            if(!org.isSubscriber()) {
                                 out.println("<a href=\"subscribe.jsp\" class=\"button-standard\">"+res.getString("dashboard.subscribe_basic_plan")+"</a>");
                             } else {
                                 out.println("<a href=\"unsubscribe.jsp\" class=\"button-standard\">"+res.getString("dashboard.unsubscribe_basic_plan")+"</a>");

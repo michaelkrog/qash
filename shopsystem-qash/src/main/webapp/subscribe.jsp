@@ -1,8 +1,5 @@
-<%--
-    Document   : index
-    Created on : 16-05-2011, 11:20:51
-    Author     : michaelzachariassenkrog
---%>
+<%@page import="dk.apaq.shopsystem.service.OrganisationService"%>
+<%@page import="dk.apaq.shopsystem.service.SystemServiceHolder"%>
 <%@page import="dk.apaq.shopsystem.qash.Qash"%>
 <%@page import="java.util.ResourceBundle"%>
 <%@page import="dk.apaq.shopsystem.entity.Organisation"%>
@@ -12,6 +9,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
 String orgid = request.getParameter("orgid");
+
+SystemService service = SystemServiceHolder.getSystemService();
+Organisation org = service.getOrganisationCrud().read(orgid);
+OrganisationService organisationService = service.getOrganisationService(org);
+        
+
 ResourceBundle res = Qash.getResourceBundle(request.getLocale());
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">

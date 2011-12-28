@@ -58,8 +58,8 @@ public class PaypalGatewayHandler implements PaymentGatewayHandler {
         String receiverEmail = map.get("receiver_email");
         String paymentCurrency = getCurrency(request);
 
-        if (!receiverEmail.equals(order.getOrganisation().getPaymentGateWayIdentifier())) {
-            throw new InvalidRequestException("Receiver email not correct.[order=" + order.getOrganisation().getPaymentGateWayIdentifier() + ",request=" + receiverEmail + "]");
+        if (!receiverEmail.equals(order.getOrganisation().getMerchantId())) {
+            throw new InvalidRequestException("Receiver email not correct.[order=" + order.getOrganisation().getMerchantId() + ",request=" + receiverEmail + "]");
         }
 
         if (!paymentCurrency.equals(order.getCurrency())) {
