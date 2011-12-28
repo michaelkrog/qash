@@ -42,7 +42,7 @@ SystemUserDetails details = (SystemUserDetails) auth.getPrincipal();
 
 SystemUser account = details.getUser();
 
-String name = account.getDisplayname();
+String name = account.getDisplayName();
 String email = account.getEmail();
 String password="UNCHANGED";
 
@@ -54,7 +54,7 @@ if(save) {
         account.setEmail(email);
         account.setEmailVerified(false);
     }
-    account.setDisplayname(request.getParameter("name"));
+    account.setDisplayName(request.getParameter("name"));
    
     userCrud.update(account);
     response.sendRedirect("dashboard.jsp");

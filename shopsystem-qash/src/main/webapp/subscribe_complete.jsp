@@ -29,19 +29,11 @@
                 }
             }
 
-            int port = request.getServerPort();
-            String host = request.getServerName() + (port>0 && port!=80?":"+request.getServerPort():"");
+            String host = request.getServerName();
             NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
             nf.setMinimumFractionDigits(2);
             nf.setMaximumFractionDigits(2);
             String orderNo = "2";
-
-            String paypalUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr";
-            String paypalId = "seller_1306274106_biz@gmail.com";
-
-            //String paypalUrl = "https://www.paypal.com/cgi-bin/webscr";
-            //String paypalId = "mic@apaq.dk";
-
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -95,34 +87,10 @@
         <div id="in-benefits-container" >
 
             <div class="in-benefits" style="padding-bottom:44px">
-                <h1>Change plan</h1>
+                <h1>Dygtig! Du har betalt</h1>
                 <br/>
                 <p>
 
-                    <form id="paymentform" action="<%=paypalUrl%>" method="POST">
-                        <!--input type="hidden" name="cmd" value="_xclick" /-->
-                        <input type="hidden" name="cmd" value="_xclick-subscriptions" />
-                        <input type="hidden" name="invoice" value="<%=orderNo%>" />
-                        <input type="hidden" name="return" value="http://<%=host%>/change_plan_complete.jsp" />
-                        <input type="hidden" name="cancel_return" value="http://<%=host%>/dashboard.jsp" />
-                        <input type="hidden" name="notify_url" value="http://<%=host%>/change_plan_notify.jsp" />
-                        <input type="hidden" name="currency_code" value="EUR"/>
-                        <input type="hidden" name="business" value="<%=paypalId%>"/>
-                        <input type="hidden" name="item_name" value="Popular plan for Qash shop (Cancelable by user at any time)"/>
-                        <!--input type="hidden" name="amount" value="<%=nf.format(25)%>"/-->
-                        <input type="hidden" name="usr_manage" value="0" />
-                        <input type="hidden" name="a3" value="<%=nf.format(25)%>"/>
-                        <input type="hidden" name="p3" value="1" />
-                        <input type="hidden" name="t3" value="M" />
-                        <input type="hidden" name="src" value="1" />
-                        <input type="hidden" name="srt" value="120" />
-                        <input type="hidden" name="usr_manage" value="0" />
-                        <input type="hidden" name="image_url" value="http://dev.apaq.dk/images/ge-logo.png" />
-                        <input type="hidden" name="lc" value="en" />
-                        <input type="hidden" name="quantity" value="1" />
-                        <input type="hidden" name="charset" value="utf-8"/>
-                        <input type="submit" />
-                    </form>
 
 
                 </p>

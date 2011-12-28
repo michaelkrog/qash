@@ -79,7 +79,7 @@ if(change) {
         <div id="in-benefits-container" >
 
             <div class="in-benefits" style="padding-bottom:44px">
-                <h1>Change plan</h1>
+                <h1>Subscribe to unlimited access</h1>
                 <br/>
             <p>
                 <form method="POST">
