@@ -66,35 +66,16 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
         <div id="in-benefits-container" >
 
             <div class="in-benefits" style="padding-bottom:44px">
-                <h1><%=res.getString("subscribe.title")%></h1>
+                <h1><%=res.getString("unsubscribe.title")%></h1>
                 <br/>
             <p>
                 <div style="width:400px;padding-bottom:20px;">
-                <%=res.getString("subscribe.text1")%><br/><br/>
-                <h2><%=res.getString("subscribe.example.title")%></h2>
-                <table>
-                    <tr>
-                        <td>
-                            <%=res.getString("subscribe.example.revenue.title")%>:
-                        </td>
-                        <td>
-                            <%=res.getString("subscribe.example.revenue.text")%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <%=res.getString("subscribe.example.fee.title")%>:
-                        </td>
-                        <td>
-                            <%=res.getString("subscribe.example.fee.text")%>
-                        </td>
-                    </tr>
-                </table>
-                <br/>
-                <%=res.getString("subscribe.example.text2")%><br/>
+                <%=res.getString("unsubscribe.text1")%>
+                <br/><br/>
+                <%=res.getString("unsubscribe.text2")%>
                 </div>
-                
-                <a href="dashboard.jsp" class="button-standard"><%=res.getString("subscribe.button.no")%></a>&nbsp;&nbsp;<a href="subscribe_2.jsp" class="button-standard"><%=res.getString("subscribe.button.yes")%></a>
+                <%=res.getString("unsubscribe.text3")%><br/><br/>
+                <a href="dashboard.jsp" class="button-standard"><%=res.getString("unsubscribe.button.no")%></a>&nbsp;&nbsp;<a href="unsubscribe_2.jsp" class="button-standard"><%=res.getString("unsubscribe.button.yes")%></a>
                 
                 
             </p>

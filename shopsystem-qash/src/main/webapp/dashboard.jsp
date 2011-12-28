@@ -120,6 +120,7 @@ String paypalUrl = "https://wwwsandbox.paypal.com/cgi-bin/webscr";
                             <th scope="col"><%=res.getString("dashboard.column.orderUsage")%></th>
                             <th scope="col"><%=res.getString("dashboard.column.inventoryUsage")%></th>
                             <th scope="col"></th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -141,21 +142,7 @@ String paypalUrl = "https://wwwsandbox.paypal.com/cgi-bin/webscr";
                             out.println("<td>");
                             
                             if(org.getPlan() == Plan.Free) {
-                                out.println("<FORM name=\"paypalform\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">");
                                 out.println(res.getString("dashboard.plan_free"));
-                                out.println("<INPUT TYPE=\"hidden\" name=\"cmd\" value=\"_xclick\"/> "
-                                    +"<INPUT TYPE=\"hidden\" name=\"pal\" value=\"YS72397FYJSWL\"/> "
-                                    +"<INPUT TYPE=\"hidden\" name=\"invoice\" value=\"\"/>"
-                                    +"<INPUT TYPE=\"hidden\" NAME=\"return\" value=\"http://qashapp.com/paypal/success.jsp\"/>"
-                                    +"<input type=\"hidden\" name=\"cancel_return\" value=\"http://qashapp.com/dashboard.jsp\"/>"
-                                    +"<input type=\"hidden\" name=\"notify_url\" value=\"http://qashapp.com/paypal/success.jsp\"/>"
-                                    +"<INPUT TYPE=\"hidden\" NAME=\"currency_code\" value=\"DKK\"/>"
-                                    +"<input type=\"hidden\" name=\"business\" value=\"michael.krog@gmail.com\"/>"
-                                    +"<input type=\"hidden\" name=\"item_name\" value=\""+res.getString("dashboard.payment_item_name")+"\"/> "
-                                    +"<input type=\"hidden\" name=\"amount\" value=\"79\"/>" 
-                                    +"<input type=\"hidden\" name=\"undefined_quantity\" value=\"1\"/> "
-                                    +"<input type=\"submit\" class=\"button-standard\" value=\""+res.getString("dashboard.subscribe_basic_plan")+"\"/> "
-                                    +"</form>");
                             } else {
                                 out.println(res.getString("dashboard.plan_basic"));
                             }
@@ -172,12 +159,21 @@ String paypalUrl = "https://wwwsandbox.paypal.com/cgi-bin/webscr";
                             out.println(res.getString("dashboard.administer"));
                             out.println("</a>");
                             out.println("</td>");
+                            
+                            out.println("<td>");
+                            if(org.getPlan() == Plan.Free) {
+                                out.println("<a href=\"subscribe.jsp\" class=\"button-standard\">"+res.getString("dashboard.subscribe_basic_plan")+"</a>");
+                            } else {
+                                out.println("<a href=\"unsubscribe.jsp\" class=\"button-standard\">"+res.getString("dashboard.unsubscribe_basic_plan")+"</a>");
+                            }
+                            out.println("</td>");
+                            
                             out.println("</tr>");
                             
                             Crud<String, Store> storeCrud = orgService.getStores();
                             List<Store> storeList = storeCrud.list();
                             if(storeList.isEmpty()) {
-                                out.println("<tr class=\"oddrow\"><td colspan=\"5\">-&nbsp;");
+                                out.println("<tr class=\"oddrow\"><td colspan=\"6\">-&nbsp;");
                                     out.println("<i>");
                                     out.println(StringEscapeUtils.escapeHtml(res.getString("dashboard.no_registers")));
                                     out.println("</i>");
@@ -185,7 +181,7 @@ String paypalUrl = "https://wwwsandbox.paypal.com/cgi-bin/webscr";
                                     out.println("</tr>");
                             } else {
                                 for(Store store : storeList) {
-                                    out.println("<tr class=\"oddrow\"><td colspan=\"5\">-&nbsp;");
+                                    out.println("<tr class=\"oddrow\"><td colspan=\"6\">-&nbsp;");
                                     out.println("<a icon=\"hyperlink\" href=\"/register/org/" + org.getId() + "/" + store.getId() + "\">");
                                     out.println("<b>");
                                     out.println(StringEscapeUtils.escapeHtml(store.getName()));

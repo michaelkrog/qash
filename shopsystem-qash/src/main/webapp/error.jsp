@@ -1,9 +1,5 @@
-<%--
-    Document   : index
-    Created on : 16-05-2011, 11:20:51
-    Author     : michaelzachariassenkrog
---%>
-<%@page import="dk.apaq.qash.util.LocaleUtil"%>
+<%@page import="dk.apaq.shopsystem.qash.Qash"%>
+<%@page import="dk.apaq.shopsystem.i18n.LocaleUtil"%>
 <%@page import="java.util.ResourceBundle"%>
 <%@page import="org.springframework.security.authentication.AnonymousAuthenticationToken"%>
 <%@page import="org.springframework.security.core.Authentication"%>
@@ -15,7 +11,7 @@
 <%@page import="java.net.URL"%>
 <%
 
-ResourceBundle res = LocaleUtil.getResourceBundle(LocaleUtil.SITE_I18N_BASE_NAME, request.getLocale());
+ResourceBundle res = Qash.getResourceBundle(request.getLocale());
 
 Locale locale = request.getLocale();
 %>
