@@ -1,9 +1,9 @@
-<%--
-    Document   : index
-    Created on : 16-05-2011, 11:20:51
-    Author     : michaelzachariassenkrog
---%>
+<%@page import="dk.apaq.shopsystem.qash.Qash"%>
+<%@page import="java.util.ResourceBundle"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+ResourceBundle res = Qash.getResourceBundle(request.getLocale());
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -55,17 +55,29 @@
         <!-- benefits -->
         <div id="in-benefits-container" >
 
-            <div class="in-benefits" style="padding-bottom:44px">
-                <h1>Qash prices</h1>
+            <div class="in-benefits" style="padding-bottom:150px">
+                <h1><%=res.getString("prices.title")%></h1>
             <br/>
-            <p>
-                <h3>You are in luck! For now the Qash shops you create are totally free.<br/>
-                    Feel free to try it out - Just go! 
-                </h3>
-                <br/>
-                <a href="login.jsp" class="button-standard">Just go!</a>
+            <ul>
 
-            </p>
+                    <!-- benefit item -->
+                    <li style="width:430px; height:105px">
+                        <span class="benefits-icon"><img src="images/prices/free.png" alt="Login" width="70" height="70" /></span>
+                        <div class="benefits-text" style="width:315px;padding-right:45px;">
+                            <h2><%=res.getString("prices.free.title")%></h2>
+                            <%=res.getString("prices.free.text")%>
+                        </div>
+                    </li>
+                    
+                    <!-- benefit item -->
+                    <li style="width:430px; height:105px">
+                        <span class="benefits-icon"><img src="images/prices/payg.png" alt="Login" width="70" height="70" /></span>
+                        <div class="benefits-text" style="width:315px;padding-right:45px;">
+                        <h2><%=res.getString("prices.paid.title")%></h2>
+                        <%=res.getString("prices.paid.text")%>
+                        </div>
+                    </li>
+            </ul>
             
             </div>
         </div>
