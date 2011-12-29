@@ -126,18 +126,21 @@
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
+
     
-    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    <!--bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
         <property name="messageConverters">
             <list>
                 <ref bean="jsonConverter" />
             </list>
         </property>
-    </bean>
+    </bean-->
 
-    <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-        <!--property name="supportedMediaTypes" value="application/json" /-->
-    </bean>
+
+    
+    <!--bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+        <!-property name="supportedMediaTypes" value="application/json" /->
+    </bean-->
 
 
     <tx:annotation-driven />

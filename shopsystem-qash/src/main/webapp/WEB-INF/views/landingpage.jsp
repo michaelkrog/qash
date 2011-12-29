@@ -1,9 +1,6 @@
-<%@page import="dk.apaq.shopsystem.qash.Qash"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.ResourceBundle"%>
-<%
-ResourceBundle res = Qash.getResourceBundle(request.getLocale());
-%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -46,14 +43,14 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
                 <div class="in-splash-content">
                     <div class="in-splash-left">
                         <!-- splash text -->
-                        <h1><%=res.getString("splash.title")%></h1>
+                        <h1><spring:message code="splash.title"/></h1>
                         <ul>
-                            <li><%=res.getString("splash.subtitle1")%></li>
-                            <li><%=res.getString("splash.subtitle2")%></li>
-                            <li><%=res.getString("splash.subtitle3")%></li>
-                            <li><%=res.getString("splash.subtitle4")%></li>
-                            <li><%=res.getString("splash.subtitle5")%></li>
-                            <li><%=res.getString("splash.subtitle6")%></li>
+                            <li><spring:message code="splash.subtitle1"/></li>
+                            <li><spring:message code="splash.subtitle2"/></li>
+                            <li><spring:message code="splash.subtitle3"/></li>
+                            <li><spring:message code="splash.subtitle4"/></li>
+                            <li><spring:message code="splash.subtitle5"/></li>
+                            <li><spring:message code="splash.subtitle6"/></li>
 
                         </ul>
                         <!-- /splash text -->
@@ -63,8 +60,8 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
                     <!-- /splash image -->
                     <!-- splash buttons -->
                     <span class="in-splash-buttons">
-                        <span class="splash-button"><a href="login.jsp"><%=res.getString("splash.start")%></a></span>
-                        <span class="splash-link"><a href="tour.jsp"><%=res.getString("splash.demo")%></a></span>
+                        <span class="splash-button"><a href="login.jsp"><spring:message code="splash.start"/></a></span>
+                        <span class="splash-link"><a href="tour.jsp"><spring:message code="splash.demo"/></a></span>
                     </span>
                     <!-- /splash buttons -->
                 </div>
@@ -86,8 +83,8 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
                     <li>
                         <span class="benefits-icon"><img src="images/benefits/benefits-001.gif" alt="example" width="70" height="70" /></span>
                         <div class="benefits-text">
-                            <h2><%=res.getString("teaser.title1")%></h2>
-                            <p><%=res.getString("teaser.text1")%></p>
+                            <h2><spring:message code="teaser.title1"/></h2>
+                            <p><spring:message code="teaser.text1"/></p>
                             <ul class="in-more">
                                 <li class="morestart"><!--<a href="#">Learn More</a>--></li>
                                 <!--li><a href="#">Preview</a></li-->
@@ -98,8 +95,8 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
                     <li>
                         <span class="benefits-icon"><img src="images/benefits/benefits-002.gif" alt="example" width="70" height="70" /></span>
                         <div class="benefits-text">
-                            <h2><%=res.getString("teaser.title2")%></h2>
-                            <p><%=res.getString("teaser.text2")%></p>
+                            <h2><spring:message code="teaser.title2"/></h2>
+                            <p><spring:message code="teaser.text2"/></p>
                             <ul class="in-more">
                                 <li class="morestart"><!--<a href="#">Learn More</a>--></li>
                                 <!--li><a href="#">Preview</a></li-->
@@ -109,8 +106,8 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
                     <li class="endbenefits">
                         <span class="benefits-icon"><img src="images/benefits/benefits-003.gif" alt="example" width="70" height="70" /></span>
                         <div class="benefits-text">
-                            <h2><%=res.getString("teaser.title3")%></h2>
-                            <p><%=res.getString("teaser.text3")%></p>
+                            <h2><spring:message code="teaser.title3"/></h2>
+                            <p><spring:message code="teaser.text3"/></p>
                             <ul class="in-more">
                                 <li class="morestart"><!--<a href="#">Learn More</a>--></li>
                                 <!--li><a href="#">Preview</a></li-->
@@ -120,8 +117,8 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
                     <li>
                         <span class="benefits-icon"><img src="images/benefits/benefits-004.gif" alt="example" width="70" height="70" /></span>
                         <div class="benefits-text">
-                            <h2><%=res.getString("teaser.title4")%></h2>
-                            <p><%=res.getString("teaser.text4")%></p>
+                            <h2><spring:message code="teaser.title4"/></h2>
+                            <p><spring:message code="teaser.text4"/></p>
                             <ul class="in-more">
                                 <li class="morestart"><!--<a href="#">Learn More</a>--></li>
                                 <!--li><a href="#">Preview</a></li-->
@@ -131,8 +128,8 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
                     <li>
                         <span class="benefits-icon"><img src="images/benefits/benefits-005.gif" alt="example" width="70" height="70" /></span>
                         <div class="benefits-text">
-                            <h2><%=res.getString("teaser.title5")%></h2>
-                            <p><%=res.getString("teaser.text5")%></p>
+                            <h2><spring:message code="teaser.title5"/></h2>
+                            <p><spring:message code="teaser.text5"/></p>
                             <ul class="in-more">
                                 <li class="morestart"><!--<a href="#">Learn More</a>--></li>
                                 <!--li><a href="#">Preview</a></li-->
@@ -142,8 +139,8 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
                     <li class="endbenefits">
                         <span class="benefits-icon"><img src="images/benefits/benefits-006.gif" alt="example" width="70" height="70" /></span>
                         <div class="benefits-text">
-                            <h2><%=res.getString("teaser.title6")%></h2>
-                            <p><%=res.getString("teaser.text6")%></p>
+                            <h2><spring:message code="teaser.title6"/></h2>
+                            <p><spring:message code="teaser.text6"/></p>
                             <ul class="in-more">
                                 <li class="morestart"><!--<a href="#">Learn More</a>--></li>
                                 <!--li><a href="#">Preview</a></li-->
@@ -187,31 +184,34 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
                 <div class="quote">
                     <div class="quote-text">
                         <!-- contact details -->
-                        <h2><%=res.getString("quote.title")%></h2>
-                        <p><%=res.getString("quote.text")%><br /><br />
-                            <%=res.getString("quote.email")%>
+                        <h2><spring:message code="quote.title"/></h2>
+                        <p><spring:message code="quote.text"/><br /><br />
+                            <spring:message code="quote.email"/>
                             <br /><br />
-                            <%=res.getString("quote.address")%>
+                            <spring:message code="quote.address"/>
                         </p>
                         <!-- /contact details -->
                     </div>
                     <div class="quote-form">
                         <!-- contact form -->
-                        <form action="process.php" method="post" id="in-quote-form">
+                        <form:form action="sendQuote.htm" modelAttribute="quote" id="in-quote-form">
                             <fieldset>
                                 <div class="form-left">
-                                    <label for="fullname"><%=res.getString("quote.form.fullname")%> <span>*</span></label>
-                                    <input id="fullname" name="fullname" type="text" />
+                                    <label for="fullname"><spring:message code="quote.form.fullname"/> <span>*</span></label>
+                                    <!--input id="fullname" name="fullname" type="text" /-->
+                                    <form:input id="fullname" path="fullName" />
                                 </div>
                                 <div class="form-right">
-                                    <label for="emailaddress"><%=res.getString("quote.form.email")%> <span>*</span></label>
-                                    <input id="emailaddress" name="emailaddress" type="text" />
+                                    <label for="emailaddress"><spring:message code="quote.form.email"/> <span>*</span></label>
+                                    <!--input id="emailaddress" name="emailaddress" type="text" /-->
+                                    <form:input id="emailaddress" path="emailAddress" />
                                 </div>
-                                <label for="message"><%=res.getString("quote.form.message")%> <span>*</span></label>
-                                <textarea id="message" name="message" cols="10" rows="5"></textarea>
-                                <button type="submit"><%=res.getString("quote.form.send")%></button>
+                                <label for="message"><spring:message code="quote.form.message"/> <span>*</span></label>
+                                <!--textarea id="message" name="message" cols="10" rows="5"></textarea-->
+                                <form:textarea id="message" path="message" rows="5" cols="10" />
+                                <button type="submit"><spring:message code="quote.form.send"/></button>
                             </fieldset>
-                        </form>
+                        </form:form>
                         <!-- /contact form -->
                     </div>
                 </div>
