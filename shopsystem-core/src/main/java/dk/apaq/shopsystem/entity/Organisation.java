@@ -15,9 +15,13 @@ public class Organisation extends AbstractCompany {
     private String annexNote;
     
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date subscriptionChangeDate = new Date();
-    private boolean subscriber = false;
+    private Date dateSubscribed = new Date();
     
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateCharged = new Date();
+    
+    private double feePercentage = 0;
+    private boolean subscriber = false;
     private String merchantId;
     
     
@@ -51,11 +55,11 @@ public class Organisation extends AbstractCompany {
 
     public void setSubscriber(boolean subscriber) {
         this.subscriber = subscriber;
-        this.subscriptionChangeDate = new Date();
+        this.dateSubscribed = subscriber ? new Date() : null;
     }
 
-    public Date getSubscriptionChangeDate() {
-        return subscriptionChangeDate;
+    public Date getDateSubscribed() {
+        return dateSubscribed;
     }
 
     public String getMerchantId() {
@@ -66,4 +70,16 @@ public class Organisation extends AbstractCompany {
         this.merchantId = merchantId;
     }
 
+    public double getFeePercentage() {
+        return feePercentage;
+    }
+
+    public Date getDateCharged() {
+        return dateCharged;
+    }
+
+    public void setDateCharged(Date dateCharged) {
+        this.dateCharged = dateCharged;
+    }
+    
 }
