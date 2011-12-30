@@ -1,17 +1,20 @@
 package dk.apaq.shopsystem.site;
 
 import dk.apaq.filter.Filter;
+import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.security.SystemUserDetails;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -46,9 +49,11 @@ public class DashboardController {
             return new ModelAndView("redirect:register/id:" + id);
         }*/
         
+        Filter orderFilter = new CompareFilter("dateInvoiced", DateUtils.addDays(new Date(), -30), CompareFilter.CompareType.GreaterOrEqual);
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("organisations", orglist);
         model.put("service", service);
+        model.put("oneMonthFilter", orderFilter);
         return new ModelAndView("dashboard", model);
     }
 

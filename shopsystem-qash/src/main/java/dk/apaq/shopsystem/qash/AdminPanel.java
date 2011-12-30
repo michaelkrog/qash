@@ -32,7 +32,7 @@ public class AdminPanel extends CustomComponent {
     private final Button btnSettings = new Button("Settings");
     private final Link linkHelp = new Link("Help", new ExternalResource("http://help.qashapp.com"), "Help", 500, 500, Link.TARGET_BORDER_MINIMAL);
     private final Link linkLogout = new Link("Log out", new ExternalResource("/logout"));
-    private final Link linkDashboard = new Link("Dashboard", new ExternalResource("/dashboard.jsp"));
+    private final Link linkDashboard = new Link("Dashboard", new ExternalResource("/dashboard.htm"));
     private final CategoryListPanel categoryListPanel = new CategoryListPanel();
     private final DaybookExportPanel daybookExportPanel = new DaybookExportPanel();
 

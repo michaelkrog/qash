@@ -9,14 +9,14 @@
 
 
     <http auto-config='true'>
-        <intercept-url pattern="/**/create_account.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <intercept-url pattern="/**/login.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/**/create_account.htm" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/**/login.htm" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/**/account.*" access="ROLE_USER" />
         <intercept-url pattern="/**/dashboard.*" access="ROLE_USER" />
         <intercept-url pattern="/**/register/**" access="ROLE_USER" />
         <intercept-url pattern="/**/admin/**" access="ROLE_USER" />
 
-        <form-login login-page="/login.jsp" />
+        <form-login login-page="/login.htm" />
         <logout logout-url="/logout" invalidate-session="true" success-handler-ref="myLogoutSuccessHandler"/>
 
         <!--custom-filter position="OPENID_FILTER" ref="rpxFilter" /-->

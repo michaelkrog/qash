@@ -25,7 +25,7 @@ public class AutopilotSiteHeader extends CustomComponent implements SiteHeader {
     private Resource homeResource = new ExternalResource("/");
     private Resource logoResource = new ThemeResource("images/ge-logo.png");
     private Embedded logo = new Embedded(null, logoResource);
-    private Link linkContact = new Link("info@qashapp.com", new ExternalResource("../contact.jsp"));
+    private Link linkContact = new Link("info@qashapp.com", new ExternalResource("../contact.htm"));
     private int linkCount = 0;
     private CssLayout currentColumn;
 

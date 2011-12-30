@@ -51,4 +51,8 @@ public interface OrganisationService extends Serializable {
     SequenceProcessor getOrderSequence();
     SequenceProcessor getInvoiceSequence();
     
+    /**
+     * Returns the organisations default tax or null if it has no default tax.
+     */
+    Tax getDefaultTax();
 }

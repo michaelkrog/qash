@@ -60,8 +60,8 @@
                     <!-- /splash image -->
                     <!-- splash buttons -->
                     <span class="in-splash-buttons">
-                        <span class="splash-button"><a href="login.jsp"><spring:message code="splash.start"/></a></span>
-                        <span class="splash-link"><a href="tour.jsp"><spring:message code="splash.demo"/></a></span>
+                        <span class="splash-button"><a href="login.htm"><spring:message code="splash.start"/></a></span>
+                        <span class="splash-link"><a href="tour.htm"><spring:message code="splash.demo"/></a></span>
                     </span>
                     <!-- /splash buttons -->
                 </div>

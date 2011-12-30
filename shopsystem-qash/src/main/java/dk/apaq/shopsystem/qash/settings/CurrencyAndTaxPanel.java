@@ -173,7 +173,7 @@ public class CurrencyAndTaxPanel extends CustomComponent {
         defaultCurrencySelect.setNullSelectionAllowed(false);
         defaultCurrencySelect.addListener(currencyChangeListener);
 
-        List<Currency> currencies = CurrencyUtil.getCountries();
+        List<Currency> currencies = CurrencyUtil.getCurrencies();
         for (Currency currency : currencies) {
             defaultCurrencySelect.addItem(currency.getCurrencyCode());
         }

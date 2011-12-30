@@ -1,22 +1,9 @@
-<%@page import="dk.apaq.shopsystem.service.OrganisationService"%>
-<%@page import="dk.apaq.shopsystem.service.SystemServiceHolder"%>
-<%@page import="dk.apaq.shopsystem.qash.Qash"%>
-<%@page import="java.util.ResourceBundle"%>
-<%@page import="dk.apaq.shopsystem.entity.Organisation"%>
-<%@page import="dk.apaq.shopsystem.service.SystemService"%>
-<%@page import="org.springframework.web.context.WebApplicationContext"%>
-<%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
+<%@page import="org.apache.commons.codec.digest.DigestUtils"%>
+<%@page import="dk.apaq.shopsystem.pay.quickpay.QuickPayMd5SumPrinter"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-String orgid = request.getParameter("orgid");
-
-SystemService service = SystemServiceHolder.getSystemService();
-Organisation org = service.getOrganisationCrud().read(orgid);
-OrganisationService organisationService = service.getOrganisationService(org);
-        
-
-ResourceBundle res = Qash.getResourceBundle(request.getLocale());
-%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -53,7 +40,7 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
     </head>
 
     <body>
-         <!-- splash -->
+        <!-- splash -->
         <div id="in-splash-container-small">
             <div class="in-splash">
 
@@ -69,38 +56,82 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
         <div id="in-benefits-container" >
 
             <div class="in-benefits" style="padding-bottom:44px">
-                <h1><%=res.getString("subscribe.title")%></h1>
+                <h1><spring:message code="subscribe.title"/></h1>
                 <br/>
-            <p>
-                <div style="width:400px;padding-bottom:20px;">
-                <%=res.getString("subscribe.text1")%><br/><br/>
-                <h2><%=res.getString("subscribe.example.title")%></h2>
-                <table>
-                    <tr>
-                        <td>
-                            <%=res.getString("subscribe.example.revenue.title")%>:
-                        </td>
-                        <td>
-                            <%=res.getString("subscribe.example.revenue.text")%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <%=res.getString("subscribe.example.fee.title")%>:
-                        </td>
-                        <td>
-                            <%=res.getString("subscribe.example.fee.text")%>
-                        </td>
-                    </tr>
-                </table>
-                <br/>
-                <%=res.getString("subscribe.example.text2")%><br/>
-                </div>
-                
-                <a href="dashboard.jsp" class="button-standard"><%=res.getString("subscribe.button.no")%></a>&nbsp;&nbsp;<a href="subscribe_2.jsp" class="button-standard"><%=res.getString("subscribe.button.yes")%></a>
-                
-                
-            </p>
+                <p>
+
+                    <fmt:formatNumber var="formattedExampleRevenue" value='10000' currencyCode="${feeCurrency}" type='currency'/>
+                    <fmt:formatNumber var="formattedExampleFee" value='20' currencyCode="${feeCurrency}" type='currency'/>
+                    <fmt:formatNumber var="formattedFee" maxFractionDigits="3" value='0.002' type='percent'/>
+                    <fmt:formatNumber var="formattedStartFee" value='${startupFee}' currencyCode="${feeCurrency}" type='currency'/>
+
+
+                    <div style="width:400px;padding-bottom:20px;">
+                        <spring:message code="subscribe.text1" argumentSeparator="|" arguments="${formattedStartFee}"/><br/><br/>
+                        <h2><spring:message code="subscribe.example.title"/></h2>
+                        <table>
+                            <tr>
+                                <td><b>
+                                        <spring:message code="subscribe.example.fee.title"/>:
+                                    </b>
+                                </td>
+                                <td>
+                                    <spring:message code="subscribe.example.fee.text" argumentSeparator="|" arguments="${formattedFee}"/> *
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>
+                                        <spring:message code="subscribe.example.startfee.title"/>:
+                                    </b>
+                                </td>
+                                <td>
+                                    <spring:message code="subscribe.example.startfee.text" argumentSeparator="|" arguments="${formattedStartFee}"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/><br/>
+	
+                        <%
+                        StringBuilder md5Builder = new StringBuilder();
+                        %>
+                        <form action="https://secure.quickpay.dk/form/" method="post">
+                            <input type="hidden" name="protocol" value="4" />
+                            <%md5Builder.append("4");%>
+                            <input type="hidden" name="msgtype" value="authorize" />
+                            <%md5Builder.append("authorize");%>
+                            <input type="hidden" name="merchant" value="29331847" />
+                            <%md5Builder.append("29331847");%>
+                            <input type="hidden" name="language" value="da" />
+                            <%md5Builder.append("da");%>
+                            <input type="hidden" name="ordernumber" value="123" />
+                            <%md5Builder.append("123");%>
+                            <input type="hidden" name="amount" value="100" />
+                            <%md5Builder.append("100");%>
+                            <input type="hidden" name="currency" value="DKK" />
+                            <%md5Builder.append("DKK");%>
+                            <input type="hidden" name="continueurl" value="http://quickpay.net/features/payment-window/ok.php" />
+                            <%md5Builder.append("http://quickpay.net/features/payment-window/ok.php");%>
+                            <input type="hidden" name="cancelurl" value="http://quickpay.net/features/payment-window/error.php" />
+                            <%md5Builder.append("http://quickpay.net/features/payment-window/error.php");%>
+                            <input type="hidden" name="callbackurl" value="http://quickpay.net/features/payment-window/callback.php" />
+                            <%md5Builder.append("http://quickpay.net/features/payment-window/callback.php");%>
+                            <input type="hidden" name="autocapture" value="0" />
+                            <%md5Builder.append("0");%>
+                            <input type="hidden" name="cardtypelock" value="" />
+                            <%md5Builder.append("");%>
+                            <input type="hidden" name="splitpayment" value="1" />
+                            <%md5Builder.append("1");%>
+                            <%md5Builder.append("9N7D16ri3EkAeH482fvUtZ67Md29W9LPbY1hxgQ3c34l54w5GImKFp1y636J725T");%>
+                            <input type="hidden" name="md5check" value="<%=DigestUtils.md5Hex(md5Builder.toString())%>" />
+                            <input type="submit" value="Betal"/>
+                        </form>
+                            <a href="dashboard.htm" class="button-standard"><spring:message code="subscribe.button.no"/></a>&nbsp;&nbsp;<button type="submit" class="button-standard"><spring:message code="subscribe.button.yes"/></button>
+                        
+                    </div>
+
+                    * <spring:message code="subscribe.footnote" argumentSeparator="|" arguments="${formattedExampleRevenue}|${formattedFee}|${formattedExampleFee}"/>
+
+                </p>
             </div>
         </div>
         <!-- /benefits -->

@@ -22,7 +22,10 @@ public class Organisation extends AbstractCompany {
     
     private double feePercentage = 0;
     private boolean subscriber = false;
+    private String subscriptionPaymentTransactionId;
     private String merchantId;
+    
+    private boolean mainOrganisation = false;
     
     
     public String getCurrency() {
@@ -80,6 +83,18 @@ public class Organisation extends AbstractCompany {
 
     public void setDateCharged(Date dateCharged) {
         this.dateCharged = dateCharged;
+    }
+
+    public boolean isMainOrganisation() {
+        return mainOrganisation;
+    }
+
+    public String getSubscriptionPaymentTransactionId() {
+        return subscriptionPaymentTransactionId;
+    }
+
+    public void setSubscriptionPaymentTransactionId(String subscriptionPaymentTransactionId) {
+        this.subscriptionPaymentTransactionId = subscriptionPaymentTransactionId;
     }
     
 }

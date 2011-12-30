@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -62,8 +63,8 @@
                             <tr>
                                 <th scope="col"><spring:message code="dashboard.column.name"/></th>
                                 <th scope="col"><spring:message code="dashboard.column.plan"/></th>
-                                <!--th scope="col"><spring:message code="dashboard.column.orderUsage"/></th>
-                                <th scope="col"><spring:message code="dashboard.column.inventoryUsage"/></th-->
+                                <th scope="col"><spring:message code="dashboard.column.fee"/></th>
+                                <th scope="col"><spring:message code="dashboard.column.orderUsage"/></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
@@ -75,20 +76,21 @@
                                         ${organisation.companyName}
                                     </td>
 
+                                    <c:set var="orderCount" value="${service.getOrganisationService(organisation).getOrders().listIds(oneMonthFilter, null).size()}" scope="request" />
 
                                     <c:choose>
                                         <c:when test="${organisation.subscriber}">
-                                            <td><spring:message code="dashboard.plan_free"/></td>    
-                                             <!--td>30 <span class="light">(<spring:message code="dashboard.noLimit"/>)</span></td>
-                                             <td>30 <span class="light">(<spring:message code="dashboard.noLimit"/>)</span></td-->
-                                            <td><a href="subscribe.htm" class="button-standard"><spring:message code="dashboard.subscribe_basic_plan"/></a></td>
+                                            <td><spring:message code="dashboard.unlimited_access"/></td>    
+                                            <td><fmt:formatNumber type="percent" maxFractionDigits="1" minFractionDigits="1" value="${organisation.feePercentage}" /></td>    
+                                            <td>${orderCount}</span></td>
+                                            <td><a href="unsubscribe.htm?organisationId=${organisation.id}" class="button-standard"><spring:message code="dashboard.unsubscribe_basic_plan"/></a></td>
                                             <td><a icon="hyperlink" href="/admin/org/${organisation.id}"><spring:message code="dashboard.administer"/></a></td>
                                         </c:when> 
                                         <c:otherwise>
-                                            <td><spring:message code="dashboard.plan_basic"/></td>
-                                           <!--td>30 <span class="light">(<spring:message code="dashboard.free_limit_orders"/>)</span></td>
-                                           <td>30 <span class="light">(<spring:message code="dashboard.free_limit_products"/>)</span></td-->
-                                            <td><a href="subscribe.htm" class="button-standard"><spring:message code="dashboard.unsubscribe_basic_plan"/></a></td>
+                                            <td><spring:message code="dashboard.limited_access"/></td>
+                                            <td><spring:message code="dashboard.free"/></td>    
+                                            <td>${orderCount} <span class="light">(<spring:message code="dashboard.free_limit_orders"/>)</span></td>
+                                            <td><a href="subscribe.htm?organisationId=${organisation.id}" class="button-standard"><spring:message code="dashboard.subscribe_basic_plan"/></a></td>
                                             <td><a icon="hyperlink" href="/admin/org/${organisation.id}"><spring:message code="dashboard.administer"/></a></td>
                                         </c:otherwise>
                                     </c:choose>
@@ -98,7 +100,7 @@
                                 <c:choose>
                                     <c:when test="${stores.isEmpty()}">
                                         <tr class="oddrow">
-                                            <td colspan="4">
+                                            <td colspan="6">
                                                 -&nbsp;<i><spring:message code="dashboard.no_registers"/>)</i>
                                             </td>
                                         </tr>
@@ -108,7 +110,7 @@
                                         <c:forEach var="store" items="${service.getOrganisationService(organisation).getStores().list()}"> 
 
                                             <tr class="oddrow">
-                                                <td colspan="4">
+                                                <td colspan="6">
                                                     -&nbsp;<a icon="hyperlink" href="/register/org/${organisation.id}/${store.id}"><b>${store.name}</b> (<spring:message code="dashboard.register"/>)</a>
                                                 </td>
                                             </tr>
@@ -117,7 +119,7 @@
                                 </c:choose>
 
                             </c:forEach>
-                            
+
                         </tbody>
                     </table>
                     <spring:message code="dashboard.footnote"/>

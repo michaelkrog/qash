@@ -18,10 +18,9 @@
             <!-- copyright -->
             <ul class="copyright">
                 <li class="copyrightstart">&copy; 2011 Apaq. All rights reserved</li>
-                <li><a href="#"><spring:message code="footer.contact"/></a></li>
-                <li><a href="#"><spring:message code="footer.help"/></a></li>
-                <li><a href="#"><spring:message code="footer.policy"/></a></li>
-                <li><a href="#"><spring:message code="footer.terms"/></a></li>
+                <li><a href="contact.htm"><spring:message code="footer.contact"/></a></li>
+                <li><a href="policy.htm"><spring:message code="footer.policy"/></a></li>
+                <li><a href="terms.htm"><spring:message code="footer.terms"/></a></li>
             </ul>
             <!-- /copyright -->
             <!-- social -->

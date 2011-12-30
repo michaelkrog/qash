@@ -30,5 +30,7 @@ public interface SystemService extends Serializable {
      * must not have been persisted previously.
      */
     Organisation createOrganisation(SystemUser user, Organisation organisation);
+    
+    Organisation getMainOrganisation();
 
 }

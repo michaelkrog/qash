@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package dk.apaq.shopsystem.util;
 
 import java.util.ArrayList;
@@ -20,11 +15,11 @@ import java.util.MissingResourceException;
  */
 public class CurrencyUtil {
 
-    public static List<Currency> getCountries() {
-        return getCountries(Locale.getDefault());
+    public static List<Currency> getCurrencies() {
+        return getCurrencies(Locale.getDefault());
     }
 
-    public static List<Currency> getCountries(Locale locale) {
+    public static List<Currency> getCurrencies(Locale locale) {
         Map<String, Currency> currencyMap = new HashMap<String, Currency>();
 
         Locale[] locales = Locale.getAvailableLocales();

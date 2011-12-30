@@ -15,11 +15,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import dk.apaq.crud.Crud.*;
 import dk.apaq.crud.CrudNotifier;
+import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.vfs.FileSystem;
+import java.util.List;
 import javax.persistence.PersistenceContext;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
@@ -147,28 +149,17 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
         orgUser.getRoles().add("ROLE_ADMIN");
         organisationService.getUsers().create(orgUser);
 
-        if(mailSender!=null) { 
-            SimpleMailMessage msg = this.templateMessage == null ? new SimpleMailMessage() : new SimpleMailMessage(this.templateMessage);
-            msg.setSubject("New account");
-            msg.setTo(user.getEmail());
-            msg.setText(
-                "Dear " + user.getDisplayName()
-                    + ", thank you for creating a new account. \n\nYour credentials are:\n"
-                    + "username: " + user.getName() + "\n"
-                    + "password: " + user.getPassword() + "\n\n"
-                    + "Best Regards\n"
-                    + "The Qash team.");
-            try{
-                this.mailSender.send(msg);
-            }
-            catch(MailException ex) {
-                // simply log it and go on...
-                LOG.error("Unable to send mail.", ex);      
-            }
-        }
         return organisation;
     }
 
-
-   
+    @Override
+    public Organisation getMainOrganisation() {
+        List<Organisation> orgList = getOrganisationCrud().list(new CompareFilter("mainOrganisation", true, CompareFilter.CompareType.Equals), null);
+        if(orgList.isEmpty()) {
+            LOG.error("Main organisation not found");
+            throw new RuntimeException("Main organisation not found.");
+        }
+        return orgList.get(0);
+    }
+    
 }

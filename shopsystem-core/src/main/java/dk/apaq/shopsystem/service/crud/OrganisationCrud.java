@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author michaelzachariassenkrog
  */
-public interface OrganisationCrud extends Crud.Editable<String, Organisation>{
+public interface OrganisationCrud extends Crud.Complete<String, Organisation>{
 
     List<String> listIds(Limit limit, SystemUser user);
     List<Organisation> list(Limit limit, SystemUser user);

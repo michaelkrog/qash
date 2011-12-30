@@ -31,6 +31,7 @@ import dk.apaq.vfs.impl.layered.LayeredFileSystem;
 import dk.apaq.vfs.impl.subfs.SubFs;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import javax.persistence.EntityManager;
@@ -99,6 +100,18 @@ public class OrganisationServiceImpl implements OrganisationService, Application
         return getGenericContentCrud(Tax.class);
     }
 
+    @Override
+    public Tax getDefaultTax() {
+        List<Tax> taxList = getTaxes().list();
+        for(Tax tax : taxList) {
+            if(tax.isDefaultEnabled()) {
+                return tax;
+            }
+        }
+        return null;
+    }
+
+    
     @Override
     public Complete<String, Payment> getPayments() {
         Organisation organisation = readOrganisation();

@@ -1,19 +1,5 @@
-<%--
-    Document   : index
-    Created on : 16-05-2011, 11:20:51
-    Author     : michaelzachariassenkrog
---%>
-<%@page import="dk.apaq.shopsystem.qash.Qash"%>
-<%@page import="java.util.ResourceBundle"%>
-<%@page import="dk.apaq.shopsystem.entity.Organisation"%>
-<%@page import="dk.apaq.shopsystem.service.SystemService"%>
-<%@page import="org.springframework.web.context.WebApplicationContext"%>
-<%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-String orgid = request.getParameter("orgid");
-ResourceBundle res = Qash.getResourceBundle(request.getLocale());
-%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -66,16 +52,18 @@ ResourceBundle res = Qash.getResourceBundle(request.getLocale());
         <div id="in-benefits-container" >
 
             <div class="in-benefits" style="padding-bottom:44px">
-                <h1><%=res.getString("unsubscribe.title")%></h1>
+                <h1><spring:message code="unsubscribe.title"/></h1>
                 <br/>
             <p>
                 <div style="width:400px;padding-bottom:20px;">
-                <%=res.getString("unsubscribe.text1")%>
+                <spring:message code="unsubscribe.text1"/>
                 <br/><br/>
-                <%=res.getString("unsubscribe.text2")%>
+                <spring:message code="unsubscribe.text2"/>
                 </div>
-                <%=res.getString("unsubscribe.text3")%><br/><br/>
-                <a href="dashboard.jsp" class="button-standard"><%=res.getString("unsubscribe.button.no")%></a>&nbsp;&nbsp;<a href="unsubscribe_2.jsp" class="button-standard"><%=res.getString("unsubscribe.button.yes")%></a>
+                <spring:message code="unsubscribe.text3"/><br/><br/>
+                <a href="dashboard.jsp" class="button-standard"><spring:message code="unsubscribe.button.no"/></a>
+                &nbsp;&nbsp;
+                <a href="unsubscribe.htm?organisationId=${organisationId}&unsubscribe=true" class="button-standard"><spring:message code="unsubscribe.button.yes"/></a>
                 
                 
             </p>

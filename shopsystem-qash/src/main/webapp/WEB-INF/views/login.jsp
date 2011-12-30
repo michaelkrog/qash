@@ -1,40 +1,7 @@
-<%--
-    Document   : index
-    Created on : 16-05-2011, 11:20:51
-    Author     : michaelzachariassenkrog
---%>
-<%@page import="dk.apaq.shopsystem.qash.Qash"%>
-<%@page import="java.util.ResourceBundle"%>
-<%@page import="org.springframework.security.authentication.AnonymousAuthenticationToken"%>
-<%@page import="org.springframework.security.core.Authentication"%>
-<%@page import="org.springframework.security.core.context.SecurityContext"%>
-<%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
-<%@page import="java.util.Locale"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.net.URLEncoder"%>
-<%@page import="java.net.URL"%>
-<%
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
-String redirect = request.getParameter("redirect");
-if(redirect==null) {
-        redirect="dashboard.jsp?autoRedirect=true";
-}
-
-SecurityContext ctx = SecurityContextHolder.getContext();
-Authentication auth = ctx.getAuthentication();
-if(auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
-    response.sendRedirect(redirect);
-    return;
-}
-
-ResourceBundle res = Qash.getResourceBundle(request.getLocale());
-
-String spec = "/j_spring_rpx_security_check?redirect="+URLEncoder.encode(redirect,"utf-8");
-URL tokenUrl = new URL(new URL(request.getRequestURL().toString()),spec);
-
-String returnUrl = tokenUrl.toString();
-Locale locale = request.getLocale();
-%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -92,20 +59,20 @@ Locale locale = request.getLocale();
                     <li style="width:430px; height:105px">
                         <span class="benefits-icon"><img src="images/account/login.png" alt="Login" width="70" height="70" /></span>
                         <div class="benefits-text" style="width:315px;padding-right:45px;">
-                            <h2><%=res.getString("login.option1.title")%></h2>
+                            <h2><spring:message code="login.option1.title"/></h2>
                             <p>
                                 <form action="j_spring_security_check" method="POST">
                                     <table>
-                                        <tr><td><label for="j_username"><%=res.getString("login.option1.username")%></label></td>
+                                        <tr><td><label for="j_username"><spring:message code="login.option1.username"/></label></td>
                                             <td><input type="text" name="j_username" id="j_username"/></td>
                                         </tr>
 
-                                        <tr><td><label for="j_password"><%=res.getString("login.option1.password")%></label></td>
+                                        <tr><td><label for="j_password"><spring:message code="login.option1.password"/></label></td>
                                             <td> <input type="password" name="j_password" id="j_password"/></td>
                                         </tr>
                                             <tr>
-                                            <td colspan="2"><input type="submit" value="<%=res.getString("login.option1.login")%>" class="button-standard"/>
-                                                &nbsp;<a href="forgot_password.jsp" class="button-standard"><%=res.getString("login.option1.forgotpassword")%></a>
+                                            <td colspan="2"><input type="submit" value="<spring:message code="login.option1.login"/>" class="button-standard"/>
+                                                &nbsp;<a href="forgot_password.jsp" class="button-standard"><spring:message code="login.option1.forgotpassword"/></a>
                                             </td>
                                             </tr>
                                     </table>
@@ -120,10 +87,10 @@ Locale locale = request.getLocale();
                     <li style="width:430px; height:105px" class="endbenefits">
                         <span class="benefits-icon"><img src="images/account/signup.png" alt="Sign up" width="70" height="70" /></span>
                         <div class="benefits-text" style="width:315px;padding-right:45px">
-                            <h2><%=res.getString("login.option2.title")%></h2>
-                            <p><%=res.getString("login.option2.text")%></p>
+                            <h2><spring:message code="login.option2.title"/></h2>
+                            <p><spring:message code="login.option2.text"/></p>
                             <ul class="in-more">
-                                <li class="morestart"><a href="create_account.jsp" class="button-standard"><%=res.getString("login.option2.button")%></a></li>
+                                <li class="morestart"><a href="create_account.jsp" class="button-standard"><spring:message code="login.option2.button"/></a></li>
                                 <!--li class="morestart"><a href="#">Learn More</a></li-->
                                 <!--li><a href="#">Preview</a></li-->
                             </ul>
@@ -134,11 +101,13 @@ Locale locale = request.getLocale();
                     <li style="width:430px; height:105px">
                         <span class="benefits-icon"><img src="images/account/social.png" alt="Login" width="70" height="70" /></span>
                         <div class="benefits-text" style="width:315px;padding-right:45px;">
-                            <h2><%=res.getString("login.option3.title")%></h2>
-                            <p><%=res.getString("login.option3.text")%>
+                            <h2><spring:message code="login.option3.title"/></h2>
+                            <p><spring:message code="login.option3.text"/>
                             </p>
                             <ul class="in-more">
-                                <li class="morestart"><a class="rpxnow button-standard" onclick="return false;" href="https://qash.rpxnow.com/openid/v2/signin?language_preference=<%=locale.getLanguage() %>&token_url=<%=URLEncoder.encode(returnUrl,"utf-8") %>"><%=res.getString("login.option3.button")%></a></li>
+                                <c:set var="rpxUrl" value="https://qash.rpxnow.com/openid/v2/signin?language_preference=${pageContext.request.locale.language}&token_url=${URLEncoder.urlEncode(rpxReturnUrl)}" scope="request" />
+
+                                <li class="morestart"><a class="rpxnow button-standard" onclick="return false;" href=""><spring:message code="login.option3.button"/></a></li>
                                 <!--li class="morestart"><a href="#">Learn More</a></li-->
                                 <!--li><a href="#">Preview</a></li-->
                             </ul>

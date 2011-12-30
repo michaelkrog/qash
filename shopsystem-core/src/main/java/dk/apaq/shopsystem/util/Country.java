@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -12,6 +13,10 @@ import java.util.MissingResourceException;
  */
 public class Country {
 
+    private static final List<String> ISO_EU_LIST = Arrays.asList(new String[]{"BE", "BG", "CZ", "DK", "DE", "EE", "IE", "EL", 
+                                                                                "ES", "FR", "IT", "CY", "LV", "LT", "LU", "HU", 
+                                                                                "MT", "NL", "AT", "PT", "PL", "RO", "SI", "SK", 
+                                                                                "FI", "SE", "UK"});
     private String iso;
     private String code;
     private String name;
@@ -22,6 +27,10 @@ public class Country {
         this.name = name;
     }
 
+    public boolean isWithinEu() {
+        return ISO_EU_LIST.contains(code);
+    }
+    
     public String getCode() {
         return code;
     }
@@ -39,6 +48,9 @@ public class Country {
         return iso + " - " + code + " - " + name.toUpperCase();
     }
 
+    /**
+     * Retrieves a country from the specified countryCode and translated using the given locale.
+     */
     public static Country getCountry(String countryCode, Locale locale) {
         if(countryCode.length()<2 && countryCode.length()>3) {
             throw new IllegalArgumentException("Country code must be either an ISO 3166 2-letter code or an ISO 3166 3-letter code.");

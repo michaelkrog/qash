@@ -110,7 +110,6 @@ public class SystemServiceImplTest {
     public void testCreateOrganisation() {
         System.out.println("createOrganisation");
         
-        mailSender.reset();
         
         SystemUser user = new SystemUser();
         user.setName("john"+System.currentTimeMillis());
@@ -122,7 +121,6 @@ public class SystemServiceImplTest {
         
         
         Organisation result = service.createOrganisation(user, organisation);
-        assertTrue(mailSender.isMailSend());
         
         OrganisationService organisationService = service.getOrganisationService(result);
         OrganisationUserReference userRef = organisationService.getUsers().list().get(0);
