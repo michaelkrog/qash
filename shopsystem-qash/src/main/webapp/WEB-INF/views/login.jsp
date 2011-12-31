@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@taglib uri="http://qashapp.com/common" prefix="common" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -105,7 +106,8 @@
                             <p><spring:message code="login.option3.text"/>
                             </p>
                             <ul class="in-more">
-                                <c:set var="rpxUrl" value="https://qash.rpxnow.com/openid/v2/signin?language_preference=${pageContext.request.locale.language}&token_url=${URLEncoder.urlEncode(rpxReturnUrl)}" scope="request" />
+                                
+                                <c:set var="rpxUrl" value="https://qash.rpxnow.com/openid/v2/signin?language_preference=${pageContext.request.locale.language}&token_url=${common:encodeUrl(rpxReturnUrl)}" scope="request" />
 
                                 <li class="morestart"><a class="rpxnow button-standard" onclick="return false;" href=""><spring:message code="login.option3.button"/></a></li>
                                 <!--li class="morestart"><a href="#">Learn More</a></li-->
