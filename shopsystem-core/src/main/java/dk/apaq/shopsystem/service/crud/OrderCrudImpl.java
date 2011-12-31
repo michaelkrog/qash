@@ -39,7 +39,6 @@ public class OrderCrudImpl extends ContentCrud<Order> {
     @Override
     public <E extends Order> String create(E order) {
         order.setNumber(organisationService.getOrderSequence().increment());
-        order.setCurrency(organisation.getCurrency());
         return super.create(order);
     }
 
