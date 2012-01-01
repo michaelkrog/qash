@@ -1,5 +1,7 @@
 package dk.apaq.shopsystem.site;
 
+import dk.apaq.filter.core.CompareFilter;
+import dk.apaq.filter.core.LikeFilter;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.service.SystemService;
@@ -61,6 +63,11 @@ public class CreateAccountController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String persistAccount(@ModelAttribute @Valid AccountInfo accountInfo, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
+        
+        if(!service.getSystemUserCrud().list(new LikeFilter("name", accountInfo.getUserName(), false), null).isEmpty()) {
+            result.rejectValue("userName", "1", "Username already taken.");
+        }
+        
         if (!accountInfo.getEmail2().equals(accountInfo.getEmail())) {
             result.rejectValue("email2", "1", "The two email fields does not match.");
         }

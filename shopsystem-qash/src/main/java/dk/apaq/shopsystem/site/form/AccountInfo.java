@@ -14,7 +14,7 @@ public class AccountInfo {
     @NotNull @Size(min=2, max=30)
     private String companyName;
     
-    @NotNull @Size(min=6, max=20)
+    @NotNull @Size(min=6, max=40)
     private String userName;
     
     @NotNull @Size(min=3, max=40)
@@ -26,10 +26,10 @@ public class AccountInfo {
     @NotNull @Size(min=6, max=20)
     private String password2;
     
-    @NotNull @Pattern(".+@.+\\.[a-z]+")
+    @NotNull @Pattern("^[\\w\\-]([\\.\\w])+[\\w]+@([\\w\\\\-]+\\.)+[a-zA-Z]{2,4}$")
     private String email;
     
-    @NotNull @Pattern(".+@.+\\.[a-z]+")
+    @NotNull @Pattern("^[\\w\\-]([\\.\\w])+[\\w]+@([\\w\\\\-]+\\.)+[a-zA-Z]{2,4}$")
     private String email2;
 
     public String getCompanyName() {

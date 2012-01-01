@@ -42,9 +42,6 @@ public class PaymentController extends AbstractController {
     private SystemService service;
     
     @Autowired
-    PaymentGatewayHandler gatewayHandler;
-    
-    @Autowired
     public PaymentController(SystemService service) {
         super(service);
     }
@@ -77,40 +74,4 @@ public class PaymentController extends AbstractController {
         return orgService.getPayments().read(id);
     }
 
-    @RequestMapping(value = "/pay/webhook", method = {RequestMethod.GET, RequestMethod.POST})
-    public void onGatewayEvent(HttpServletRequest request, HttpServletResponse response) {
-        String orderId = gatewayHandler.getOrderId(request);
-        double amount = gatewayHandler.getAmount(request);
-        String organisationId = gatewayHandler.getOrganisationId(request);
-
-        Organisation org = service.getOrganisationCrud().read(organisationId);
-        if (org == null) {
-            throw new ResourceNotFoundException("Organisation not found [id=" + organisationId + "]");
-        }
-
-        OrganisationService organisationService = service.getOrganisationService(org);
-        Order order = organisationService.getOrders().read(orderId);
-        if (order == null) {
-            throw new ResourceNotFoundException("Order not found [id=" + orderId + "]");
-        }
-        try {
-            gatewayHandler.validate(request, response, order);
-        } catch (IOException ex) {
-            LOG.warn("Unable to validate payment", ex);
-            throw new UnknownErrorException("Unable to validate payment.", ex);
-        }
-
-        //We make sure the order is accepted.
-        if(!order.getStatus().isConfirmedState()) {
-            order.setStatus(OrderStatus.Accepted);
-            organisationService.getOrders().update(order);
-        }
-        
-        //Insert payment. If the payment is enough, then the order will be completed automagically.
-        Payment payment = new Payment();
-        payment.setAmount(amount);
-        payment.setPaymentType(PaymentType.Card);
-        payment.setOrderId(orderId);
-        organisationService.getPayments().create(payment);
-    }
 }

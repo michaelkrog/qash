@@ -4,6 +4,7 @@ import dk.apaq.shopsystem.entity.ContactInformation;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Tax;
+import dk.apaq.shopsystem.pay.PaymentGateway;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.util.Country;
@@ -26,13 +27,16 @@ import org.springframework.web.servlet.ModelAndView;
  * @author michael
  */
 @Controller
-@RequestMapping("/subscribe.htm")
+@RequestMapping()
 public class SubscribeController {
     
     @Autowired
     private SystemService service;
     
-    @RequestMapping(method= RequestMethod.GET)
+    @Autowired
+    PaymentGateway paymentGateway;
+    
+    @RequestMapping(value="/subscribe.htm", method= RequestMethod.GET)
     public ModelAndView handleRequest(@RequestParam(required = true) String organisationId, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -49,7 +53,7 @@ public class SubscribeController {
         //if user already has an order in session then delete it if it has never been completed.
         if (order != null && order.getId() != null) {
             order = sellingOrgService.getOrders().read(order.getId());
-            if (!order.getStatus().isConfirmedState()) {
+            if (order != null && !order.getStatus().isConfirmedState()) {
                 sellingOrgService.getOrders().delete(order.getId());
             }
         }
@@ -95,5 +99,21 @@ public class SubscribeController {
         model.put("order", order);
         
         return new ModelAndView("subscribe", model);
+    }
+    
+    @RequestMapping("/subscribe_ok.htm")
+    public ModelAndView onPaymentSuccess(@RequestParam(required=true) Long ordernumber) {
+        
+        return new ModelAndView("payment_confirmation");
+    }
+    
+    @RequestMapping("/subscribe_cancel.htm")
+    public String onPaymentCancelled() {
+        return "redirect:/dashboard.htm";
+    }
+    
+    @RequestMapping("/quickpay_callback.htm")
+    public void onQuickpayCallback() {
+        
     }
 }

@@ -43,9 +43,7 @@ public class PaymentControllerTest {
     @PersistenceContext
     EntityManager em;
     
-    /**
-     * Test of getPaymentList method, of class DaybookController.
-     */
+    /*
     @Test
     public void testPaymentViaWebhook() {
         OrganisationCrud crud = service.getOrganisationCrud();
@@ -114,5 +112,5 @@ public class PaymentControllerTest {
         
         assertTrue(order.isPaid());
         assertEquals(OrderStatus.Completed, order.getStatus());
-    }
+    }*/
 }

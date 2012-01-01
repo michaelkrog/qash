@@ -36,7 +36,7 @@
     </head>
 
     <body onload="document.getElementById('username').focus()">
-         <!-- splash -->
+        <!-- splash -->
         <div id="in-splash-container-small">
             <div class="in-splash">
 
@@ -47,52 +47,39 @@
         <jsp:include page="inc/header.jsp" />
         <jsp:include page="inc/navigator.jsp" />
 
-        
+
         <!-- benefits -->
         <div id="in-benefits-container" >
-    
+
             <div class="in-benefits">
-                <h1><spring:message code="contact.title"/></h1>
-            <br/>
-            <br/>
-            <ul>
+                <h1><spring:message code="terms.title"/></h1>
+                <br/>
+                <br/>
+                <div>
+                    <h2><spring:message code="terms.header1"/></h2>
+                    <spring:message code="terms.text1"/><br/><br/>
 
-                    <!-- benefit item -->
-                    <li style="width:430px">
-                        <span class="benefits-icon"><img src="images/contact/home.png" alt="Address" width="70" height="70" /></span>
-                        <div class="benefits-text" style="width:315px;padding-right:45px;">
-                            <h2><spring:message code="contact.address.title"/></h2>
-                            <p>
-                                Apaq<br />
-                                Stovringparken 10<br />
-                                DK-9530 Stovring<br />
-                                <i>Scandiavian Denmark</i>
-                            </p>
+                    <h2><spring:message code="terms.header2"/></h2>
+                    <spring:message code="terms.text2"/><br/><br/>
 
-                        </div>
-                    </li>
-                    <!-- /benefit item -->
+                    <h2><spring:message code="terms.header3"/></h2>
+                    <spring:message code="terms.text3"/><br/><br/>
 
-                    <li style="width:430px" class="endbenefits">
-                        <span class="benefits-icon"><img src="images/contact/email.png" alt="Direct contact" width="70" height="70" /></span>
-                        <div class="benefits-text" style="width:315px;padding-right:45px">
-                            <h2><spring:message code="contact.direct.title"/></h2>
-                            <p>
-                                <table>
-                                    <tr><td><spring:message code="contact.direct.sales.title"/>:</td><td><spring:message code="contact.direct.sales.text"/></td></tr>
-                                    <tr><td><spring:message code="contact.direct.support.title"/>:</td><td><spring:message code="contact.direct.support.text"/></td></tr>
+                    <h2><spring:message code="terms.header4"/></h2>
+                    <spring:message code="terms.text4"/><br/><br/>
 
-                                </table>
-                            </p>
-                        </div>
-                    </li>
+                    <h2><spring:message code="terms.header5"/></h2>
+                    <spring:message code="terms.text5"/><br/><br/>
 
+                    <h2><spring:message code="terms.header6"/></h2>
+                    <spring:message code="terms.text6"/><br/><br/>
 
+                    <br/><br/>
+                </div>
 
-
-                </ul>
-                <div class="clear"></div>
             </div>
+            <div class="clear"></div>
+        </div>
         </div>
         <!-- /benefits -->
 

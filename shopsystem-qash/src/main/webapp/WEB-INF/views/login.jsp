@@ -73,7 +73,7 @@
                                         </tr>
                                             <tr>
                                             <td colspan="2"><input type="submit" value="<spring:message code="login.option1.login"/>" class="button-standard"/>
-                                                &nbsp;<a href="forgot_password.jsp" class="button-standard"><spring:message code="login.option1.forgotpassword"/></a>
+                                                &nbsp;<a href="forgot_password.htm" class="button-standard"><spring:message code="login.option1.forgotpassword"/></a>
                                             </td>
                                             </tr>
                                     </table>
@@ -91,7 +91,7 @@
                             <h2><spring:message code="login.option2.title"/></h2>
                             <p><spring:message code="login.option2.text"/></p>
                             <ul class="in-more">
-                                <li class="morestart"><a href="create_account.jsp" class="button-standard"><spring:message code="login.option2.button"/></a></li>
+                                <li class="morestart"><a href="createAccount.htm" class="button-standard"><spring:message code="login.option2.button"/></a></li>
                                 <!--li class="morestart"><a href="#">Learn More</a></li-->
                                 <!--li><a href="#">Preview</a></li-->
                             </ul>
