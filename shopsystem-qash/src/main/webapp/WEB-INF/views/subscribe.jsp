@@ -92,41 +92,48 @@
                                 <td>
                                     <spring:message code="subscribe.example.startfee.text" argumentSeparator="|" arguments="${formattedStartFee}"/>
                                     <c:if test="${order.getTotalTax() > 0}"><spring:message code="subscribe.example.startfee.taxtext" argumentSeparator="|" arguments="${formattedStartFeeTotal}"/></c:if>
-                                </td>
-                            </tr>
-                        </table>
-                        <br/><br/>
-	
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/><br/>
+
                         <%
-                        //TODO Should not have Java code here and not be bound to Quickpay
-                        QuickPayMd5SumPrinter md5SumPrinter = new QuickPayMd5SumPrinter();
-                        Order order = (Order) request.getAttribute("order");
-                        
-                        NumberFormat orderNumberFormatter = NumberFormat.getIntegerInstance();
-                        orderNumberFormatter.setMinimumIntegerDigits(4);
-                        orderNumberFormatter.setMaximumIntegerDigits(20);
-                        orderNumberFormatter.setGroupingUsed(false);
+
+                            String host = request.getServerName();
+                            if (request.getServerPort() != 80) {
+                                host += ":" + request.getServerPort();
+                            }
+
+                            //TODO Should not have Java code here and not be bound to Quickpay
+                            QuickPayMd5SumPrinter md5SumPrinter = new QuickPayMd5SumPrinter();
+                            Order order = (Order) request.getAttribute("order");
+
+                            NumberFormat orderNumberFormatter = NumberFormat.getIntegerInstance();
+                            orderNumberFormatter.setMinimumIntegerDigits(4);
+                            orderNumberFormatter.setMaximumIntegerDigits(20);
+                            orderNumberFormatter.setGroupingUsed(false);
                         %>
                         <form action="https://secure.quickpay.dk/form/" method="post">
                             <%=md5SumPrinter.printHtmlHidden("protocol", "4")%>
-                            <%=md5SumPrinter.printHtmlHidden("msgtype", "authorize")%>
+                            <%=md5SumPrinter.printHtmlHidden("msgtype", "subscribe")%>
                             <%=md5SumPrinter.printHtmlHidden("merchant", "29331847")%>
                             <%=md5SumPrinter.printHtmlHidden("language", "da")%>
                             <%=md5SumPrinter.printHtmlHidden("ordernumber", orderNumberFormatter.format(order.getNumber()))%>
-                            <%=md5SumPrinter.printHtmlHidden("amount", Integer.toString((int)(order.getTotalWithTax()*100)))%>
+                            <%=md5SumPrinter.printHtmlHidden("amount", Integer.toString((int) (order.getTotalWithTax() * 100)))%>
                             <%=md5SumPrinter.printHtmlHidden("currency", order.getCurrency())%>
-                            <%=md5SumPrinter.printHtmlHidden("continueurl", "http://quickpay.net/features/payment-window/ok.php")%>
-                            <%=md5SumPrinter.printHtmlHidden("cancelurl", "http://quickpay.net/features/payment-window/ok.php")%>
-                            <%=md5SumPrinter.printHtmlHidden("callbackurl", "http://quickpay.net/features/payment-window/ok.php")%>
+                            <%=md5SumPrinter.printHtmlHidden("continueurl", "http://" + host + "/payment_ok.htm")%>
+                            <%=md5SumPrinter.printHtmlHidden("cancelurl", "http://" + host + "/payment_cancel.htm")%>
+                            <%=md5SumPrinter.printHtmlHidden("callbackurl", "http://" + host + "/quickpay_callback.htm")%>
                             <%=md5SumPrinter.printHtmlHidden("autocapture", "0")%>
                             <%=md5SumPrinter.printHtmlHidden("cardtypelock", "")%>
+                            <%=md5SumPrinter.printHtmlHidden("description", "Qash Signup")%>
                             <%=md5SumPrinter.printHtmlHidden("splitpayment", "0")%>
                             <%md5SumPrinter.add("2254zV7gN9nK96642q1U79b89euRQ5I1W5l8Bj8dF73vrCtyw36xD5YGsZHapJ1S");%>
-                            
+
                             <input type="hidden" name="md5check" value="<%=md5SumPrinter.getMD5Result()%>" />
                             <a href="dashboard.htm" class="button-standard"><spring:message code="subscribe.button.no"/></a>&nbsp;&nbsp;<button type="submit" class="button-standard"><spring:message code="subscribe.button.yes"/></button>
                         </form>
-                        
+
                     </div>
 
                     * <spring:message code="subscribe.footnote" argumentSeparator="|" arguments="${formattedExampleRevenue}|${formattedFee}|${formattedExampleFee}"/>
