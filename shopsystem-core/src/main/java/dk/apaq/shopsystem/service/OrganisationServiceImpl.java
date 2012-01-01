@@ -8,6 +8,7 @@ import dk.apaq.crud.CrudListener;
 import dk.apaq.crud.CrudNotifier;
 import dk.apaq.shopsystem.entity.Customer;
 import dk.apaq.shopsystem.entity.Document;
+import dk.apaq.shopsystem.entity.DocumentCollection;
 import dk.apaq.shopsystem.entity.ProductGroup;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Order;
@@ -93,6 +94,11 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     @Override
     public Complete<String, Document> getDocuments() {
         return getGenericContentCrud(Document.class);
+    }
+    
+    @Override
+    public Complete<String, DocumentCollection> getDocumentCollections() {
+        return getGenericContentCrud(DocumentCollection.class);
     }
 
     @Override

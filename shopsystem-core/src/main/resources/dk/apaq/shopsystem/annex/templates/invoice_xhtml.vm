@@ -38,9 +38,13 @@
 
             }
 
+            .details td {
+                padding-right:4px;
+            }
+
             .ordercontent table{
                  -fs-table-paginate: paginate;
-    }
+            }
 
             
 

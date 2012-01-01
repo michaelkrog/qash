@@ -333,7 +333,7 @@ public class AnnexServiceImpl implements AnnexService {
         NumberFormat cf2 = NumberFormat.getNumberInstance(locale);
         NumberFormat nf = NumberFormat.getNumberInstance(locale);
         NumberFormat pf = NumberFormat.getPercentInstance(locale);
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
         ResourceBundle rb = LocaleUtil.getResourceBundle(LocaleUtil.SYSTEM_I18N_BASE_NAME, locale);
 
         cf.setCurrency(currency);
