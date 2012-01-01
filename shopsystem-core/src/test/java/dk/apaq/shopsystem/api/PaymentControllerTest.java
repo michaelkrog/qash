@@ -43,6 +43,10 @@ public class PaymentControllerTest {
     @PersistenceContext
     EntityManager em;
     
+    @Test
+    public void testPaymentViaWebhook() { 
+    }
+    
     /*
     @Test
     public void testPaymentViaWebhook() {
