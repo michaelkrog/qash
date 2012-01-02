@@ -39,6 +39,7 @@ public class Payment implements Serializable, ContentEntity {
     private double amount;
 
     private String orderId;
+    private String paymentDetails;
 
     public Payment() {
     }
@@ -100,5 +101,15 @@ public class Payment implements Serializable, ContentEntity {
         this.orderId = orderId;
     }
 
+    public String getPaymentDetails() {
+        return paymentDetails;
+    }
+
+    public void setPaymentDetails(String paymentDetails) {
+        this.paymentDetails = paymentDetails;
+    }
+
+    
+    
     
 }
