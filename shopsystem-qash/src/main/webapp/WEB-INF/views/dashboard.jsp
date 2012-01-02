@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -82,7 +82,7 @@
                                         <c:when test="${organisation.subscriber}">
                                             <td><spring:message code="dashboard.unlimited_access"/></td>    
                                             <td><fmt:formatNumber type="percent" maxFractionDigits="1" minFractionDigits="1" value="${organisation.feePercentage}" /></td>    
-                                            <td>${orderCount}</span></td>
+                                            <td>${orderCount}</td>
                                             <td><a href="unsubscribe.htm?organisationId=${organisation.id}" class="button-standard"><spring:message code="dashboard.unsubscribe_basic_plan"/></a></td>
                                             <td><a icon="hyperlink" href="/admin/org/${organisation.id}"><spring:message code="dashboard.administer"/></a></td>
                                         </c:when> 

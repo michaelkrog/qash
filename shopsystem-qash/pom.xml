@@ -70,25 +70,32 @@
             <artifactId>jackson-jaxrs</artifactId>
             <version>1.9.0</version>
         </dependency>
+        
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
+        
+
+        
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>jsp-api</artifactId>
             <version>2.2</version>
             <scope>provided</scope>
         </dependency>
-        <!--dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>
             <scope>provided</scope>
-        </dependency-->
-
-        <dependency>
+        </dependency><dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <version>${spring.version}</version>
@@ -99,47 +106,47 @@
             <version>${spring.version}</version>
         </dependency>
         
+        
+
+        
+        
+        <!-- VAADIN -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
             <type>jar</type>
-        </dependency>
+        </dependency><!-- This is also used by gwt-maven-plugin to deduce GWT version number. -->
+        
+        
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
             <version>${spring.version}</version>
-        </dependency>
-
-        
-        <!-- VAADIN -->
-        <dependency>
+        </dependency><dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin</artifactId>
             <version>6.7.1</version>
-        </dependency>
+        </dependency><!-- Vaadin theme -->
         
-        <!-- This is also used by gwt-maven-plugin to deduce GWT version number. -->
+        
+        
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <version>2.3.0</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>dk.apaq.vaadin.addon</groupId>
             <artifactId>crudcontainer-addon</artifactId>
             <version>1.1.11-SNAPSHOT</version>
-        </dependency>
-        
-        <!-- Vaadin theme -->
-        <dependency>
+        </dependency><dependency>
             <groupId>org.vaadin.addons</groupId>
             <artifactId>reindeermods</artifactId>
             <version>0.2</version>
-        </dependency>
-
-        <dependency>
+        </dependency><dependency>
             <groupId>org.vaadin.addons</groupId>
             <artifactId>browsercookies</artifactId>
             <version>1.0.4</version>
