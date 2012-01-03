@@ -57,7 +57,7 @@ public class Order implements Serializable, ContentEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus status = OrderStatus.New;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
     @JoinColumn(name="order_id")
     @Fetch(FetchMode.SUBSELECT)
     private List<OrderLine> orderlines = new ArrayList<OrderLine>();
