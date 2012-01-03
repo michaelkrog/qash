@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.GenericGenerator;
@@ -43,6 +44,7 @@ public abstract class AbstractDocument implements Serializable {
     private String templateName;
     
     @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL,fetch= FetchType.EAGER)
+    @JoinColumn(name="owner_id")
     private List<ComponentInformation> placeholderList = new ArrayList<ComponentInformation>();
 
     public void addComponentInformation(ComponentInformation ci) {

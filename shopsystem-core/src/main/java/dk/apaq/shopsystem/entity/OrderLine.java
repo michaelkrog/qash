@@ -292,4 +292,5 @@ public class OrderLine implements Serializable, BasicEntity {
 
         return calculation;
     }
+    
 }

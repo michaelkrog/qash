@@ -14,6 +14,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -57,6 +58,7 @@ public class Order implements Serializable, ContentEntity {
     private OrderStatus status = OrderStatus.New;
 
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinColumn(name="order_id")
     @Fetch(FetchMode.SUBSELECT)
     private List<OrderLine> orderlines = new ArrayList<OrderLine>();
 
