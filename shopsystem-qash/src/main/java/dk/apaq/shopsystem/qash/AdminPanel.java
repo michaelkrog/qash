@@ -1,12 +1,9 @@
 package dk.apaq.shopsystem.qash;
 
-import com.vaadin.data.Item;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.VerticalLayout;
 import dk.apaq.shopsystem.annex.AnnexService;
@@ -16,7 +13,7 @@ import dk.apaq.shopsystem.qash.settings.SettingsDialogForAdmin;
 import dk.apaq.shopsystem.service.OrganisationService;
 
 /**
- * Panel for handling gui in the admin application.
+ * Panel for handling gui in the admin application. It links all views together.
  * @author krog
  */
 public class AdminPanel extends CustomComponent {

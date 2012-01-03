@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 /**
- * The application class for the Admin application. This class contains no gui elements. Instead it uses <code>AdminPanel</code> which contains
- * all Gui.
+ * The application class for the Admin application. This class contains no gui elements. Instead it 
+ * uses <code>AdminPanel</code> which contains all Gui.
  * @author krog
  */
 public class AdminApplication extends Application implements HttpServletRequestListener {

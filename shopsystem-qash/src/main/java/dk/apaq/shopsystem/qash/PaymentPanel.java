@@ -23,7 +23,7 @@ import dk.apaq.shopsystem.qash.data.util.CurrencyAmountFormatter;
 import java.text.NumberFormat;
 
 /**
- *
+ * A panel for creating <code>Payment</code>'s. 
  * @author krog
  */
 public class PaymentPanel extends CustomComponent implements Property, Property.Editor {

@@ -25,7 +25,6 @@ import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.filter.Filter;
 import dk.apaq.filter.core.AndFilter;
 import dk.apaq.filter.core.CompareFilter;
-import dk.apaq.filter.core.OrFilter;
 import dk.apaq.filter.sort.SortDirection;
 import dk.apaq.filter.sort.Sorter;
 import dk.apaq.printing.core.Printer;
@@ -92,6 +91,7 @@ public class OrderList extends CustomComponent implements
     
     private class DeleteColumnGenerator implements Table.ColumnGenerator {
 
+        @Override
         public Component generateCell(Table source, final Object itemId, Object columnId) {
             Item item = source.getItem(itemId);
             OrderStatus status = (OrderStatus) item.getItemProperty("status").getValue();
@@ -101,6 +101,7 @@ public class OrderList extends CustomComponent implements
                 embedded.setHeight(16, UNITS_PIXELS);
                 embedded.addListener(new com.vaadin.event.MouseEvents.ClickListener() {
 
+                    @Override
                     public void click(MouseEvents.ClickEvent event) {
                         table.removeItem(itemId);
                     }
@@ -146,6 +147,7 @@ public class OrderList extends CustomComponent implements
 
     private class FormattedDateGenerator implements Table.ColumnGenerator {
 
+        @Override
         public Component generateCell(Table source, Object itemId, Object columnId) {
             Property prop = source.getContainerProperty(itemId, columnId);
             Date date = (Date) prop.getValue();
@@ -153,10 +155,12 @@ public class OrderList extends CustomComponent implements
         }
     }
 
+    @Override
     public void addListener(ItemClickListener listener) {
         table.addListener(listener);
     }
 
+    @Override
     public void removeListener(ItemClickListener listener) {
         table.removeListener(listener);
     }
@@ -261,12 +265,17 @@ public class OrderList extends CustomComponent implements
 
         btnAdd.addListener(new Button.ClickListener() {
 
+            @Override
             public void buttonClick(ClickEvent event) {
                 Object id = container.addItem();
                 Item item = table.getItem(id);
 
                 //Set the outlet for the order
                 item.getItemProperty("outlet").setValue(outlet);
+                
+                //Set default currency
+                item.getItemProperty("currency").setValue(organisationService.readOrganisation().getCurrency());
+                
                 if(item instanceof Buffered) {
                     ((Buffered)item).commit();
                 }

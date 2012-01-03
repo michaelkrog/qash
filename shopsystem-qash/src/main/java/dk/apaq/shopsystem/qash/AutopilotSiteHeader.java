@@ -12,10 +12,9 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.themes.Reindeer;
-import dk.apaq.shopsystem.qash.settings.SettingsDialogForAdmin;
 
 /**
- *
+ * A site header matching the Autopilot theme used by the Qash site.
  */
 public class AutopilotSiteHeader extends CustomComponent implements SiteHeader {
 
