@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -17,6 +19,7 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author michael
  */
+@Entity
 public class DocumentCollection implements ContentEntity, Serializable {
     
     @Id
@@ -35,7 +38,7 @@ public class DocumentCollection implements ContentEntity, Serializable {
 
     private String name;
     
-    @OneToMany
+    @OneToMany(fetch= FetchType.EAGER)
     @OrderColumn()
     private List<Document> documents = new ArrayList<Document>();
 
