@@ -114,6 +114,7 @@ public class SubscribeController {
         model.put("feeCurrency", feeCurrency);
         model.put("startupFee", startupFee);
         model.put("order", order);
+        model.put("seller", sellingOrg);
 
         return new ModelAndView("subscribe", model);
     }
@@ -125,68 +126,5 @@ public class SubscribeController {
         return new ModelAndView("payment_confirmation");
     }
 
-    @RequestMapping("/payment_cancel.htm")
-    public String onPaymentCancelled() {
-        //Redirect direkte tilbage til dashboard
-        return "redirect:/dashboard.htm";
-    }
-
-    @RequestMapping(value="/quickpay_callback.htm", method= RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public void onQuickpayCallback(@RequestParam Long ordernumber, @RequestParam  Integer amount, 
-                                    @RequestParam String currency, @RequestParam  String qpstat,
-                                    @RequestParam String transaction, @RequestParam  String cardtype, @RequestParam  String cardnumber) throws IOException, ServletException {
-
-        //TODO Check md5
-        
-        if (!"000".equals(qpstat)) {
-            return;
-        }
-
-        Organisation org = service.getMainOrganisation();
-        OrganisationService organisationService = service.getOrganisationService(org);
-        
-        List<String> idList = organisationService.getOrders().listIds(new CompareFilter("number", ordernumber, CompareFilter.CompareType.Equals), null);
-        if(idList.isEmpty()) {
-            throw new ResourceNotFoundException("Order not found [ordernumber="+ordernumber+"]");
-        }
-        
-        String orderId = idList.get(0);
-        
-        //User is really gonna pay - accept order if it isnt already accepted
-        Order order = organisationService.getOrders().read(orderId);
-        if(!order.getStatus().isConfirmedState()) {
-            order.setStatus(OrderStatus.Accepted);
-            organisationService.getOrders().update(order);
-        }
-        
-        Payment payment = new Payment();
-        payment.setAmount(((double) amount) / 100);
-        payment.setOrderId(orderId);
-        payment.setPaymentType(PaymentType.Card);
-        payment.setPaymentDetails(cardtype + ": " + cardnumber);
-        organisationService.getPayments().create(payment);
-        
-        //if all paid then Enable subscription and Save transaction
-        order = organisationService.getOrders().read(orderId);
-        if(order.isPaid()) {
-            //TODO Which organisation?
-            //org.setSubscriber(true);
-            //org.setSubscriptionPaymentTransactionId(transaction);
-            //organisationService.updateOrganisation(org);
-        }
-        
-         
-
-    }
-
-    private String readPart(Part part) throws IOException {
-        if (part == null) {
-            return null;
-        }
-        InputStream in = part.getInputStream();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        StreamUtils.copy(in, out);
-        return new String(out.toByteArray());
-    }
+    
 }

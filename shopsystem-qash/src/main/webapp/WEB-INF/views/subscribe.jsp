@@ -1,3 +1,4 @@
+<%@page import="dk.apaq.shopsystem.entity.Organisation"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="dk.apaq.shopsystem.entity.Order"%>
 <%@page import="org.apache.commons.codec.digest.DigestUtils"%>
@@ -107,6 +108,7 @@
                             //TODO Should not have Java code here and not be bound to Quickpay
                             QuickPayMd5SumPrinter md5SumPrinter = new QuickPayMd5SumPrinter();
                             Order order = (Order) request.getAttribute("order");
+                            Organisation seller = (Order) request.getAttribute("seller");
 
                             NumberFormat orderNumberFormatter = NumberFormat.getIntegerInstance();
                             orderNumberFormatter.setMinimumIntegerDigits(4);
@@ -122,8 +124,8 @@
                             <%=md5SumPrinter.printHtmlHidden("amount", Integer.toString((int) (order.getTotalWithTax() * 100)))%>
                             <%=md5SumPrinter.printHtmlHidden("currency", order.getCurrency())%>
                             <%=md5SumPrinter.printHtmlHidden("continueurl", "http://" + host + "/payment_ok.htm")%>
-                            <%=md5SumPrinter.printHtmlHidden("cancelurl", "http://" + host + "/payment_cancel.htm")%>
-                            <%=md5SumPrinter.printHtmlHidden("callbackurl", "http://" + host + "/quickpay_callback.htm")%>
+                            <%=md5SumPrinter.printHtmlHidden("cancelurl", "http://" + host + "/dashboard.htm")%>
+                            <%=md5SumPrinter.printHtmlHidden("callbackurl", "http://" + host + "/_api/" + seller.getId() + "/payments?gateway=quickpay")%>
                             <%=md5SumPrinter.printHtmlHidden("autocapture", "0")%>
                             <%=md5SumPrinter.printHtmlHidden("cardtypelock", "")%>
                             <%=md5SumPrinter.printHtmlHidden("description", "Qash Signup")%>
