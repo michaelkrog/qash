@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.api;
 
+import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.filter.limit.Limit;
 import dk.apaq.shopsystem.entity.Order;
@@ -8,31 +9,20 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URLEncoder;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
+import javax.servlet.ServletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 public class PaymentController extends AbstractController {
@@ -62,6 +52,58 @@ public class PaymentController extends AbstractController {
             return orgService.getProducts().listIds(l);
         }
     }
+    
+    @RequestMapping(value = "/organisations/{orgInfo}/payments", method = RequestMethod.POST, params="!gateway")
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public @ResponseBody
+    void persistPayment(@PathVariable String orgInfo, @RequestParam Payment payment) {
+
+    }
+    
+    @RequestMapping(value = "/organisations/{orgInfo}/payments", method = RequestMethod.POST, params="gateway=quickpay")
+    @ResponseStatus(HttpStatus.CREATED)
+    public @ResponseBody
+    void onQuickpayEvent(@PathVariable String orgId, @RequestParam Long ordernumber, @RequestParam  Integer amount, 
+                                    @RequestParam String currency, @RequestParam  String qpstat,
+                                    @RequestParam String transaction, @RequestParam  String cardtype, @RequestParam  String cardnumber) throws IOException, ServletException {
+
+        //TODO Check md5
+        
+        if (!"000".equals(qpstat)) {
+            return;
+        }
+
+        OrganisationService organisationService = getOrganisationService(orgId);
+        String orderId = getOrderIdFromOrderNumber(organisationService, ordernumber);
+        
+        //Woohoo. :) User is really gonna pay - accept order if it isnt already accepted
+        Order order = organisationService.getOrders().read(orderId);
+        if(!order.getStatus().isConfirmedState()) {
+            order.setStatus(OrderStatus.Accepted);
+            organisationService.getOrders().update(order);
+        }
+        
+        Payment payment = new Payment();
+        payment.setAmount(((double) amount) / 100);
+        payment.setOrderId(orderId);
+        payment.setPaymentType(PaymentType.Card);
+        payment.setPaymentDetails(cardtype + ": " + cardnumber);
+        organisationService.getPayments().create(payment);
+        
+        //if all paid then Enable subscription and Save transaction
+        //order = organisationService.getOrders().read(orderId);
+        //if(order.isPaid()) {
+            //TODO Which organisation?
+            //org.setSubscriber(true);
+            //org.setSubscriptionPaymentTransactionId(transaction);
+            //organisationService.updateOrganisation(org);
+        //}
+        
+         
+
+    }
+
+    
 
     /**
      * Retrieves a specific payment.
@@ -74,4 +116,13 @@ public class PaymentController extends AbstractController {
         return orgService.getPayments().read(id);
     }
 
+    
+    private String getOrderIdFromOrderNumber(OrganisationService organisationService, long orderNumber) {
+        List<String> idList = organisationService.getOrders().listIds(new CompareFilter("number", orderNumber, CompareFilter.CompareType.Equals), null);
+        if(idList.isEmpty()) {
+            throw new ResourceNotFoundException("Order not found [ordernumber="+orderNumber+"]");
+        }
+        
+        return idList.get(0);
+    }
 }
