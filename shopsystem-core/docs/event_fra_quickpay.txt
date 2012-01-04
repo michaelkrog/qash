@@ -1,0 +1,89 @@
+------------------------------da8054a09923
+Content-Disposition: form-data; name="msgtype"
+
+subscribe
+------------------------------da8054a09923
+Content-Disposition: form-data; name="ordernumber"
+
+0048
+------------------------------da8054a09923
+Content-Disposition: form-data; name="amount"
+
+6125
+------------------------------da8054a09923
+Content-Disposition: form-data; name="currency"
+
+DKK
+------------------------------da8054a09923
+Content-Disposition: form-data; name="time"
+
+120102165216
+------------------------------da8054a09923
+Content-Disposition: form-data; name="state"
+
+
+------------------------------da8054a09923
+Content-Disposition: form-data; name="qpstat"
+
+008
+------------------------------da8054a09923
+Content-Disposition: form-data; name="qpstatmsg"
+
+Recurring transactions are not allowed
+------------------------------da8054a09923
+Content-Disposition: form-data; name="chstat"
+
+
+------------------------------da8054a09923
+Content-Disposition: form-data; name="chstatmsg"
+
+
+------------------------------da8054a09923
+Content-Disposition: form-data; name="merchant"
+
+Apaq
+------------------------------da8054a09923
+Content-Disposition: form-data; name="merchantemail"
+
+mic@apaq.dk
+------------------------------da8054a09923
+Content-Disposition: form-data; name="transaction"
+
+38553475
+------------------------------da8054a09923
+Content-Disposition: form-data; name="cardtype"
+
+dankort
+------------------------------da8054a09923
+Content-Disposition: form-data; name="cardnumber"
+
+
+------------------------------da8054a09923
+Content-Disposition: form-data; name="cardexpire"
+
+
+------------------------------da8054a09923
+Content-Disposition: form-data; name="splitpayment"
+
+
+------------------------------da8054a09923
+Content-Disposition: form-data; name="fraudprobability"
+
+
+------------------------------da8054a09923
+Content-Disposition: form-data; name="fraudremarks"
+
+
+------------------------------da8054a09923
+Content-Disposition: form-data; name="fraudreport"
+
+
+------------------------------da8054a09923
+Content-Disposition: form-data; name="fee"
+
+0
+------------------------------da8054a09923
+Content-Disposition: form-data; name="md5check"
+
+a64a727aec63433af75cd694a6289b87
+------------------------------da8054a09923--
