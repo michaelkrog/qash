@@ -108,7 +108,7 @@
                             //TODO Should not have Java code here and not be bound to Quickpay
                             QuickPayMd5SumPrinter md5SumPrinter = new QuickPayMd5SumPrinter();
                             Order order = (Order) request.getAttribute("order");
-                            Organisation seller = (Order) request.getAttribute("seller");
+                            Organisation seller = (Organisation) request.getAttribute("seller");
 
                             NumberFormat orderNumberFormatter = NumberFormat.getIntegerInstance();
                             orderNumberFormatter.setMinimumIntegerDigits(4);
