@@ -6,7 +6,7 @@ import dk.apaq.crud.Crud.Complete;
 import dk.apaq.crud.Crud.Editable;
 import dk.apaq.crud.CrudListener;
 import dk.apaq.crud.CrudNotifier;
-import dk.apaq.shopsystem.entity.Customer;
+import dk.apaq.shopsystem.entity.CustomerRelationship;
 import dk.apaq.shopsystem.entity.Document;
 import dk.apaq.shopsystem.entity.DocumentCollection;
 import dk.apaq.shopsystem.entity.ProductGroup;
@@ -131,8 +131,8 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
 
     @Override
-    public Complete<String, Customer> getCustomers() {
-        return getGenericContentCrud(Customer.class);
+    public Complete<String, CustomerRelationship> getCustomers() {
+        return getGenericContentCrud(CustomerRelationship.class);
     }
     
     @Override

@@ -20,7 +20,7 @@
     <class>dk.apaq.shopsystem.entity.Tax</class>
     <class>dk.apaq.shopsystem.entity.ProductGroup</class>
     <class>dk.apaq.shopsystem.entity.ProductCategory</class>
-    <class>dk.apaq.shopsystem.entity.Customer</class>
+    <class>dk.apaq.shopsystem.entity.CustomerRelationship</class>
     <class>dk.apaq.shopsystem.entity.Website</class>
     <class>dk.apaq.shopsystem.entity.WebPage</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>

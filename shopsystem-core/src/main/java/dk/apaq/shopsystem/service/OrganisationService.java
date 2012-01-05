@@ -2,7 +2,6 @@ package dk.apaq.shopsystem.service;
 
 import dk.apaq.shopsystem.service.sequence.SequenceProcessor;
 import dk.apaq.crud.Crud;
-import dk.apaq.shopsystem.entity.Customer;
 import dk.apaq.shopsystem.entity.Document;
 import dk.apaq.shopsystem.entity.DocumentCollection;
 import dk.apaq.shopsystem.entity.ProductGroup;
@@ -17,14 +16,11 @@ import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.entity.WebPage;
 import dk.apaq.shopsystem.entity.ProductCategory;
+import dk.apaq.shopsystem.entity.CustomerRelationship;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.vfs.FileSystem;
 import java.io.Serializable;
 
-/**
- *
- * @author krog
- */
 public interface OrganisationService extends Serializable {
 
     public Organisation readOrganisation();
@@ -33,7 +29,7 @@ public interface OrganisationService extends Serializable {
     Crud.Complete<String, OrganisationUserReference> getUsers();
 
     Crud.Editable<String, Store> getStores();
-    Crud.Complete<String, Customer> getCustomers();
+    Crud.Complete<String, CustomerRelationship> getCustomers();
     Crud.Complete<String, ProductGroup> getProductGroups();
     Crud.Complete<String, ProductCategory> getProductCategories();
     Crud.Complete<String, Order> getOrders();
