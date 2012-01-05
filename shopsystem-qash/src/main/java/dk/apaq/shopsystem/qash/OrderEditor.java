@@ -41,8 +41,6 @@ import dk.apaq.crud.Crud.Filterable;
 import dk.apaq.filter.Filter;
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.sort.Sorter;
-
-
 import dk.apaq.printing.core.Paper;
 import dk.apaq.printing.core.Printer;
 import dk.apaq.printing.core.PrinterJob;
@@ -55,7 +53,6 @@ import dk.apaq.shopsystem.annex.OrderDocumentContent;
 import dk.apaq.shopsystem.annex.Page;
 import dk.apaq.shopsystem.annex.PageSize;
 import dk.apaq.shopsystem.entity.ContactInformation;
-import dk.apaq.shopsystem.entity.Customer;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderLineTax;
 import dk.apaq.shopsystem.entity.OrderStatus;
@@ -643,8 +640,8 @@ public class OrderEditor extends CustomComponent implements
                         if(commonDialog.getResult() == CommonDialog.ButtonType.Ok) {
                             String id = (String) customerList.getValue();
                             if(id == null) return;
-                            CrudItem<String, Customer> item = (CrudItem<String, Customer>) customerList.getItem(id);
-                            Customer customer = item.getBean();
+                            CrudItem<String, Organisation> item = (CrudItem<String, Organisation>) customerList.getItem(id);
+                            Organisation customer = item.getBean();
                             
                             order.setBuyerId(customer.getId());
                             order.setBuyer(new ContactInformation(customer));

@@ -3,6 +3,7 @@ package dk.apaq.shopsystem.qash;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.event.Action;
 import com.vaadin.event.Action.Handler;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -24,7 +25,8 @@ import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.crud.Crud;
 import dk.apaq.filter.FilterGenerator;
 import dk.apaq.filter.sort.Sorter;
-import dk.apaq.shopsystem.entity.Customer;
+import dk.apaq.shopsystem.entity.CustomerRelationship;
+import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.qash.common.CustomerFilterGenerator;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.shopsystem.qash.listeners.RemoveSelectedOnClickListener;
@@ -50,7 +52,7 @@ public class CustomerList extends CustomComponent implements Property, Property.
     private TextField searchField = new TextField();
     private Spacer spacer = new Spacer();
     private Table table = new Table();
-    private Crud<String, Customer> customerCrud;
+    private Crud<String, CustomerRelationship> customerCrud;
     private CrudContainer customerContainer;
     private Sorter sorter = new Sorter("contactName");
     private final FilterGenerator filterGenerator = new CustomerFilterGenerator();
@@ -142,7 +144,7 @@ public class CustomerList extends CustomComponent implements Property, Property.
         layout.setSizeFull();
     }
 
-    public void setCustomerCrud(Crud<String, Customer> customerCrud) {
+    public void setCustomerCrud(Crud<String, CustomerRelationship> customerCrud) {
         this.customerCrud = customerCrud;
         refreshCustomerContainer();
     }
@@ -254,7 +256,7 @@ public class CustomerList extends CustomComponent implements Property, Property.
     }
 
     private void editItem(final Item item) {
-        final CustomerForm form = new CustomerForm();
+        final OrganisationForm form = new OrganisationForm();
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
         Window dialog = new Window("Edit Customer", layout);
@@ -265,15 +267,19 @@ public class CustomerList extends CustomComponent implements Property, Property.
         
         getApplication().getMainWindow().addWindow(dialog);
 
+        //The form takes Organsiation items and not CustomerRelation items which is what we have.
+        //TODO: How does it get persisted?
+        Organisation org = (Organisation) item.getItemProperty("customer").getValue();
+        Item orgItem = new BeanItem(org);
         
-        form.setItemDataSource(item);
+        form.setItemDataSource(orgItem);
         
         
     }
 
     private void refreshCustomerContainer() {
         if (customerCrud != null) {
-            this.customerContainer = new CrudContainer(customerCrud, Customer.class);
+            this.customerContainer = new CrudContainer(customerCrud, CustomerRelationship.class);
             this.customerContainer.setSorter(sorter);
             table.setContainerDataSource(this.customerContainer);
             table.setVisibleColumns(COLUMNS);

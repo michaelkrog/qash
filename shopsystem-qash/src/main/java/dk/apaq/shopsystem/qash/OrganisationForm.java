@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author krog
  */
-public class CustomerForm extends Form {
+public class OrganisationForm extends Form {
     
     private static final List<String> PROPERTIES = Arrays.asList(new String[]{
                     "companyName", "contactName", "street", "postalCode", "city", "countryCode", "telephone",
@@ -105,7 +105,7 @@ public class CustomerForm extends Form {
         }
     }
 
-    public CustomerForm() {
+    public OrganisationForm() {
         
         // Create generalt layout (3x3 GridLayout)
         generalLayout = new GridLayout(3, 6);
