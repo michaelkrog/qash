@@ -48,7 +48,6 @@ public class Address implements Serializable, HasAddress {
     /**
      * Sets the city name.
      */
-    @Override
     public void setCity(String city) {
         this.city = city;
     }
@@ -64,7 +63,6 @@ public class Address implements Serializable, HasAddress {
     /**
      * Sets countrycode.
      */
-    @Override
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
@@ -74,7 +72,6 @@ public class Address implements Serializable, HasAddress {
         return postalCode;
     }
 
-    @Override
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
@@ -90,7 +87,6 @@ public class Address implements Serializable, HasAddress {
     /**
      * Sets state(fx 'Alabama') or province(fx 'Nordjylland').
       */
-    @Override
     public void setStateOrProvince(String stateOrProvince) {
         this.stateOrProvince = stateOrProvince;
     }
@@ -100,7 +96,6 @@ public class Address implements Serializable, HasAddress {
         return street;
     }
 
-    @Override
     public void setStreet(String street) {
         this.street = street;
     }

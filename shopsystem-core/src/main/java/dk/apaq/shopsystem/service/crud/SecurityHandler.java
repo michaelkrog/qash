@@ -9,6 +9,7 @@ import dk.apaq.shopsystem.entity.ContentEntity;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.OrganisationUserReference;
+import dk.apaq.shopsystem.security.SecurityRoles;
 import dk.apaq.shopsystem.security.SystemUserDetails;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.ServiceException;
@@ -56,7 +57,7 @@ public final class SecurityHandler {
         }
 
         for (GrantedAuthority authority : auth.getAuthorities()) {
-            if ("ROLE_ADMIN".equals(authority.getAuthority())) {
+            if (SecurityRoles.ROLE_ADMIN.name().equals(authority.getAuthority())) {
                 return true;
 
             }
@@ -181,7 +182,7 @@ public final class SecurityHandler {
             boolean allowed = false;
             List<OrganisationUserReference> orgUsers = service.getUsers().list(new CompareFilter("user", sud.getUser(), CompareFilter.CompareType.Equals), null);
             for(OrganisationUserReference current : orgUsers) {
-                if(current.getRoles().contains("ROLE_ADMIN")) {
+                if(current.getRoles().contains(SecurityRoles.ROLE_ORGADMIN.name())) {
                     allowed = true;
                     break;
                 }

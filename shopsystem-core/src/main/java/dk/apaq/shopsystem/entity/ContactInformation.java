@@ -108,7 +108,6 @@ public class ContactInformation implements Serializable, HasContactInformation {
     /**
      * Sets the city name.
      */
-    @Override
     public void setCity(String city) {
         this.city = city;
     }
@@ -124,7 +123,6 @@ public class ContactInformation implements Serializable, HasContactInformation {
     /**
      * Sets countrycode.
      */
-    @Override
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
@@ -134,7 +132,6 @@ public class ContactInformation implements Serializable, HasContactInformation {
         return postalCode;
     }
 
-    @Override
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
@@ -150,7 +147,6 @@ public class ContactInformation implements Serializable, HasContactInformation {
     /**
      * Sets state(fx 'Alabama') or province(fx 'Nordjylland').
       */
-    @Override
     public void setStateOrProvince(String stateOrProvince) {
         this.stateOrProvince = stateOrProvince;
     }
@@ -160,7 +156,6 @@ public class ContactInformation implements Serializable, HasContactInformation {
         return street;
     }
 
-    @Override
     public void setStreet(String street) {
         this.street = street;
     }

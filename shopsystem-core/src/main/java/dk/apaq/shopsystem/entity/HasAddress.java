@@ -28,20 +28,20 @@ public interface HasAddress {
     /**
      * Sets the city name.
      */
-    void setCity(String city);
+    //void setCity(String city);
 
     /**
      * Sets countrycode.
      */
-    void setCountryCode(String countryCode);
+    //void setCountryCode(String countryCode);
 
-    void setPostalCode(String postalCode);
+    //void setPostalCode(String postalCode);
 
     /**
      * Sets state(fx 'Alabama') or province(fx 'Nordjylland').
      */
-    void setStateOrProvince(String stateOrProvince);
+    //void setStateOrProvince(String stateOrProvince);
 
-    void setStreet(String street);
+    //void setStreet(String street);
     
 }

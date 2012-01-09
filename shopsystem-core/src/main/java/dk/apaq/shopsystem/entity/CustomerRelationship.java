@@ -121,31 +121,5 @@ public class CustomerRelationship implements ContentEntity, HasContactInformatio
         return customer == null ? null : customer.getStreet();
     }
 
-    @Override
-    public void setCity(String city) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setCountryCode(String countryCode) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setPostalCode(String postalCode) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setStateOrProvince(String stateOrProvince) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setStreet(String street) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    
     
 }

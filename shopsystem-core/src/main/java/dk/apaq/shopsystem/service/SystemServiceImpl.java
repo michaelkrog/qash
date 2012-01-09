@@ -19,6 +19,7 @@ import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.OrganisationUserReference;
+import dk.apaq.shopsystem.security.SecurityRoles;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.vfs.FileSystem;
 import java.util.List;
@@ -146,7 +147,8 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
         OrganisationUserReference orgUser = new OrganisationUserReference();
         orgUser.setOrganisation(organisation);
         orgUser.setUser(user);
-        orgUser.getRoles().add("ROLE_ADMIN");
+        orgUser.getRoles().add(SecurityRoles.ROLE_ORGADMIN.name());
+        orgUser.getRoles().add(SecurityRoles.ROLE_ORGPAYER.name());
         organisationService.getUsers().create(orgUser);
 
         return organisation;

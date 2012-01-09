@@ -1,41 +1,26 @@
 package dk.apaq.shopsystem.site;
 
-import dk.apaq.filter.core.CompareFilter;
-import dk.apaq.shopsystem.api.ResourceNotFoundException;
 import dk.apaq.shopsystem.entity.ContactInformation;
 import dk.apaq.shopsystem.entity.Order;
-import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.Payment;
-import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.pay.PaymentGateway;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.util.Country;
-import dk.apaq.shopsystem.util.StreamUtils;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-import org.apache.wicket.protocol.http.servlet.MultipartServletWebRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 /**

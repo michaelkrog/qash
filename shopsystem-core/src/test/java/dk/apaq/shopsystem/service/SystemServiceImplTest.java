@@ -5,6 +5,7 @@ import dk.apaq.crud.Crud.Filterable;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.entity.SystemUser;
+import dk.apaq.shopsystem.security.SecurityRoles;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import dk.apaq.vfs.FileSystem;
 import org.junit.Test;
@@ -124,7 +125,8 @@ public class SystemServiceImplTest {
         
         OrganisationService organisationService = service.getOrganisationService(result);
         OrganisationUserReference userRef = organisationService.getUsers().list().get(0);
-        assertTrue(userRef.getRoles().contains("ROLE_ADMIN"));
+        assertTrue(userRef.getRoles().contains(SecurityRoles.ROLE_ORGADMIN.name()));
+        assertTrue(userRef.getRoles().contains(SecurityRoles.ROLE_ORGPAYER.name()));
         assertEquals("doe", userRef.getPassword());
     }
 }

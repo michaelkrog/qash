@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.apaq.shopsystem.entity.SystemUser;
+import dk.apaq.shopsystem.security.SecurityRoles;
 import dk.apaq.shopsystem.security.SystemUserDetails;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemServiceHolder;
@@ -59,7 +60,7 @@ public class OrganisationUserTest {
             
             orgUser = new OrganisationUserReference();
             orgUser.setUser(systemUser);
-            orgUser.getRoles().add("ROLE_ADMIN");
+            orgUser.getRoles().add(SecurityRoles.ROLE_ORGADMIN.name());
             
             String orgOwnerId = orgService.getUsers().create(orgUser);
             orgUser = (OrganisationUserReference)orgService.getUsers().read(orgOwnerId);

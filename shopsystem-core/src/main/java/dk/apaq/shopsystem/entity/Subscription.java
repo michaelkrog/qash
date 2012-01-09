@@ -24,20 +24,24 @@ public class Subscription implements ContentEntity {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateChanged = new Date();
 
-    private String name;
-    
     @ManyToOne
     private Organisation organisation;
-    
-    /**
-     * startfee
-        interval
-        intervalUnit (Day, Week, Month, Year)
-        dateCharged
-        customer
-        pricingType(fixedInAdvance, fixedSubSequent, usageBased)  
-     */
-    
+
+    private int interval;
+    private IntervalUnit intervalUnit;
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateCharged;
+
+    @ManyToOne
+    private CustomerRelationship customer;
+    private SubscriptionPricingType pricingType;
+    private boolean autoRenew;
+    private boolean enabled;
+    private double price;
+    private String currency;
+    private String subscriptionPaymentId;
+
     
     @Override
     public String getId() {
@@ -69,14 +73,6 @@ public class Subscription implements ContentEntity {
         this.dateChanged = dateChanged;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-    
     @Override
     public Organisation getOrganisation() {
         return organisation;
@@ -86,5 +82,90 @@ public class Subscription implements ContentEntity {
     public void setOrganisation(Organisation organisation) {
         this.organisation = organisation;
     }
+
+    public boolean isAutoRenew() {
+        return autoRenew;
+    }
+
+    public void setAutoRenew(boolean autoRenew) {
+        this.autoRenew = autoRenew;
+    }
+
+    public CustomerRelationship getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerRelationship customer) {
+        this.customer = customer;
+    }
+
+    public Date getDateCharged() {
+        return dateCharged;
+    }
+
+    public void setDateCharged(Date dateCharged) {
+        this.dateCharged = dateCharged;
+    }
+
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
+
+    public IntervalUnit getIntervalUnit() {
+        return intervalUnit;
+    }
+
+    public void setIntervalUnit(IntervalUnit intervalUnit) {
+        this.intervalUnit = intervalUnit;
+    }
+
+    public SubscriptionPricingType getPricingType() {
+        return pricingType;
+    }
+
+    public void setPricingType(SubscriptionPricingType pricingType) {
+        this.pricingType = pricingType;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    /**
+     * The price collected every time the subscription is renewed. (If the subscription
+     * is qashusagebased then the field is used as a percentage).
+     */
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getSubscriptionPaymentId() {
+        return subscriptionPaymentId;
+    }
+
+    public void setSubscriptionPaymentId(String subscriptionPaymentId) {
+        this.subscriptionPaymentId = subscriptionPaymentId;
+    }
+
     
 }
