@@ -230,7 +230,7 @@ body, html{
     background-image:url(../images/ge-header-background.png);
     background-position:top center;
     background-repeat:repeat-x;
-    
+
 }
 
 .ge-header{
@@ -255,7 +255,7 @@ body, html{
 .ge-userinfo div[role=button]:hover span{
     text-decoration:underline;
     color: white;
-    
+
 }
 
 
@@ -425,11 +425,11 @@ body, html{
     text-shadow:0px 1px 0px #000000;
     text-align:right;
     text-decoration:none;
-    
+
 }
 
 .ge-phone {
-    
+
     width:220px;
     height:35px;
     position:relative;
@@ -921,7 +921,7 @@ Forms
     -moz-box-shadow: inset 0 1px 0 white;
     -webkit-box-shadow: inset 0 1px 0 white;
     outline: none;
-    
+
 }
 
 .button-standard {
@@ -1005,4 +1005,14 @@ Forms
 [icon=hyperlink] {
     padding-right: 16px;
     background: transparent url(../images/linkarrow.png) no-repeat center right;
+}
+
+
+/** MESSAGES **/
+.information {
+    background: #FFFFDF;
+    border: 1px solid #DFDFAF;
+    border-radius: 6px;
+    padding: 6px;
+    margin-top: 15px;
 }

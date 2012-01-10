@@ -4,36 +4,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Qash - The professional online cash register (POS / Point of Sale)</title>
         <meta name="description" content="Qash is an innovative approach to an online cash register ( POS / Point Of Sale ). With a user-friendly and attractive interface, it is both quick and easy to get started selling products from your shop." />
         <meta name="keywords" content="qash, point of sale, pos, pos in browser, retail, pos, pos software, apaq, macos, linux, windows, mac os, browser, online, sales, credit card, invoice, inventory, accounting, bookkeeping"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta http-equiv="content-language" content="en"/>
-        <meta name="google-site-verification" content="Dh7WdAlkzeXUeckVsd2uAAunO6sKnBTFBAYODINwz54" />
-        <link rel="shortcut icon" href="favicon.ico"/>
-        <link rel="stylesheet" type="text/css" href="css/reset.css"/>
-        <link rel="stylesheet" type="text/css" href="css/layout.css"/>
-        <link rel="stylesheet" type="text/css" href="css/lightbox.css"/>
-        <link  href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic" rel="stylesheet" type="text/css" />
-
-        <!--[if IE 6]>
-        <link rel="stylesheet" type="text/css" href="css/ie6.css" />
-        <![endif]-->
-        <!--[if IE 7]>
-        <link rel="stylesheet" type="text/css" href="css/ie7.css" />
-        <![endif]-->
-
-
-        <script type="text/javascript" src="lib/jquery-core.js"></script>
-        <!--[if IE 6]>
-        <script type="text/javascript" src="lib/jquery-pngfix.js"></script>
-        <script type="text/javascript" src="lib/jquery-config-ie6.js"></script>
-        <![endif]-->
-        <script type="text/javascript" src="lib/jquery-cycle.js"></script>
-        <script type="text/javascript" src="lib/jquery-form.js"></script>
-        <script type="text/javascript" src="lib/jquery-lightbox.js"></script>
-        <script type="text/javascript" src="lib/jquery-config.js"></script>
+        <jsp:include page="inc/htmlhead.jsp" />
     </head>
 
     <body>

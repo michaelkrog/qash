@@ -5,36 +5,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Qash - Your account</title>
         <meta name="description" content="The account information you have registered with Qash" />
         <meta name="keywords" content="login, qash"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta http-equiv="content-language" content="en"/>
-        <meta name="google-site-verification" content="Dh7WdAlkzeXUeckVsd2uAAunO6sKnBTFBAYODINwz54" />
-        <link rel="shortcut icon" href="favicon.ico"/>
-        <link rel="stylesheet" type="text/css" href="css/reset.css"/>
-        <link rel="stylesheet" type="text/css" href="css/layout.css"/>
-        <link rel="stylesheet" type="text/css" href="css/lightbox.css"/>
-        <link  href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic" rel="stylesheet" type="text/css" />
-
-        <!--[if IE 6]>
-        <link rel="stylesheet" type="text/css" href="css/ie6.css" />
-        <![endif]-->
-        <!--[if IE 7]>
-        <link rel="stylesheet" type="text/css" href="css/ie7.css" />
-        <![endif]-->
-
-
-        <script type="text/javascript" src="lib/jquery-core.js"></script>
-        <!--[if IE 6]>
-        <script type="text/javascript" src="lib/jquery-pngfix.js"></script>
-        <script type="text/javascript" src="lib/jquery-config-ie6.js"></script>
-        <![endif]-->
-        <script type="text/javascript" src="lib/jquery-cycle.js"></script>
-        <script type="text/javascript" src="lib/jquery-form.js"></script>
-        <script type="text/javascript" src="lib/jquery-lightbox.js"></script>
-        <script type="text/javascript" src="lib/jquery-config.js"></script>
+        <jsp:include page="inc/htmlhead.jsp" />
     </head>
 
     <body>
@@ -56,8 +30,10 @@
             <div class="in-benefits" style="padding-bottom:44px">
                 <h1><spring:message code="dashboard.title"/></h1>
                 <p>
-
-
+                    
+                    <c:if test="${!service.hasUserVerifiedEmail(user.name)}">
+                        <div class="information"><h2>You're email address has not been verified.</h2>Without a valid email address you may not recieve important emails like payment notifications, password information etc. <a href="/verify_email_send.htm">Send verification email</a></div>
+                    </c:if>
                     <table class="table-minimalistic table-minimalistic-lined" style="width:950px" summary="Shop list">
                         <thead>
                             <tr>

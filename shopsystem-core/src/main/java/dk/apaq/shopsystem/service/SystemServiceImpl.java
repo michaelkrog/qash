@@ -15,7 +15,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import dk.apaq.crud.Crud.*;
 import dk.apaq.crud.CrudNotifier;
+import dk.apaq.filter.Filter;
+import dk.apaq.filter.core.AndFilter;
 import dk.apaq.filter.core.CompareFilter;
+import dk.apaq.filter.core.LikeFilter;
+import dk.apaq.filter.core.OrFilter;
 import dk.apaq.shopsystem.entity.Domain;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.OrganisationUserReference;
@@ -163,5 +167,18 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
         }
         return orgList.get(0);
     }
+
+    @Override
+    public boolean hasUserVerifiedEmail(String userName) {
+        Filter filter = new AndFilter(new LikeFilter("name", userName, false), new CompareFilter("emailVerified", true, CompareFilter.CompareType.Equals));
+        return !getSystemUserCrud().list(filter, null).isEmpty();
+    }
+
+    @Override
+    public boolean isUsernameInUse(String userName) {
+        return !getSystemUserCrud().list(new LikeFilter("name", userName, false), null).isEmpty();
+    }
+    
+    
     
 }

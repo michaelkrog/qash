@@ -33,4 +33,6 @@ public interface SystemService extends Serializable {
     
     Organisation getMainOrganisation();
 
+    boolean hasUserVerifiedEmail(String userName);
+    boolean isUsernameInUse(String userName);
 }

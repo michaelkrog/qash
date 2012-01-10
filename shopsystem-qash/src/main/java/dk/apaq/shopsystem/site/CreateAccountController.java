@@ -64,7 +64,7 @@ public class CreateAccountController {
     @RequestMapping(method = RequestMethod.POST)
     public String persistAccount(@ModelAttribute @Valid AccountInfo accountInfo, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
         
-        if(!service.getSystemUserCrud().list(new LikeFilter("name", accountInfo.getUserName(), false), null).isEmpty()) {
+        if(service.isUsernameInUse(accountInfo.getUserName())) {
             result.rejectValue("userName", "1", "Username already taken.");
         }
         

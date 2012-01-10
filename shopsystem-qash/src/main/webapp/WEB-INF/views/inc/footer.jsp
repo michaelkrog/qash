@@ -29,8 +29,8 @@
                 <li><a href="#"><img src="images/social/icon-facebook.png" alt="Facebook" width="16" height="16" /></a></li>
                 <li><a href="#"><img src="images/social/icon-flickr.png" alt="Flickr" width="16" height="16" /></a></li>
                 <li><a href="#"><img src="images/social/icon-linkedin.png" alt="LinkedIn" width="16" height="16" /></a></li>
-                <li><a href="#"><img src="images/social/icon-rss.png" alt="RSS" width="16" height="16" /></a></li>
-                <li><a href="#"><img src="images/social/icon-skype.png" alt="Skype" width="16" height="16" /></a></li-->
+                <li><a href="#"><img src="images/social/icon-rss.png" alt="RSS" width="16" height="16" /></a></li-->
+                <li><a href="https://plus.google.com/107275937311376264435?prsrc=3" style="text-decoration:none;"><img src="https://ssl.gstatic.com/images/icons/gplus-16.png" alt="" style="border:0;width:16px;height:16px;"/></a></li>
                 <li><a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="qashapp">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></li>
                 <!--li><a href="#"><img src="images/social/icon-vimeo.png" alt="Vimeo" width="16" height="16" /></a></li>
                 <li><a href="#"><img src="images/social/icon-youtube.png" alt="YouTube" width="16" height="16" /></a></li-->

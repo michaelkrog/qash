@@ -12,6 +12,7 @@
         <intercept-url pattern="/**/create_account.htm" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/**/login.htm" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/**/account.*" access="ROLE_USER" />
+        <intercept-url pattern="/**/verify_email.htm" access="ROLE_USER" />
         <intercept-url pattern="/**/dashboard.*" access="ROLE_USER" />
         <intercept-url pattern="/**/register/**" access="ROLE_USER" />
         <intercept-url pattern="/**/admin/**" access="ROLE_USER" />

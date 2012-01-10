@@ -1,9 +1,14 @@
 package dk.apaq.shopsystem.site;
 
 import dk.apaq.filter.Filter;
+import dk.apaq.filter.core.AndFilter;
 import dk.apaq.filter.core.CompareFilter;
+import dk.apaq.filter.core.OrFilter;
+import dk.apaq.shopsystem.entity.Order;
+import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.security.SystemUserDetails;
+import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.service.crud.OrganisationCrud;
 import java.io.IOException;
@@ -32,29 +37,32 @@ public class DashboardController {
     @Autowired
     private SystemService service;
 
+    private Filter orderFilter = new CompareFilter("dateInvoiced", DateUtils.addDays(new Date(), -30), CompareFilter.CompareType.GreaterOrEqual);
+    
     @RequestMapping("/dashboard.htm")
     public ModelAndView handleRequest(@RequestParam(defaultValue="true") Boolean autoRedirect, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         OrganisationCrud orgCrud = service.getOrganisationCrud();
 
-        //TODO List organisations
         SystemUserDetails sud = ((SystemUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
         List<Organisation> orglist = orgCrud.list(null, sud.getUser());
 
-        //Wait - if user only has one shop and this is not forced, then redirect to the shop
-        /*if (orglist.size() == 1 && autoRedirect) {
-            String id = orglist.get(0).getId();
-            return new ModelAndView("redirect:register/id:" + id);
-        }*/
-        
-        Filter orderFilter = new CompareFilter("dateInvoiced", DateUtils.addDays(new Date(), -30), CompareFilter.CompareType.GreaterOrEqual);
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("organisations", orglist);
+        model.put("user", sud.getUser());
         model.put("service", service);
         model.put("oneMonthFilter", orderFilter);
         return new ModelAndView("dashboard", model);
+    }
+    
+    private Order getOutstandingOrder(Organisation org) {
+        Filter filter = new AndFilter(
+                            new CompareFilter("buyerId", org.getId(), CompareFilter.CompareType.Equals),
+                            new CompareFilter("status", OrderStatus.Accepted, CompareFilter.CompareType.Equals));
+        OrganisationService mainOrgService = service.getOrganisationService(service.getMainOrganisation());
+        List<String> ids = mainOrgService.getOrders().listIds(filter, null);
+        return ids.isEmpty() ? null : mainOrgService.getOrders().read(ids.get(0));
     }
 
 }

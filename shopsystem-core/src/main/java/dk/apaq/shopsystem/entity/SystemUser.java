@@ -139,7 +139,13 @@ public class SystemUser implements User, Serializable, BasicEntity {
         this.password = password;
     }
 
+    /**
+     * Sets the email of the user. Will set emailVerified false if email is changed.
+     */
     public void setEmail(String email) {
+        if(this.email != null && !this.email.equals(email)) {
+            this.emailVerified = false;
+        }
         this.email = email;
     }
 
