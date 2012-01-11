@@ -1,5 +1,8 @@
 package dk.apaq.shopsystem.site;
 
+import dk.apaq.filter.Filter;
+import dk.apaq.filter.core.AndFilter;
+import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.shopsystem.entity.ContactInformation;
 import dk.apaq.shopsystem.entity.CustomerRelationship;
 import dk.apaq.shopsystem.entity.IntervalUnit;
@@ -14,6 +17,7 @@ import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.util.Country;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -34,7 +38,6 @@ import org.springframework.web.servlet.ModelAndView;
  * @author michael
  */
 @Controller
-@RequestMapping()
 public class SubscriptionController {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriptionController.class);
@@ -44,19 +47,22 @@ public class SubscriptionController {
     @Autowired
     PaymentGateway paymentGateway;
 
-    @RequestMapping(value = "/subscribe.htm", method = RequestMethod.GET)
+    @RequestMapping(value = "/subscribe.htm")
     public ModelAndView handleSubscriptionRequest(@RequestParam(required = true) String organisationId, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         Organisation org = service.getOrganisationCrud().read(organisationId);
         if (org.isSubscriber()) {
-            return new ModelAndView("redirect:/dasboard.htm");
+            return new ModelAndView("redirect:/dashboard.htm");
         }
 
-        return new ModelAndView("subscribe");
+        Map<String, String> model = new HashMap<String, String>();
+        model.put("organisationId", organisationId);
+        model.put("currency", getPaymentCurrencyForOrganisation(org));
+        return new ModelAndView("subscribe", model);
     }
 
-    @RequestMapping(value="/subscribe.htm", method= RequestMethod.POST)
+    @RequestMapping(value="/subscribe_do.htm")
     @Transactional
     public ModelAndView onSubscribe(@RequestParam(required = true) String organisationId) {
 
@@ -64,7 +70,10 @@ public class SubscriptionController {
         OrganisationService mainOrganisationService = service.getOrganisationService(service.getMainOrganisation());
         
         if (!org.isSubscriber()) {
+            //TODO: Default fee percentage should be read from somewhere
             org.setSubscriber(true);
+            org.setFeePercentage(0.002);
+            
             service.getOrganisationCrud().update(org);
             
             //Get or create CustomerRelationShip
@@ -75,7 +84,6 @@ public class SubscriptionController {
             subscription.setCurrency(getPaymentCurrencyForOrganisation(org));
             subscription.setInterval(1);
             subscription.setIntervalUnit(IntervalUnit.Month);
-            subscription.setPrice(0.2);
             subscription.setPricingType(SubscriptionPricingType.QashUsageBase);
             subscription.setEnabled(true);
             subscription.setCustomer(relationship);
@@ -83,10 +91,10 @@ public class SubscriptionController {
             mainOrganisationService.getSubscriptions().create(subscription);
         }
         
-        return new ModelAndView("redirect:/dasboard.htm");
+        return new ModelAndView("redirect:/dashboard.htm");
     }
 
-    @RequestMapping(value="/unsubscribe.htm",method= RequestMethod.GET)
+    @RequestMapping(value="/unsubscribe.htm")
     public ModelAndView handleUnsubscribeRequest(@RequestParam(required=true) String organisationId, @RequestParam(required=false) Boolean unsubscribe,  HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -96,18 +104,37 @@ public class SubscriptionController {
         }
         
         if(Boolean.TRUE.equals(unsubscribe)) {
-            //Do unsubscribe
-            org.setSubscriber(false);
-            service.getOrganisationCrud().update(org);
-            
-            //Do charge for orders not charged for
-            
-            //Delete subscription
             
             return new ModelAndView("redirect:/dashboard.htm");
         }
         
         return new ModelAndView("unsubscribe", "organisationId", organisationId);
+    }
+    
+    @RequestMapping(value="/unsubscribe_do.htm",method= RequestMethod.GET)
+    public ModelAndView onUnsubscribe(@RequestParam(required=true) String organisationId) {
+            Organisation org = service.getOrganisationCrud().read(organisationId);
+            OrganisationService mainOrganisationService = service.getOrganisationService(service.getMainOrganisation());
+                
+            if(org.isSubscriber()) {
+                //Do unsubscribe
+                org.setSubscriber(false);
+                service.getOrganisationCrud().update(org);
+
+                //Do charge for orders not charged for
+
+                //Delete subscription
+                CustomerRelationship relationship = mainOrganisationService.getCustomerRelationship(org, false);
+                if(relationship!=null) {
+                    Filter filter = new AndFilter(new CompareFilter("customer", relationship, CompareFilter.CompareType.Equals),
+                                                new CompareFilter("pricingType", SubscriptionPricingType.QashUsageBase, CompareFilter.CompareType.Equals));
+                    List<String> idlist = mainOrganisationService.getSubscriptions().listIds(filter, null);
+                    for(String id : idlist) {
+                        mainOrganisationService.getSubscriptions().delete(id);
+                    }
+                }
+            }
+            return new ModelAndView("redirect:/dashboard.htm");
     }
         
     private String getPaymentCurrencyForOrganisation(Organisation org) {

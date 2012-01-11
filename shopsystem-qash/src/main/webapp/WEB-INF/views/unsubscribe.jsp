@@ -37,7 +37,7 @@
                 <spring:message code="unsubscribe.text3"/><br/><br/>
                 <a href="dashboard.jsp" class="button-standard"><spring:message code="unsubscribe.button.no"/></a>
                 &nbsp;&nbsp;
-                <a href="unsubscribe.htm?organisationId=${organisationId}&unsubscribe=true" class="button-standard"><spring:message code="unsubscribe.button.yes"/></a>
+                <a href="unsubscribe_do.htm?organisationId=${organisationId}" class="button-standard"><spring:message code="unsubscribe.button.yes"/></a>
                 
                 
             </p>

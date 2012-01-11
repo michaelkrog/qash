@@ -1,6 +1,6 @@
 package dk.apaq.shopsystem.site;
 
-import dk.apaq.shopsystem.site.form.Quote;
+import dk.apaq.shopsystem.site.form.QuoteFormBean;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,11 +31,11 @@ public class LandingPageController {
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        return new ModelAndView("landingpage", "quote", new Quote());
+        return new ModelAndView("landingpage", "quote", new QuoteFormBean());
     }
     
     @RequestMapping("/sendQuote.htm")
-    public String sendQuote(@ModelAttribute Quote quote) {
+    public String sendQuote(@ModelAttribute QuoteFormBean quote) {
         SimpleMailMessage message = new SimpleMailMessage();
         templateMessage.copyTo(message);
         message.setText(quote.getMessage());

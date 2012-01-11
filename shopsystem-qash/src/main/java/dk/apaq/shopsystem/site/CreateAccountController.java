@@ -5,7 +5,7 @@ import dk.apaq.filter.core.LikeFilter;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.service.SystemService;
-import dk.apaq.shopsystem.site.form.AccountInfo;
+import dk.apaq.shopsystem.site.form.CreateAccountFormBean;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,11 +58,11 @@ public class CreateAccountController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest() {
-        return new ModelAndView("create_account", "accountInfo", new AccountInfo());
+        return new ModelAndView("create_account", "accountInfo", new CreateAccountFormBean());
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String persistAccount(@ModelAttribute @Valid AccountInfo accountInfo, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView persistAccount(@ModelAttribute @Valid CreateAccountFormBean accountInfo, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
         
         if(service.isUsernameInUse(accountInfo.getUserName())) {
             result.rejectValue("userName", "1", "Username already taken.");
@@ -108,9 +108,9 @@ public class CreateAccountController {
             }
 
             authenticateUserAndSetSession(user, request);
-            return "redirect:/dashboard.htm";
+            return new ModelAndView("redirect:/dashboard.htm");
         } else {
-            return "create_account";
+            return new ModelAndView("create_account", "accountInfo", accountInfo);
         }
 
     }

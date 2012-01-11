@@ -11,7 +11,7 @@
     </head>
 
     <body>
-         <!-- splash -->
+        <!-- splash -->
         <div id="in-splash-container-small">
             <div class="in-splash">
 
@@ -28,47 +28,46 @@
 
             <div class="in-benefits" style="padding-bottom:44px">
                 <h1><spring:message code="createaccount.title"/></h1>
-            <br/>
-            <br/>
-            <p>
-                <form:form action="createAccount.htm" modelAttribute="accountInfo">
-                <input type="hidden" name="save" value="true"/>
-            <table class="table-minimalistic">
-                <tr>
-                    <td class="lined"><spring:message code="createaccount.company"/></td>
-                    <td class="lined"><form:input path="companyName" /><form:errors path="companyName" /></td>
-                </tr>
-                <tr>
-                    <td><spring:message code="createaccount.username"/></td>
-                    <td><form:input path="userName" /><form:errors path="userName" /></td>
-                </tr>
-                <tr>
-                    <td><spring:message code="createaccount.name"/></td>
-                    <td><form:input path="displayName" /><form:errors path="displayName" /></td>
-                </tr>
-                <tr>
-                    <td><spring:message code="createaccount.email"/></td>
-                    <td><form:input path="email" /><form:errors path="email" /></td>
-                </tr>
-                <tr>
-                    <td class="lined"><spring:message code="createaccount.email_confirm"/></td>
-                    <td class="lined"><form:input path="email2" /><form:errors path="email2" /></td>
-                </tr>
-                <tr>
-                    <td><spring:message code="createaccount.password"/></td>
-                    <td><form:input path="password" /><form:errors path="password" /></td>
-                </tr>
-                <tr>
-                    <td><spring:message code="createaccount.password_confirm"/></td>
-                    <td><form:input path="password2" /><form:errors path="password2" /></td>
-                </tr>
+                <br/>
+                <br/>
+                <p>
+                    <form:form action="createAccount.htm" modelAttribute="accountInfo">
+                        <table class="table-minimalistic">
+                            <tr>
+                                <td class="lined"><spring:message code="createaccount.company"/></td>
+                                <td class="lined"><form:input path="companyName" /><form:errors path="companyName" /></td>
+                            </tr>
+                            <tr>
+                                <td><spring:message code="createaccount.username"/></td>
+                                <td><form:input path="userName" /><form:errors path="userName" /></td>
+                            </tr>
+                            <tr>
+                                <td><spring:message code="createaccount.name"/></td>
+                                <td><form:input path="displayName" /><form:errors path="displayName" /></td>
+                            </tr>
+                            <tr>
+                                <td><spring:message code="createaccount.email"/></td>
+                                <td><form:input path="email" /><form:errors path="email" /></td>
+                            </tr>
+                            <tr>
+                                <td class="lined"><spring:message code="createaccount.email_confirm"/></td>
+                                <td class="lined"><form:input path="email2" /><form:errors path="email2" /></td>
+                            </tr>
+                            <tr>
+                                <td><spring:message code="createaccount.password"/></td>
+                                <td><form:password path="password" /><form:errors path="password" /></td>
+                            </tr>
+                            <tr>
+                                <td><spring:message code="createaccount.password_confirm"/></td>
+                                <td><form:password path="password2" /><form:errors path="password2" /></td>
+                            </tr>
 
-                <tr>
-                    <td></td><td><button type="submit" class="button-standard"><spring:message code="createaccount.submit"/></button></td>
-                </tr>
-            </table>
-            </form:form>
-            </p>
+                            <tr>
+                                <td></td><td><button type="submit" class="button-standard"><spring:message code="createaccount.submit"/></button></td>
+                            </tr>
+                        </table>
+                    </form:form>
+                </p>
             </div>
         </div>
         <!-- /benefits -->

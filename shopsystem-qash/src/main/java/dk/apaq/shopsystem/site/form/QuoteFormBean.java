@@ -4,15 +4,15 @@ package dk.apaq.shopsystem.site.form;
  *
  * @author krog
  */
-public class Quote {
+public class QuoteFormBean {
     private String fullName;
     private String emailAddress;
     private String message;
 
-    public Quote() {
+    public QuoteFormBean() {
     }
 
-    public Quote(String fullName, String emailAddress, String message) {
+    public QuoteFormBean(String fullName, String emailAddress, String message) {
         this.fullName = fullName;
         this.emailAddress = emailAddress;
         this.message = message;
