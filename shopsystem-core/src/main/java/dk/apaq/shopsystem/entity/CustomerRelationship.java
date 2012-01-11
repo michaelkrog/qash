@@ -1,8 +1,5 @@
 package dk.apaq.shopsystem.entity;
 
-import dk.apaq.shopsystem.entity.Company;
-import dk.apaq.shopsystem.entity.ContentEntity;
-import dk.apaq.shopsystem.entity.Organisation;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

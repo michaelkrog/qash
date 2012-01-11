@@ -112,7 +112,7 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     public CustomerRelationship getCustomerRelationship(Organisation org, boolean createIfNotFound) {
         Crud.Complete<String, CustomerRelationship> crud = getCustomers();
         List<CustomerRelationship> relations = crud.list(new CompareFilter("customer", org, CompareFilter.CompareType.Equals), null);
-        if(relations.isEmpty()) {
+        if(!relations.isEmpty()) {
             return relations.get(0);
         } else if(createIfNotFound) {
             CustomerRelationship customerRelationship = new CustomerRelationship();

@@ -178,6 +178,15 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
     public boolean isUsernameInUse(String userName) {
         return !getSystemUserCrud().list(new LikeFilter("name", userName, false), null).isEmpty();
     }
+
+    @Override
+    public SystemUser getSystemUser(String name) {
+        Filter filter = new CompareFilter("name", name, CompareFilter.CompareType.Equals);
+        List<SystemUser> userlist = getSystemUserCrud().list(filter, null);
+        return userlist.isEmpty() ? null : userlist.get(0);
+    }
+    
+    
     
     
     

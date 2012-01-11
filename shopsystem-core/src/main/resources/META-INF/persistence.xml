@@ -15,6 +15,7 @@
     <class>dk.apaq.shopsystem.entity.Payment</class>
     <class>dk.apaq.shopsystem.entity.Product</class>
     <class>dk.apaq.shopsystem.entity.Sequence</class>
+    <class>dk.apaq.shopsystem.entity.Subscription</class>
     <class>dk.apaq.shopsystem.entity.Store</class>
     <class>dk.apaq.shopsystem.entity.SystemUser</class>
     <class>dk.apaq.shopsystem.entity.Tax</class>

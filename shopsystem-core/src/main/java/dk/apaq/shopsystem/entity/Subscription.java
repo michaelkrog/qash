@@ -1,7 +1,10 @@
 package dk.apaq.shopsystem.entity;
 
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -27,8 +30,11 @@ public class Subscription implements ContentEntity {
     @ManyToOne
     private Organisation organisation;
 
+    @Column(name="subscriptioninterval")
     private int interval;
-    private IntervalUnit intervalUnit;
+    
+    @Enumerated(EnumType.STRING)
+    private IntervalUnit intervalUnit = IntervalUnit.Month;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateCharged;

@@ -35,4 +35,5 @@ public interface SystemService extends Serializable {
 
     boolean hasUserVerifiedEmail(String userName);
     boolean isUsernameInUse(String userName);
+    SystemUser getSystemUser(String name);
 }

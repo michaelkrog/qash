@@ -58,6 +58,7 @@ public class Organisation implements HasId<String>, Company, HasContactInformati
     private boolean mainOrganisation = false;
     
     private boolean subscriber = false;
+    private double feePercentage = 0;
     
     public String getCity() {
         return city;
@@ -211,6 +212,14 @@ public class Organisation implements HasId<String>, Company, HasContactInformati
         this.subscriber = subscriber;
     }
 
+    public double getFeePercentage() {
+        return feePercentage;
+    }
+
+    public void setFeePercentage(double feePercentage) {
+        this.feePercentage = feePercentage;
+    }
+    
     public String getMerchantId() {
         return merchantId;
     }
