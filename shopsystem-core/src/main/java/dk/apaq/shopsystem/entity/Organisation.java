@@ -59,14 +59,6 @@ public class Organisation implements HasId<String>, Company, HasContactInformati
     
     private boolean subscriber = false;
     
-    /** TODO THIS INFORMATION IS TO BE MOVED SOMEWHERE ELSE - CustomerRelationsShip? */
-    private double feePercentage = 0;
-    private String subscriptionPaymentTransactionId;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dateSubscribed = new Date();
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dateCharged = new Date();
-    
     public String getCity() {
         return city;
     }
@@ -217,11 +209,6 @@ public class Organisation implements HasId<String>, Company, HasContactInformati
 
     public void setSubscriber(boolean subscriber) {
         this.subscriber = subscriber;
-        this.dateSubscribed = subscriber ? new Date() : null;
-    }
-
-    public Date getDateSubscribed() {
-        return dateSubscribed;
     }
 
     public String getMerchantId() {
@@ -232,29 +219,10 @@ public class Organisation implements HasId<String>, Company, HasContactInformati
         this.merchantId = merchantId;
     }
 
-    public double getFeePercentage() {
-        return feePercentage;
-    }
-
-    public Date getDateCharged() {
-        return dateCharged;
-    }
-
-    public void setDateCharged(Date dateCharged) {
-        this.dateCharged = dateCharged;
-    }
-
     public boolean isMainOrganisation() {
         return mainOrganisation;
     }
 
-    public String getSubscriptionPaymentTransactionId() {
-        return subscriptionPaymentTransactionId;
-    }
-
-    public void setSubscriptionPaymentTransactionId(String subscriptionPaymentTransactionId) {
-        this.subscriptionPaymentTransactionId = subscriptionPaymentTransactionId;
-    }
     public Date getBirthDay() {
         return birthDay;
     }

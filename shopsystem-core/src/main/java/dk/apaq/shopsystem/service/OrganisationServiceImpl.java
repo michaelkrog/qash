@@ -1,11 +1,13 @@
 package dk.apaq.shopsystem.service;
 
+import dk.apaq.shopsystem.entity.Subscription;
 import dk.apaq.shopsystem.service.sequence.SequenceProcessor;
 import dk.apaq.crud.Crud;
 import dk.apaq.crud.Crud.Complete;
 import dk.apaq.crud.Crud.Editable;
 import dk.apaq.crud.CrudListener;
 import dk.apaq.crud.CrudNotifier;
+import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.shopsystem.entity.CustomerRelationship;
 import dk.apaq.shopsystem.entity.Document;
 import dk.apaq.shopsystem.entity.DocumentCollection;
@@ -107,6 +109,22 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     }
 
     @Override
+    public CustomerRelationship getCustomerRelationship(Organisation org, boolean createIfNotFound) {
+        Crud.Complete<String, CustomerRelationship> crud = getCustomers();
+        List<CustomerRelationship> relations = crud.list(new CompareFilter("customer", org, CompareFilter.CompareType.Equals), null);
+        if(relations.isEmpty()) {
+            return relations.get(0);
+        } else if(createIfNotFound) {
+            CustomerRelationship customerRelationship = new CustomerRelationship();
+            customerRelationship.setCustomer(org);
+            String id = crud.create(customerRelationship);
+            return crud.read(id);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public Tax getDefaultTax() {
         List<Tax> taxList = getTaxes().list();
         for(Tax tax : taxList) {
@@ -165,7 +183,10 @@ public class OrganisationServiceImpl implements OrganisationService, Application
         return getWebContentCrud(website, WebPage.class);
     }
 
-    
+    @Override
+    public Complete<String, Subscription> getSubscriptions() {
+        return getGenericContentCrud(Subscription.class);
+    }
 
     private <T> Complete<String, T> getGenericContentCrud(Class<T> clazz, CrudListener ... listeners) {
         Organisation organisation = readOrganisation();
