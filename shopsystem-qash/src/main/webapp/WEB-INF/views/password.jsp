@@ -4,8 +4,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>Qash - Your account</title>
-        <meta name="description" content="The account information you have registered with Qash" />
+        <title>Qash - Your password</title>
+        <meta name="description" content="The password you have registered with Qash" />
         <meta name="keywords" content="account, qash"/>
         <jsp:include page="inc/htmlhead.jsp" />
     </head>
@@ -31,27 +31,27 @@
                 <br/>
                 <br/>
                 <p>
-                    <form:form action="account.htm" modelAttribute="accountInfo">
+                    <form:form action="account_password.htm" modelAttribute="passwordInfo">
                         <table class="table-minimalistic">
                             <tr>
                                 <td class="lined"><spring:message code="account.username"/></td>
                                 <td class="lined">${username}</td>
                             </tr>
                             <tr>
-                                <td><spring:message code="account.name"/></td>
-                                <td><form:input path="displayName" /><form:errors path="displayName" /></td>
+                                <td><spring:message code="account.oldPassword"/></td>
+                                <td><form:password path="oldPassword" /><form:errors path="oldPassword" /></td>
                             </tr>
                             <tr>
-                                <td><spring:message code="account.email"/></td>
-                                <td><form:input path="email" /><form:errors path="email" /></td>
+                                <td><spring:message code="account.newPassword"/></td>
+                                <td><form:password path="newPassword" /><form:errors path="newPassword" /></td>
                             </tr>
                             <tr>
-                                <td><spring:message code="account.email_confirm"/></td>
-                                <td><form:input path="email2" /><form:errors path="email2" /></td>
+                                <td><spring:message code="account.confirmPassword"/></td>
+                                <td><form:password path="newPassword2" /><form:errors path="newPassword2" /></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td><button type="submit" class="button-standard"><spring:message code="account.save"/></button>&nbsp;<a href="account_password.htm" class="button-standard"><spring:message code="account.changePassword"/></a></td>
+                                <td><button type="submit" class="button-standard"><spring:message code="account.save"/></button></td>
                             </tr>
                         </table>
                     </form:form>

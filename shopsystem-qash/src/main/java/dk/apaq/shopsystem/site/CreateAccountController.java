@@ -6,6 +6,7 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.site.form.CreateAccountFormBean;
+import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,26 +58,30 @@ public class CreateAccountController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView handleRequest() {
-        return new ModelAndView("create_account", "accountInfo", new CreateAccountFormBean());
+    public String handleRequest(Map model) {
+        model.put("accountInfo", new CreateAccountFormBean());
+        return "create_account";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView persistAccount(@ModelAttribute @Valid CreateAccountFormBean accountInfo, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
+    public String persistAccount(@ModelAttribute("accountInfo") @Valid CreateAccountFormBean accountInfo, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
         
         if(service.isUsernameInUse(accountInfo.getUserName())) {
-            result.rejectValue("userName", "1", "Username already taken.");
+            result.rejectValue("userName", "createaccount.input.usernameInUse", "Username already taken.");
         }
         
         if (!accountInfo.getEmail2().equals(accountInfo.getEmail())) {
-            result.rejectValue("email2", "1", "The two email fields does not match.");
+            result.rejectValue("email2", "createaccount.input.emailsNotEqual", "The two email fields does not match.");
         }
 
         if (!accountInfo.getPassword2().equals(accountInfo.getPassword())) {
-            result.rejectValue("password2", "1", "The two password fields does not match.");
+            result.rejectValue("password2", "createaccount.input.passwordsNotEquals", "The two password fields does not match.");
         }
 
-        if (!result.hasErrors()) {
+        if (result.hasErrors()) {
+            return "create_account";
+            
+        } else {
             Organisation org = new Organisation();
             org.setCompanyName(accountInfo.getCompanyName());
 
@@ -108,9 +113,7 @@ public class CreateAccountController {
             }
 
             authenticateUserAndSetSession(user, request);
-            return new ModelAndView("redirect:/dashboard.htm");
-        } else {
-            return new ModelAndView("create_account", "accountInfo", accountInfo);
+            return "redirect:/dashboard.htm";
         }
 
     }

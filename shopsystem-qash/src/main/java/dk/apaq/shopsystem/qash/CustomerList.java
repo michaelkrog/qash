@@ -54,7 +54,7 @@ public class CustomerList extends CustomComponent implements Property, Property.
     private Table table = new Table();
     private Crud<String, CustomerRelationship> customerCrud;
     private CrudContainer customerContainer;
-    private Sorter sorter = new Sorter("contactName");
+    private Sorter sorter = new Sorter("customer.contactName");
     private final FilterGenerator filterGenerator = new CustomerFilterGenerator();
 
     private class SearchFieldHandler implements TextChangeListener {

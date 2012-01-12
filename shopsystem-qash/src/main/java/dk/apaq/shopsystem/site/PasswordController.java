@@ -4,6 +4,7 @@ import dk.apaq.shopsystem.api.ResourceNotFoundException;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.site.form.AccountFormBean;
+import dk.apaq.shopsystem.site.form.PasswordFormBean;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -34,10 +35,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author krog
  */
 @Controller
-@RequestMapping("/account.htm")
-public class AccountController {
+@RequestMapping("/account_password.htm")
+public class PasswordController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AccountController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PasswordController.class);
     @Autowired
     private MailSender mailSender;
     @Autowired
@@ -64,12 +65,12 @@ public class AccountController {
         }
         
         model.put("username", username);
-        model.put("accountInfo", new AccountFormBean(user));
-        return "account";
+        model.put("passwordInfo", new PasswordFormBean());
+        return "password";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String persistAccount(@ModelAttribute("accountInfo") @Valid AccountFormBean accountInfo, BindingResult result, Map model, HttpServletRequest request, HttpServletResponse response) {
+    public String persistAccount(@ModelAttribute("passwordInfo") @Valid PasswordFormBean passwordInfo, BindingResult result, Map model, HttpServletRequest request, HttpServletResponse response) {
         
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         SystemUser orgUser = service.getSystemUser(username);
@@ -77,40 +78,26 @@ public class AccountController {
             throw new ResourceNotFoundException("Orginal user not found.");
         }
         
-        if(orgUser.getEmail() == null || !orgUser.getEmail().equals(accountInfo.getEmail())) {
-            if (!accountInfo.getEmail2().equals(accountInfo.getEmail())) {
-                result.rejectValue("email2", "account.input.emailsNotEqual", "The two email fields does not match.");
+        if(passwordInfo.getOldPassword() == null || !passwordInfo.getOldPassword().equals(orgUser.getPassword())) {
+            result.rejectValue("oldPassword", "account.input.passwordIncorrect", "Incorrect password");
+        }
+        
+        if(orgUser.getPassword() == null || !orgUser.getPassword().equals(passwordInfo.getNewPassword())) {
+            if (!passwordInfo.getNewPassword().equals(passwordInfo.getNewPassword2())) {
+                result.rejectValue("newPassword2", "account.input.passwordsNotEqual", "The two password fields does not match.");
             }
         }
 
         
         if (!result.hasErrors()) {
-            orgUser.setDisplayName(accountInfo.getDisplayName());
-            orgUser.setEmail(accountInfo.getEmail());
+            orgUser.setPassword(passwordInfo.getNewPassword());
             service.getSystemUserCrud().update(orgUser);
             
-            if (mailSender != null) {
-                SimpleMailMessage msg = this.templateMessage == null ? new SimpleMailMessage() : new SimpleMailMessage(this.templateMessage);
-                msg.setSubject("New account");
-                msg.setTo(accountInfo.getEmail());
-                msg.setText(
-                        "Dear " + accountInfo.getDisplayName()
-                        + "\n\nYour account information has been changed.\n\n"
-                        + "Best Regards\n"
-                        + "The Qash team.");
-                try {
-                    this.mailSender.send(msg);
-                } catch (MailException ex) {
-                    // simply log it and go on...
-                    LOG.error("Unable to send mail.", ex);
-                }
-            }
-
             authenticateUserAndSetSession(orgUser, request);
             return "redirect:/dashboard.htm";
         } else {
             model.put("username", orgUser.getName());
-            return "account";
+            return "password";
         }
 
     }

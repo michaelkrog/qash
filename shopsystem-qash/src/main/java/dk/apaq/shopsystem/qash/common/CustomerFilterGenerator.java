@@ -22,13 +22,12 @@ public class CustomerFilterGenerator implements FilterGenerator {
         }
 
         if (filterString != null && !"".equals(filterString)) {
-            LikeFilter filter1 = new LikeFilter("contactName", filterString, false);
-            LikeFilter filter2 = new LikeFilter("companyName", filterString, false);
-            LikeFilter filter3 = new LikeFilter("username", filterString, false);
-            LikeFilter filter4 = new LikeFilter("email", filterString, false);
-            LikeFilter filter5 = new LikeFilter("companyRegistration", filterString, false);
+            LikeFilter filter1 = new LikeFilter("customer.contactName", filterString, false);
+            LikeFilter filter2 = new LikeFilter("customer.companyName", filterString, false);
+            LikeFilter filter3 = new LikeFilter("customer.email", filterString, false);
+            LikeFilter filter4 = new LikeFilter("customer.companyRegistration", filterString, false);
 
-            return new OrFilter(filter1, filter2, filter3, filter4, filter5);
+            return new OrFilter(filter1, filter2, filter3, filter4);
         } else {
             return null;
         }
