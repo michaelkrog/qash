@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.entity;
 
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,7 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author krog
  */
 @Entity
-public class CustomerRelationship implements ContentEntity, HasContactInformation {
+public class CustomerRelationship implements ContentEntity/*, HasContactInformation*/ {
 
     @Id
     @GeneratedValue(generator="system-uuid")
@@ -29,8 +30,10 @@ public class CustomerRelationship implements ContentEntity, HasContactInformatio
     @ManyToOne
     private Organisation organisation;
     
-    @ManyToOne
+    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.REFRESH})
     private Organisation customer;
+    
+    private boolean editable;
     
     public String getId() {
         return id;
@@ -73,7 +76,7 @@ public class CustomerRelationship implements ContentEntity, HasContactInformatio
         this.customer = customer;
     }
 
-    @Override
+   /* @Override
     public String getCompanyName() {
         return customer == null ? null : customer.getCompanyName();
     }
@@ -116,7 +119,20 @@ public class CustomerRelationship implements ContentEntity, HasContactInformatio
     @Override
     public String getStreet() {
         return customer == null ? null : customer.getStreet();
+    }*/
+
+    /**
+     * Wether the customer should be allowed to edit the customer or not.
+     * Only customers created by the organisation should be allowed to be edited by the organisation
+     */
+    public boolean isEditable() {
+        return editable;
     }
 
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
+    
     
 }

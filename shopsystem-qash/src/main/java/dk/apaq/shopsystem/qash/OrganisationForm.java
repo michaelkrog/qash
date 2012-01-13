@@ -35,7 +35,7 @@ public class OrganisationForm extends Form {
     
     private static final List<String> PROPERTIES = Arrays.asList(new String[]{
                     "companyName", "contactName", "street", "postalCode", "city", "countryCode", "telephone",
-                    "email", "companyRegistration", "bankAccount", "websiteUrl", "birthDay"});
+                    "email", "companyRegistration", "bankAccount", "websiteUrl"});
 
     private TabSheet tabSheet = new TabSheet();
     private VerticalLayout outerLayout = new VerticalLayout();
@@ -50,7 +50,6 @@ public class OrganisationForm extends Form {
     private Label lblVatNo = new Label("VatNo.");
     private Label lblBankAccount = new Label("Bank");
     private Label lblWebsite = new Label("Website");
-    private Label lblBirthday = new Label("Birthday");
     private Button btnSave = new Button("Save");
     
 
@@ -71,6 +70,7 @@ public class OrganisationForm extends Form {
             countries.setFilteringMode(ComboBox.FILTERINGMODE_STARTSWITH);
         }
 
+        
         @Override
         public Field createField(Item item, Object propertyId, Component uiContext) {
             Field f;
@@ -109,7 +109,7 @@ public class OrganisationForm extends Form {
         
         // Create generalt layout (3x3 GridLayout)
         generalLayout = new GridLayout(3, 6);
-        miscLayout = new GridLayout(2,5);
+        miscLayout = new GridLayout(2,4);
 
         // Use top-left margin and spacing
         generalLayout.setMargin(true, false, false, true);
@@ -152,7 +152,6 @@ public class OrganisationForm extends Form {
         addLabel(miscLayout, lblEmail, 0, 1);
         addLabel(miscLayout, lblBankAccount, 0, 2);
         addLabel(miscLayout, lblWebsite, 0, 3);
-        addLabel(miscLayout, lblBirthday, 0, 4);
         
         btnSave.addListener(new Button.ClickListener() {
 
@@ -205,9 +204,6 @@ public class OrganisationForm extends Form {
         } else if (propertyId.equals("websiteUrl")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             miscLayout.addComponent(field, 1, 3);
-        } else if (propertyId.equals("birthDay")) {
-            field.setWidth(100, UNITS_PERCENTAGE);
-            miscLayout.addComponent(field, 1, 4);
         } else {
             return;
         }

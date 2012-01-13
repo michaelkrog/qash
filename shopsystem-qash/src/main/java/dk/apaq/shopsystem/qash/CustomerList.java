@@ -29,6 +29,7 @@ import dk.apaq.shopsystem.entity.CustomerRelationship;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.qash.common.CustomerFilterGenerator;
 import dk.apaq.shopsystem.qash.common.Spacer;
+import dk.apaq.shopsystem.qash.data.CustomerRelationshipContainer;
 import dk.apaq.shopsystem.qash.listeners.RemoveSelectedOnClickListener;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
@@ -39,7 +40,7 @@ import java.util.Collection;
  */
 public class CustomerList extends CustomComponent implements Property, Property.Editor, Container, Container.Editor {
 
-    private static final String[] COLUMNS = {"companyName", "contactName", "email"};
+    private static final String[] COLUMNS = {"customer.companyName", "customer.contactName", "customer.email"};
     private final Action editAction = new Action("Edit");
     private final Action deleteAction = new Action("Delete");
     private Label titleLabel = new Label("Customers");
@@ -116,7 +117,7 @@ public class CustomerList extends CustomComponent implements Property, Property.
             public void buttonClick(ClickEvent event) {
                 Object id = table.addItem();
                 Item item = table.getItem(id);
-                item.getItemProperty("companyName").setValue("Unnamed customer");
+                item.getItemProperty("customer.comapnyName").setValue("Unnamed Customer");
                 editItem(item);
             }
         });
@@ -267,22 +268,17 @@ public class CustomerList extends CustomComponent implements Property, Property.
         
         getApplication().getMainWindow().addWindow(dialog);
 
-        //The form takes Organsiation items and not CustomerRelation items which is what we have.
-        //TODO: How does it get persisted?
-        Organisation org = (Organisation) item.getItemProperty("customer").getValue();
-        Item orgItem = new BeanItem(org);
-        
-        form.setItemDataSource(orgItem);
+        form.setItemDataSource(item);
         
         
     }
 
     private void refreshCustomerContainer() {
         if (customerCrud != null) {
-            this.customerContainer = new CrudContainer(customerCrud, CustomerRelationship.class);
+            this.customerContainer = new CustomerRelationshipContainer(customerCrud);
             this.customerContainer.setSorter(sorter);
             table.setContainerDataSource(this.customerContainer);
-            table.setVisibleColumns(COLUMNS);
+            //table.setVisibleColumns(COLUMNS);
         }
     }
 
