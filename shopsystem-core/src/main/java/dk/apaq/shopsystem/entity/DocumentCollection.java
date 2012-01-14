@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
@@ -38,7 +39,7 @@ public class DocumentCollection implements ContentEntity, Serializable {
 
     private String name;
     
-    @OneToMany(fetch= FetchType.EAGER)
+    @ManyToMany(fetch= FetchType.EAGER)
     @OrderColumn()
     private List<Document> documents = new ArrayList<Document>();
 
