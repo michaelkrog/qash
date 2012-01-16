@@ -31,6 +31,7 @@ public class SubscriptionUtilTest {
         
     }
     
+    @Test
     public void testDummy() {
         
     }
