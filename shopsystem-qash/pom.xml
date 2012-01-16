@@ -91,6 +91,11 @@
             <version>1.2.2</version>
         </dependency>
         <dependency>
+            <groupId>com.kenai.nbpwr</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>1.6.2-201110292322</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>
