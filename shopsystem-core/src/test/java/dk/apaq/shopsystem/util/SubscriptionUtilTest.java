@@ -31,6 +31,9 @@ public class SubscriptionUtilTest {
         
     }
     
+    public void testDummy() {
+        
+    }
     /*
     @Test
     public void testGetRevenueSinceLastCharge() {
