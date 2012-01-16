@@ -19,6 +19,12 @@
 
 <!-- HIBERNATE -->
         <dependency>
+            <groupId>com.kenai.nbpwr</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>1.6.2-201110292322</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
@@ -175,7 +181,7 @@
         </dependency>
         
         <!-- APCAHE HTTPCLIENT --> 
-      <dependency>
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.1.2</version>
@@ -247,9 +253,9 @@
         
         <!-- JSON -->
         <dependency>
-        <groupId>org.codehaus.jackson</groupId>
-        <artifactId>jackson-core-asl</artifactId>
-        <version>1.9.2</version>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.2</version>
         </dependency>
         <dependency>
             <groupId>easymock</groupId>

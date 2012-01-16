@@ -122,4 +122,14 @@ public class TaxTool {
         }
         return values;
     }
+    
+    public static Tax getTaxBasedOnCountry(Country country) {
+        //TODO This should actually be chosen from taxes the organisation has registered.
+        //Right now this is harcoded for salers inside EU.
+        if (country.isWithinEu()) {
+            return new Tax("Vat", 25);
+        } else {
+            return null;
+        }
+    }
 }
