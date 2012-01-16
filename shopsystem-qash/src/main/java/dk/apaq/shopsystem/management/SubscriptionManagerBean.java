@@ -1,29 +1,21 @@
 package dk.apaq.shopsystem.management;
 
-import dk.apaq.filter.Filter;
-import dk.apaq.filter.core.AndFilter;
-import dk.apaq.filter.core.CompareFilter;
-import dk.apaq.shopsystem.entity.CustomerRelationship;
 import dk.apaq.shopsystem.entity.Order;
-import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.entity.Subscription;
-import dk.apaq.shopsystem.entity.SubscriptionPricingType;
 import dk.apaq.shopsystem.entity.SystemUser;
-import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.pay.PaymentException;
 import dk.apaq.shopsystem.pay.PaymentGateway;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
-import dk.apaq.shopsystem.util.Country;
+import dk.apaq.shopsystem.util.SubscriptionUtil;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.persistence.EntityManager;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +35,6 @@ public class SubscriptionManagerBean {
     private final SystemService service;
     private final PaymentGateway paymentGateway;
     private final NumberFormat orderNumberFormatter = NumberFormat.getIntegerInstance();
-    private final NumberFormat feeFormatter = NumberFormat.getPercentInstance();
     private final NumberFormat amountFormatter = NumberFormat.getCurrencyInstance(Locale.ENGLISH);
     private final MailSender mailSender;
     private final SimpleMailMessage templateMessage;
@@ -70,7 +61,7 @@ public class SubscriptionManagerBean {
         for (Subscription subscription : subscriptions) {
 
             //ensure that the subscription is to be collected for
-            if(!isDueForCollection(subscription)) {
+            if(!SubscriptionUtil.isDueForCollection(subscription)) {
                 continue;
             }
             
@@ -78,7 +69,7 @@ public class SubscriptionManagerBean {
             SystemUser adminUser = getAdminUserForOrganisation(subscription.getCustomer().getCustomer());
 
             //1: generate order
-            Order order = generateOrderFromSubscription(subscription);
+            Order order = SubscriptionUtil.generateOrderFromSubscription(service, subscription);
 
             //2: Create order
             String id = orgService.getOrders().create(order);
@@ -179,100 +170,12 @@ public class SubscriptionManagerBean {
                 Thread.sleep(50);
             } catch (InterruptedException ex) {
             }
-
         }
-
     }
 
-    public SystemUser getAdminUserForOrganisation(Organisation organisation) {
+    private SystemUser getAdminUserForOrganisation(Organisation organisation) {
         return null;
     }
 
-    public Tax getTaxBasedOnCountry(Country country) {
-        //TODO This should actually be chosen from taxes the organisation has registered.
-        //Right now this is harcoded for salers inside EU.
-        if (country.isWithinEu()) {
-            return new Tax("Vat", 25);
-        } else {
-            return null;
-        }
-    }
 
-    /********* METHODS THAT SHOULD BE MOVED TO A SUBSCRIPTION UTILITY CLASS ************/
-    public double getUsageFee(Subscription subscription) {
-
-        Date dateFrom = subscription.getDateCharged() == null ? subscription.getDateCreated() : subscription.getDateCharged();
-        Filter orderFilter = new AndFilter(new CompareFilter("status", OrderStatus.Completed, CompareFilter.CompareType.Equals),
-                new CompareFilter("dateChanged", dateFrom, CompareFilter.CompareType.GreaterOrEqual));
-        Organisation customer = subscription.getCustomer().getCustomer();
-        String currency = customer.getCurrency();
-
-        double fee = 0;
-
-        OrganisationService customerOrganisationService = service.getOrganisationService(subscription.getCustomer().getCustomer());
-        List<Order> orderList = customerOrganisationService.getOrders().list(orderFilter, null);
-        for (Order order : orderList) {
-            if (!currency.equals(order.getCurrency())) {
-                //TODO: Handle customers orders in other currencies than their default
-                continue;
-            }
-
-            fee += order.getTotalWithTax();
-        }
-
-        return fee;
-    }
-
-    public Order generateOrderFromSubscription(Subscription subscription) {
-        CustomerRelationship customerRelationship = subscription.getCustomer();
-        Country customerCountry = Country.getCountry(customerRelationship.getCustomer().getCountryCode(), Locale.getDefault());
-
-        String customerCurrency = customerRelationship.getCustomer().getCurrency();
-
-        Order order = new Order();
-
-        //1: Find out how much to collect
-        if (subscription.getPricingType() == SubscriptionPricingType.QashUsageBase) {
-            //1a: if qashUsageBased subscription calculate usage fee
-            order.setCurrency(customerCurrency);
-            double revenue = getUsageFee(subscription);
-            double fee = revenue * customerRelationship.getCustomer().getFeePercentage();
-
-            order.addOrderLine("Fee for revenue (" + feeFormatter.format(fee) + ")", 1, fee, getTaxBasedOnCountry(customerCountry));
-        } else {
-            order.setCurrency(subscription.getCurrency());
-
-            //1b: else use price specified on subscription
-            order.addOrderLine("Subscription", 1, subscription.getPrice(), getTaxBasedOnCountry(customerCountry));
-        }
-        return order;
-    }
-
-    public boolean isDueForCollection(Subscription subscription) {
-        Date startOfCurrentInterval = subscription.getDateCharged() == null ? subscription.getDateCreated() : subscription.getDateCharged();
-
-        DateTime cutOffTime = new DateTime(startOfCurrentInterval.getTime());
-
-        switch (subscription.getIntervalUnit()) {
-            case Hour:
-                cutOffTime.plusHours(subscription.getInterval());
-                break;
-            case Day:
-                cutOffTime.plusDays(subscription.getInterval());
-                break;
-            case Week:
-                cutOffTime.plusWeeks(subscription.getInterval());
-                break;
-            case Month:
-                cutOffTime.plusMonths(subscription.getInterval());
-                break;
-            case Year:
-                cutOffTime.plusYears(subscription.getInterval());
-                break;
-        }
-
-        //If time has passed cutOffTime then return true
-        return cutOffTime.isBeforeNow();
-
-    }
 }
