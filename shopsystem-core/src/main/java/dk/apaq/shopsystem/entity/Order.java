@@ -123,14 +123,31 @@ public class Order implements Serializable, ContentEntity {
         return buyer;
     }
 
+    /**
+     * Sets information of the buyer.
+     */
     public void setBuyer(ContactInformation buyer) {
         this.buyer = buyer;
     }
+    
+    /**
+     * Sets information of the buyer. The buyer information will be copied to
+     * a new ContactInformation object.
+     */
+    public void setBuyer(HasContactInformation buyer) {
+        this.buyer = new ContactInformation(buyer);
+    }
 
+    /*
+     * The id of the organisation that is registered as buyer.
+     */
     public String getBuyerId() {
         return buyerId;
     }
 
+    /*
+     * The id of the organisation that is registered as buyer.
+     */
     public void setBuyerId(String buyerId) {
         this.buyerId = buyerId;
     }
