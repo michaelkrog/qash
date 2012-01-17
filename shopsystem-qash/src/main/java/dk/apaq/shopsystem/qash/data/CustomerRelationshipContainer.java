@@ -12,7 +12,7 @@ import dk.apaq.vaadin.addon.crudcontainer.CrudItem;
  */
 public class CustomerRelationshipContainer extends CrudContainer<String, CustomerRelationship>  {
 
-    private String[] extraPropertyIds = {"customer.companyName", "customer.companyRegistration", 
+    private String[] extraPropertyIds = {"customer.companyName", "customer.contactName", "customer.companyRegistration", 
                                         "customer.telephone", "customer.email", "customer.street", 
                                         "customer.city", "customer.stateOrProvince", "customer.postalCode", 
                                         "customer.countryCode", "customer.bankAccount", "customer.websiteUrl"};

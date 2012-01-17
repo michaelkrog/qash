@@ -34,8 +34,10 @@ import java.util.List;
 public class OrganisationForm extends Form {
     
     private static final List<String> PROPERTIES = Arrays.asList(new String[]{
-                    "companyName", "contactName", "street", "postalCode", "city", "countryCode", "telephone",
-                    "email", "companyRegistration", "bankAccount", "websiteUrl"});
+                    "customer.companyName", "customer.contactName", "customer.street", 
+                    "customer.postalCode", "customer.city", "customer.countryCode", 
+                    "customer.telephone", "customer.email", "customer.companyRegistration", 
+                    "customer.bankAccount", "customer.websiteUrl"});
 
     private TabSheet tabSheet = new TabSheet();
     private VerticalLayout outerLayout = new VerticalLayout();
@@ -74,26 +76,26 @@ public class OrganisationForm extends Form {
         @Override
         public Field createField(Item item, Object propertyId, Component uiContext) {
             Field f;
-            if ("countryCode".equals(propertyId)) {
+            if ("customer.countryCode".equals(propertyId)) {
                 return countries;
             } else {
                 f = super.createField(item, propertyId, uiContext);
             }
 
-            if("companyName".equals(propertyId)) {
+            if("customer.companyName".equals(propertyId)) {
                 f.addValidator(new StringLengthValidator("Name should be at least one character.", 1, 30, true));
                 ((TextField)f).setInputPrompt("Name of Shop");
-            } else if("street".equals(propertyId)) {
+            } else if("customer.street".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("Street and houseno.");
-            } else if("postalCode".equals(propertyId)) {
+            } else if("customer.postalCode".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("Postal Code");
-            } else if("city".equals(propertyId)) {
+            } else if("customer.city".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("City");
-            } else if("email".equals(propertyId)) {
+            } else if("customer.email".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("Fx. my@address.net");
-            } else if("bankAccount".equals(propertyId)) {
+            } else if("customer.bankAccount".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("Your bank account number");
-            } else if("websiteUrl".equals(propertyId)) {
+            } else if("customer.websiteUrl".equals(propertyId)) {
                 ((TextField)f).setInputPrompt("Your bank account number");
             }
 
@@ -173,35 +175,35 @@ public class OrganisationForm extends Form {
     @Override
     protected void attachField(Object propertyId, Field field) {
         field.setCaption(null);
-        if (propertyId.equals("companyName")) {
+        if (propertyId.equals("customer.companyName")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             generalLayout.addComponent(field, 1, 0, 2, 0);
-        } else if (propertyId.equals("contactName")) {
+        } else if (propertyId.equals("customer.contactName")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             generalLayout.addComponent(field, 1, 1, 2, 1);
-        } else if (propertyId.equals("street")) {
+        } else if (propertyId.equals("customer.street")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             generalLayout.addComponent(field, 1, 2, 2, 2);
-        } else if (propertyId.equals("postalCode")) {
+        } else if (propertyId.equals("customer.postalCode")) {
             generalLayout.addComponent(field, 1, 3);
-        } else if (propertyId.equals("city")) {
+        } else if (propertyId.equals("customer.city")) {
             generalLayout.addComponent(field, 2, 3);
-        } else if (propertyId.equals("countryCode")) {
+        } else if (propertyId.equals("customer.countryCode")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             generalLayout.addComponent(field, 1, 4, 2, 4);
-        } else if (propertyId.equals("companyRegistration")) {
+        } else if (propertyId.equals("customer.companyRegistration")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             generalLayout.addComponent(field, 1, 5, 2, 5);
-        } else if (propertyId.equals("telephone")) {
+        } else if (propertyId.equals("customer.telephone")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             miscLayout.addComponent(field, 1, 0);
-        } else if (propertyId.equals("email")) {
+        } else if (propertyId.equals("customer.email")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             miscLayout.addComponent(field, 1, 1);
-        } else if (propertyId.equals("bankAccount")) {
+        } else if (propertyId.equals("customer.bankAccount")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             miscLayout.addComponent(field, 1, 2);
-        } else if (propertyId.equals("websiteUrl")) {
+        } else if (propertyId.equals("customer.websiteUrl")) {
             field.setWidth(100, UNITS_PERCENTAGE);
             miscLayout.addComponent(field, 1, 3);
         } else {

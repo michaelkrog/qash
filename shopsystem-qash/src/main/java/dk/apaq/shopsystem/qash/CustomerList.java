@@ -41,6 +41,7 @@ import java.util.Collection;
 public class CustomerList extends CustomComponent implements Property, Property.Editor, Container, Container.Editor {
 
     private static final String[] COLUMNS = {"customer.companyName", "customer.contactName", "customer.email"};
+    private static final String[] COLUMN_NAMES = {"Company Name", "Contact Name", "Email"};
     private final Action editAction = new Action("Edit");
     private final Action deleteAction = new Action("Delete");
     private Label titleLabel = new Label("Customers");
@@ -53,7 +54,7 @@ public class CustomerList extends CustomComponent implements Property, Property.
     private TextField searchField = new TextField();
     private Spacer spacer = new Spacer();
     private Table table = new Table();
-    private Crud<String, CustomerRelationship> customerCrud;
+    private Crud.Complete<String, CustomerRelationship> customerCrud;
     private CrudContainer customerContainer;
     private Sorter sorter = new Sorter("customer.contactName");
     private final FilterGenerator filterGenerator = new CustomerFilterGenerator();
@@ -115,9 +116,13 @@ public class CustomerList extends CustomComponent implements Property, Property.
         addButton.addListener(new Button.ClickListener() {
 
             public void buttonClick(ClickEvent event) {
-                Object id = table.addItem();
+                //create new customer and relation through customercrud
+                Organisation customer = new Organisation();
+                customer.setCompanyName("Unnamed Customer");
+                CustomerRelationship relationship = new CustomerRelationship(customer);
+                String id = customerCrud.create(relationship);
+                
                 Item item = table.getItem(id);
-                item.getItemProperty("customer.comapnyName").setValue("Unnamed Customer");
                 editItem(item);
             }
         });
@@ -145,7 +150,7 @@ public class CustomerList extends CustomComponent implements Property, Property.
         layout.setSizeFull();
     }
 
-    public void setCustomerCrud(Crud<String, CustomerRelationship> customerCrud) {
+    public void setCustomerCrud(Crud.Complete<String, CustomerRelationship> customerCrud) {
         this.customerCrud = customerCrud;
         refreshCustomerContainer();
     }
@@ -249,12 +254,6 @@ public class CustomerList extends CustomComponent implements Property, Property.
     public Container getContainerDataSource() {
         return table.getContainerDataSource();
     }
-    
-    @Override
-    public void attach() {
-        super.attach();
-        refreshCustomerContainer();
-    }
 
     private void editItem(final Item item) {
         final OrganisationForm form = new OrganisationForm();
@@ -274,11 +273,12 @@ public class CustomerList extends CustomComponent implements Property, Property.
     }
 
     private void refreshCustomerContainer() {
-        if (customerCrud != null) {
+        if (customerCrud != null && this.customerContainer == null) {
             this.customerContainer = new CustomerRelationshipContainer(customerCrud);
             this.customerContainer.setSorter(sorter);
             table.setContainerDataSource(this.customerContainer);
-            //table.setVisibleColumns(COLUMNS);
+            table.setVisibleColumns(COLUMNS);
+            table.setColumnHeaders(COLUMN_NAMES);
         }
     }
 
