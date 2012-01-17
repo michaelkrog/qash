@@ -52,6 +52,7 @@ import dk.apaq.shopsystem.annex.OrderDocumentContent;
 import dk.apaq.shopsystem.annex.Page;
 import dk.apaq.shopsystem.annex.PageSize;
 import dk.apaq.shopsystem.entity.ContactInformation;
+import dk.apaq.shopsystem.entity.CustomerRelationship;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderLineTax;
 import dk.apaq.shopsystem.entity.OrderStatus;
@@ -631,6 +632,7 @@ public class OrderEditor extends CustomComponent implements
             @Override
             public void buttonClick(ClickEvent event) {
                 final CustomerList customerList = new CustomerList();
+                customerList.setReadOnly(true);
                 customerList.setCustomerCrud(organisationService.getCustomers());
                 final CommonDialog commonDialog = new CommonDialog("Vælg kunde", customerList, CommonDialog.ButtonType.Close, CommonDialog.ButtonType.Cancel, CommonDialog.ButtonType.Ok);
                 commonDialog.setButtonCaption(CommonDialog.ButtonType.Close, "Anonym kunde");
@@ -648,8 +650,8 @@ public class OrderEditor extends CustomComponent implements
                         if(commonDialog.getResult() == CommonDialog.ButtonType.Ok) {
                             String id = (String) customerList.getValue();
                             if(id == null) return;
-                            CrudItem<String, Organisation> item = (CrudItem<String, Organisation>) customerList.getItem(id);
-                            Organisation customer = item.getBean();
+                            CrudItem<String, CustomerRelationship> item = (CrudItem<String, CustomerRelationship>) customerList.getItem(id);
+                            Organisation customer = item.getBean().getCustomer();
                             
                             order.setBuyerId(customer.getId());
                             order.setBuyer(new ContactInformation(customer));

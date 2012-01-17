@@ -1,8 +1,3 @@
-<%@page import="dk.apaq.shopsystem.entity.Organisation"%>
-<%@page import="java.text.NumberFormat"%>
-<%@page import="dk.apaq.shopsystem.entity.Order"%>
-<%@page import="org.apache.commons.codec.digest.DigestUtils"%>
-<%@page import="dk.apaq.shopsystem.pay.quickpay.QuickPayMd5SumPrinter"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
@@ -38,8 +33,8 @@
                 <br/>
                 <p>
                     <fmt:formatNumber var="formattedExampleRevenue" value='10000' currencyCode="${currency}" type='currency'/>
-                    <fmt:formatNumber var="formattedExampleFee" value='20' currencyCode="${currency}" type='currency'/>
-                    <fmt:formatNumber var="formattedFee" maxFractionDigits="3" value='0.002' type='percent'/>
+                    <fmt:formatNumber var="formattedExampleFee" value='10' currencyCode="${currency}" type='currency'/>
+                    <fmt:formatNumber var="formattedFee" maxFractionDigits="3" value='0.001' type='percent'/>
                    
 
                     <div style="width:400px;padding-bottom:20px;">

@@ -53,12 +53,12 @@ public class SettingsDialogForAdmin extends Window {
 
         CategoryGridPanel.Category cat1 = gridPanel.addCategory("General");
         CategoryGridPanel.Category cat2 = gridPanel.addCategory("Pepherials");
-        CategoryGridPanel.Category cat3 = gridPanel.addCategory("System");
+        //CategoryGridPanel.Category cat3 = gridPanel.addCategory("System");
         gridPanel.addComponent(cat1, new ThemeResource("img/home_48.png"), "Address", organisationForm);
         gridPanel.addComponent(cat1, new ThemeResource("img/taxes_48.png"), "Currency and taxes", currencyAndTaxPanel);
         gridPanel.addComponent(cat1, new ThemeResource("img/invoice_48.png"), "Sales", salesSettings);
         gridPanel.addComponent(cat2, new ThemeResource("img/printer_48.png"), "Printer", printerSettingPanel);
-        gridPanel.addComponent(cat3, new ThemeResource("img/user_48.png"), "Users", userManagerPanel);
+        //gridPanel.addComponent(cat3, new ThemeResource("img/user_48.png"), "Users", userManagerPanel);
         gridPanel.setSizeFull();
 
         layout.addComponent(topLayout);

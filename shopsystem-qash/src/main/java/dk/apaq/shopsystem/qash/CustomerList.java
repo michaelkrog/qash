@@ -93,7 +93,6 @@ public class CustomerList extends CustomComponent implements Property, Property.
         topHLayout.addComponent(addButton);
         topHLayout.addComponent(openButton);
         topHLayout.addComponent(removeButton);
-        //topHLayout.addComponent(adjustButton);
         topHLayout.setComponentAlignment(searchField, Alignment.BOTTOM_RIGHT);
         topHLayout.setExpandRatio(spacer, 1.0F);
         topHLayout.setWidth(100, Component.UNITS_PERCENTAGE);
@@ -255,6 +254,16 @@ public class CustomerList extends CustomComponent implements Property, Property.
         return table.getContainerDataSource();
     }
 
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        super.setReadOnly(readOnly);
+        
+        addButton.setVisible(!readOnly);
+        removeButton.setVisible(!readOnly);
+        openButton.setVisible(!readOnly);
+    }
+
+    
     private void editItem(final Item item) {
         final OrganisationForm form = new OrganisationForm();
         VerticalLayout layout = new VerticalLayout();

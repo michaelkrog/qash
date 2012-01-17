@@ -72,7 +72,7 @@ public class SubscriptionController {
         if (!org.isSubscriber()) {
             //TODO: Default fee percentage should be read from somewhere
             org.setSubscriber(true);
-            org.setFeePercentage(0.002);
+            org.setFeePercentage(0.001);
             
             service.getOrganisationCrud().update(org);
             
