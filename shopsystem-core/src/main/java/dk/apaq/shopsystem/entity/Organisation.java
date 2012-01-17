@@ -51,9 +51,6 @@ public class Organisation implements HasId<String>, Company, HasContactInformati
     @Column(length=4096)
     private String notes;
     
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date birthDay = new Date();
-    
     private String merchantId;
     private boolean mainOrganisation = false;
     
@@ -230,14 +227,6 @@ public class Organisation implements HasId<String>, Company, HasContactInformati
 
     public boolean isMainOrganisation() {
         return mainOrganisation;
-    }
-
-    public Date getBirthDay() {
-        return birthDay;
-    }
-
-    public void setBirthDay(Date birthDay) {
-        this.birthDay = birthDay;
     }
 
     public String getNotes() {

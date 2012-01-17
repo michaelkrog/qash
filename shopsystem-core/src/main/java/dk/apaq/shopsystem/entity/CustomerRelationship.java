@@ -30,10 +30,19 @@ public class CustomerRelationship implements ContentEntity/*, HasContactInformat
     @ManyToOne
     private Organisation organisation;
     
-    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private Organisation customer;
     
     private boolean editable;
+
+    public CustomerRelationship() {
+    }
+
+    public CustomerRelationship(Organisation customer) {
+        this.customer = customer;
+    }
+    
+    
     
     public String getId() {
         return id;

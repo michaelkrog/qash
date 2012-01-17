@@ -100,11 +100,23 @@
             <groupId>dk.apaq.crud</groupId>
             <artifactId>crud-jpa</artifactId>
             <version>${dk.apaq.crud.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>persistence-api</artifactId>
+                    <groupId>javax.persistence</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>dk.apaq.filter</groupId>
             <artifactId>filter-jpa</artifactId>
             <version>${dk.apaq.filter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>persistence-api</artifactId>
+                    <groupId>javax.persistence</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
         <!-- Velocity -->
