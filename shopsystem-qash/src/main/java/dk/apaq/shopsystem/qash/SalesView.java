@@ -6,9 +6,12 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
+import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.annex.AnnexService;
@@ -36,6 +39,23 @@ public class SalesView extends CustomComponent {
     private AnnexService annexService;
     private Outlet outlet;
     private boolean autoOpenPaymentDialog = false;
+    
+    private class TabCloser implements ClickListener {
+        private TabSheet tabSheet;
+        private Tab tab;
+
+        public TabCloser(TabSheet tabSheet, Tab tab) {
+            this.tabSheet = tabSheet;
+            this.tab = tab;
+        }
+
+        @Override
+        public void buttonClick(ClickEvent event) {
+            tabSheet.removeTab(tab);
+        }
+        
+        
+    }
     
     public SalesView() {
         
@@ -156,7 +176,7 @@ public class SalesView extends CustomComponent {
             int suitableIndex = getSuitableIndexForNewOrderTab(orderNumber);
             OrderEditor editor = createEditor(item);
             TabSheet.Tab tab = tabSheet.addTab(editor, "Order #" + orderNumber, null, suitableIndex);
-            tab.setClosable(true);
+            editor.getCloseButton().addListener(new TabCloser(tabSheet, tab));
             tabSheet.setSelectedTab(tab.getComponent());
         }
     }

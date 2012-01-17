@@ -28,7 +28,6 @@ import com.vaadin.ui.Embedded;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout.MarginInfo;
-import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.Select;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TableFieldFactory;
@@ -88,7 +87,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.lang.LocaleUtils;
+import org.hibernate.mapping.ToOne;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -282,6 +281,7 @@ public class OrderEditor extends CustomComponent implements
         //private final Button btn_shipping = new Button("Shipping");
         private final Button btn_customer = new Button("Customer");
         private final Button btn_payments = new Button("Payments");
+        private final Button btn_close = new Button("Close");
         //private final Label lbl_clerk = new Label("Clerk: Hannah Krog");
         private final Label lbl_status = new Label("New");
         private final AddressLabel customerAddress = new AddressLabel();
@@ -294,6 +294,7 @@ public class OrderEditor extends CustomComponent implements
         private final Resource resource_shipping_icon = new ThemeResource("img/shipping_48.png");
         private final Resource resource_recipient_icon = new ThemeResource("img/recipient_48.png");
         private final Resource resource_payments_icon = new ThemeResource("img/payments_48.png");
+        private final Resource resource_close_icon = new ThemeResource("img/close_48.png");
         private HorizontalLayout orderlineLayout = new HorizontalLayout();
         private Property property;
         private boolean enabled = true;
@@ -345,6 +346,7 @@ public class OrderEditor extends CustomComponent implements
             topButtonLayout.addComponent(btn_customer);
             //topButtonLayout.addComponent(btn_shipping);
             topButtonLayout.addComponent(btn_payments);
+            topButtonLayout.addComponent(btn_close);
             
             topButtonLayout.setSpacing(true);
             
@@ -379,6 +381,8 @@ public class OrderEditor extends CustomComponent implements
             btn_customer.setIcon(resource_recipient_icon);
             btn_payments.setStyleName("IconButton");
             btn_payments.setIcon(resource_payments_icon);
+            btn_close.setStyleName("IconButton");
+            btn_close.setIcon(resource_close_icon);
             
             setCompositionRoot(outerLayout);
 
@@ -426,6 +430,10 @@ public class OrderEditor extends CustomComponent implements
             return btn_payments;
         }
 
+        public Button getToolbarButtonClose() {
+            return btn_close;
+        }
+        
         public TextField getBarcodeField() {
             return txt_barcode;
         }
@@ -780,6 +788,10 @@ public class OrderEditor extends CustomComponent implements
 
     }
 
+    public Button getCloseButton() {
+        return header.getToolbarButtonClose();
+    }
+    
     public void setOrganisationService(OrganisationService organisationService) {
         this.organisationService = organisationService;
         
