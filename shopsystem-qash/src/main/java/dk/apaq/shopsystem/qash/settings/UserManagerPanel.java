@@ -4,11 +4,13 @@ import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -20,10 +22,15 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.CloseEvent;
 import dk.apaq.crud.Crud;
 import dk.apaq.shopsystem.entity.OrganisationUserReference;
+import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.qash.common.CommonDialog;
 import dk.apaq.shopsystem.qash.common.Spacer;
+import dk.apaq.shopsystem.qash.validators.AvailableUsernameValidator;
+import dk.apaq.shopsystem.qash.validators.RepeatFieldValidator;
 import dk.apaq.shopsystem.service.OrganisationService;
+import dk.apaq.shopsystem.service.SystemServiceHolder;
+import dk.apaq.shopsystem.site.form.AccountFormBean;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 
 /**
@@ -83,8 +90,12 @@ public class UserManagerPanel extends CustomComponent {
             layout.addComponent(txtPasswordRepeat, 1, 3);
             
             txtDisplayName.addValidator(new StringLengthValidator("Must be at least 3 characters and no longer than 30.", 3, 30, false));
+            
             txtName.addValidator(new StringLengthValidator("Must be at least 3 characters long and no longer than 30.", 3, 30, false));
-            txtName.addValidator(new StringLengthValidator("Must be at least 5 characters long and no longer than 16.", 3, 30, false));
+            txtName.addValidator(new AvailableUsernameValidator("Username not available."));
+            
+            txtPassword.addValidator(new StringLengthValidator("Must be at least 5 characters long and no longer than 16.", 3, 30, false));
+            txtPasswordRepeat.addValidator(new RepeatFieldValidator(txtPassword, "Password fields are not equal."));
             
             setCompositionRoot(layout);
         }
@@ -158,30 +169,49 @@ public class UserManagerPanel extends CustomComponent {
         btnNewUser.addListener(new Button.ClickListener() {
 
             public void buttonClick(ClickEvent event) {
-                final CreateUserWindow cuw = new CreateUserWindow();
-                final CommonDialog dialog = new CommonDialog("Opret ny bruger", cuw);
+                final Form form = new Form();
+                final UserBean userBean = new UserBean();
+                BeanItem accountItem = new BeanItem(userBean);
+                form.setItemDataSource(accountItem);
+                form.getField("displayName").addValidator(new StringLengthValidator("Must be at least 3 characters and no longer than 30.", 3, 30, false));
+                form.getField("name").addValidator(new StringLengthValidator("Must be at least 3 characters long and no longer than 30.", 3, 30, false));
+                form.getField("name").addValidator(new AvailableUsernameValidator("Username not available."));
+                form.getField("password").addValidator(new StringLengthValidator("Must be at least 5 characters long and no longer than 16.", 3, 30, false));
+                form.getField("repeatedPassword").addValidator(new RepeatFieldValidator(form.getField("password"), "Password fields are not equal."));
+
+                //final CreateUserWindow cuw = new CreateUserWindow();
+                final CommonDialog dialog = new CommonDialog("Opret ny bruger", form);
                 dialog.setModal(true);
                 dialog.setWidth(300, UNITS_PIXELS);
                 dialog.setButtonCaption(CommonDialog.ButtonType.Ok, "Opret bruger");
                 dialog.setButtonCaption(CommonDialog.ButtonType.Cancel, "Annuller");
                 getApplication().getMainWindow().addWindow(dialog);
+                
+                
                 dialog.addListener(new Window.CloseListener() {
 
                     
                     @Override
                     public void windowClose(CloseEvent e) {
                         if(dialog.getResult() == CommonDialog.ButtonType.Ok) {
+                            try{
+                                form.commit();
+                            } catch(InvalidValueException ex) {
+                                getApplication().getMainWindow().addWindow(dialog);
+                                return;
+                            }
+                            
+                            SystemUser user = new SystemUser();
+                            user.setName(userBean.getName());
+                            user.setDisplayName(userBean.getDisplayName());
+                            user.setPassword(userBean.getPassword());
+                            String id = SystemServiceHolder.getSystemService().getSystemUserCrud().create(user);
+                            user = SystemServiceHolder.getSystemService().getSystemUserCrud().read(id);
+                            
+                            OrganisationUserReference reference = new OrganisationUserReference(user);
                             Crud.Complete<String, OrganisationUserReference> users = organsiationService.getUsers();
+                            users.create(reference);
                             
-                            //Create system user
-                            
-                            //Create organisation user using the created systemuser.
-                            /*String id = users.createSystemUser();
-                            SystemUser user = (SystemUser) users.read(id);
-                            user.setDisplayName(cuw.getDisplayName());
-                            user.setName(cuw.getName());
-                            user.setPassword(cuw.getPassword());
-                            users.update(user);*/
                         }
                     }
                 });
