@@ -2,6 +2,7 @@ package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.CrudEvent.WithEntity;
 import dk.apaq.crud.CrudEvent.WithId;
+import dk.apaq.crud.CrudEvent.WithIdAndEntity;
 import dk.apaq.crud.core.BaseCrudListener;
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.filter.core.NotFilter;
@@ -83,12 +84,7 @@ public final class SecurityHandler {
         }
 
         @Override
-        public void onEntityRead(WithEntity<String, Organisation> event) {
-            
-        }
-
-        @Override
-        public void onBeforeEntityUpdate(WithEntity<String, Organisation> event) {
+        public void onBeforeEntityUpdate(WithIdAndEntity<String, Organisation> event) {
             handleEdit(event.getCrud().read(event.getEntity().getId()));
         }
 
@@ -113,6 +109,7 @@ public final class SecurityHandler {
 
     public static class SystemUserSecurity extends BaseCrudListener<String, SystemUser> {
 
+        
         /*
         @Override
         public void onEntityRead(WithEntity<String, Account> event) {
@@ -125,7 +122,7 @@ public final class SecurityHandler {
         }*/
 
         @Override
-        public void onBeforeEntityUpdate(WithEntity<String, SystemUser> event) {
+        public void onBeforeEntityUpdate(WithIdAndEntity<String, SystemUser> event) {
             handleEdit(event.getCrud().read(event.getEntity().getId()));
         }
 
@@ -148,9 +145,8 @@ public final class SecurityHandler {
     
     public static class OrganisationUserReferenceSecurity extends BaseCrudListener<String, OrganisationUserReference> {
 
-        
         @Override
-        public void onBeforeEntityUpdate(WithEntity<String, OrganisationUserReference> event) {
+        public void onBeforeEntityUpdate(WithIdAndEntity<String, OrganisationUserReference> event) {
             handleEdit(event.getCrud().read(event.getEntity().getId()));
         }
 
@@ -206,7 +202,7 @@ public final class SecurityHandler {
         }
 
         @Override
-        public void onEntityRead(WithEntity<String, T> event) {
+        public void onEntityRead(WithIdAndEntity<String, T> event) {
             T entity = event.getEntity();
 
             if(entity==null) {
@@ -219,7 +215,7 @@ public final class SecurityHandler {
         }
 
         @Override
-        public void onBeforeEntityUpdate(WithEntity<String, T> event) {
+        public void onBeforeEntityUpdate(WithIdAndEntity<String, T> event) {
             handleEdit(event.getCrud().read(event.getEntity().getId()));
         }
 

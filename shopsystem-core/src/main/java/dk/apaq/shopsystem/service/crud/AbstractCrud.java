@@ -38,13 +38,13 @@ public abstract class AbstractCrud<I, T extends HasId<I>> extends BaseEditableCr
 
     @Transactional
     public I create() {
-        fireOnBeforeCreate();
         
         if(LOG.isDebugEnabled()) {
             LOG.debug("Creating new entity [type=" + entityClass.getName() + "]");
         }
 
         T entity = createEntityInstance();
+        fireOnBeforeCreate(entity);
         entity = em.merge(entity);
         em.flush();
         fireOnCreate(entity.getId(), entity);

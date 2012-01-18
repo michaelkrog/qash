@@ -7,6 +7,7 @@ package dk.apaq.shopsystem.service.crud;
 
 import dk.apaq.crud.CrudEvent.WithEntity;
 import dk.apaq.crud.CrudEvent.WithId;
+import dk.apaq.crud.CrudEvent.WithIdAndEntity;
 import dk.apaq.crud.HasId;
 import dk.apaq.crud.core.BaseCrudListener;
 
@@ -45,7 +46,7 @@ public class MockCrudListener<I, T extends HasId<I>> extends BaseCrudListener<I,
     }
 
     @Override
-    public void onEntityRead(WithEntity<I, T> we) {
+    public void onEntityRead(WithIdAndEntity<I, T> event) {
         readCalled = true;
     }
 
@@ -55,12 +56,12 @@ public class MockCrudListener<I, T extends HasId<I>> extends BaseCrudListener<I,
     }
 
     @Override
-    public void onEntityUpdate(WithEntity<I, T> we) {
+    public void onEntityUpdate(WithIdAndEntity<I, T> event) {
         updateCalled = true;
     }
 
     @Override
-    public void onEntityCreate(WithEntity<I, T> we) {
+    public void onEntityCreate(WithIdAndEntity<I, T> event) {
         createCalled = true;
     }
 

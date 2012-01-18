@@ -54,8 +54,12 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
     private ApplicationContext context;
     private FileSystem fileSystem;
     private FileSystemPopulator filesystemPopulator;
+    private final SecurityHandler.SystemUserSecurity systemUserSecurity;
+    private final SecurityHandler.OrganisationSecurity organisationSecurity;
 
     public SystemServiceImpl() {
+        organisationSecurity = new SecurityHandler.OrganisationSecurity(this);
+        systemUserSecurity = new SecurityHandler.SystemUserSecurity();
     }
 
     
@@ -88,7 +92,7 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
         LOG.debug("Retrieving OrganisationCrud");
         if(orgCrud==null) {
             orgCrud = (OrganisationCrud) context.getBean("organisationCrud", em);
-            ((CrudNotifier)orgCrud).addListener(new SecurityHandler.OrganisationSecurity(this));
+            ((CrudNotifier)orgCrud).addListener(organisationSecurity);
         }
         return orgCrud;
     }
@@ -98,7 +102,7 @@ public class SystemServiceImpl implements SystemService, ApplicationContextAware
         LOG.debug("Retrieving AccountCrud");
         if(systemUserCrud==null) {
             systemUserCrud = (Crud.Complete<String, SystemUser>) context.getBean("crud", em, SystemUser.class);
-            ((CrudNotifier)systemUserCrud).addListener(new SecurityHandler.SystemUserSecurity());
+            ((CrudNotifier)systemUserCrud).addListener(systemUserSecurity);
         }
         return systemUserCrud;
     }
