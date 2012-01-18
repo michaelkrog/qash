@@ -31,6 +31,9 @@ public class Image extends CmsModule {
         if(path.startsWith("/Content/")) {
             resourceRef = application.getContentResourceReference();
             path=path.substring(9);
+        } else if(path.startsWith("/System/Content/")) {
+            resourceRef = application.getContentResourceReference();
+            path=path.substring(16);
         } else if(path.startsWith("/Themes/")) {
             resourceRef = application.getThemeResourceReference();
             path=path.substring(8);

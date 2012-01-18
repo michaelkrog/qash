@@ -7,6 +7,8 @@ import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.vfs.Directory;
 import dk.apaq.vfs.File;
 import dk.apaq.vfs.Node;
+import dk.apaq.vfs.Path;
+import dk.apaq.vfs.impl.layered.LayeredFileSystem;
 import java.io.IOException;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.request.resource.AbstractResource;
@@ -18,12 +20,12 @@ import org.slf4j.LoggerFactory;
  *
  * @author michael
  */
-public class ResolvingContentResource extends AbstractResource {
+public class ResolvingOrganisationContentResource extends AbstractResource {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ResolvingContentResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ResolvingOrganisationContentResource.class);
     private final SystemService service;
 
-    public ResolvingContentResource(SystemService service) {
+    public ResolvingOrganisationContentResource(SystemService service) {
         this.service = service;
     }
 
@@ -39,7 +41,13 @@ public class ResolvingContentResource extends AbstractResource {
         
         try {
 
-            Directory dir = organisationService.getFileSystem().getRoot().getDirectory("Content", true);
+            //In order to support special handling of images we use layered filesystem.
+            //Symbol requires images from both organisation and system
+            
+            LayeredFileSystem lfs = new LayeredFileSystem(organisationService.getFileSystem());
+            Directory systemImagesDir = service.getFileSystem().getRoot().getDirectory("System",true).getDirectory("Content", true).getDirectory("Images", true);
+            lfs.addLayer(new Path("/Content/Images"), systemImagesDir);
+            Directory dir = lfs.getRoot().getDirectory("Content", true);
 
             for (int i = 0; i < attributes.getParameters().getIndexedCount(); i++) {
                 String nextSegment = attributes.getParameters().get(i).toString();

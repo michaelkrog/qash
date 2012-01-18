@@ -11,7 +11,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 public class ContentResourceReference extends ResourceReference {
 
     private final SystemService service;
-
+    
     public ContentResourceReference(SystemService service) {
         super("ContentResource");
         this.service = service;
@@ -20,7 +20,7 @@ public class ContentResourceReference extends ResourceReference {
     
     @Override
     public IResource getResource() {
-        return new ResolvingContentResource(service);
+        return new ResolvingOrganisationContentResource(service);
     }
     
 }
