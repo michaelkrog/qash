@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlrewrite>
+
+    <!-- ENGLISH -->
+    <rule>
+        <rule>
+            <from>/en/(.*)</from>
+            <to>/$1</to>
+        </rule>
+    </rule>
+
+    <rule>
+        <rule>
+            <from>/en($)</from>
+            <to type="redirect">/en/</to>
+        </rule>
+    </rule>
+
+    <!-- DANISH  -->
+    <rule>
+        <rule>
+            <from>/da/(.*)</from>
+            <to>/$1</to>
+        </rule>
+    </rule>
+
+    <rule>
+        <rule>
+            <from>/da($)</from>
+            <to type="redirect">/da/</to>
+        </rule>
+    </rule>
+</urlrewrite>
