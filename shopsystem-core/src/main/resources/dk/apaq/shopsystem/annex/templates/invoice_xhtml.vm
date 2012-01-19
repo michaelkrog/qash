@@ -25,7 +25,7 @@
             .header table,
             .details table,
             .ordercontent table{
-                width:100%;
+                width:${bodyWidth}px;
                border-spacing: 0px;
 
             }
