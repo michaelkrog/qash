@@ -84,7 +84,7 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <dk.apaq.crud.version>1.1.3-SNAPSHOT</dk.apaq.crud.version>
+        <dk.apaq.crud.version>1.1.2</dk.apaq.crud.version>
         <dk.apaq.filter.version>1.0.10</dk.apaq.filter.version>
         <vaadin.version>6.7.1</vaadin.version>
         <spring.version>3.0.6.RELEASE</spring.version>
