@@ -38,8 +38,9 @@
 
             }
 
+            .header td ,
             .details td {
-                padding-right:4px;
+                padding-right:10px;
             }
 
             .ordercontent table{
