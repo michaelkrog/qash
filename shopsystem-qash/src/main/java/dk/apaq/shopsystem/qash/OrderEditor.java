@@ -1082,7 +1082,7 @@ public class OrderEditor extends CustomComponent implements
                 page = new Page(PageSize.A4, 2, 2, 2, 2);
                 jobName = "Receipt_"+order.getNumber();
             } else {
-                page = new Page(PageSize.A4, 7, 7, 7, 7);
+                page = new Page(PageSize.A4, 10, 10, 10, 10);
                 jobName = "Invoice_"+order.getNumber();
             }
             
