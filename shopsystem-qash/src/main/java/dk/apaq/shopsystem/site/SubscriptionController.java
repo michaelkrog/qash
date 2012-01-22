@@ -42,11 +42,16 @@ public class SubscriptionController {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriptionController.class);
     
-    @Autowired
     private SystemService service;
-    @Autowired
-    PaymentGateway paymentGateway;
+    private PaymentGateway paymentGateway;
 
+    @Autowired
+    public SubscriptionController(SystemService service, PaymentGateway paymentGateway) {
+        this.service = service;
+        this.paymentGateway = paymentGateway;
+    }
+    
+    
     @RequestMapping(value = "/subscribe.htm")
     public ModelAndView handleSubscriptionRequest(@RequestParam(required = true) String organisationId, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
