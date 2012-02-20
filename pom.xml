@@ -65,6 +65,9 @@
                         <format>html</format>
                         <format>xml</format>
                     </formats>
+                    <excludes>
+                        <exclude>dk/apaq/shopsystem/rendering/AbstractCustomParser.class</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
@@ -95,5 +98,5 @@
     <modules>
         <module>shopsystem-core</module>
         <module>shopsystem-qash</module>
-  </modules>
+    </modules>
 </project>
