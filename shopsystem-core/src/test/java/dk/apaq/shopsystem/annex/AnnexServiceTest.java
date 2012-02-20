@@ -15,6 +15,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Date;
@@ -39,6 +40,7 @@ public class AnnexServiceTest extends TestCase {
         Organisation org = new Organisation();
         org.setCompanyName("Apaq");
         org.setTelephone("51923192");
+        org.setBankAccount("1231-2312313123");
         org.setEmail("mail@gmail.com");
         org.setStreet("Stovringparken 10");
         org.setPostalCode("9530");
@@ -175,16 +177,16 @@ public class AnnexServiceTest extends TestCase {
         Organisation org = getOrganisation();
         Order order = getOrder(1);
 
-        //FileOutputStream out = new FileOutputStream("invoice.pdf");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        FileOutputStream out = new FileOutputStream("invoice.pdf");
+        //ByteArrayOutputStream out = new ByteArrayOutputStream();
         
         OrderDocumentContent content = new OrderDocumentContent(org, order, null);
         Page page = new Page(PageSize.A4, 15, 15, 15, 15);
         AnnexContext<OrderDocumentContent, OutputStream> context = new AnnexContext<OrderDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
         annexService.generatePurchaseDocument(context, AnnexType.Invoice, OutputType.Pdf);
         
-        String value = new String(out.toByteArray());
-        assertNotSame(0, value.length());
+        /*String value = new String(out.toByteArray());
+        assertNotSame(0, value.length());*/
     }
     
     public void testGenerateInvoicePrintable() throws Exception {

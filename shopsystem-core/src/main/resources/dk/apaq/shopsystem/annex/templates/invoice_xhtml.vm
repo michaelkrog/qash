@@ -74,14 +74,14 @@
 
             .logo{
                 font-size:24px;
-                font-family:arial;
+                font-family:verdana;
                 color:#6f6f6f;
                 line-height:60px;
             }
 
             body{
                 font-size:10px;
-                font-family: arial;
+                font-family: verdana;
                 width:${bodyWidth}px;
                 /*margin-top: ${pixelMarginTop}px;
                 margin-right: ${pixelMarginRight}px;
