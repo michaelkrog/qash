@@ -16,9 +16,9 @@ import static org.junit.Assert.*;
  *
  * @author krog
  */
-public class FlyingSaucerWebRendererTest {
+public class FlyingSaucerRendererTest {
     
-    public FlyingSaucerWebRendererTest() {
+    public FlyingSaucerRendererTest() {
     }
 
     
@@ -28,7 +28,7 @@ public class FlyingSaucerWebRendererTest {
      */
     @Test
     public void testRenderWebpageToImage() throws IOException {
-        /*
+        
         System.out.println("renderWebpageToImage");
         Device device = new Device() {
 
@@ -60,12 +60,12 @@ public class FlyingSaucerWebRendererTest {
         comparer = new ImageComparer(stonehenge, result);
         comparer.compare();
         assertFalse(comparer.match());
-        */
+        
     }
     
     @Test
     public void testRenderWebpageWithSvgToImage() throws IOException {
-        /*
+        
         System.out.println("renderWebpageToImage");
         Device device = new Device() {
 
@@ -93,7 +93,7 @@ public class FlyingSaucerWebRendererTest {
         comparer.compare();
         assertTrue(comparer.match());
         
-        */
+        
     }
         
 }

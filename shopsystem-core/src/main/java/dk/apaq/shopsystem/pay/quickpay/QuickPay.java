@@ -33,6 +33,7 @@ public class QuickPay implements PaymentGateway {
     private String secretWord = null;
     private String url = null;
     private boolean testMode;
+    private org.apache.http.client.HttpClient httpClient;
     private final static String protocolVersion = "4";
 
 
@@ -52,11 +53,21 @@ public class QuickPay implements PaymentGateway {
         this.testMode = testMode;
     }
 
+    public void setHttpClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
+    
+    private HttpClient getHttpClient() {
+        if(httpClient == null) {
+            httpClient = new DefaultHttpClient();
+        }
+        return httpClient;
+    }
+    
     @Override
     public void cancel(String transactionId) {
         try {
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
-            org.apache.http.client.HttpClient httpclient = new DefaultHttpClient();
             HttpPost post = new HttpPost(url);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
@@ -74,7 +85,7 @@ public class QuickPay implements PaymentGateway {
 
             post.getEntity().writeTo(System.out);
 
-            HttpResponse response = httpclient.execute(post);
+            HttpResponse response = getHttpClient().execute(post);
             HttpEntity entity = response.getEntity();
             ByteArrayOutputStream ba = new ByteArrayOutputStream((int) entity.getContentLength());
             entity.writeTo(ba);
@@ -90,7 +101,6 @@ public class QuickPay implements PaymentGateway {
     public PaymentStatus status(String transactionId) {
         try {
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
-            HttpClient httpclient = new DefaultHttpClient();
             HttpPost post = new HttpPost(url);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
@@ -106,7 +116,7 @@ public class QuickPay implements PaymentGateway {
             nvps.add(new BasicNameValuePair("md5check", md5.getMD5Result()));
             post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 
-            HttpResponse response = httpclient.execute(post);
+            HttpResponse response = getHttpClient().execute(post);
             HttpEntity entity = response.getEntity();
             ByteArrayOutputStream ba = new ByteArrayOutputStream((int) entity.getContentLength());
             entity.writeTo(ba);
@@ -126,7 +136,6 @@ public class QuickPay implements PaymentGateway {
     public void capture(long amountInCents, String transactionId) {
         try {
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
-            HttpClient httpclient = new DefaultHttpClient();
             HttpPost post = new HttpPost(url);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
@@ -143,7 +152,7 @@ public class QuickPay implements PaymentGateway {
             nvps.add(new BasicNameValuePair("md5check", md5.getMD5Result()));
             post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 
-            HttpResponse response = httpclient.execute(post);
+            HttpResponse response = getHttpClient().execute(post);
             HttpEntity entity = response.getEntity();
             ByteArrayOutputStream ba = new ByteArrayOutputStream((int) entity.getContentLength());
             entity.writeTo(ba);
@@ -157,7 +166,6 @@ public class QuickPay implements PaymentGateway {
     public void recurring(String orderNumber, long amountInCents, String currency, boolean autocapture, String transactionId) {
         try {
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
-            HttpClient httpclient = new DefaultHttpClient();
             HttpPost post = new HttpPost(url);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
@@ -177,7 +185,7 @@ public class QuickPay implements PaymentGateway {
             nvps.add(new BasicNameValuePair("md5check", md5.getMD5Result()));
             post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 
-            HttpResponse response = httpclient.execute(post);
+            HttpResponse response = getHttpClient().execute(post);
             HttpEntity entity = response.getEntity();
             ByteArrayOutputStream ba = new ByteArrayOutputStream((int) entity.getContentLength());
             entity.writeTo(ba);
@@ -191,7 +199,6 @@ public class QuickPay implements PaymentGateway {
     public void renew(long amountInCents, String transactionId) {
         try {
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
-            HttpClient httpclient = new DefaultHttpClient();
             HttpPost post = new HttpPost(url);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
@@ -207,7 +214,7 @@ public class QuickPay implements PaymentGateway {
             nvps.add(new BasicNameValuePair("md5check", md5.getMD5Result()));
             post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 
-            HttpResponse response = httpclient.execute(post);
+            HttpResponse response = getHttpClient().execute(post);
             HttpEntity entity = response.getEntity();
             ByteArrayOutputStream ba = new ByteArrayOutputStream((int) entity.getContentLength());
             entity.writeTo(ba);
@@ -223,7 +230,6 @@ public class QuickPay implements PaymentGateway {
     public void refund(long amountInCents, String transactionId) {
         try {
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
-            HttpClient httpclient = new DefaultHttpClient();
             HttpPost post = new HttpPost(url);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
@@ -240,7 +246,7 @@ public class QuickPay implements PaymentGateway {
             nvps.add(new BasicNameValuePair("md5check", md5.getMD5Result()));
             post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 
-            HttpResponse response = httpclient.execute(post);
+            HttpResponse response = getHttpClient().execute(post);
             HttpEntity entity = response.getEntity();
             ByteArrayOutputStream ba = new ByteArrayOutputStream((int) entity.getContentLength());
             entity.writeTo(ba);
@@ -251,42 +257,38 @@ public class QuickPay implements PaymentGateway {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
         QuickPay qp = new QuickPay("29331847", "Q9N7D16ri3EkAeH482fvUtZ67Md29W9LPbY1hxgQ3c34l54w5GImKFp1y636J725T");
         qp.capture(12000, "33942345");
         
-    }
+    }*/
 
     private void checkQuickpayResult(QuickPayResult result) {
         String status = result.getParameter("qpstat");
         String statusMessage = result.getParameter("qpstatmsg");
         
-        if("001".equals(status)) {
+        if("000".equals(status)) {
+            return;
+        } else if("001".equals(status)) {
             throw new PaymentException("001: " + statusMessage + ". Rejected by acquirer.");
-        }
-        if("002".equals(status)) {
+        } else if("002".equals(status)) {
             throw new PaymentException("002: " + statusMessage + ". Communication error.");
-        }
-        if("003".equals(status)) {
+        } else if("003".equals(status)) {
             throw new PaymentException("003: " + statusMessage + ". Card expired.");
-        }
-        if("004".equals(status)) {
+        } else if("004".equals(status)) {
             throw new PaymentException("004: " + statusMessage + ". Transition is not allowed for transaction current state.");
-        }
-        if("005".equals(status)) {
+        } else if("005".equals(status)) {
             throw new PaymentException("005: " + statusMessage + ". Authorization is expired.");
-        }
-        if("006".equals(status)) {
+        } else if("006".equals(status)) {
             throw new PaymentException("006: " + statusMessage + ". Error reported by acquirer.");
-        }
-        if("007".equals(status)) {
+        } else if("007".equals(status)) {
             throw new PaymentException("007: " + statusMessage + ". Error reported by QuickPay.");
-        }
-        if("008".equals(status)) {
+        } else if("008".equals(status)) {
             throw new PaymentException("008: " + statusMessage + ". Error in request data.");
-        }
-        if("009".equals(status)) {
+        } else if("009".equals(status)) {
             throw new PaymentException("009: " + statusMessage + ". Payment aborted by shopper.");
+        } else {
+            throw new PaymentException("Unknown status. [status=" + status + "]");
         }
 
     }

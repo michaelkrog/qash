@@ -97,7 +97,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
         private final URI svgURI;
         private final boolean scaleToFit;
         private final boolean antiAlias;
-        private final SVGUniverse svgUniverse = SVGCache.getSVGUniverse();
+        private final SVGUniverse svgUniverse = new SVGUniverse();// SVGCache.getSVGUniverse();
         private final AffineTransform scaleXform = new AffineTransform();
         private final SVGDiagram diagram;
 
@@ -478,7 +478,7 @@ public class FlyingSaucerRenderer extends AbstractImageRenderer implements PdfRe
      * This methods is syncronized because SvgSalamanders SvgPanel is not thread safe.
      */
     @Override
-    public synchronized BufferedImage renderWebpageToImage(Device device, String url, boolean useCache) {
+    public /*synchronized*/ BufferedImage renderWebpageToImage(Device device, String url, boolean useCache) {
         LOG.debug("Rendering image from url [device={}; url={}; useCache= {}]", new Object[]{device.getScreenWidth() + "x" + device.getScreenHeight(), url, useCache});
         Java2DRenderer renderer = new Java2DRenderer(url, device.getScreenWidth());
 
