@@ -60,8 +60,8 @@ public class OrderList extends CustomComponent implements
     
     private static final Logger LOG = LoggerFactory.getLogger(OrderList.class);
     private static final String[] COLUMNS_STORE = {"delete", "number", "status", "dateChanged", "totalWithTax"};
-    private static final String[] COLUMNS_NOSTORE = {"delete", "number", "outlet", "status", "dateChanged", "totalWithTax"};
-    private static final String[] COLUMNCAPTIONS_STORE = {"", "Number", "Status", "Changed", "Total"};
+    private static final String[] COLUMNS_NOSTORE = {"delete", "number", "outlet", "status", "dateChanged", "dateTimelyPayment", "total", "totalWithTax"};
+    private static final String[] COLUMNCAPTIONS_STORE = {"", "Number", "Status", "Changed", "Due", "Total", "Total(inc. tax)"};
     private static final String[] COLUMNCAPTIONS_NOSTORE = {"", "Number", "Store", "Status", "Changed", "Total"};
     
     private static final String LABEL_INPROCESS = "In process";

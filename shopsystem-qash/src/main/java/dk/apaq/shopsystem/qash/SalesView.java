@@ -1,6 +1,5 @@
 package dk.apaq.shopsystem.qash;
 
-import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -19,9 +18,7 @@ import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Outlet;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.Product;
-import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.service.OrganisationService;
-import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import dk.apaq.vaadin.addon.crudcontainer.SortableCrudContainer;
 
 /**
