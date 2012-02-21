@@ -1,5 +1,8 @@
 package dk.apaq.shopsystem.annex;
 
+import com.lowagie.text.pdf.PdfDictionary;
+import com.lowagie.text.pdf.PdfName;
+import com.lowagie.text.pdf.PdfReader;
 import dk.apaq.shopsystem.entity.ContactInformation;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,16 +13,20 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.entity.Tax;
+import dk.apaq.shopsystem.util.StreamUtils;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.Printable;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.imageio.ImageIO;
 import junit.framework.TestCase;
 
@@ -177,16 +184,23 @@ public class AnnexServiceTest extends TestCase {
         Organisation org = getOrganisation();
         Order order = getOrder(1);
 
-        FileOutputStream out = new FileOutputStream("invoice.pdf");
-        //ByteArrayOutputStream out = new ByteArrayOutputStream();
+        //FileOutputStream out = new FileOutputStream("invoice.pdf");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         
         OrderDocumentContent content = new OrderDocumentContent(org, order, null);
         Page page = new Page(PageSize.A4, 15, 15, 15, 15);
         AnnexContext<OrderDocumentContent, OutputStream> context = new AnnexContext<OrderDocumentContent, OutputStream>(content, out, page, Locale.getDefault());
         annexService.generatePurchaseDocument(context, AnnexType.Invoice, OutputType.Pdf);
         
-        /*String value = new String(out.toByteArray());
-        assertNotSame(0, value.length());*/
+        byte[] data = out.toByteArray();
+        assertNotSame(0, data.length);
+        
+        PdfReader reader = new PdfReader(data);
+        List<String> fonts = new ArrayList(listFonts(reader));
+        assertTrue(fonts.contains("Courier"));
+        
+        FileOutputStream fout = new FileOutputStream("invoice.pdf");
+        StreamUtils.copyThenClose(new ByteArrayInputStream(data), fout);
     }
     
     public void testGenerateInvoicePrintable() throws Exception {
@@ -317,6 +331,61 @@ public class AnnexServiceTest extends TestCase {
         ImageIO.write(img, "png", out);
         String value = new String(out.toByteArray());
         assertNotSame(0, value.length());
+    }
+     
+         /**
+     * Creates a Set containing information about the fonts in the src PDF file.
+     * @param src the path to a PDF file
+     * @throws IOException
+     */
+    public Set<String> listFonts(PdfReader reader) throws IOException {
+        Set<String> set = new TreeSet<String>();
+        PdfDictionary resources;
+        for (int k = 1; k <= reader.getNumberOfPages(); ++k) {
+            resources = reader.getPageN(k).getAsDict(PdfName.RESOURCES);
+            processResource(set, resources);
+        }
+        return set;
+    }
+ 
+    /**
+     * Extracts the font names from page or XObject resources.
+     * @param set the set with the font names
+     * @param resources the resources dictionary
+     */
+    public static void processResource(Set<String> set, PdfDictionary resource) {
+        if (resource == null)
+            return;
+        PdfDictionary xobjects = resource.getAsDict(PdfName.XOBJECT);
+        if (xobjects != null) {
+            for (PdfName key : (Set<PdfName>)xobjects.getKeys()) {
+                processResource(set, xobjects.getAsDict(key));
+            }
+        }
+        PdfDictionary fonts = resource.getAsDict(PdfName.FONT);
+        if (fonts == null)
+            return;
+        PdfDictionary font;
+        for (PdfName key : (Set<PdfName>)fonts.getKeys()) {
+            font = fonts.getAsDict(key);
+            String name = font.getAsName(PdfName.BASEFONT).toString();
+            if (name.length() > 8 && name.charAt(7) == '+') {
+                name = String.format("%s subset (%s)", name.substring(8), name.substring(1, 7));
+            }
+            else {
+                name = name.substring(1);
+                /*PdfDictionary desc = font.getAsDict(PdfName.FONTDESCRIPTOR);
+                if (desc == null)
+                    name += " nofontdescriptor";
+                else if (desc.get(PdfName.FONTFILE) != null)
+                    name += " (Type 1) embedded";
+                else if (desc.get(PdfName.FONTFILE2) != null)
+                    name += " (TrueType) embedded";
+                else if (desc.get(PdfName.FONTFILE3) != null)
+                    name += " (" + font.getAsName(PdfName.SUBTYPE).toString().substring(1) + ") embedded";*/
+            }
+            set.add(name);
+        }
     }
 
     /*public void testPrintReceiptHtml() throws Exception {

@@ -13,6 +13,12 @@
                 margin: ${pageMarginTop}mm ${pageMarginRight}mm ${pageMarginBottom}mm ${pageMarginLeft}mm; 
             }
 
+            @font-face {
+                font-family: Courier ;
+                -fs-pdf-font-embed: embed;
+                -fs-pdf-font-encoding: Identity-H;
+            }
+
 
             .left{
                 text-align: left;
@@ -40,7 +46,7 @@
 
             .header td ,
             .details td {
-                padding-right:10px;
+                /*padding-right:10px;*/
             }
 
             .ordercontent table{
@@ -74,14 +80,14 @@
 
             .logo{
                 font-size:24px;
-                font-family:verdana;
+                font-family: Courier ;
                 color:#6f6f6f;
                 line-height:60px;
             }
 
             body{
                 font-size:10px;
-                font-family: verdana;
+                font-family: Courier ;
                 width:${bodyWidth}px;
                 /*margin-top: ${pixelMarginTop}px;
                 margin-right: ${pixelMarginRight}px;

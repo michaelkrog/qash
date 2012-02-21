@@ -1,7 +1,9 @@
 package dk.apaq.shopsystem.annex;
 
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.pdf.BaseFont;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import java.awt.image.BufferedImage;
 import java.awt.print.Printable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -43,7 +46,16 @@ import org.xhtmlrenderer.swing.Java2DRenderer;
 public class AnnexServiceImpl implements AnnexService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AnnexServiceImpl.class);
+    private static File FONT_DIR = null;
 
+    static {
+        try {
+            FONT_DIR = new File(AnnexServiceImpl.class.getResource("/dk/apaq/shopsystem/annex/fonts").toURI());
+        } catch (URISyntaxException ex) {
+            LOG.error("Unable to access font dir.", ex);
+        }
+    }
+            
     public AnnexServiceImpl() {
         try {
             LOG.info("Initializing AnnexService.");
@@ -386,6 +398,7 @@ public class AnnexServiceImpl implements AnnexService {
     private void generatePdfFromHtml(byte[] htmlData, OutputStream out) throws DocumentException, IOException {
         Document dom = XMLResource.load(new ByteArrayInputStream(htmlData)).getDocument();
         ITextRenderer renderer = new ITextRenderer(72, 72);
+        //renderer.getFontResolver().addFontDirectory(FONT_DIR.toString(), BaseFont.EMBEDDED);
         renderer.setDocument(dom, "http://localhost");
         renderer.layout();
         renderer.createPDF(out);
@@ -395,7 +408,7 @@ public class AnnexServiceImpl implements AnnexService {
     private void generatePngFromHtml(byte[] htmlData, int width, OutputStream out) throws IOException {
         Document dom2 = XMLResource.load(new ByteArrayInputStream(htmlData)).getDocument();
         Java2DRenderer renderer2 = new Java2DRenderer(dom2, width, -1);
-
+        
         BufferedImage image = renderer2.getImage();
         ImageIO.write(image, "PNG", out);
         out.flush();
