@@ -113,30 +113,7 @@
         <url-pattern>/contact.jsp</url-pattern>
     </servlet-mapping>
     
-        <!-- URLRewrite filter -->
-    <filter>
-        <filter-name>UrlRewriteFilter</filter-name>
-        <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
-        <init-param>
-            <param-name>logLevel</param-name>
-            <param-value>WARN</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>UrlRewriteFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    
-       <!-- Locale Filter -->
-    <!--filter>
-        <filter-name>LocaleFilter</filter-name>
-        <filter-class>dk.apaq.shopsystem.filter.LocaleFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>LocaleFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping-->
-    
+
 
     
     <!-- SPRING SECURITY -->
@@ -158,7 +135,30 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
- 
+         <!-- URLRewrite filter -->
+    <filter>
+        <filter-name>UrlRewriteFilter</filter-name>
+        <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+        <init-param>
+            <param-name>logLevel</param-name>
+            <param-value>WARN</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>UrlRewriteFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+       <!-- Locale Filter -->
+    <filter>
+        <filter-name>LocaleFilter</filter-name>
+        <filter-class>dk.apaq.shopsystem.filter.LocaleFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LocaleFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
 
     
     <welcome-file-list>
