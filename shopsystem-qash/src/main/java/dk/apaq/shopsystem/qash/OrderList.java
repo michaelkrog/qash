@@ -323,6 +323,8 @@ public class OrderList extends CustomComponent implements
         if (!initialized) {
             dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
             table.addGeneratedColumn("dateChanged", new FormattedDateGenerator());
+            table.addGeneratedColumn("dateTimelyPayment", new FormattedDateGenerator());
+            table.addGeneratedColumn("total", currencyColumnGenerator);
             table.addGeneratedColumn("totalWithTax", currencyColumnGenerator);
             initialized = true;
         }
