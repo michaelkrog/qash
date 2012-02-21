@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -31,20 +31,19 @@ public class LandingPageController {
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        return new ModelAndView("landingpage", "quote", new QuoteFormBean());
+        return new ModelAndView("landingpage");
     }
     
     @RequestMapping("/sendQuote.htm")
-    public String sendQuote(@ModelAttribute QuoteFormBean quote) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        templateMessage.copyTo(message);
-        message.setText(quote.getMessage());
-        message.setTo("contact@qashapp.com");
-        message.setSubject("Quote from Qash site [" + quote.getFullName() + "]");
-        message.setText("From: " + quote.getFullName() +"("+quote.getEmailAddress()+")\n\n" + quote.getMessage());
+    public void sendQuote(@RequestParam String name, @RequestParam String email, @RequestParam String message) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        templateMessage.copyTo(mail);
+        mail.setTo("contact@qashapp.com");
+        mail.setSubject("Quote from Qash site [" + name + "]");
+        mail.setText("From: " + name +"("+email+")\n\n" + mail);
         
-        mailSender.send(message);
+        mailSender.send(mail); 
         
-        return "redirect:/index.htm";
+        //return "redirect:/index.htm";
     }
 }

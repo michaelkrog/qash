@@ -168,24 +168,24 @@
                     </div>
                     <div class="quote-form">
                         <!-- contact form -->
-                        <form:form action="sendQuote.htm" modelAttribute="quote" id="in-quote-form">
+                        <form id="in-quote-form">
                             <fieldset>
                                 <div class="form-left">
                                     <label for="fullname"><spring:message code="quote.form.fullname"/> <span>*</span></label>
                                     <!--input id="fullname" name="fullname" type="text" /-->
-                                    <form:input id="fullname" path="fullName" />
+                                    <input id="name" name="name" path="fullName" />
                                 </div>
                                 <div class="form-right">
                                     <label for="emailaddress"><spring:message code="quote.form.email"/> <span>*</span></label>
                                     <!--input id="emailaddress" name="emailaddress" type="text" /-->
-                                    <form:input id="emailaddress" path="emailAddress" />
+                                    <input id="email" name="email" path="emailAddress" />
                                 </div>
                                 <label for="message"><spring:message code="quote.form.message"/> <span>*</span></label>
                                 <!--textarea id="message" name="message" cols="10" rows="5"></textarea-->
-                                <form:textarea id="message" path="message" rows="5" cols="10" />
+                                <textarea id="message" name="message" path="message" rows="5" cols="10"> </textarea>
                                 <button type="submit"><spring:message code="quote.form.send"/></button>
                             </fieldset>
-                        </form:form>
+                        </form>
                         <!-- /contact form -->
                     </div>
                 </div>
@@ -251,6 +251,14 @@
         <script type="text/javascript" charset="utf-8">
             $(document).ready(function(){
                 $(".gallery a[rel^='prettyPhoto']").prettyPhoto({animationSpeed:'fast',slideshow:10000, theme: 'autopilot'});
+            });
+            
+            $('#in-quote-form').submit(function() {
+              var data = $(this).serialize();
+              $.get('sendQuote.htm', data, function(data) {
+                  alert("Thank you. We will respond to yoor quote as soon as possible.")
+                });
+              return false;
             });
         </script>
     </body>
