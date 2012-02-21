@@ -52,7 +52,11 @@ public class Country {
      * Retrieves a country from the specified countryCode and translated using the given locale.
      */
     public static Country getCountry(String countryCode, Locale locale) {
-        if(countryCode.length()<2 && countryCode.length()>3) {
+        if(locale == null) {
+            locale = Locale.getDefault();
+        }
+        
+        if(countryCode == null || countryCode.length()<2 || countryCode.length()>3) {
             throw new IllegalArgumentException("Country code must be either an ISO 3166 2-letter code or an ISO 3166 3-letter code.");
         }
 

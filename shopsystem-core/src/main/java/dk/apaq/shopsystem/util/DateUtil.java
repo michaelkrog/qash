@@ -43,7 +43,7 @@ public class DateUtil {
 		//This is awkward. Theres i no way to get the number 
 		//of days in a month. But we can go to the beginning
 		//of the month, then add one month and subtract one day.
-		//That will live us the last day in the current month
+		//That will give us the last day in the current month
 		//(BLAME SUN)
 		date = getBeginningOfMonth(date);
 		date.setMonth(date.getMonth()+1);

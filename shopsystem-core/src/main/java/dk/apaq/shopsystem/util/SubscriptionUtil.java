@@ -38,7 +38,7 @@ public class SubscriptionUtil {
         Organisation customer = subscription.getCustomer().getCustomer();
         String currency = customer.getCurrency();
 
-        double fee = 0;
+        double revenue = 0;
 
         OrganisationService customerOrganisationService = service.getOrganisationService(subscription.getCustomer().getCustomer());
         List<Order> orderList = customerOrganisationService.getOrders().list(orderFilter, null);
@@ -48,10 +48,10 @@ public class SubscriptionUtil {
                 continue;
             }
 
-            fee += order.getTotalWithTax();
+            revenue += order.getTotalWithTax();
         }
 
-        return fee;
+        return revenue;
     }
 
     /**
@@ -59,8 +59,21 @@ public class SubscriptionUtil {
      */
     public static Order generateOrderFromSubscription(SystemService service, Subscription subscription) {
         CustomerRelationship customerRelationship = subscription.getCustomer();
-        Country customerCountry = Country.getCountry(customerRelationship.getCustomer().getCountryCode(), Locale.getDefault());
+        if(customerRelationship==null || customerRelationship.getCustomer() == null) {
+            throw new NullPointerException("CustomerRelationsShip is not set for Subsciption");
+        }
+        
+        String customerCountryCode = customerRelationship.getCustomer().getCountryCode();
+        if(customerCountryCode==null) {
+            //if customer has no countrycode set we will default to the organisations countrycode.
+            customerCountryCode = subscription.getOrganisation().getCountryCode();
+        }
+        
+        if(customerCountryCode==null) {
+            throw new NullPointerException("No countrycode for customer could be resolved.");
+        }
 
+        Country customerCountry = Country.getCountry(customerCountryCode, Locale.getDefault());
         String customerCurrency = customerRelationship.getCustomer().getCurrency();
 
         Order order = new Order();
