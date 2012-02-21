@@ -45,11 +45,15 @@ public class AddressLabel extends CustomComponent {
         if(this.contactInformation == null) {
             lbls[0].setValue(this.nullRepresentation);
         } else {
-            lbls[0].setValue(this.contactInformation.getCompanyName());
+            int i=0;
+            lbls[i++].setValue(this.contactInformation.getCompanyName());
+            if(this.contactInformation.getContactName() != null) {
+                lbls[i++].setValue("Att: "+this.contactInformation.getContactName());
+            }
 
             String addressFormatted = AddressUtil.formatAddress(this.contactInformation, getLocale(), "\n");
             String[] addressSplit = addressFormatted.split("\n");
-            for(int i = 0;i<addressSplit.length && i<lbls.length-1; i++) {
+            for(;i<addressSplit.length && i<lbls.length-1; i++) {
                 lbls[i+1].setValue(addressSplit[i]);
             }
         }
