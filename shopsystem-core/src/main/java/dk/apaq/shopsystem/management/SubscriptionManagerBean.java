@@ -17,7 +17,6 @@ import dk.apaq.shopsystem.pay.PaymentGateway;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.util.Country;
-import dk.apaq.shopsystem.util.SubscriptionUtil;
 import dk.apaq.shopsystem.util.TaxTool;
 import java.text.NumberFormat;
 import java.util.Date;

@@ -9,7 +9,6 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.SubscriptionPricingType;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
-import dk.apaq.shopsystem.util.SubscriptionUtil;
 import java.util.Date;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
