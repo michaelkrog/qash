@@ -1,26 +1,22 @@
-package dk.apaq.shopsystem.util;
+package dk.apaq.shopsystem.management;
 
-import dk.apaq.shopsystem.entity.CustomerRelationship;
-import dk.apaq.shopsystem.entity.IntervalUnit;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
-import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import dk.apaq.shopsystem.entity.Order;
+import dk.apaq.shopsystem.entity.CustomerRelationship;
+import dk.apaq.shopsystem.entity.IntervalUnit;
 import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
-import dk.apaq.shopsystem.entity.Subscription;
 import dk.apaq.shopsystem.entity.SubscriptionPricingType;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
+import dk.apaq.shopsystem.util.SubscriptionUtil;
 import java.util.Date;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import dk.apaq.shopsystem.entity.Order;
+import dk.apaq.shopsystem.entity.Subscription;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.*;
 
 /**
@@ -29,11 +25,13 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/defaultspringcontext.xml"})
-@Transactional
-public class SubscriptionUtilTest {
+public class SubscriptionManagerBeanTest {
     
-    @Autowired
+   @Autowired
     private SystemService service;
+   
+   @Autowired SubscriptionManagerBean subscriptionManagerBean;
+   
     private Organisation organisation;
     private OrganisationService organisationService;
     private CustomerRelationship relationship;
@@ -81,7 +79,7 @@ public class SubscriptionUtilTest {
     public void testGetRevenueSinceLastCharge() throws InterruptedException {
         System.out.println("getRevenueSinceLastCharge");
         
-        double result = SubscriptionUtil.getRevenueSinceLastCharge(service, subscription);
+        double result = subscriptionManagerBean.getRevenueSinceLastCharge(subscription);
         assertEquals(100.0, result,0.5);
     }
 
@@ -89,15 +87,13 @@ public class SubscriptionUtilTest {
     public void testGenerateOrderFromSubscription() {
         System.out.println("generateOrderFromSubscription");
         double expected = 0.1;
-        Order result = SubscriptionUtil.generateOrderFromSubscription(service, subscription);
+        Order result = subscriptionManagerBean.generateOrderFromSubscription(subscription);
         assertEquals(expected, result.getTotalWithTax(), 0.05);
     }
 
     @Test
     public void testIsDueForCollection() {
         System.out.println("isDueForCollection");
-        assertTrue(SubscriptionUtil.isDueForCollection(subscription));
+        assertTrue(subscriptionManagerBean.isDueForCollection(subscription));
     }
-
-    
 }
