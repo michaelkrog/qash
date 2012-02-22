@@ -30,7 +30,7 @@
                 <h1><spring:message code="prices.title"/></h1>
             <br/>
             <ul>
-                    <fmt:formatNumber var="formattedFee" maxFractionDigits="3" value='0.001' type='percent'/>
+                    <fmt:formatNumber var="formattedFee"  value='${orderFee}' currencyCode="${currency}" type='currency'/>
                     <fmt:formatNumber var="formattedMaxFee" value='${maxFee}' currencyCode="${currency}" type='currency'/>
                    
                     <!-- benefit item -->

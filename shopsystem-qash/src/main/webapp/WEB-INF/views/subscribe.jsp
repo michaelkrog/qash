@@ -34,7 +34,7 @@
                 <p>
                     <fmt:formatNumber var="formattedExampleRevenue" value='10000' currencyCode="${currency}" type='currency'/>
                     <fmt:formatNumber var="formattedExampleFee" value='10' currencyCode="${currency}" type='currency'/>
-                    <fmt:formatNumber var="formattedFee" maxFractionDigits="3" value='0.001' type='percent'/>
+                    <fmt:formatNumber var="formattedFee" value='${orderFee}' currencyCode="${currency}" type='currency'/>
                     <fmt:formatNumber var="formattedMinFee" value='${minFee}' currencyCode="${currency}" type='currency'/>
                     <fmt:formatNumber var="formattedMaxFee" value='${maxFee}' currencyCode="${currency}" type='currency'/>
                    
@@ -62,7 +62,7 @@
 
                     </div>
 
-                    * <spring:message code="subscribe.footnote" argumentSeparator="|" arguments="${formattedExampleRevenue}|${formattedFee}|${formattedExampleFee}"/>
+                    <!-- * <spring:message code="subscribe.footnote" argumentSeparator="|" arguments="${formattedExampleRevenue}|${formattedFee}|${formattedExampleFee}"/> -->
 
                 </p>
             </div>

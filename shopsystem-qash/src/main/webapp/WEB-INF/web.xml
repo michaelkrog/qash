@@ -135,6 +135,16 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
+           <!-- Locale Filter -->
+    <filter>
+        <filter-name>LocaleFilter</filter-name>
+        <filter-class>dk.apaq.shopsystem.filter.LocaleFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LocaleFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
          <!-- URLRewrite filter -->
     <filter>
         <filter-name>UrlRewriteFilter</filter-name>
@@ -149,15 +159,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
-       <!-- Locale Filter -->
-    <filter>
-        <filter-name>LocaleFilter</filter-name>
-        <filter-class>dk.apaq.shopsystem.filter.LocaleFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>LocaleFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+
     
 
     

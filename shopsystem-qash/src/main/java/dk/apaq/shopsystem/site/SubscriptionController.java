@@ -3,24 +3,18 @@ package dk.apaq.shopsystem.site;
 import dk.apaq.filter.Filter;
 import dk.apaq.filter.core.AndFilter;
 import dk.apaq.filter.core.CompareFilter;
-import dk.apaq.shopsystem.entity.ContactInformation;
 import dk.apaq.shopsystem.entity.CustomerRelationship;
 import dk.apaq.shopsystem.entity.IntervalUnit;
-import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Subscription;
 import dk.apaq.shopsystem.entity.SubscriptionPricingType;
-import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.management.SubscriptionManagerBean;
 import dk.apaq.shopsystem.pay.PaymentGateway;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
-import dk.apaq.shopsystem.util.Country;
-import dk.apaq.shopsystem.util.SubscriptionUtil;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -65,11 +59,13 @@ public class SubscriptionController {
             return new ModelAndView("redirect:/dashboard.htm");
         }
 
+        String currency = subscriptionManagerBean.getPaymentCurrencyForOrganisation(org);
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("organisationId", organisationId);
-        model.put("currency", getPaymentCurrencyForOrganisation(org));
-        model.put("minFee", 49.0);
-        model.put("maxFee", 249.0);
+        model.put("currency", currency);
+        model.put("orderFee", subscriptionManagerBean.getOrderFee(currency));
+        model.put("minFee", subscriptionManagerBean.getMinMonthlyFee(currency));
+        model.put("maxFee", subscriptionManagerBean.getMaxMonthlyFee(currency));
         return new ModelAndView("subscribe", model);
     }
 
@@ -92,7 +88,7 @@ public class SubscriptionController {
             
             Subscription subscription = new Subscription();
             subscription.setAutoRenew(true);
-            subscription.setCurrency(getPaymentCurrencyForOrganisation(org));
+            subscription.setCurrency(subscriptionManagerBean.getPaymentCurrencyForOrganisation(org));
             subscription.setInterval(1);
             subscription.setIntervalUnit(IntervalUnit.Month);
             subscription.setPricingType(SubscriptionPricingType.QashUsageBase);
@@ -159,23 +155,6 @@ public class SubscriptionController {
             return new ModelAndView("redirect:/dashboard.htm");
     }
         
-    private String getPaymentCurrencyForOrganisation(Organisation org) {
-        String countryCode = org.getCountryCode();
-        if (countryCode == null) {
-            countryCode = "DK";
-        }
-
-        String currency = null;
-        
-        Country country = Country.getCountry(countryCode, Locale.getDefault());
-        if ("DK".equals(country.getCode())) {
-            currency = "DKK";
-        } else if (country.isWithinEu()) {
-            currency = "EUR";
-        } else {
-            currency = "USD";
-        }
-        return currency;
-    }
+   
     
 }
