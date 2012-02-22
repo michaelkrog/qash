@@ -57,7 +57,7 @@ public class Country {
         }
         
         if(countryCode == null || countryCode.length()<2 || countryCode.length()>3) {
-            throw new IllegalArgumentException("Country code must be either an ISO 3166 2-letter code or an ISO 3166 3-letter code.");
+            throw new IllegalArgumentException("Country code must be either an ISO 3166 2-letter code or an ISO 3166 3-letter code. [countryCode="+countryCode+"]");
         }
 
         if(countryCode.length() == 2) {
