@@ -20,8 +20,11 @@ import dk.apaq.shopsystem.util.Country;
 import dk.apaq.shopsystem.util.TaxTool;
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.joda.time.DateTime;
@@ -33,14 +36,12 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 
 /**
- * SHOULD IMPLEMENT AN INTERFACE AND EXPOSE METHODS FOR OTHERS THAT NEED TO FORCE SUBSCRIPTION MAINTAINING
  * @author krog
  */
 public class SubscriptionManagerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriptionManagerBean.class);
     private static final NumberFormat feeFormatter = NumberFormat.getPercentInstance();
-    
     @PersistenceContext
     private EntityManager em;
     @Autowired
@@ -53,10 +54,61 @@ public class SubscriptionManagerBean {
     private MailSender mailSender;
     @Autowired
     private SimpleMailMessage templateMessage;
-    
+    private Map<String, Double> minMonthlyFeeMap;
+    private Map<String, Double> maxMonthlyFeeMap;
+    private Map<String, Double> orderFeeMap;
 
     public SubscriptionManagerBean() {
         this.orderNumberFormatter.setMinimumIntegerDigits(4);
+    }
+
+    @PostConstruct
+    protected void init() {
+        if (minMonthlyFeeMap == null) {
+            minMonthlyFeeMap = new HashMap<String, Double>();
+        }
+        if (maxMonthlyFeeMap == null) {
+            maxMonthlyFeeMap = new HashMap<String, Double>();
+        }
+        if (orderFeeMap == null) {
+            orderFeeMap = new HashMap<String, Double>();
+        }
+    }
+
+    public void setMinMonthlyFeeMap(Map<String, Double> minMonthlyFeeMap) {
+        this.minMonthlyFeeMap = minMonthlyFeeMap;
+    }
+
+    public void setMaxMonthlyFeeMap(Map<String, Double> maxMonthlyFeeMap) {
+        this.maxMonthlyFeeMap = maxMonthlyFeeMap;
+    }
+
+    public void setOrderFeeMap(Map<String, Double> orderFeeMap) {
+        this.orderFeeMap = orderFeeMap;
+    }
+
+    public double getMinMonthlyFee(String currency) {
+        if (minMonthlyFeeMap.containsKey(currency)) {
+            return minMonthlyFeeMap.get(currency);
+        } else {
+            return 0;
+        }
+    }
+
+    public double getMaxMonthlyFee(String currency) {
+        if (minMonthlyFeeMap.containsKey(currency)) {
+            return maxMonthlyFeeMap.get(currency);
+        } else {
+            return 0;
+        }
+    }
+
+    public double getOrderFee(String currency) {
+        if (minMonthlyFeeMap.containsKey(currency)) {
+            return orderFeeMap.get(currency);
+        } else {
+            return 0;
+        }
     }
 
     /**
@@ -86,38 +138,59 @@ public class SubscriptionManagerBean {
         return revenue;
     }
     
+    public int countCompletedOrdersSinceLastCharge(Subscription subscription) {
+
+        Date dateFrom = subscription.getDateCharged() == null ? subscription.getDateCreated() : subscription.getDateCharged();
+        Filter orderFilter = new AndFilter(new CompareFilter("status", OrderStatus.Completed, CompareFilter.CompareType.Equals),
+                new CompareFilter("dateChanged", dateFrom, CompareFilter.CompareType.GreaterOrEqual));
+        Organisation customer = subscription.getCustomer().getCustomer();
+        OrganisationService customerOrganisationService = service.getOrganisationService(customer);
+        List<String> orderList = customerOrganisationService.getOrders().listIds(orderFilter, null);
+        return orderList.size();
+    }
+
     /**
      * Generate a new order for the subscription.
      */
     public Order generateOrderFromSubscription(Subscription subscription) {
         CustomerRelationship customerRelationship = subscription.getCustomer();
-        if(customerRelationship==null || customerRelationship.getCustomer() == null) {
+        if (customerRelationship == null || customerRelationship.getCustomer() == null) {
             throw new NullPointerException("CustomerRelationsShip is not set for Subsciption");
         }
-        
+
         String customerCountryCode = customerRelationship.getCustomer().getCountryCode();
-        if(customerCountryCode==null) {
+        if (customerCountryCode == null) {
             //if customer has no countrycode set we will default to the organisations countrycode.
             customerCountryCode = subscription.getOrganisation().getCountryCode();
         }
-        
-        if(customerCountryCode==null) {
+
+        if (customerCountryCode == null) {
             throw new NullPointerException("No countrycode for customer could be resolved.");
         }
 
         Country customerCountry = Country.getCountry(customerCountryCode, Locale.getDefault());
-        String customerCurrency = customerRelationship.getCustomer().getCurrency();
+        String paymentCurrency = getPaymentCurrencyForOrganisation(customerRelationship.getCustomer());
+        double minFee = getMinMonthlyFee(paymentCurrency);
+        double maxFee = getMaxMonthlyFee(paymentCurrency);
 
         Order order = new Order();
 
         //1: Find out how much to collect
         if (subscription.getPricingType() == SubscriptionPricingType.QashUsageBase) {
             //1a: if qashUsageBased subscription calculate usage fee
-            order.setCurrency(customerCurrency);
-            double revenue = getRevenueSinceLastCharge(subscription);
-            double fee = revenue * customerRelationship.getCustomer().getFeePercentage();
+            order.setCurrency(paymentCurrency);
+            int noOfOrders = countCompletedOrdersSinceLastCharge(subscription);
+            double fee = noOfOrders * getOrderFee(paymentCurrency);
+            
+            if(fee<minFee) {
+                fee = minFee;
+            }
+            
+            if(fee>maxFee) {
+                fee = maxFee;
+            }
 
-            order.addOrderLine("Fee for revenue (" + feeFormatter.format(fee) + ")", 1, fee, TaxTool.getTaxBasedOnCountry(customerCountry));
+            order.addOrderLine("Qash fee for " + noOfOrders + " orders", 1, fee, TaxTool.getTaxBasedOnCountry(customerCountry));
         } else {
             order.setCurrency(subscription.getCurrency());
 
@@ -157,7 +230,7 @@ public class SubscriptionManagerBean {
         return cutOffTime.isBeforeNow();
 
     }
-    
+
     public void maintainSubscriptions() {
         //To ensure best performance, we will retrieve the subscriptions directly 
         //through the entitymanager instead of traversing all organsiations through 
@@ -170,10 +243,10 @@ public class SubscriptionManagerBean {
         for (Subscription subscription : subscriptions) {
 
             //ensure that the subscription is to be collected for
-            if(!isDueForCollection(subscription)) {
+            if (!isDueForCollection(subscription)) {
                 continue;
             }
-            
+
             performCollection(subscription);
 
             //Sleep a bit to make time for other threads also
@@ -187,18 +260,18 @@ public class SubscriptionManagerBean {
     public void performCollection(Subscription subscription) {
         OrganisationService orgService = service.getOrganisationService(subscription.getOrganisation());
         SystemUser adminUser = getAdminUserForOrganisation(subscription.getCustomer().getCustomer());
-        
+
         //1: generate order
         Order order = generateOrderFromSubscription(subscription);
-        
+
         //2: Create order
         String id = orgService.getOrders().create(order);
         order = orgService.getOrders().read(id);
-        
+
         //3:Update charge date on subscription
         subscription.setDateCharged(new Date());
         orgService.getSubscriptions().update(subscription);
-        
+
         //4: If missing payment info send user mail
         if (subscription.getSubscriptionPaymentId() == null) {
             if (adminUser != null) {
@@ -210,7 +283,7 @@ public class SubscriptionManagerBean {
                         "Dear " + adminUser.getDisplayName()
                         + "\n\nWe are about to withdraw a payment for your subscription but we dont have your payment information.\n"
                         + "Please go to the following link in order to fulfill your payment.\n"
-                        + "http://qashapp.com/payment.html?id="+order.getId()+"\n\n"
+                        + "http://qashapp.com/payment.html?id=" + order.getId() + "\n\n"
                         + "If we are not able to withdraw the payment within 14 days we will automatically cancel your subscription.\n\n"
                         + "Best Regards\n"
                         + "The Qash team.");
@@ -224,7 +297,7 @@ public class SubscriptionManagerBean {
             return;
         }
         double paymentAmount = order.getTotalWithTax();
-        
+
         //5: If unable to authorize recurring payment send user mail
         try {
             paymentGateway.recurring(orderNumberFormatter.format(order.getNumber()), (int) (paymentAmount * 100), order.getCurrency(), false, subscription.getSubscriptionPaymentId());
@@ -238,7 +311,7 @@ public class SubscriptionManagerBean {
                         "Dear " + adminUser.getDisplayName()
                         + "\n\nWe were unable withdraw a payment for your subscription using the payment information you gave us earlier.\n"
                         + "Please go to the following link in order to fulfill your payment.\n"
-                        + "http://qashapp.com/payment.html?id="+order.getId()+"\n\n"
+                        + "http://qashapp.com/payment.html?id=" + order.getId() + "\n\n"
                         + "If we are not able to withdraw the payment within 14 days we will automatically cancel your subscription.\n\n"
                         + "Best Regards\n"
                         + "The Qash team.");
@@ -251,17 +324,17 @@ public class SubscriptionManagerBean {
             }
             return;
         }
-        
+
         //6: register payments for order
         Payment payment = new Payment();
         payment.setAmount(paymentAmount);
         payment.setOrderId(order.getId());
         payment.setPaymentType(PaymentType.Card);
         orgService.getPayments().create(payment);
-        
+
         //7: capture amount
         paymentGateway.capture((int) (paymentAmount * 100), subscription.getSubscriptionPaymentId());
-        
+
         //8: Send receipt
         if (adminUser != null) {
             //Unable to authorize payment - send mail to user regarding missing payment information
@@ -285,9 +358,26 @@ public class SubscriptionManagerBean {
         }
     }
 
+    public String getPaymentCurrencyForOrganisation(Organisation org) {
+        String countryCode = org.getCountryCode();
+        if (countryCode == null) {
+            countryCode = "DK";
+        }
+
+        String currency = null;
+
+        Country country = Country.getCountry(countryCode, Locale.getDefault());
+        if ("DK".equals(country.getCode())) {
+            currency = "DKK";
+        } else if (country.isWithinEu()) {
+            currency = "EUR";
+        } else {
+            currency = "USD";
+        }
+        return currency;
+    }
+
     private SystemUser getAdminUserForOrganisation(Organisation organisation) {
         return null;
     }
-
-
 }

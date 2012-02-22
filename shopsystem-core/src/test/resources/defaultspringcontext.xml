@@ -86,7 +86,30 @@
     <bean id="mailSender" class="dk.apaq.shopsystem.service.MockMailSender"/>
 
     <!-- Subscription -->
-    <bean id="subscriptionManagerBean" class="dk.apaq.shopsystem.management.SubscriptionManagerBean"/>
+    <bean id="subscriptionManagerBean" class="dk.apaq.shopsystem.management.SubscriptionManagerBean">
+        <property name="minMonthlyFeeMap">
+            <map>
+                <entry key="DKK" value="${prices.minimumMonthlyFee.DKK}"/>
+                <entry key="USD" value="${prices.minimumMonthlyFee.USD}"/>
+                <entry key="EUR" value="${prices.minimumMonthlyFee.EUR}"/>
+            </map>
+        </property>
+        <property name="maxMonthlyFeeMap">
+            <map>
+                <entry key="DKK" value="${prices.maximumMonthlyFee.DKK}"/>
+                <entry key="USD" value="${prices.maximumMonthlyFee.USD}"/>
+                <entry key="EUR" value="${prices.maximumMonthlyFee.EUR}"/>
+            </map>
+        </property>
+        <property name="orderFeeMap">
+            <map>
+                <entry key="DKK" value="${prices.orderFee.DKK}"/>
+                <entry key="USD" value="${prices.orderFee.USD}"/>
+                <entry key="EUR" value="${prices.orderFee.EUR}"/>
+            </map>
+        </property>
+        
+    </bean>
 
     <!-- this is a template message that we can pre-load with default state -->
     <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">

@@ -85,7 +85,7 @@ public class SubscriptionManagerBeanTest {
     @Test
     public void testGenerateOrderFromSubscription() {
         System.out.println("generateOrderFromSubscription");
-        double expected = 0.1;
+        double expected = 36.25;
         Order result = subscriptionManagerBean.generateOrderFromSubscription(subscription);
         assertEquals(expected, result.getTotalWithTax(), 0.05);
     }
