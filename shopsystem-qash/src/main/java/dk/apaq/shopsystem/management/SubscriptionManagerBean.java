@@ -24,7 +24,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 
 /**
- *
+ * SHOULD IMPLEMENT AN INTERFACE AND EXPOSE METHODS FOR OTHERS THAT NEED TO FORCE SUBSCRIPTION MAINTAINING
  * @author krog
  */
 public class SubscriptionManagerBean {
@@ -65,96 +65,44 @@ public class SubscriptionManagerBean {
                 continue;
             }
             
-            OrganisationService orgService = service.getOrganisationService(subscription.getOrganisation());
-            SystemUser adminUser = getAdminUserForOrganisation(subscription.getCustomer().getCustomer());
+            performCollection(subscription);
 
-            //1: generate order
-            Order order = SubscriptionUtil.generateOrderFromSubscription(service, subscription);
-
-            //2: Create order
-            String id = orgService.getOrders().create(order);
-            order = orgService.getOrders().read(id);
-            
-            //3:Update charge date on subscription
-            subscription.setDateCharged(new Date());
-            orgService.getSubscriptions().update(subscription);
-
-            //4: If missing payment info send user mail
-            if (subscription.getSubscriptionPaymentId() == null) {
-                if (adminUser != null) {
-                    //TODO Unable to authorize payment - send mail to user regarding missing payment information
-                    SimpleMailMessage msg = this.templateMessage == null ? new SimpleMailMessage() : new SimpleMailMessage(this.templateMessage);
-                    msg.setSubject("New account");
-                    msg.setTo(adminUser.getEmail());
-                    msg.setText(
-                            "Dear " + adminUser.getDisplayName()
-                            + "\n\nWe are about to withdraw a payment for your subscription but we dont have your payment information.\n"
-                            + "Please go to the following link in order to fulfill your payment.\n"
-                            + "http://qashapp.com/payment.html?id="+order.getId()+"\n\n"
-                            + "If we are not able to withdraw the payment within 14 days we will automatically cancel your subscription.\n\n"
-                            + "Best Regards\n"
-                            + "The Qash team.");
-                    try {
-                        this.mailSender.send(msg);
-                    } catch (MailException ex) {
-                        // simply log it and go on...
-                        LOG.error("Unable to send mail.", ex);
-                    }
-                }
-                continue;
-            }
-
-            double paymentAmount = order.getTotalWithTax();
-
-            //5: If unable to authorize recurring payment send user mail
+            //Sleep a bit to make time for other threads also
             try {
-                paymentGateway.recurring(orderNumberFormatter.format(order.getNumber()), (int) (paymentAmount * 100), order.getCurrency(), false, subscription.getSubscriptionPaymentId());
-            } catch (PaymentException ex) {
-                if (adminUser != null) {
-                    //Unable to authorize payment - send mail to user regarding missing payment information
-                    SimpleMailMessage msg = this.templateMessage == null ? new SimpleMailMessage() : new SimpleMailMessage(this.templateMessage);
-                    msg.setSubject("New account");
-                    msg.setTo(adminUser.getEmail());
-                    msg.setText(
-                            "Dear " + adminUser.getDisplayName()
-                            + "\n\nWe were unable withdraw a payment for your subscription using the payment information you gave us earlier.\n"
-                            + "Please go to the following link in order to fulfill your payment.\n"
-                            + "http://qashapp.com/payment.html?id="+order.getId()+"\n\n"
-                            + "If we are not able to withdraw the payment within 14 days we will automatically cancel your subscription.\n\n"
-                            + "Best Regards\n"
-                            + "The Qash team.");
-                    try {
-                        this.mailSender.send(msg);
-                    } catch (MailException ex2) {
-                        // simply log it and go on...
-                        LOG.error("Unable to send mail.", ex);
-                    }
-                }
-                continue;
+                Thread.sleep(50);
+            } catch (InterruptedException ex) {
             }
+        }
+    }
 
-            //6: register payments for order
-            Payment payment = new Payment();
-            payment.setAmount(paymentAmount);
-            payment.setOrderId(order.getId());
-            payment.setPaymentType(PaymentType.Card);
-            orgService.getPayments().create(payment);
-
-            //7: capture amount
-            paymentGateway.capture((int) (paymentAmount * 100), subscription.getSubscriptionPaymentId());
-
-            //8: Send receipt
+    public void performCollection(Subscription subscription) {
+        OrganisationService orgService = service.getOrganisationService(subscription.getOrganisation());
+        SystemUser adminUser = getAdminUserForOrganisation(subscription.getCustomer().getCustomer());
+        
+        //1: generate order
+        Order order = SubscriptionUtil.generateOrderFromSubscription(service, subscription);
+        
+        //2: Create order
+        String id = orgService.getOrders().create(order);
+        order = orgService.getOrders().read(id);
+        
+        //3:Update charge date on subscription
+        subscription.setDateCharged(new Date());
+        orgService.getSubscriptions().update(subscription);
+        
+        //4: If missing payment info send user mail
+        if (subscription.getSubscriptionPaymentId() == null) {
             if (adminUser != null) {
-                //Unable to authorize payment - send mail to user regarding missing payment information
+                //TODO Unable to authorize payment - send mail to user regarding missing payment information
                 SimpleMailMessage msg = this.templateMessage == null ? new SimpleMailMessage() : new SimpleMailMessage(this.templateMessage);
                 msg.setSubject("New account");
                 msg.setTo(adminUser.getEmail());
                 msg.setText(
                         "Dear " + adminUser.getDisplayName()
-                        + "\n\nWe have withdrawn a payment for your subscription with us.\n\n"
-                        + "Amount: " + amountFormatter.format(paymentAmount) + "\n\n"
-                        + "Please login to your account to retrieve invoices when needed.\n"
-                        + "http://qashapp.com\n\n"
+                        + "\n\nWe are about to withdraw a payment for your subscription but we dont have your payment information.\n"
+                        + "Please go to the following link in order to fulfill your payment.\n"
+                        + "http://qashapp.com/payment.html?id="+order.getId()+"\n\n"
+                        + "If we are not able to withdraw the payment within 14 days we will automatically cancel your subscription.\n\n"
                         + "Best Regards\n"
                         + "The Qash team.");
                 try {
@@ -164,11 +112,66 @@ public class SubscriptionManagerBean {
                     LOG.error("Unable to send mail.", ex);
                 }
             }
-
-            //9: Sleep a bit to make time for other threads also
+            return;
+        }
+        double paymentAmount = order.getTotalWithTax();
+        
+        //5: If unable to authorize recurring payment send user mail
+        try {
+            paymentGateway.recurring(orderNumberFormatter.format(order.getNumber()), (int) (paymentAmount * 100), order.getCurrency(), false, subscription.getSubscriptionPaymentId());
+        } catch (PaymentException ex) {
+            if (adminUser != null) {
+                //Unable to authorize payment - send mail to user regarding missing payment information
+                SimpleMailMessage msg = this.templateMessage == null ? new SimpleMailMessage() : new SimpleMailMessage(this.templateMessage);
+                msg.setSubject("New account");
+                msg.setTo(adminUser.getEmail());
+                msg.setText(
+                        "Dear " + adminUser.getDisplayName()
+                        + "\n\nWe were unable withdraw a payment for your subscription using the payment information you gave us earlier.\n"
+                        + "Please go to the following link in order to fulfill your payment.\n"
+                        + "http://qashapp.com/payment.html?id="+order.getId()+"\n\n"
+                        + "If we are not able to withdraw the payment within 14 days we will automatically cancel your subscription.\n\n"
+                        + "Best Regards\n"
+                        + "The Qash team.");
+                try {
+                    this.mailSender.send(msg);
+                } catch (MailException ex2) {
+                    // simply log it and go on...
+                    LOG.error("Unable to send mail.", ex);
+                }
+            }
+            return;
+        }
+        
+        //6: register payments for order
+        Payment payment = new Payment();
+        payment.setAmount(paymentAmount);
+        payment.setOrderId(order.getId());
+        payment.setPaymentType(PaymentType.Card);
+        orgService.getPayments().create(payment);
+        
+        //7: capture amount
+        paymentGateway.capture((int) (paymentAmount * 100), subscription.getSubscriptionPaymentId());
+        
+        //8: Send receipt
+        if (adminUser != null) {
+            //Unable to authorize payment - send mail to user regarding missing payment information
+            SimpleMailMessage msg = this.templateMessage == null ? new SimpleMailMessage() : new SimpleMailMessage(this.templateMessage);
+            msg.setSubject("New account");
+            msg.setTo(adminUser.getEmail());
+            msg.setText(
+                    "Dear " + adminUser.getDisplayName()
+                    + "\n\nWe have withdrawn a payment for your subscription with us.\n\n"
+                    + "Amount: " + amountFormatter.format(paymentAmount) + "\n\n"
+                    + "Please login to your account to retrieve invoices when needed.\n"
+                    + "http://qashapp.com\n\n"
+                    + "Best Regards\n"
+                    + "The Qash team.");
             try {
-                Thread.sleep(50);
-            } catch (InterruptedException ex) {
+                this.mailSender.send(msg);
+            } catch (MailException ex) {
+                // simply log it and go on...
+                LOG.error("Unable to send mail.", ex);
             }
         }
     }

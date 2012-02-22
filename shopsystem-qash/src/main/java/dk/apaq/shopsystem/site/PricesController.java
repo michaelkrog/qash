@@ -1,6 +1,8 @@
 package dk.apaq.shopsystem.site;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +21,9 @@ public class PricesController {
     @RequestMapping("/prices.htm")
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        return new ModelAndView("prices");
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("maxFee", 249.0);
+        model.put("currency", "DKK");
+        return new ModelAndView("prices", model);
     }
 }

@@ -11,10 +11,12 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Subscription;
 import dk.apaq.shopsystem.entity.SubscriptionPricingType;
 import dk.apaq.shopsystem.entity.Tax;
+import dk.apaq.shopsystem.management.SubscriptionManagerBean;
 import dk.apaq.shopsystem.pay.PaymentGateway;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.util.Country;
+import dk.apaq.shopsystem.util.SubscriptionUtil;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -44,11 +46,13 @@ public class SubscriptionController {
     
     private SystemService service;
     private PaymentGateway paymentGateway;
+    private SubscriptionManagerBean subscriptionManagerBean;
 
     @Autowired
-    public SubscriptionController(SystemService service, PaymentGateway paymentGateway) {
+    public SubscriptionController(SystemService service, PaymentGateway paymentGateway, SubscriptionManagerBean managerBean) {
         this.service = service;
         this.paymentGateway = paymentGateway;
+        this.subscriptionManagerBean = managerBean;
     }
     
     
@@ -61,9 +65,11 @@ public class SubscriptionController {
             return new ModelAndView("redirect:/dashboard.htm");
         }
 
-        Map<String, String> model = new HashMap<String, String>();
+        Map<String, Object> model = new HashMap<String, Object>();
         model.put("organisationId", organisationId);
         model.put("currency", getPaymentCurrencyForOrganisation(org));
+        model.put("minFee", 49.0);
+        model.put("maxFee", 249.0);
         return new ModelAndView("subscribe", model);
     }
 
@@ -117,6 +123,7 @@ public class SubscriptionController {
     }
     
     @RequestMapping(value="/unsubscribe_do.htm",method= RequestMethod.GET)
+    @Transactional
     public ModelAndView onUnsubscribe(@RequestParam(required=true) String organisationId) {
             Organisation org = service.getOrganisationCrud().read(organisationId);
             OrganisationService mainOrganisationService = service.getOrganisationService(service.getMainOrganisation());
@@ -126,18 +133,28 @@ public class SubscriptionController {
                 org.setSubscriber(false);
                 service.getOrganisationCrud().update(org);
 
-                //Do charge for orders not charged for
-
-                //Delete subscription
+                //Find subscription
+                Subscription subscription = null;
                 CustomerRelationship relationship = mainOrganisationService.getCustomerRelationship(org, false);
                 if(relationship!=null) {
                     Filter filter = new AndFilter(new CompareFilter("customer", relationship, CompareFilter.CompareType.Equals),
                                                 new CompareFilter("pricingType", SubscriptionPricingType.QashUsageBase, CompareFilter.CompareType.Equals));
                     List<String> idlist = mainOrganisationService.getSubscriptions().listIds(filter, null);
-                    for(String id : idlist) {
-                        mainOrganisationService.getSubscriptions().delete(id);
+                    if(!idlist.isEmpty()) {
+                        subscription = mainOrganisationService.getSubscriptions().read(idlist.get(0));
                     }
+                    
                 }
+                
+                if(subscription != null) {
+                    //Delete subscription
+                    mainOrganisationService.getSubscriptions().delete(subscription.getId());
+                    
+                    //Do charge for orders not charged for
+                    subscriptionManagerBean.performCollection(subscription);
+
+                }
+                
             }
             return new ModelAndView("redirect:/dashboard.htm");
     }
