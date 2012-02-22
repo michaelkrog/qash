@@ -19,6 +19,9 @@ import org.joda.time.DateTime;
 
 /**
  * Utility class for Subscriptions
+ * 
+ * SHOULD BE MOVED TO SubscriptionManagerBean
+ * 
  * @author krog
  */
 public class SubscriptionUtil {
