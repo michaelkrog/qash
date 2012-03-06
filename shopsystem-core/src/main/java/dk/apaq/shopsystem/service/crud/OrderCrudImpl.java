@@ -86,11 +86,14 @@ public class OrderCrudImpl extends ContentCrud<Order> {
             long invoicenumber = organisationService.getInvoiceSequence().increment();
          
             Date invoiceDate = new Date();
-            Date timelyPayment = new Date(invoiceDate.getTime() + (DAYINMILLIS * organisation.getDefaultPaymentPeriodInDays()));
-
+            
             entity.setInvoiceNumber(invoicenumber);
             entity.setDateInvoiced(invoiceDate);
-            entity.setDateTimelyPayment(timelyPayment);
+            
+            if(entity.getDateTimelyPayment()==null) {
+                Date timelyPayment = new Date(invoiceDate.getTime() + (DAYINMILLIS * organisation.getDefaultPaymentPeriodInDays()));
+                entity.setDateTimelyPayment(timelyPayment);
+            }
         }
         em.merge(entity);
         em.flush();

@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  * @author krog
@@ -231,13 +232,13 @@ public class SubscriptionManagerBean {
 
     }
 
+    @Scheduled(cron="0 0 * * *")
     public void maintainSubscriptions() {
         //To ensure best performance, we will retrieve the subscriptions directly 
         //through the entitymanager instead of traversing all organsiations through 
         //the service.
 
-        String sql = "select s from Subscription s where "
-                + "enabled == true and autoRenew == true";
+        String sql = "from Subscription s where s.enabled = true and s.autoRenew = true";
 
         List<Subscription> subscriptions = em.createQuery(sql).getResultList();
         for (Subscription subscription : subscriptions) {
@@ -248,12 +249,7 @@ public class SubscriptionManagerBean {
             }
 
             performCollection(subscription);
-
-            //Sleep a bit to make time for other threads also
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException ex) {
-            }
+            
         }
     }
 

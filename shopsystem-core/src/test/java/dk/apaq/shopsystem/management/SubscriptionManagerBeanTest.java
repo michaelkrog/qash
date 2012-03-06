@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.management;
 
+import java.util.Map;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.apaq.shopsystem.entity.CustomerRelationship;
@@ -16,6 +17,7 @@ import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Subscription;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.*;
 
 /**
@@ -24,6 +26,7 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/defaultspringcontext.xml"})
+@Transactional
 public class SubscriptionManagerBeanTest {
     
    @Autowired
@@ -58,13 +61,15 @@ public class SubscriptionManagerBeanTest {
         Date anHourAgo = new Date(System.currentTimeMillis() - 3600000);
         subscription = new Subscription();
         subscription.setCurrency("DKK");
+        subscription.setEnabled(true);
+        subscription.setAutoRenew(true);
         subscription.setCustomer(relationship);
         subscription.setInterval(1);
         subscription.setIntervalUnit(IntervalUnit.Hour);
         subscription.setDateChanged(anHourAgo);
         subscription.setDateCreated(anHourAgo);
         subscription.setDateCharged(anHourAgo);
-        subscription.setPricingType(SubscriptionPricingType.QashUsageBase);
+        subscription.setPricingType(SubscriptionPricingType.FixedSubsequent);
         organisationService.getSubscriptions().create(subscription);
         
         OrganisationService custService = service.getOrganisationService(customer);
@@ -82,17 +87,29 @@ public class SubscriptionManagerBeanTest {
         assertEquals(100.0, result,0.5);
     }
 
-    @Test
+    /*@Test
     public void testGenerateOrderFromSubscription() {
         System.out.println("generateOrderFromSubscription");
         double expected = 36.25;
         Order result = subscriptionManagerBean.generateOrderFromSubscription(subscription);
         assertEquals(expected, result.getTotalWithTax(), 0.05);
-    }
+    }*/
 
     @Test
     public void testIsDueForCollection() {
         System.out.println("isDueForCollection");
         assertTrue(subscriptionManagerBean.isDueForCollection(subscription));
     }
+
+    @Test
+    public void testMaintainSubscription() {
+        System.out.println("maintainSubscription");
+        
+        assertEquals(0, organisationService.getOrders().listIds().size());
+        subscriptionManagerBean.maintainSubscriptions();
+        assertEquals(1, organisationService.getOrders().listIds().size());
+        
+    }
+
+   
 }
