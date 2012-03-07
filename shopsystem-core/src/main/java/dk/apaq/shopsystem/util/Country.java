@@ -1,22 +1,43 @@
 package dk.apaq.shopsystem.util;
 
+import au.com.bytecode.opencsv.CSVReader;
+import dk.apaq.shopsystem.i18n.LocaleUtil;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- *
+ * A class for handling Country information.
+ * 
+ * Ip-to-Country data are retrieved from http://software77.net/geo-ip/
  * @author krog
  */
 public class Country {
 
+    private static class IPEntry {
+        long from, to;
+        String countrycode;
+    }
+    
+    private static final Logger LOG = LoggerFactory.getLogger(Country.class);
+    private static List<IPEntry> ipEntries = null;
     private static final List<String> ISO_EU_LIST = Arrays.asList(new String[]{"BE", "BG", "CZ", "DK", "DE", "EE", "IE", "EL", 
                                                                                 "ES", "FR", "IT", "CY", "LV", "LT", "LU", "HU", 
                                                                                 "MT", "NL", "AT", "PT", "PL", "RO", "SI", "SK", 
                                                                                 "FI", "SE", "UK"});
+    
+    static {
+        loadIpEntries();
+    }
+     
     private String iso;
     private String code;
     private String name;
@@ -51,6 +72,13 @@ public class Country {
     /**
      * Retrieves a country from the specified countryCode and translated using the given locale.
      */
+    public static Country getCountry(String countryCode) {
+        return getCountry(countryCode, null);
+    }
+    
+    /**
+     * Retrieves a country from the specified countryCode and translated using the given locale.
+     */
     public static Country getCountry(String countryCode, Locale locale) {
         if(locale == null) {
             locale = Locale.getDefault();
@@ -74,6 +102,23 @@ public class Country {
             }
         }
         return null;
+    }
+    
+        /**
+     * This method will lookup the ip and check which country it comes from. If it fails to do so
+     * if will default to an English locale. 
+     * @param address The address to lookup.
+     * @return The locale.
+     */
+    public static Country getCountryByIpaddress(String ipaddress) {
+
+        long longIp = ipToLong(ipaddress);
+        for (IPEntry entry : ipEntries) {
+            if (entry.from <= longIp && entry.to >= longIp) {
+                return getCountry(entry.countrycode);
+            }
+        }
+        return getCountry("DK");
     }
     
     public static List<Country> getCountries() {
@@ -103,6 +148,47 @@ public class Country {
             return locale.getISO3Country();
         } catch(MissingResourceException ex) {
             return null;
+        }
+    }
+    
+
+
+    private static void loadIpEntries() {
+        try {
+           
+            ipEntries = new ArrayList<IPEntry>();
+            InputStream stream = LocaleUtil.class.getResourceAsStream("/dk/apaq/shopsystem/i18n/IpToCountry.csv");
+            InputStreamReader isreader = new InputStreamReader(stream);
+            CSVReader reader = new CSVReader(isreader);
+            List<String[]> list = (List<String[]>) reader.readAll();
+
+            for (String[] array : list) {
+                IPEntry entry = new IPEntry();
+                entry.from = Long.parseLong(array[0]);
+                entry.to = Long.parseLong(array[1]);
+                entry.countrycode = array[4];
+                ipEntries.add(entry);
+            }
+        } catch (IOException e) {
+            LOG.error("Unable to load ip-to-country file.", e);
+        }
+    }
+
+    private static Long ipToLong(String addr) {
+        //TODO Support ip6
+        try{ 
+            String[] addrArray = addr.split("\\.");
+
+            long num = 0;
+            for (int i = 0; i < addrArray.length; i++) {
+                int power = 3 - i;
+
+                num += ((Long.parseLong(addrArray[i]) % 256 * Math.pow(256, power)));
+            }
+
+            return num;
+        } catch(NumberFormatException ex) {
+            return -1L;
         }
     }
 }

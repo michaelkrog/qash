@@ -7,6 +7,7 @@ import dk.apaq.shopsystem.entity.CustomerRelationship;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.entity.Subscription;
@@ -16,6 +17,7 @@ import dk.apaq.shopsystem.pay.PaymentException;
 import dk.apaq.shopsystem.pay.PaymentGateway;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
+import dk.apaq.shopsystem.service.crud.SecurityHandler.OrganisationUserReferenceSecurity;
 import dk.apaq.shopsystem.util.Country;
 import dk.apaq.shopsystem.util.TaxTool;
 import java.text.NumberFormat;
@@ -55,9 +57,7 @@ public class SubscriptionManagerBean {
     private MailSender mailSender;
     @Autowired
     private SimpleMailMessage templateMessage;
-    private Map<String, Double> minMonthlyFeeMap;
-    private Map<String, Double> maxMonthlyFeeMap;
-    private Map<String, Double> orderFeeMap;
+    private Map<String, Double> subscriptionFeeMap;
 
     public SubscriptionManagerBean() {
         this.orderNumberFormatter.setMinimumIntegerDigits(4);
@@ -65,48 +65,20 @@ public class SubscriptionManagerBean {
 
     @PostConstruct
     protected void init() {
-        if (minMonthlyFeeMap == null) {
-            minMonthlyFeeMap = new HashMap<String, Double>();
-        }
-        if (maxMonthlyFeeMap == null) {
-            maxMonthlyFeeMap = new HashMap<String, Double>();
-        }
-        if (orderFeeMap == null) {
-            orderFeeMap = new HashMap<String, Double>();
+        if (subscriptionFeeMap == null) {
+            subscriptionFeeMap = new HashMap<String, Double>();
         }
     }
 
-    public void setMinMonthlyFeeMap(Map<String, Double> minMonthlyFeeMap) {
-        this.minMonthlyFeeMap = minMonthlyFeeMap;
+   
+
+    public void setSubscriptionFeeMap(Map<String, Double> subscriptionFeeMap) {
+        this.subscriptionFeeMap = subscriptionFeeMap;
     }
 
-    public void setMaxMonthlyFeeMap(Map<String, Double> maxMonthlyFeeMap) {
-        this.maxMonthlyFeeMap = maxMonthlyFeeMap;
-    }
-
-    public void setOrderFeeMap(Map<String, Double> orderFeeMap) {
-        this.orderFeeMap = orderFeeMap;
-    }
-
-    public double getMinMonthlyFee(String currency) {
-        if (minMonthlyFeeMap.containsKey(currency)) {
-            return minMonthlyFeeMap.get(currency);
-        } else {
-            return 0;
-        }
-    }
-
-    public double getMaxMonthlyFee(String currency) {
-        if (minMonthlyFeeMap.containsKey(currency)) {
-            return maxMonthlyFeeMap.get(currency);
-        } else {
-            return 0;
-        }
-    }
-
-    public double getOrderFee(String currency) {
-        if (minMonthlyFeeMap.containsKey(currency)) {
-            return orderFeeMap.get(currency);
+    public double getSubscriptionFee(String currency) {
+        if (subscriptionFeeMap.containsKey(currency)) {
+            return subscriptionFeeMap.get(currency);
         } else {
             return 0;
         }
@@ -171,33 +143,15 @@ public class SubscriptionManagerBean {
 
         Country customerCountry = Country.getCountry(customerCountryCode, Locale.getDefault());
         String paymentCurrency = getPaymentCurrencyForOrganisation(customerRelationship.getCustomer());
-        double minFee = getMinMonthlyFee(paymentCurrency);
-        double maxFee = getMaxMonthlyFee(paymentCurrency);
-
+        
         Order order = new Order();
 
         //1: Find out how much to collect
-        if (subscription.getPricingType() == SubscriptionPricingType.QashUsageBase) {
-            //1a: if qashUsageBased subscription calculate usage fee
-            order.setCurrency(paymentCurrency);
-            int noOfOrders = countCompletedOrdersSinceLastCharge(subscription);
-            double fee = noOfOrders * getOrderFee(paymentCurrency);
-            
-            if(fee<minFee) {
-                fee = minFee;
-            }
-            
-            if(fee>maxFee) {
-                fee = maxFee;
-            }
+        
+        order.setCurrency(subscription.getCurrency());
 
-            order.addOrderLine("Qash fee for " + noOfOrders + " orders", 1, fee, TaxTool.getTaxBasedOnCountry(customerCountry));
-        } else {
-            order.setCurrency(subscription.getCurrency());
-
-            //1b: else use price specified on subscription
-            order.addOrderLine("Subscription", 1, subscription.getPrice(), TaxTool.getTaxBasedOnCountry(customerCountry));
-        }
+        //1b: else use price specified on subscription
+        order.addOrderLine("Subscription", 1, subscription.getPrice(), TaxTool.getTaxBasedOnCountry(customerCountry));
         return order;
     }
 
@@ -211,19 +165,19 @@ public class SubscriptionManagerBean {
 
         switch (subscription.getIntervalUnit()) {
             case Hour:
-                cutOffTime.plusHours(subscription.getInterval());
+                cutOffTime = cutOffTime.plusHours(subscription.getInterval());
                 break;
             case Day:
-                cutOffTime.plusDays(subscription.getInterval());
+                cutOffTime = cutOffTime.plusDays(subscription.getInterval());
                 break;
             case Week:
-                cutOffTime.plusWeeks(subscription.getInterval());
+                cutOffTime = cutOffTime.plusWeeks(subscription.getInterval());
                 break;
             case Month:
-                cutOffTime.plusMonths(subscription.getInterval());
+                cutOffTime = cutOffTime.plusMonths(subscription.getInterval());
                 break;
             case Year:
-                cutOffTime.plusYears(subscription.getInterval());
+                cutOffTime = cutOffTime.plusYears(subscription.getInterval());
                 break;
         }
 
@@ -232,7 +186,6 @@ public class SubscriptionManagerBean {
 
     }
 
-    @Scheduled(cron="0 0 * * *")
     public void maintainSubscriptions() {
         //To ensure best performance, we will retrieve the subscriptions directly 
         //through the entitymanager instead of traversing all organsiations through 
@@ -374,6 +327,11 @@ public class SubscriptionManagerBean {
     }
 
     private SystemUser getAdminUserForOrganisation(Organisation organisation) {
+        for(OrganisationUserReference ref: service.getOrganisationService(organisation).getUsers().list()) {
+            if(ref.getRoles().contains("ROLE_ADMIN")) {
+                return ref.getUser();
+            }
+        }
         return null;
     }
 }

@@ -87,25 +87,12 @@
 
     <!-- Subscription -->
     <bean id="subscriptionManagerBean" class="dk.apaq.shopsystem.management.SubscriptionManagerBean">
-        <property name="minMonthlyFeeMap">
+        
+        <property name="subscriptionFeeMap">
             <map>
-                <entry key="DKK" value="${prices.minimumMonthlyFee.DKK}"/>
-                <entry key="USD" value="${prices.minimumMonthlyFee.USD}"/>
-                <entry key="EUR" value="${prices.minimumMonthlyFee.EUR}"/>
-            </map>
-        </property>
-        <property name="maxMonthlyFeeMap">
-            <map>
-                <entry key="DKK" value="${prices.maximumMonthlyFee.DKK}"/>
-                <entry key="USD" value="${prices.maximumMonthlyFee.USD}"/>
-                <entry key="EUR" value="${prices.maximumMonthlyFee.EUR}"/>
-            </map>
-        </property>
-        <property name="orderFeeMap">
-            <map>
-                <entry key="DKK" value="${prices.orderFee.DKK}"/>
-                <entry key="USD" value="${prices.orderFee.USD}"/>
-                <entry key="EUR" value="${prices.orderFee.EUR}"/>
+                <entry key="DKK" value="${prices.subscriptionFee.DKK}"/>
+                <entry key="USD" value="${prices.subscriptionFee.USD}"/>
+                <entry key="EUR" value="${prices.subscriptionFee.EUR}"/>
             </map>
         </property>
         
