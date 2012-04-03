@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.util;
+package dk.apaq.shopsystem.l10n;
 
 import java.text.Collator;
 import java.util.Comparator;

@@ -27,7 +27,7 @@ import dk.apaq.shopsystem.pay.PaymentException;
 import dk.apaq.shopsystem.pay.PaymentGateway;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
-import dk.apaq.shopsystem.util.Country;
+import dk.apaq.shopsystem.l10n.Country;
 import dk.apaq.shopsystem.util.TaxTool;
 
 import org.joda.time.DateTime;

@@ -15,7 +15,7 @@ import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
-import dk.apaq.shopsystem.util.Country;
+import dk.apaq.shopsystem.l10n.Country;
 import java.util.Arrays;
 import java.util.List;
 

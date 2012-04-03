@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.util;
+package dk.apaq.shopsystem.l10n;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +13,7 @@ import java.util.MissingResourceException;
  *
  * @author michaelzachariassenkrog
  */
-public class CurrencyUtil {
+public class CurrencyHelper {
 
     public static List<Currency> getCurrencies() {
         return getCurrencies(Locale.getDefault());

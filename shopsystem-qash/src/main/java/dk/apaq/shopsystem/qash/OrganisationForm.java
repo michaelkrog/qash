@@ -23,7 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.service.OrganisationService;
-import dk.apaq.shopsystem.util.Country;
+import dk.apaq.shopsystem.l10n.Country;
 import java.util.Arrays;
 import java.util.List;
 

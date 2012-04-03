@@ -22,7 +22,7 @@ import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.shopsystem.service.OrganisationService;
-import dk.apaq.shopsystem.util.CurrencyUtil;
+import dk.apaq.shopsystem.l10n.CurrencyHelper;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
 import java.util.Currency;
 import java.util.List;
@@ -173,7 +173,7 @@ public class CurrencyAndTaxPanel extends CustomComponent {
         defaultCurrencySelect.setNullSelectionAllowed(false);
         defaultCurrencySelect.addListener(currencyChangeListener);
 
-        List<Currency> currencies = CurrencyUtil.getCurrencies();
+        List<Currency> currencies = CurrencyHelper.getCurrencies();
         for (Currency currency : currencies) {
             defaultCurrencySelect.addItem(currency.getCurrencyCode());
         }

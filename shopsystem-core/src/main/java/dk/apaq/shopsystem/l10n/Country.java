@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.util;
+package dk.apaq.shopsystem.l10n;
 
 import au.com.bytecode.opencsv.CSVReader;
 import dk.apaq.shopsystem.i18n.LocaleUtil;

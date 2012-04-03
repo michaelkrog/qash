@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.image;
+package dk.apaq.shopsystem.rendering.media;
 
 import com.jhlabs.image.AbstractBufferedImageOp;
 import java.awt.Graphics2D;

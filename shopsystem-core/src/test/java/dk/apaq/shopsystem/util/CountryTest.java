@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.util;
 
+import dk.apaq.shopsystem.l10n.Country;
 import java.util.List;
 import java.util.Locale;
 import org.junit.After;

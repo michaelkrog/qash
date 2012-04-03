@@ -1,7 +1,7 @@
 package dk.apaq.shopsystem.site;
 
 import dk.apaq.shopsystem.management.SubscriptionManagerBean;
-import dk.apaq.shopsystem.util.Country;
+import dk.apaq.shopsystem.l10n.Country;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
