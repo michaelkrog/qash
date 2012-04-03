@@ -42,6 +42,7 @@ import dk.apaq.shopsystem.entity.Outlet;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.shopsystem.qash.data.util.CurrencyColumnGenerator;
+import dk.apaq.shopsystem.qash.data.util.MoneyColumnGenerator;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.vaadin.addon.crudcontainer.FilterableContainer;
 import java.awt.print.Printable;
@@ -82,7 +83,8 @@ public class OrderList extends CustomComponent implements
     private Container container;
     private boolean initialized;
     private final ThemeResource resourceDelete = new ThemeResource("img/clear.png");
-    private final CurrencyColumnGenerator currencyColumnGenerator = new CurrencyColumnGenerator();
+    //private final CurrencyColumnGenerator currencyColumnGenerator = new CurrencyColumnGenerator();
+    private final MoneyColumnGenerator moneyColumnGenerator = new MoneyColumnGenerator();
     private final Sorter sorter = new Sorter("number", SortDirection.Descending);
     private Outlet outlet;
     private String chosenStatus;
@@ -194,7 +196,7 @@ public class OrderList extends CustomComponent implements
         table.addGeneratedColumn("status", new StatusColumnGenerator());
         table.setColumnAlignment("totalWithTax", Table.ALIGN_RIGHT);
 
-        currencyColumnGenerator.setCurrencyPropertyId("currency");
+        //currencyColumnGenerator.setCurrencyPropertyId("currency");
 
         filterLayout.addComponent(cmbStatus);
         //filterLayout.addComponent(cmbClerk);
@@ -328,8 +330,8 @@ public class OrderList extends CustomComponent implements
             dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
             table.addGeneratedColumn("dateChanged", new FormattedDateGenerator());
             table.addGeneratedColumn("dateTimelyPayment", new FormattedDateGenerator());
-            table.addGeneratedColumn("total", currencyColumnGenerator);
-            table.addGeneratedColumn("totalWithTax", currencyColumnGenerator);
+            table.addGeneratedColumn("total", moneyColumnGenerator);
+            table.addGeneratedColumn("totalWithTax", moneyColumnGenerator);
             initialized = true;
         }
 

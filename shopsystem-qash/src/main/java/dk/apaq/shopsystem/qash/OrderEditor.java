@@ -585,14 +585,14 @@ public class OrderEditor extends CustomComponent implements
         }
 
         public void update() {
-            double total = 0;
-            double tax = 0;
+            long total = 0;
+            long tax = 0;
 
             if (dataSource != null) {
                 Property propTotal = dataSource.getItemProperty("total");
                 Property propTotalTax = dataSource.getItemProperty("totalTax");
-                tax = (Double) propTotalTax.getValue();
-                total = ((Double) propTotal.getValue()) + tax;
+                tax = (Long) propTotalTax.getValue();
+                total = ((Long) propTotal.getValue()) + tax;
             }
 
             lbl_total.setCaption(numberFormat.format(total));
@@ -923,9 +923,9 @@ public class OrderEditor extends CustomComponent implements
             invoicedString = (invoiced == null ? "-" : dateFormat.format(invoiced));
             statusString = getStatusString(status);
 
-            double due = getDue();
-            double change = getChange();
-            double paidAmount = getPaidValue() + change;
+            long due = getDue();
+            long change = getChange();
+            long paidAmount = getPaidValue() + change;
             
             if (status.isConfirmedState()) {
                 if (due > 0) {
@@ -1167,7 +1167,7 @@ public class OrderEditor extends CustomComponent implements
 
     private void doPay() {
         final PaymentPanel panel = new PaymentPanel();
-        double due = getDue();
+        long due = getDue();
         panel.setDue(due);
         panel.setCurrency((String) dataSource.getItemProperty("currency").getValue());
         panel.setValue(getDue());
@@ -1185,13 +1185,13 @@ public class OrderEditor extends CustomComponent implements
             public void windowClose(CloseEvent e) {
                 if (dialog.getResult() == CommonDialog.ButtonType.Ok) {
                     PaymentType pt = panel.getPaymentType();
-                    double value = (Double) panel.getValue();
+                    long value = (Long) panel.getValue();
 
                     addPayment(pt, value);
 
                     OrderStatus status = (OrderStatus) dataSource.getItemProperty("status").getValue();
                     if (OrderStatus.Completed.equals(status)) {
-                        double due = getDue();
+                        Long due = getDue();
                         if (due < 0) {
                             addPayment(PaymentType.Change, due);
                         }
@@ -1207,41 +1207,41 @@ public class OrderEditor extends CustomComponent implements
         });
     }
 
-    private double getPaidValue() {
+    private long getPaidValue() {
         if (paymentContainer == null) {
             return 0;
         }
-        double value = 0;
+        long value = 0;
         for (Object id : paymentContainer.getItemIds()) {
             Item item = paymentContainer.getItem(id);
-            value += (Double) item.getItemProperty("amount").getValue();
+            value += (Long) item.getItemProperty("amount").getValue();
         }
         return value;
     }
 
-    private double getDue() {
+    private long getDue() {
         if (dataSource == null) {
             return 0;
         }
-        double orderTotal = (Double) dataSource.getItemProperty("totalWithTax").getValue();
+        long orderTotal = (Long) dataSource.getItemProperty("totalWithTax").getValue();
         return orderTotal - getPaidValue();
     }
 
-    private double getChange() {
+    private long getChange() {
         if (paymentContainer == null) {
             return 0;
         }
-        double value = 0;
+        long value = 0;
         for (Object id : paymentContainer.getItemIds()) {
             Item item = paymentContainer.getItem(id);
             if (PaymentType.Change.equals(item.getItemProperty("paymentType").getValue())) {
-                value -= (Double) item.getItemProperty("amount").getValue();
+                value -= (Long) item.getItemProperty("amount").getValue();
             }
         }
         return value < -0.00 || value > 0.00 ? value : 0;
     }
 
-    private void addPayment(PaymentType paymentType, double value) {
+    private void addPayment(PaymentType paymentType, long value) {
         Order order = getOrderFromDatasource();
         Object id = paymentContainer.addItem();
         Item item = paymentContainer.getItem(id);

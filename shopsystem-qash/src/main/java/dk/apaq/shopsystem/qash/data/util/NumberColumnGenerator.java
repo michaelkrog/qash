@@ -7,17 +7,21 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.ColumnGenerator;
 import java.text.NumberFormat;
 import java.util.Currency;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
- *
+ * Generates a number formatted label for a column. If number is double it is formattede directly.
+ * If number is an integer or a long 
  * @author michaelzachariassenkrog
  */
 public class NumberColumnGenerator implements ColumnGenerator{
 
     private int minFractionDigits = 0;
     private int maxFractionDigits = 3;
-
+    private final Map<Locale, NumberFormat> formatMap = new HashMap<Locale, NumberFormat>(); 
+    
     public NumberColumnGenerator() {
     }
 
@@ -28,18 +32,27 @@ public class NumberColumnGenerator implements ColumnGenerator{
 
 
     public Component generateCell(Table source, Object itemId, Object columnId) {
+        Property prop = source.getContainerProperty(itemId, columnId);
+        Double value = (Double) prop.getValue();
+
+        return new Label(formatValue(source, value));
+    }
+    
+    
+    protected String formatValue(Table source, Double value) {
         Locale locale = source.getLocale();
         if(locale == null) {
             locale = Locale.getDefault();
         }
-        NumberFormat nf = NumberFormat.getNumberInstance(locale);
+        
+        NumberFormat nf = formatMap.get(locale);
+        if(nf==null) {
+            nf = NumberFormat.getNumberInstance(locale);
+            formatMap.put(locale, nf);
+        }
         nf.setMinimumFractionDigits(minFractionDigits);
         nf.setMaximumFractionDigits(maxFractionDigits);
-        
-        Property prop = source.getContainerProperty(itemId, columnId);
-        Double value = (Double) prop.getValue();
-
-        return new Label(nf.format(value));
+        return nf.format(value);
     }
 
     public void setMaxFractionDigits(int maxFractionDigits) {

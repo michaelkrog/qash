@@ -48,15 +48,15 @@ public class PaymentPanel extends CustomComponent implements Property, Property.
             Button.ClickListener {
 
         public void valueChange(ValueChangeEvent event) {
-            update((Double) event.getProperty().getValue());
+            update((Long) event.getProperty().getValue());
         }
 
         public void textChange(TextChangeEvent event) {
-            double value;
+            long value;
             String text = event.getText();
 
             try {
-                value = numberFormat.parse(text).doubleValue();
+                value = ((Double)(numberFormat.parse(text).doubleValue() * 100)).longValue();
             } catch (Exception e) {
                 value = 0;
             }
@@ -64,9 +64,9 @@ public class PaymentPanel extends CustomComponent implements Property, Property.
             update(value);
         }
 
-        private void update(double value) {
-            Double due = (Double) dueProperty.getValue();
-            Double newChange = (due - value) * -1;
+        private void update(long value) {
+            Long due = (Long) dueProperty.getValue();
+            Long newChange = (due - value) * -1;
             newChange = (newChange < -0.00 || newChange > 0.00) ? newChange : 0;
             changeProperty.setValue(newChange);
         }
@@ -114,8 +114,8 @@ public class PaymentPanel extends CustomComponent implements Property, Property.
     }
 
     public void setPropertyDataSource(Property newDataSource) {
-        if (newDataSource.getType() != Double.class) {
-            throw new IllegalArgumentException("Property must be of type Double");
+        if (newDataSource.getType() != Long.class) {
+            throw new IllegalArgumentException("Property must be of type Long");
         }
         this.property = newDataSource;
     }
@@ -124,7 +124,7 @@ public class PaymentPanel extends CustomComponent implements Property, Property.
         return property;
     }
 
-    public void setDue(double value) {
+    public void setDue(long value) {
         this.dueProperty.setValue(value);
     }
 
@@ -155,7 +155,7 @@ public class PaymentPanel extends CustomComponent implements Property, Property.
     }
 
     public Class<?> getType() {
-        return Double.class;
+        return Long.class;
     }
 
     @Override

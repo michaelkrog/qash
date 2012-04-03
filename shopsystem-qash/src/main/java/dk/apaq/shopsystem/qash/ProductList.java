@@ -32,6 +32,7 @@ import dk.apaq.shopsystem.qash.common.CommonDialog;
 import dk.apaq.shopsystem.qash.common.ProductFilterGenerator;
 import dk.apaq.shopsystem.qash.common.Spacer;
 import dk.apaq.shopsystem.qash.data.ProductContainer;
+import dk.apaq.shopsystem.qash.data.util.MoneyColumnGenerator;
 import dk.apaq.shopsystem.qash.data.util.NumberColumnGenerator;
 import dk.apaq.shopsystem.qash.listeners.RemoveSelectedOnClickListener;
 import dk.apaq.vaadin.addon.crudcontainer.CrudContainer;
@@ -64,6 +65,7 @@ public class ProductList extends CustomComponent {
     private ThemeResource resourceDelete = new ThemeResource("img/clear.png");
     private Sorter productSorter = new Sorter("name");
     private final ProductFilterGenerator filterGenerator = new ProductFilterGenerator();
+    private final MoneyColumnGenerator moneyColumnGenerator = new MoneyColumnGenerator();
 
     private class SearchFieldHandler implements TextChangeListener {
 
@@ -104,8 +106,8 @@ public class ProductList extends CustomComponent {
         topHLayout.setExpandRatio(spacer, 1.0F);
         topHLayout.setWidth(100, Component.UNITS_PERCENTAGE);
 
-        table.addGeneratedColumn("price", new NumberColumnGenerator(2, 2));
-        table.addGeneratedColumn("priceWithTax", new NumberColumnGenerator(2, 2));
+        table.addGeneratedColumn("price", moneyColumnGenerator);
+        table.addGeneratedColumn("priceWithTax", moneyColumnGenerator);
         table.addGeneratedColumn("quantityInStock", new NumberColumnGenerator(0, 3));
 
         table.setSelectable(true);
