@@ -44,7 +44,7 @@ public class Subscription implements ContentEntity {
     private SubscriptionPricingType pricingType;
     private boolean autoRenew;
     private boolean enabled;
-    private double price;
+    private long price;
     private String currency;
     private String subscriptionPaymentId;
 
@@ -154,14 +154,18 @@ public class Subscription implements ContentEntity {
     }
 
     /**
-     * The price collected every time the subscription is renewed. (If the subscription
-     * is qashusagebased then the field is used as a percentage).
+     * The price collected every time the subscription is renewed. The price is in the smallest
+     * denomination of the currency, fx. cents.
      */
-    public double getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    /**
+     * Price fo the subscription given in the smaller denomination of the currency fx. cents for dollars.
+     * @param price 
+     */
+    public void setPrice(long price) {
         this.price = price;
     }
 

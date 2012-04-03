@@ -36,7 +36,7 @@ public class Payment implements Serializable, ContentEntity {
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
     
-    private double amount;
+    private long amount;
 
     private String orderId;
     private String paymentDetails;
@@ -77,11 +77,11 @@ public class Payment implements Serializable, ContentEntity {
         this.organisation = organisation;
     }
 
-    public double getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 

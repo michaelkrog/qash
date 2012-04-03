@@ -14,7 +14,7 @@ public interface PaymentGateway {
     public void refund(long amountInCents, String transactionId);
     public void cancel(String transactionId);
 
-    public PaymentStatus status(String transactionId);
+    public PaymentInformation getPaymentInformation(String transactionId);
 
     
 }

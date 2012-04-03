@@ -2,7 +2,7 @@ package dk.apaq.shopsystem.pay.quickpay;
 
 import dk.apaq.shopsystem.pay.PaymentException;
 import dk.apaq.shopsystem.pay.PaymentGateway;
-import dk.apaq.shopsystem.pay.PaymentStatus;
+import dk.apaq.shopsystem.pay.PaymentInformation;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -98,7 +98,7 @@ public class QuickPay implements PaymentGateway {
         
     }
 
-    public PaymentStatus status(String transactionId) {
+    public PaymentInformation getPaymentInformation(String transactionId) {
         try {
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
             HttpPost post = new HttpPost(url);

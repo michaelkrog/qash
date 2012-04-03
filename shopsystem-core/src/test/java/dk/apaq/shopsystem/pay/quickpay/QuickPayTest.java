@@ -5,7 +5,7 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
-import dk.apaq.shopsystem.pay.PaymentStatus;
+import dk.apaq.shopsystem.pay.PaymentInformation;
 import java.io.IOException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -80,7 +80,7 @@ public class QuickPayTest {
         Mockito.when(mockHttpClient.execute(Mockito.any(HttpUriRequest.class))).thenReturn(response);
 
         quickPay.setHttpClient(mockHttpClient);
-        PaymentStatus status = quickPay.status("123");
+        PaymentInformation status = quickPay.getPaymentInformation("123");
 
     }
 

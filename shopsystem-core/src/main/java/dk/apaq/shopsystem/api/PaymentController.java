@@ -63,7 +63,7 @@ public class PaymentController extends AbstractController {
     @RequestMapping(value = "/organisations/{orgInfo}/payments", method = RequestMethod.POST, params="gateway=quickpay")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    void onQuickpayEvent(@PathVariable String orgId, @RequestParam Long ordernumber, @RequestParam  Integer amount, 
+    void onQuickpayEvent(@PathVariable String orgId, @RequestParam Long ordernumber, @RequestParam Long amount, 
                                     @RequestParam String currency, @RequestParam  String qpstat,
                                     @RequestParam String transaction, @RequestParam  String cardtype, @RequestParam  String cardnumber) throws IOException, ServletException {
 
@@ -84,7 +84,7 @@ public class PaymentController extends AbstractController {
         }
         
         Payment payment = new Payment();
-        payment.setAmount(((double) amount) / 100);
+        payment.setAmount(amount);
         payment.setOrderId(orderId);
         payment.setPaymentType(PaymentType.Card);
         payment.setPaymentDetails(cardtype + ": " + cardnumber);

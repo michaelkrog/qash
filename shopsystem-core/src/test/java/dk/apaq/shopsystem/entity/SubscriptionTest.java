@@ -24,7 +24,7 @@ public class SubscriptionTest extends TestCase {
         subscription.setInterval(1);
         subscription.setIntervalUnit(IntervalUnit.Year);
         subscription.setOrganisation(new Organisation());
-        subscription.setPrice(1);
+        subscription.setPrice(100);
         subscription.setPricingType(SubscriptionPricingType.FixedSubsequent);
         subscription.setSubscriptionPaymentId("subscriptionPaymentId");
 
@@ -39,7 +39,7 @@ public class SubscriptionTest extends TestCase {
         assertEquals(1, subscription.getInterval());
         assertNotNull(subscription.getIntervalUnit());
         assertNotNull(subscription.getOrganisation());
-        assertEquals(1.0, subscription.getPrice());
+        assertEquals(100, subscription.getPrice());
         assertNotNull(subscription.getPricingType());
         assertNotNull(subscription.getSubscriptionPaymentId());
         

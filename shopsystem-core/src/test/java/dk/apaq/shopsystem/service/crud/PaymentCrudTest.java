@@ -111,7 +111,7 @@ public class PaymentCrudTest {
         Crud.Complete<String, Order> orderCrud = service.getOrganisationService(org).getOrders();
         Order order = orderCrud.read(orderCrud.create());
         order.setCurrency("DKK");
-        order.addOrderLine("Test", 1, 194.95, null);
+        order.addOrderLine("Test", 1, 19495, null);
         orderCrud.update(order);
 
         Crud.Complete<String, Payment> crud = service.getOrganisationService(org).getPayments();
@@ -123,7 +123,7 @@ public class PaymentCrudTest {
         String id = result.getId();
 
         Date now = new Date();
-        result.setAmount(200);
+        result.setAmount(20000);
         result.setPaymentType(PaymentType.Cash);
         
         try {
@@ -144,12 +144,12 @@ public class PaymentCrudTest {
         crud.update(result);
 
         result = crud.read(id);
-        assertEquals(200, result.getAmount(), 0.03);
+        assertEquals(20000, result.getAmount());
         assertEquals(PaymentType.Cash, result.getPaymentType());
 
         Payment change = crud.read(crud.create());
         change.setOrderId(order.getId());
-        change.setAmount(-5.95);
+        change.setAmount(-595);
         change.setPaymentType(PaymentType.Change);
         crud.update(change);
     }
@@ -185,14 +185,14 @@ public class PaymentCrudTest {
         Crud.Complete<String, Order> orderCrud = service.getOrganisationService(org1).getOrders();
         Order order = orderCrud.read(orderCrud.create());
         order.setCurrency("DKK");
-        order.addOrderLine("Test", 1, 194.95, null);
+        order.addOrderLine("Test", 1, 19495, null);
         order.setStatus(OrderStatus.Accepted);
         orderCrud.update(order);
 
         Crud.Complete<String, Order> orderCrud2 = service.getOrganisationService(org2).getOrders();
         Order order2 = orderCrud2.read(orderCrud2.create());
         order2.setCurrency("DKK");
-        order2.addOrderLine("Test", 1, 194.95, null);
+        order2.addOrderLine("Test", 1, 19495, null);
         order2.setStatus(OrderStatus.Accepted);
         orderCrud2.update(order2);
 

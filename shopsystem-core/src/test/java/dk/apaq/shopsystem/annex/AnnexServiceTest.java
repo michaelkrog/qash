@@ -71,7 +71,7 @@ public class AnnexServiceTest extends TestCase {
         order.setBuyer(getContactInformation());
 
         for(int i=0;i<orderlinecount;i++){
-            order.addOrderLine("Coffee & cup and much much more #"+i, 1, 10.23*(i+1), i%2==0?tax:tax2);
+            order.addOrderLine("Coffee & cup and much much more #"+i, 1, 1023*(i+1), i%2==0?tax:tax2);
         }
         return order;
     }

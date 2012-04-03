@@ -38,7 +38,7 @@ public class OrderLine implements Serializable, BasicEntity {
     private String itemId;
     private String itemNo;
     private double quantity;
-    private double price;
+    private long price;
 
     /*@Column(name="UNITTYPE")
     @Enumerated(EnumType.STRING)
@@ -55,11 +55,11 @@ public class OrderLine implements Serializable, BasicEntity {
      * the taxes added to the orderline..
      * @return The tax value.
      */
-    public double getTaxValue() {
-        double calculation = 0;
+    public long getTaxValue() {
+        long calculation = 0;
 
         if (tax != null) {
-            calculation = price * (tax.getRate() / PERCENTAGEDIVIDE);
+            calculation = (long) (price * (tax.getRate() / PERCENTAGEDIVIDE));
         }
 
         return calculation;
@@ -152,10 +152,10 @@ public class OrderLine implements Serializable, BasicEntity {
     }
 
     /**
-     * Sets the price of item, tax-excluded.
+     * Sets the price of item, tax-excluded, and in the smallest denomination of a currency.
      * @param price Price of the item, tax-excluded.
      */
-    public void setPrice(double price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 
@@ -172,11 +172,13 @@ public class OrderLine implements Serializable, BasicEntity {
      * Sets the price of item including tax. This will use taxes to calculate how much
      * of the price is tax and then call setPrice() to adjust the price. This means that
      * changing the tax after calling this method with also change the retrieved value with
-     * getPriceWithTax.
+     * getPriceWithTax. 
+     * 
+     * The price must be in the smallest denomination of a currency.
      */
-    public void setPriceWithTax(double price) {
+    public void setPriceWithTax(long price) {
         if(tax!=null) {
-            price = ((price / (tax.getRate() + 100.0)) * 100.0);
+            price = (long)((price / (tax.getRate() + 100.0)) * 100.0);
         }
 
         setPrice(price);

@@ -34,7 +34,7 @@ public class OrderTest extends TestCase {
 
         Product item = new Product();
         item.setName("Dims");
-        item.setPrice(20.0);
+        item.setPrice(2000);
         item.setId("ID");
         item.setItemNo("DIMS");
         item.setTax(tax);
@@ -43,7 +43,7 @@ public class OrderTest extends TestCase {
         order.addOrderLine(item);
         
         assertEquals(1, order.getOrderLineCount());
-        assertEquals(40.0, order.getTotal());
+        assertEquals(4000, order.getTotal());
         
     }
 
@@ -53,11 +53,11 @@ public class OrderTest extends TestCase {
         tax.setId("tax");
         tax.setName("Moms");
         tax.setRate(25.0);
-        order.addOrderLine("Dims", 1, 100, tax);
+        order.addOrderLine("Dims", 1, 10000, tax);
 
         List<OrderLineTax> taxlist = order.getTaxList();
         assertEquals(1, taxlist.size());
-        assertEquals(25.0, order.getTotalTax(taxlist.get(0)));
+        assertEquals(2500, order.getTotalTax(taxlist.get(0)));
     }
 
 

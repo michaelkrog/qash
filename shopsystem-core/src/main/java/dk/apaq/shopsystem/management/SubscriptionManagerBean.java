@@ -1,5 +1,16 @@
 package dk.apaq.shopsystem.management;
 
+import java.text.NumberFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import dk.apaq.filter.Filter;
 import dk.apaq.filter.core.AndFilter;
 import dk.apaq.filter.core.CompareFilter;
@@ -11,24 +22,14 @@ import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.entity.Subscription;
-import dk.apaq.shopsystem.entity.SubscriptionPricingType;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.pay.PaymentException;
 import dk.apaq.shopsystem.pay.PaymentGateway;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
-import dk.apaq.shopsystem.service.crud.SecurityHandler.OrganisationUserReferenceSecurity;
 import dk.apaq.shopsystem.util.Country;
 import dk.apaq.shopsystem.util.TaxTool;
-import java.text.NumberFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,27 +37,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * Handles managing of subscriptions. This is done by finding those that nned to be maintained because
+ * its time for them to get paid etc.
  * @author krog
  */
 public class SubscriptionManagerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriptionManagerBean.class);
     private static final NumberFormat feeFormatter = NumberFormat.getPercentInstance();
-    @PersistenceContext
-    private EntityManager em;
-    @Autowired
-    private SystemService service;
-    @Autowired
-    private PaymentGateway paymentGateway;
+    
+    @PersistenceContext private EntityManager em;
+    @Autowired private SystemService service;
+    @Autowired private PaymentGateway paymentGateway;
+    @Autowired private MailSender mailSender;
+    @Autowired private SimpleMailMessage templateMessage;
     private final NumberFormat orderNumberFormatter = NumberFormat.getIntegerInstance();
     private final NumberFormat amountFormatter = NumberFormat.getCurrencyInstance(Locale.ENGLISH);
-    @Autowired
-    private MailSender mailSender;
-    @Autowired
-    private SimpleMailMessage templateMessage;
     private Map<String, Double> subscriptionFeeMap;
 
     public SubscriptionManagerBean() {
@@ -70,12 +69,21 @@ public class SubscriptionManagerBean {
         }
     }
 
-   
-
+    /**
+     * Sets the subscription fee as a map in different currencies. The key is the currency code and
+     * the double value is the amount to charge as fee in the given currency. The fee is for a month of subscription.
+     * @param subscriptionFeeMap 
+     */
     public void setSubscriptionFeeMap(Map<String, Double> subscriptionFeeMap) {
         this.subscriptionFeeMap = subscriptionFeeMap;
     }
 
+    /**
+     * Retrieves the fee in the given currencycode. If no fee is set then 0 is returned. The fee is for 
+     * 1 month of subscription.
+     * @param currency The 2 letter currencycode.
+     * @return The fee in the given currency.
+     */
     public double getSubscriptionFee(String currency) {
         if (subscriptionFeeMap.containsKey(currency)) {
             return subscriptionFeeMap.get(currency);
@@ -85,9 +93,11 @@ public class SubscriptionManagerBean {
     }
 
     /**
-     * Calculates the revenue made by the organisation that is subscribing since last charged.
+     * Calculates the revenue made by the organisation that is subscribing since last charged. It is
+     * based on the orders that has been marked completed since last charge. If the subscription has
+     * never been charged, the create date of the subscription is used for calculation instead.
      */
-    public double getRevenueSinceLastCharge(Subscription subscription) {
+   /* public double getRevenueSinceLastCharge(Subscription subscription) {
 
         Date dateFrom = subscription.getDateCharged() == null ? subscription.getDateCreated() : subscription.getDateCharged();
         Filter orderFilter = new AndFilter(new CompareFilter("status", OrderStatus.Completed, CompareFilter.CompareType.Equals),
@@ -109,9 +119,15 @@ public class SubscriptionManagerBean {
         }
 
         return revenue;
-    }
+    }*/
     
-    public int countCompletedOrdersSinceLastCharge(Subscription subscription) {
+    /**
+     * Returns number of completede orders sinces last charge. If subscription has never been charged,
+     * the date of creation is used instead.
+     * @param subscription
+     * @return 
+     */
+    /*public int countCompletedOrdersSinceLastCharge(Subscription subscription) {
 
         Date dateFrom = subscription.getDateCharged() == null ? subscription.getDateCreated() : subscription.getDateCharged();
         Filter orderFilter = new AndFilter(new CompareFilter("status", OrderStatus.Completed, CompareFilter.CompareType.Equals),
@@ -120,12 +136,12 @@ public class SubscriptionManagerBean {
         OrganisationService customerOrganisationService = service.getOrganisationService(customer);
         List<String> orderList = customerOrganisationService.getOrders().listIds(orderFilter, null);
         return orderList.size();
-    }
+    }*/
 
     /**
      * Generate a new order for the subscription.
      */
-    public Order generateOrderFromSubscription(Subscription subscription) {
+    private Order generateOrderFromSubscription(Subscription subscription) {
         CustomerRelationship customerRelationship = subscription.getCustomer();
         if (customerRelationship == null || customerRelationship.getCustomer() == null) {
             throw new NullPointerException("CustomerRelationsShip is not set for Subsciption");
@@ -149,6 +165,7 @@ public class SubscriptionManagerBean {
         //1: Find out how much to collect
         
         order.setCurrency(subscription.getCurrency());
+        order.setStatus(OrderStatus.Accepted);
 
         //1b: else use price specified on subscription
         order.addOrderLine("Subscription", 1, subscription.getPrice(), TaxTool.getTaxBasedOnCountry(customerCountry));
@@ -206,7 +223,24 @@ public class SubscriptionManagerBean {
         }
     }
 
-    public void performCollection(Subscription subscription) {
+    /**
+     * Performs a collection for a subscription. This is normally called automatically by the subscriptionManagerBean
+     * when the subscription is due for collection, but sometimes other actions makes it neccesary to collect in the middle
+     * of a period, and then this method can be used.<br><br>
+     * 
+     * The method can collect a valid subscription at any time. It will do the following:<br>
+     * 1: Generate an order for the subscription.<br>
+     * 2: Persist order at the main system organisation for the collection<br>
+     * 3: Update charge date for the subscription.<br>
+     * 4: If paymentinfo is missing an email is sent to the organisations adminuser<br>
+     * 5: Authorizes withdrawal. If unable to authorize recurring payment an email is sent to the organisations adminuser<br>
+     * 6: Register payments for order.<br>
+     * 7: Capture amount<br>
+     * 8: Send receipt via email to adminuser<br>
+     * @param subscription 
+     */
+    @Transactional
+    public Order performCollection(Subscription subscription) {
         OrganisationService orgService = service.getOrganisationService(subscription.getOrganisation());
         SystemUser adminUser = getAdminUserForOrganisation(subscription.getCustomer().getCustomer());
 
@@ -229,7 +263,7 @@ public class SubscriptionManagerBean {
                 msg.setSubject("New account");
                 msg.setTo(adminUser.getEmail());
                 msg.setText(
-                        "Dear " + adminUser.getDisplayName()
+                        "Dear " + getNiceCustomerName(adminUser)
                         + "\n\nWe are about to withdraw a payment for your subscription but we dont have your payment information.\n"
                         + "Please go to the following link in order to fulfill your payment.\n"
                         + "http://qashapp.com/payment.html?id=" + order.getId() + "\n\n"
@@ -243,13 +277,13 @@ public class SubscriptionManagerBean {
                     LOG.error("Unable to send mail.", ex);
                 }
             }
-            return;
+            return order;
         }
-        double paymentAmount = order.getTotalWithTax();
+        long paymentAmount = order.getTotalWithTax();
 
         //5: If unable to authorize recurring payment send user mail
         try {
-            paymentGateway.recurring(orderNumberFormatter.format(order.getNumber()), (int) (paymentAmount * 100), order.getCurrency(), false, subscription.getSubscriptionPaymentId());
+            paymentGateway.recurring(orderNumberFormatter.format(order.getNumber()), paymentAmount, order.getCurrency(), false, subscription.getSubscriptionPaymentId());
         } catch (PaymentException ex) {
             if (adminUser != null) {
                 //Unable to authorize payment - send mail to user regarding missing payment information
@@ -257,7 +291,7 @@ public class SubscriptionManagerBean {
                 msg.setSubject("New account");
                 msg.setTo(adminUser.getEmail());
                 msg.setText(
-                        "Dear " + adminUser.getDisplayName()
+                        "Dear " + getNiceCustomerName(adminUser)
                         + "\n\nWe were unable withdraw a payment for your subscription using the payment information you gave us earlier.\n"
                         + "Please go to the following link in order to fulfill your payment.\n"
                         + "http://qashapp.com/payment.html?id=" + order.getId() + "\n\n"
@@ -271,7 +305,7 @@ public class SubscriptionManagerBean {
                     LOG.error("Unable to send mail.", ex);
                 }
             }
-            return;
+            return order;
         }
 
         //6: register payments for order
@@ -282,7 +316,7 @@ public class SubscriptionManagerBean {
         orgService.getPayments().create(payment);
 
         //7: capture amount
-        paymentGateway.capture((int) (paymentAmount * 100), subscription.getSubscriptionPaymentId());
+        paymentGateway.capture(paymentAmount, subscription.getSubscriptionPaymentId());
 
         //8: Send receipt
         if (adminUser != null) {
@@ -291,7 +325,7 @@ public class SubscriptionManagerBean {
             msg.setSubject("New account");
             msg.setTo(adminUser.getEmail());
             msg.setText(
-                    "Dear " + adminUser.getDisplayName()
+                    "Dear " + getNiceCustomerName(adminUser)
                     + "\n\nWe have withdrawn a payment for your subscription with us.\n\n"
                     + "Amount: " + amountFormatter.format(paymentAmount) + "\n\n"
                     + "Please login to your account to retrieve invoices when needed.\n"
@@ -305,6 +339,9 @@ public class SubscriptionManagerBean {
                 LOG.error("Unable to send mail.", ex);
             }
         }
+        
+        //Return a fresh order
+        return orgService.getOrders().read(id);
     }
 
     public String getPaymentCurrencyForOrganisation(Organisation org) {
@@ -328,10 +365,14 @@ public class SubscriptionManagerBean {
 
     private SystemUser getAdminUserForOrganisation(Organisation organisation) {
         for(OrganisationUserReference ref: service.getOrganisationService(organisation).getUsers().list()) {
-            if(ref.getRoles().contains("ROLE_ADMIN")) {
+            if(ref.getRoles().contains("ROLE_ORGPAYER")) {
                 return ref.getUser();
             }
         }
         return null;
+    }
+    
+    private String getNiceCustomerName(SystemUser user) {
+        return user.getDisplayName() == null ? "Customer" : user.getDisplayName();
     }
 }

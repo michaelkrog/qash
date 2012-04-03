@@ -38,8 +38,8 @@ public class Product implements Serializable, ContentEntity, HasEnable {
     private String name;
     private String itemNo;
     private String barcode;
-    private double price = 0;
-    private double discountprice = 0;
+    private long price = 0;
+    private long discountprice = 0;
     private double quantityInStock = 0;
     private boolean stockProduct = false;
     private boolean enabled = true;
@@ -126,11 +126,11 @@ public class Product implements Serializable, ContentEntity, HasEnable {
         this.barcode = barcode;
     }
 
-    public double getDiscountPrice() {
+    public long getDiscountPrice() {
         return discountprice;
     }
 
-    public void setDiscountPrice(double discountprice) {
+    public void setDiscountPrice(long discountprice) {
         this.discountprice = discountprice;
     }
 
@@ -142,7 +142,11 @@ public class Product implements Serializable, ContentEntity, HasEnable {
         this.itemNo = itemNo;
     }
 
-    public double getPrice() {
+    /**
+     * Price i the lowest denomination of a currency.
+     * @return 
+     */
+    public long getPrice() {
         return price;
     }
 
@@ -151,11 +155,11 @@ public class Product implements Serializable, ContentEntity, HasEnable {
      * getPrice() + getTaxValue();
      * @return
      */
-    public double getPriceWithTax() {
+    public long getPriceWithTax() {
         return getPrice() + getTaxValue();
     }
 
-    public void setPrice(double price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 
@@ -165,15 +169,15 @@ public class Product implements Serializable, ContentEntity, HasEnable {
      * changing the tax after calling this method with also change the retrieved value with
      * getPriceWithTax.
      */
-    public void setPriceWithTax(double price) {
+    public void setPriceWithTax(long price) {
         if (tax != null) {
-            price = ( ( price / ( tax.getRate() + 100.0 ) ) * 100.0 );
+            price = (long)( ( price / ( tax.getRate() + 100.0 ) ) * 100.0 );
         }
 
         setPrice(price);
     }
 
-    public double getTaxValue() {
+    public long getTaxValue() {
         return TaxTool.getAddableTaxValue(getPrice(), getTax());
     }
 

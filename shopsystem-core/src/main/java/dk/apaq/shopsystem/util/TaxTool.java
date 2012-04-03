@@ -19,11 +19,11 @@ public class TaxTool {
      * @param tax The tax to use for tax calculations.
      * @return The value of the calculated tax or 0 if tax is null.
      */
-    public static double getAddableTaxValue(double value, Tax tax) {
+    public static long getAddableTaxValue(long value, Tax tax) {
         if (tax == null) {
             return 0;
         }
-        return value * (tax.getRate() / 100);
+        return (long) (value * (tax.getRate() / 100));
     }
 
     /**
@@ -33,9 +33,9 @@ public class TaxTool {
      * @param taxList The list of taxes to use for tax calculations.
      * @return The value of the calculated txax.
      */
-    public static double getAddableTaxValue(double value, List<Tax> taxList, boolean cascade) {
-        double[] values = getAddableTaxValues(value, taxList, cascade);
-        double valueTax = 0;
+    public static long getAddableTaxValue(long value, List<Tax> taxList, boolean cascade) {
+        long[] values = getAddableTaxValues(value, taxList, cascade);
+        long valueTax = 0;
 
         for (int i = 0; i < values.length; i++) {
             valueTax += values[i];
@@ -52,12 +52,12 @@ public class TaxTool {
      * @param taxList The list of taxes to use for tax calculations.
      * @return The array of taxvalues.
      */
-    public static double[] getAddableTaxValues(double value, List<Tax> taxList, boolean cascade) {
-        double[] values = new double[taxList.size()];
+    public static long[] getAddableTaxValues(double value, List<Tax> taxList, boolean cascade) {
+        long[] values = new long[taxList.size()];
 
         for (int i = 0; i < taxList.size(); i++) {
             Tax currentTax = taxList.get(i);
-            values[i] = (currentTax.getRate() / 100) * value;
+            values[i] = (long) ((currentTax.getRate() / 100) * value);
             
             if(cascade) {
                 value += values[i];
@@ -72,11 +72,11 @@ public class TaxTool {
      * @param tax The tax to use for tax calculations.
      * @return The value of the calculated tax or 0 if tax is null.
      */
-    public static double getWithdrawableTaxValue(double value, Tax tax) {
+    public static long getWithdrawableTaxValue(long value, Tax tax) {
         if (tax == null) {
             return 0;
         }
-        return value - ((value / (tax.getRate() + 100.0)) * 100.0);
+        return (long) (value - ((value / (tax.getRate() + 100.0)) * 100.0));
     }
 
     /**
@@ -86,9 +86,9 @@ public class TaxTool {
      * @param taxList The list of taxes to use for tax calculations.
      * @return The value of the calculated txax.
      */
-    public static double getWithdrawableTaxValue(double value, List<Tax> taxList, boolean cascade) {
-        double[] values = getWithdrawableTaxValues(value, taxList, cascade);
-        double valueTax = 0;
+    public static long getWithdrawableTaxValue(long value, List<Tax> taxList, boolean cascade) {
+        long[] values = getWithdrawableTaxValues(value, taxList, cascade);
+        long valueTax = 0;
 
         for (int i = 0; i < values.length; i++) {
             valueTax += values[i];
@@ -105,8 +105,8 @@ public class TaxTool {
      * @param taxList The list of taxes to use for tax calculations.
      * @return The array of taxvalues.
      */
-    public static double[] getWithdrawableTaxValues(double value, List<Tax> taxList, boolean cascade) {
-        double[] values = new double[taxList.size()];
+    public static long[] getWithdrawableTaxValues(long value, List<Tax> taxList, boolean cascade) {
+        long[] values = new long[taxList.size()];
 
         if(!cascade) {
             double totalRate = 0;
@@ -125,7 +125,7 @@ public class TaxTool {
     
     public static Tax getTaxBasedOnCountry(Country country) {
         //TODO This should actually be chosen from taxes the organisation has registered.
-        //Right now this is harcoded for salers inside EU.
+        //Right now this is hardcoded for salers inside EU.
         if (country.isWithinEu()) {
             return new Tax("Vat", 25);
         } else {

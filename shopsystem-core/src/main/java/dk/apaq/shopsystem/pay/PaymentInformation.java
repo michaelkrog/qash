@@ -8,9 +8,9 @@ import java.util.List;
  *
  * @author krog
  */
-public class PaymentStatus {
+public class PaymentInformation {
     
-    private final PaymentStatus paymentStatus;
+    private final TransactionStatus transationStatus;
     private final List<HistoryEntry> history;
     private final String orderNumber;
     private final int amount;
@@ -27,11 +27,11 @@ public class PaymentStatus {
     public class HistoryEntry {
         private String type;
         private int amount;
-        private PaymentStatus status;
+        private PaymentInformation status;
         private Date timestamp;
         private String gatewayStatus;
 
-        public HistoryEntry(String type, int amount, PaymentStatus status, Date timestamp, String gatewayStatus) {
+        public HistoryEntry(String type, int amount, PaymentInformation status, Date timestamp, String gatewayStatus) {
             this.type = type;
             this.amount = amount;
             this.status = status;
@@ -47,7 +47,7 @@ public class PaymentStatus {
             return gatewayStatus;
         }
 
-        public PaymentStatus getStatus() {
+        public PaymentInformation getStatus() {
             return status;
         }
 
@@ -60,10 +60,10 @@ public class PaymentStatus {
         }
     }
 
-    public PaymentStatus(PaymentStatus paymentStatus, List<HistoryEntry> history, String orderNumber, int amount, String currency, 
+    public PaymentInformation(TransactionStatus transactionStatus, List<HistoryEntry> history, String orderNumber, int amount, String currency, 
             String gatewayStatus, String merchantId, String merchantEmail, String transactionId, String cardType, String cardNumber, 
             String cardExpire, boolean splitPayment) {
-        this.paymentStatus = paymentStatus;
+        this.transationStatus = transactionStatus;
         this.history = history;
         this.orderNumber = orderNumber;
         this.amount = amount;
@@ -118,8 +118,8 @@ public class PaymentStatus {
         return orderNumber;
     }
 
-    public PaymentStatus getPaymentStatus() {
-        return paymentStatus;
+    public TransactionStatus getTransationStatus() {
+        return transationStatus;
     }
 
     public boolean isSplitPayment() {

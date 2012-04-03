@@ -3,12 +3,9 @@ package dk.apaq.shopsystem.webrenderer;
 import java.io.File;
 import dk.apaq.shopsystem.webrenderer.ImageRenderer.Device;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -18,11 +15,6 @@ import static org.junit.Assert.*;
  */
 public class FlyingSaucerRendererTest {
     
-    public FlyingSaucerRendererTest() {
-    }
-
-    
-
     /**
      * Test of renderWebpageToImage method, of class FlyingSaucerWebRenderer.
      */
@@ -95,5 +87,41 @@ public class FlyingSaucerRendererTest {
         
         
     }
+    
+    @Test
+    public void testRenderWebpagesToPdf() throws IOException {
+        
+        System.out.println("renderWebpagesToPdf");
+        
+        
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        File file1 = new File("./src/test/resources/rendertest.html");
+        File file2 = new File("./src/test/resources/rendertestwithsvg.html");
+        String url1 = file1.toURL().toString();
+        String url2 = file2.toURL().toString();
+        FlyingSaucerRenderer instance = new FlyingSaucerRenderer();
+        instance.renderWebpageToPdf(bos, url1, url2);
+        
+        assertNotSame(0, bos.size());
+        
+        
+    }
+    
+    /*@Test
+    public void testRenderWebpageWithSvgToPdf() throws IOException {
+        
+        System.out.println("renderWebpageWithSvgToPdf");
+        
+        
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        File file = new File("./src/test/resources/rendertestwithsvg.html");
+        String url = file.toURL().toString();
+        FlyingSaucerRenderer instance = new FlyingSaucerRenderer();
+        instance.renderWebpageToPdf(bos, url);
+        
+        assertNotSame(0, bos.size());
+        
+        
+    }*/
         
 }

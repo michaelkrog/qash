@@ -286,15 +286,15 @@ public class Order implements Serializable, ContentEntity {
         addOrderLine(item.getName(), quantity, item.getPrice(), item.getId(), item.getItemNo(), item.getTax());
     }
 
-    public void addOrderLine(String title, double quantity, double price, Tax tax) {
+    public void addOrderLine(String title, double quantity, long price, Tax tax) {
         addOrderLine(title, quantity, price, null, null, tax);
     }
 
-    public void addOrderLine(String title, double quantity, double price, String itemid, String itemno) {
+    public void addOrderLine(String title, double quantity, long price, String itemid, String itemno) {
         addOrderLine(title, quantity, price, itemid, itemno, null);
     }
 
-    public void addOrderLine(String title, double quantity, double price, String itemid, String itemno, Tax tax) {
+    public void addOrderLine(String title, double quantity, long price, String itemid, String itemno, Tax tax) {
 
         OrderLineTax lineTax;
 
@@ -408,8 +408,8 @@ public class Order implements Serializable, ContentEntity {
         //payments.clear();
     }
 
-    public double getTotal() {
-        double total = 0;
+    public long getTotal() {
+        long total = 0;
         for (int i = 0; i < getOrderLineCount(); i++) {
             OrderLine line = getOrderLine(i);
             total += line.getTotal();
@@ -417,11 +417,11 @@ public class Order implements Serializable, ContentEntity {
         return total;
     }
 
-    public double getTotalTax() {
+    public long getTotalTax() {
         return getTotalTax(null);
     }
 
-    public double getTotalWithTax() {
+    public long getTotalWithTax() {
         return getTotal() + getTotalTax();
     }
 
@@ -439,8 +439,8 @@ public class Order implements Serializable, ContentEntity {
         return taxes;
     }
 
-    public double getTotalTax(OrderLineTax tax) {
-        double value = 0;
+    public long getTotalTax(OrderLineTax tax) {
+        long value = 0;
         for (OrderLine line : orderlines) {
             if (tax == null || hasSameTaxReferenced(tax, line.getTax())) {
                 value += line.getTotalTax();
