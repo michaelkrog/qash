@@ -63,9 +63,9 @@ public class SubscriptionController {
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("organisationId", organisationId);
         model.put("currency", currency);
-        model.put("orderFee", subscriptionManagerBean.getOrderFee(currency));
+        /*model.put("orderFee", subscriptionManagerBean.getOrderFee(currency));
         model.put("minFee", subscriptionManagerBean.getMinMonthlyFee(currency));
-        model.put("maxFee", subscriptionManagerBean.getMaxMonthlyFee(currency));
+        model.put("maxFee", subscriptionManagerBean.getMaxMonthlyFee(currency));*/
         return new ModelAndView("subscribe", model);
     }
 
@@ -77,21 +77,21 @@ public class SubscriptionController {
         OrganisationService mainOrganisationService = service.getOrganisationService(service.getMainOrganisation());
         
         if (!org.isSubscriber()) {
-            //TODO: Default fee percentage should be read from somewhere
             org.setSubscriber(true);
-            org.setFeePercentage(0.001);
             
             service.getOrganisationCrud().update(org);
             
             //Get or create CustomerRelationShip
             CustomerRelationship relationship = mainOrganisationService.getCustomerRelationship(org, true);
-            
+            String currency = subscriptionManagerBean.getPaymentCurrencyForOrganisation(org);
+                    
             Subscription subscription = new Subscription();
             subscription.setAutoRenew(true);
-            subscription.setCurrency(subscriptionManagerBean.getPaymentCurrencyForOrganisation(org));
+            subscription.setCurrency(currency);
+            subscription.setPrice(subscriptionManagerBean.getSubscriptionFee(currency));
             subscription.setInterval(1);
             subscription.setIntervalUnit(IntervalUnit.Month);
-            subscription.setPricingType(SubscriptionPricingType.QashUsageBase);
+            subscription.setPricingType(SubscriptionPricingType.FixedSubsequent);
             subscription.setEnabled(true);
             subscription.setCustomer(relationship);
             
@@ -133,8 +133,7 @@ public class SubscriptionController {
                 Subscription subscription = null;
                 CustomerRelationship relationship = mainOrganisationService.getCustomerRelationship(org, false);
                 if(relationship!=null) {
-                    Filter filter = new AndFilter(new CompareFilter("customer", relationship, CompareFilter.CompareType.Equals),
-                                                new CompareFilter("pricingType", SubscriptionPricingType.QashUsageBase, CompareFilter.CompareType.Equals));
+                    Filter filter = new AndFilter(new CompareFilter("customer", relationship, CompareFilter.CompareType.Equals));
                     List<String> idlist = mainOrganisationService.getSubscriptions().listIds(filter, null);
                     if(!idlist.isEmpty()) {
                         subscription = mainOrganisationService.getSubscriptions().read(idlist.get(0));

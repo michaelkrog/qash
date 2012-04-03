@@ -44,9 +44,9 @@ public class PricesController {
         
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("currency", currency);
-        model.put("orderFee", subscriptionManagerBean.getOrderFee(currency));
+       /* model.put("orderFee", subscriptionManagerBean.getOrderFee(currency));
         model.put("minFee", subscriptionManagerBean.getMinMonthlyFee(currency));
-        model.put("maxFee", subscriptionManagerBean.getMaxMonthlyFee(currency));
+        model.put("maxFee", subscriptionManagerBean.getMaxMonthlyFee(currency));*/
         return new ModelAndView("prices", model);
     }
 }
