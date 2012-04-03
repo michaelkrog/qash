@@ -56,7 +56,7 @@ public class SubscriptionManagerBean {
     @Autowired private SimpleMailMessage templateMessage;
     private final NumberFormat orderNumberFormatter = NumberFormat.getIntegerInstance();
     private final NumberFormat amountFormatter = NumberFormat.getCurrencyInstance(Locale.ENGLISH);
-    private Map<String, Double> subscriptionFeeMap;
+    private Map<String, Long> subscriptionFeeMap;
 
     public SubscriptionManagerBean() {
         this.orderNumberFormatter.setMinimumIntegerDigits(4);
@@ -65,7 +65,7 @@ public class SubscriptionManagerBean {
     @PostConstruct
     protected void init() {
         if (subscriptionFeeMap == null) {
-            subscriptionFeeMap = new HashMap<String, Double>();
+            subscriptionFeeMap = new HashMap<String, Long>();
         }
     }
 
@@ -74,7 +74,7 @@ public class SubscriptionManagerBean {
      * the double value is the amount to charge as fee in the given currency. The fee is for a month of subscription.
      * @param subscriptionFeeMap 
      */
-    public void setSubscriptionFeeMap(Map<String, Double> subscriptionFeeMap) {
+    public void setSubscriptionFeeMap(Map<String, Long> subscriptionFeeMap) {
         this.subscriptionFeeMap = subscriptionFeeMap;
     }
 
@@ -84,7 +84,7 @@ public class SubscriptionManagerBean {
      * @param currency The 2 letter currencycode.
      * @return The fee in the given currency.
      */
-    public double getSubscriptionFee(String currency) {
+    public long getSubscriptionFee(String currency) {
         if (subscriptionFeeMap.containsKey(currency)) {
             return subscriptionFeeMap.get(currency);
         } else {
