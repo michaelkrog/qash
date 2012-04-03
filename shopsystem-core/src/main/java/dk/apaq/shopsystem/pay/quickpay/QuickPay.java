@@ -67,6 +67,7 @@ public class QuickPay implements PaymentGateway {
     @Override
     public void cancel(String transactionId) {
         try {
+            LOG.debug("Cancelling transaction [transactionId={}]", transactionId);
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
             HttpPost post = new HttpPost(url);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
@@ -100,6 +101,7 @@ public class QuickPay implements PaymentGateway {
 
     public PaymentInformation getPaymentInformation(String transactionId) {
         try {
+            LOG.debug("Retrieving information about transaction [transactionId={}]", transactionId);
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
             HttpPost post = new HttpPost(url);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
@@ -135,6 +137,7 @@ public class QuickPay implements PaymentGateway {
     @Override
     public void capture(long amountInCents, String transactionId) {
         try {
+            LOG.debug("Capturing money for transaction [transactionId={}; amountInCents={}]", new Object[]{transactionId, amountInCents});
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
             HttpPost post = new HttpPost(url);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
@@ -165,6 +168,9 @@ public class QuickPay implements PaymentGateway {
 
     public void recurring(String orderNumber, long amountInCents, String currency, boolean autocapture, String transactionId) {
         try {
+            LOG.debug("Recurrings authorization for transaction [transactionId={}; orderNumber={}; amountInCents={}; currency={}; autoCapture={}]", 
+                                                                    new Object[]{transactionId, orderNumber, amountInCents, currency, autocapture});
+            
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
             HttpPost post = new HttpPost(url);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
@@ -198,6 +204,7 @@ public class QuickPay implements PaymentGateway {
 
     public void renew(long amountInCents, String transactionId) {
         try {
+            LOG.debug("Renewing transaction [transaction={}; amountInCents={}]", new Object[]{transactionId, amountInCents});
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
             HttpPost post = new HttpPost(url);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
@@ -229,6 +236,7 @@ public class QuickPay implements PaymentGateway {
 
     public void refund(long amountInCents, String transactionId) {
         try {
+            LOG.debug("Refunding transaction [transaction={}; amountInCents={}]", new Object[]{transactionId, amountInCents});
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
             HttpPost post = new HttpPost(url);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
