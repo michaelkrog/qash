@@ -23,8 +23,10 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Embedded;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout.MarginInfo;
@@ -88,7 +90,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.hibernate.mapping.ToOne;
+import javax.media.jai.PropertyChangeEmitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -136,17 +138,36 @@ public class OrderEditor extends CustomComponent implements
     private OrganisationService organisationService;
     private AnnexService annexService;
     private boolean autoOpenPaymentDialog=false;
+    private final PropertyChangeListener propertyChangeListener = new PropertyChangeListener();
+    
+    private class PropertyChangeListener implements Property.ValueChangeListener {
+
+        @Override
+        public void valueChange(ValueChangeEvent event) {
+            hasChanges = true;
+            commit();
+        }
+        
+    }
     
     private class OrderChangeListener implements Item.PropertySetChangeListener {
 
         public void itemPropertySetChange(PropertySetChangeEvent event) {
             update();
         }
+
     }
 
     private class PaymentChangeListener implements Container.ItemSetChangeListener {
 
         public void containerItemSetChange(ItemSetChangeEvent event) {
+            //A payment could have changed the order. Lets reload the order.
+            
+            //TODO: We need a better way to force a reload
+            if(dataSource!=null) {
+                dataSource.getItemProperty("dateChanged").setValue(null);
+                ((CrudItem)dataSource).discard();
+            }
             update();
         }
     }
@@ -157,6 +178,8 @@ public class OrderEditor extends CustomComponent implements
             hasChanges = true;
         }
     }
+    
+    
 
     private class DeleteColumnGenerator implements Table.ColumnGenerator {
 
@@ -277,14 +300,20 @@ public class OrderEditor extends CustomComponent implements
         private final HorizontalLayout bottomLayout = new HorizontalLayout();
         private final Label lbl_title = new Label("#12");
         private final Label lbl_invoiceno = new Label("Invoiceno: #12");
-        private final Label lbl_dateCreated = new Label("Created: 1/2 2011");
-        private final Label lbl_dateDelivered = new Label("Delivered: 1/2 2011");
+        private final Label lbl_dateCreated_title = new Label("Created:");
+        private final Label lbl_dateDelivered_title = new Label("Delivered:");
+        private final Label lbl_dateCreated = new Label("1/2 2011");
+        private final Label lbl_dateDelivered = new Label("1/2 2011");
+        private final Label lbl_dateTimelyPayment_title = new Label("Due:");
+        private final DateField date_dateTimelyPayment = new DateField();
+        private final GridLayout dateLayout = new GridLayout(2, 3);
         //private final Button btn_shipping = new Button("Shipping");
         private final Button btn_customer = new Button("Customer");
         private final Button btn_payments = new Button("Payments");
         private final Button btn_close = new Button("Close");
         //private final Label lbl_clerk = new Label("Clerk: Hannah Krog");
         private final Label lbl_status = new Label("New");
+        private final Label lbl_customer = new Label("Customer");
         private final AddressLabel customerAddress = new AddressLabel();
         private final TextField txt_barcode = new TextField();
         private final Button btn_addLine = new Button("Add non-stock item");
@@ -321,6 +350,10 @@ public class OrderEditor extends CustomComponent implements
             lbl_dateDelivered.setSizeUndefined();
             //lbl_clerk.setSizeUndefined();
             lbl_status.setSizeUndefined();
+            lbl_customer.setStyleName(ShopSystemTheme.LABEL_BOLD);
+            
+            date_dateTimelyPayment.setShowISOWeekNumbers(true);
+            date_dateTimelyPayment.setResolution(DateField.RESOLUTION_DAY);
             
             outerLayout.addComponent(topLayout);
             outerLayout.addComponent(bottomLayout);
@@ -328,7 +361,7 @@ public class OrderEditor extends CustomComponent implements
             outerLayout.setComponentAlignment(orderlineLayout, Alignment.BOTTOM_RIGHT);
             outerLayout.setSizeFull();
 
-            bottomLayout.setMargin(true, true, false, true);
+            bottomLayout.setMargin(true, true, true, true);
             bottomLayout.addComponent(leftLayout);
             bottomLayout.addComponent(rightLayout);
             bottomLayout.setSizeFull();
@@ -352,18 +385,20 @@ public class OrderEditor extends CustomComponent implements
             topButtonLayout.setSpacing(true);
             
             leftLayout.setMargin(false);
+            leftLayout.addComponent(lbl_customer);
             leftLayout.addComponent(customerAddress);
-            //leftLayout.addComponent(lbl_dateCreated);
-            //leftLayout.addComponent(lbl_dateDelivered);
             leftLayout.setSizeFull();
 
             rightLayout.setMargin(false);
-            rightLayout.addComponent(lbl_dateCreated);
-            rightLayout.setComponentAlignment(lbl_dateCreated, Alignment.TOP_RIGHT);
-            rightLayout.addComponent(lbl_dateDelivered);
-            rightLayout.setComponentAlignment(lbl_dateDelivered, Alignment.TOP_RIGHT);
-            //rightLayout.addComponent(lbl_clerk);
-            //rightLayout.setComponentAlignment(lbl_clerk, Alignment.TOP_RIGHT);
+            rightLayout.addComponent(dateLayout);
+            rightLayout.setComponentAlignment(dateLayout, Alignment.TOP_RIGHT);
+            
+            dateLayout.addComponent(lbl_dateCreated_title);
+            dateLayout.addComponent(lbl_dateCreated);
+            dateLayout.addComponent(lbl_dateDelivered_title);
+            dateLayout.addComponent(lbl_dateDelivered);
+            dateLayout.addComponent(lbl_dateTimelyPayment_title);
+            dateLayout.addComponent(date_dateTimelyPayment);
             rightLayout.setSizeFull();
 
             orderlineLayout.setMargin(false, true, false, true);
@@ -445,6 +480,10 @@ public class OrderEditor extends CustomComponent implements
         
         public AddressLabel getCustomerLabel() {
             return customerAddress;
+        }
+        
+        public DateField getTimelyPaymetnField() {
+            return date_dateTimelyPayment;
         }
     }
 
@@ -821,6 +860,8 @@ public class OrderEditor extends CustomComponent implements
         if (this.dataSource != null && (this.dataSource instanceof Item.PropertySetChangeNotifier)) {
             ((Item.PropertySetChangeNotifier) this.dataSource).removeListener(orderChangeListener);
         }
+        
+        header.getTimelyPaymetnField().removeListener(propertyChangeListener);
 
         this.dataSource = newDataSource;
 
@@ -839,6 +880,9 @@ public class OrderEditor extends CustomComponent implements
         ((FilterableContainer) paymentContainer).setFilter(paymentFilter);
         this.orderlineContainer.setDatasource(newDataSource);
         footer.setItemDataSource(this.dataSource);
+        header.getTimelyPaymetnField().setPropertyDataSource(this.dataSource.getItemProperty("dateTimelyPayment"));
+        header.getTimelyPaymetnField().addListener(propertyChangeListener);
+
         this.update();
     }
 
@@ -875,8 +919,8 @@ public class OrderEditor extends CustomComponent implements
             titleString = titleString + ": " + getStatusString(status);
             
             invoiceNumberString = "InvoiceNo.: " + (invoiceNumber > 0 ? invoiceNumber : "-");
-            createdString = "Created: " + dateFormat.format(created);
-            invoicedString = "Invoiced: " + (invoiced == null ? "-" : dateFormat.format(invoiced));
+            createdString = dateFormat.format(created);
+            invoicedString = (invoiced == null ? "-" : dateFormat.format(invoiced));
             statusString = getStatusString(status);
 
             double due = getDue();
@@ -958,7 +1002,7 @@ public class OrderEditor extends CustomComponent implements
             table.setVisibleColumns(shownTableProperties);
             table.setColumnHeaders(shownTableHeaders);
             table.setColumnCollapsingAllowed(true);
-            table.setColumnCollapsed("price", true);
+            //table.setColumnCollapsed("price", true);
 
             table.setColumnAlignment("quantity", Table.ALIGN_RIGHT);
             table.setColumnAlignment("price", Table.ALIGN_RIGHT);
@@ -995,6 +1039,7 @@ public class OrderEditor extends CustomComponent implements
         header.getButtonAddLine().setEnabled(editable);
         header.getButtonPrint().setEnabled(!editable);
         header.getToolbarButtonCustomers().setEnabled(editable);
+        header.getTimelyPaymetnField().setReadOnly(!editable);
         
         table.setEditable(editable);
 

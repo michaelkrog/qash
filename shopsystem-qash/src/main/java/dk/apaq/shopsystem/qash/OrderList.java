@@ -59,10 +59,10 @@ public class OrderList extends CustomComponent implements
         ItemClickEvent.ItemClickNotifier, Property {
     
     private static final Logger LOG = LoggerFactory.getLogger(OrderList.class);
-    private static final String[] COLUMNS_STORE = {"delete", "number", "status", "dateChanged", "totalWithTax"};
+    private static final String[] COLUMNS_STORE =        {"delete", "number", "status", "dateChanged", "totalWithTax"};
+    private static final String[] COLUMNCAPTIONS_STORE = {"", "Number", "Status", "Changed", "Total"};
     private static final String[] COLUMNS_NOSTORE = {"delete", "number", "outlet", "status", "dateChanged", "dateTimelyPayment", "total", "totalWithTax"};
-    private static final String[] COLUMNCAPTIONS_STORE = {"", "Number", "Status", "Changed", "Due", "Total", "Total(inc. tax)"};
-    private static final String[] COLUMNCAPTIONS_NOSTORE = {"", "Number", "Store", "Status", "Changed", "Total"};
+    private static final String[] COLUMNCAPTIONS_NOSTORE = {"", "Number", "Store", "Status", "Changed", "Due", "Total", "Total(inc. tax)"};
     
     private static final String LABEL_INPROCESS = "In process";
     private static final String LABEL_ACCEPTED = "Accepted";
@@ -151,7 +151,11 @@ public class OrderList extends CustomComponent implements
         public Component generateCell(Table source, Object itemId, Object columnId) {
             Property prop = source.getContainerProperty(itemId, columnId);
             Date date = (Date) prop.getValue();
-            return new Label(dateFormat.format(date));
+            if(date==null) {
+                return new Label("-");
+            } else {
+                return new Label(dateFormat.format(date));
+            }
         }
     }
 

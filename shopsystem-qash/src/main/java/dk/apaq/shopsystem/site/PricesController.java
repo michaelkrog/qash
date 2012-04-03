@@ -29,8 +29,10 @@ public class PricesController {
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        /*Country country  = Country.getCountry(request.getLocale().getCountry(), request.getLocale());
+        //Get country based on ip address
+        Country country  = Country.getCountryByIpaddress(request.getRemoteAddr());
         
+        //Get currency based on country
         String currency;
         if ("DK".equals(country.getCode())) {
             currency = "DKK";
@@ -38,15 +40,12 @@ public class PricesController {
             currency = "EUR";
         } else {
             currency = "USD";
-        }*/
+        }
         
-        String currency = "USD";
         
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("currency", currency);
-       /* model.put("orderFee", subscriptionManagerBean.getOrderFee(currency));
-        model.put("minFee", subscriptionManagerBean.getMinMonthlyFee(currency));
-        model.put("maxFee", subscriptionManagerBean.getMaxMonthlyFee(currency));*/
+        model.put("subscriptionFee", subscriptionManagerBean.getSubscriptionFee(currency));
         return new ModelAndView("prices", model);
     }
 }

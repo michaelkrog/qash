@@ -7,6 +7,7 @@ import dk.apaq.filter.core.OrFilter;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
+import dk.apaq.shopsystem.management.SubscriptionManagerBean;
 import dk.apaq.shopsystem.security.SystemUserDetails;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
@@ -36,6 +37,9 @@ public class DashboardController {
 
     @Autowired
     private SystemService service;
+    
+    @Autowired
+    private SubscriptionManagerBean subscriptionManagerBean;
 
     private Filter orderFilter = new CompareFilter("dateInvoiced", DateUtils.addDays(new Date(), -30), CompareFilter.CompareType.GreaterOrEqual);
     
@@ -53,6 +57,7 @@ public class DashboardController {
         model.put("user", sud.getUser());
         model.put("service", service);
         model.put("oneMonthFilter", orderFilter);
+        model.put("subscription", subscriptionManagerBean);
         return new ModelAndView("dashboard", model);
     }
     

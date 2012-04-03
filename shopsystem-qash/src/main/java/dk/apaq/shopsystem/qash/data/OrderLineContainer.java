@@ -339,7 +339,7 @@ public class OrderLineContainer implements Container, Container.ItemSetChangeNot
         }
 
         int index = order.getOrderLineCount();
-        order.addOrderLine("", 0, 0, null, null);
+        order.addOrderLine("", 0, 0, null);
         fireSetChange();
         return index;
     }

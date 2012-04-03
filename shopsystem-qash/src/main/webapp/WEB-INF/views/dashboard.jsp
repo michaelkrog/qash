@@ -40,8 +40,6 @@
                                 <th scope="col"><spring:message code="dashboard.column.name"/></th>
                                 <th scope="col"><spring:message code="dashboard.column.plan"/></th>
                                 <th scope="col"><spring:message code="dashboard.column.fee"/></th>
-                                <th scope="col"><spring:message code="dashboard.column.orderUsage"/></th>
-                                <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -53,53 +51,54 @@
                                     </td>
 
                                     <c:set var="orderCount" value="${service.getOrganisationService(organisation).getOrders().listIds(oneMonthFilter, null).size()}" scope="request" />
+                                    <c:choose>
+                                        <c:when test="${orderCount<10}">
+                                            <c:set var="ordersLeft" value="${10-orderCount}" scope="request" />
+
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <c:set var="ordersLeft" value="0" scope="request" />
+
+                                        </c:otherwise>
+                                        
+                                    </c:choose>
+                                    
 
                                     <c:choose>
                                         <c:when test="${organisation.subscriber}">
+                                            <c:set var="currency" value="${subscription.getPaymentCurrencyForOrganisation(organisation)}" scope="request" />
                                             <td><spring:message code="dashboard.unlimited_access"/></td>    
-                                            <td><fmt:formatNumber type="percent" maxFractionDigits="1" minFractionDigits="1" value="${organisation.feePercentage}" /></td>    
-                                            <td>${orderCount}</td>
+                                            <td><fmt:formatNumber value='${subscription.getSubscriptionFee(currency)}' currencyCode="${currency}" type='currency'/></td>    
                                             <td><a href="unsubscribe.htm?organisationId=${organisation.id}" class="button-standard"><spring:message code="dashboard.unsubscribe_basic_plan"/></a></td>
-                                            <td><a icon="hyperlink" href="/admin/org/${organisation.id}"><spring:message code="dashboard.administer"/></a></td>
                                         </c:when> 
                                         <c:otherwise>
-                                            <td><spring:message code="dashboard.limited_access"/></td>
+                                            
+                                            <td><spring:message code="dashboard.limited_access"/> (<spring:message code="dashboard.free_limit_orders" arguments="${ordersLeft}"/>)*</td>
                                             <td><spring:message code="dashboard.free"/></td>    
-                                            <td>${orderCount} <span class="light">(<spring:message code="dashboard.free_limit_orders"/>)</span></td>
                                             <td><a href="subscribe.htm?organisationId=${organisation.id}" class="button-standard"><spring:message code="dashboard.subscribe_basic_plan"/></a></td>
-                                            <td><a icon="hyperlink" href="/admin/org/${organisation.id}"><spring:message code="dashboard.administer"/></a></td>
                                         </c:otherwise>
                                     </c:choose>
                                 </tr>
                                 <c:set var="stores" value="${service.getOrganisationService(organisation).getStores().list()}" scope="request" />
 
-                                <c:choose>
-                                    <c:when test="${stores.isEmpty()}">
-                                        <tr class="oddrow">
-                                            <td colspan="6">
-                                                -&nbsp;<i><spring:message code="dashboard.no_registers"/>)</i>
-                                            </td>
-                                        </tr>
-
-                                    </c:when>
-                                    <c:otherwise>
+                                <tr class="oddrow">
+                                                <td colspan="6">
+                                                    <a icon="hyperlink" href="/admin/org/${organisation.id}"><b><spring:message code="dashboard.administration"/></b>&nbsp;(<spring:message code="dashboard.backoffice"/>)</a>&nbsp;
+                                                    
                                         <c:forEach var="store" items="${service.getOrganisationService(organisation).getStores().list()}"> 
 
-                                            <tr class="oddrow">
-                                                <td colspan="6">
-                                                    -&nbsp;<a icon="hyperlink" href="/register/org/${organisation.id}/${store.id}"><b>${store.name}</b> (<spring:message code="dashboard.register"/>)</a>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>   
-                                    </c:otherwise>
-                                </c:choose>
+                                            |&nbsp;<a icon="hyperlink" href="/register/org/${organisation.id}/${store.id}"><b>${store.name}</b> (<spring:message code="dashboard.register"/>)</a>
 
+                                        </c:forEach>   
+                                                </td>
+                                </tr>
                             </c:forEach>
 
                         </tbody>
                     </table>
                     <spring:message code="dashboard.footnote"/>
-                    <!--Restrictions are based on the plan chosen for the Shop.--><br/>
+                   <br/>
 
 
                 </p>

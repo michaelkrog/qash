@@ -34,26 +34,15 @@
                 <p>
                     <fmt:formatNumber var="formattedExampleRevenue" value='10000' currencyCode="${currency}" type='currency'/>
                     <fmt:formatNumber var="formattedExampleFee" value='10' currencyCode="${currency}" type='currency'/>
-                    <fmt:formatNumber var="formattedFee" value='${orderFee}' currencyCode="${currency}" type='currency'/>
-                    <fmt:formatNumber var="formattedMinFee" value='${minFee}' currencyCode="${currency}" type='currency'/>
-                    <fmt:formatNumber var="formattedMaxFee" value='${maxFee}' currencyCode="${currency}" type='currency'/>
-                   
+                    <fmt:formatNumber var="formattedFee" value='${subscriptionFee}' currencyCode="${currency}" type='currency'/>
+                    
 
                     <div style="width:400px;padding-bottom:20px;">
                         <spring:message code="subscribe.text1" /><br/><br/>
-                        <h2><spring:message code="subscribe.example.title"/></h2>
-                        <table>
-                            <tr>
-                                <td><b>
-                                        <spring:message code="subscribe.example.fee.title"/>:
-                                    </b>
-                                </td>
-                                <td>
-                                    <spring:message code="subscribe.example.fee.text" argumentSeparator="|" arguments="${formattedFee}|${formattedMinFee}|${formattedMaxFee}"/> *
-                                </td>
-                            </tr>
-                            
-                            </table>
+                        <spring:message code="subscribe.text2" /><br/><br/>
+                        <h2><spring:message code="subscribe.fee.title"/></h2>
+                        <spring:message code="subscribe.fee.text" argumentSeparator="|" arguments="${formattedFee}"/> *
+
                             <br/><br/>
 
                        
@@ -61,8 +50,6 @@
                        
 
                     </div>
-
-                    <!-- * <spring:message code="subscribe.footnote" argumentSeparator="|" arguments="${formattedExampleRevenue}|${formattedFee}|${formattedExampleFee}"/> -->
 
                 </p>
             </div>

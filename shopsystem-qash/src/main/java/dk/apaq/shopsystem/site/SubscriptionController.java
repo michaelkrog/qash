@@ -63,9 +63,7 @@ public class SubscriptionController {
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("organisationId", organisationId);
         model.put("currency", currency);
-        /*model.put("orderFee", subscriptionManagerBean.getOrderFee(currency));
-        model.put("minFee", subscriptionManagerBean.getMinMonthlyFee(currency));
-        model.put("maxFee", subscriptionManagerBean.getMaxMonthlyFee(currency));*/
+        model.put("subscriptionFee", subscriptionManagerBean.getSubscriptionFee(currency));
         return new ModelAndView("subscribe", model);
     }
 
@@ -133,7 +131,8 @@ public class SubscriptionController {
                 Subscription subscription = null;
                 CustomerRelationship relationship = mainOrganisationService.getCustomerRelationship(org, false);
                 if(relationship!=null) {
-                    Filter filter = new AndFilter(new CompareFilter("customer", relationship, CompareFilter.CompareType.Equals));
+                    Filter filter = new AndFilter(new CompareFilter("customer", relationship, CompareFilter.CompareType.Equals),
+                                                new CompareFilter("pricingType", SubscriptionPricingType.FixedSubsequent, CompareFilter.CompareType.Equals));
                     List<String> idlist = mainOrganisationService.getSubscriptions().listIds(filter, null);
                     if(!idlist.isEmpty()) {
                         subscription = mainOrganisationService.getSubscriptions().read(idlist.get(0));

@@ -30,8 +30,7 @@
                 <h1><spring:message code="prices.title"/></h1>
             <br/>
             <ul>
-                    <fmt:formatNumber var="formattedFee"  value='${orderFee}' currencyCode="${currency}" type='currency'/>
-                    <fmt:formatNumber var="formattedMaxFee" value='${maxFee}' currencyCode="${currency}" type='currency'/>
+                    <fmt:formatNumber var="formattedFee"  value='${subscriptionFee}' currencyCode="${currency}" type='currency'/>
                    
                     <!-- benefit item -->
                     <li style="width:430px; height:105px">
@@ -47,7 +46,7 @@
                         <span class="benefits-icon"><img src="images/prices/payg.png" alt="Login" width="70" height="70" /></span>
                         <div class="benefits-text" style="width:315px;padding-right:45px;">
                         <h2><spring:message code="prices.paid.title"/></h2>
-                        <spring:message code="prices.paid.text" argumentSeparator="|" arguments="${formattedFee}|${formattedMaxFee}"/>
+                        <spring:message code="prices.paid.text" argumentSeparator="|" arguments="${formattedFee}"/>
                         </div>
                     </li>
             </ul>
