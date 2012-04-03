@@ -86,7 +86,7 @@ public class AnnexServiceTest extends TestCase {
             order.setCurrency("DKK");
             order.setNumber(i + 1);
             order.setStatus(OrderStatus.Completed);
-            order.addOrderLine("Coffee Cup", i + 1, 10, "ID", "COFFEECUP", tax);
+            order.addOrderLine("Coffee Cup", i + 1, 10, tax);
             orderlist.add(order);
 
         }

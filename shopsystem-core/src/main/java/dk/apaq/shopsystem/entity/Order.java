@@ -262,12 +262,8 @@ public class Order implements Serializable, ContentEntity {
         addOrderLine(item, 1);
     }
 
-    /**
-     * @deprecated 
-     * @param line
-     */
-    public void addOrderLine(OrderLine line) {
-        orderlines.add(line);
+    public void addOrderLine(Subscription subscription) {
+        
     }
 
     public void addOrderLine(Product item, double quantity) {
@@ -290,11 +286,7 @@ public class Order implements Serializable, ContentEntity {
         addOrderLine(title, quantity, price, null, null, tax);
     }
 
-    public void addOrderLine(String title, double quantity, long price, String itemid, String itemno) {
-        addOrderLine(title, quantity, price, itemid, itemno, null);
-    }
-
-    public void addOrderLine(String title, double quantity, long price, String itemid, String itemno, Tax tax) {
+    private void addOrderLine(String title, double quantity, long price, String itemid, String itemno, Tax tax) {
 
         OrderLineTax lineTax;
 
@@ -312,7 +304,7 @@ public class Order implements Serializable, ContentEntity {
         line.setTax(lineTax);
         line.setItemNo(itemno);
 
-        addOrderLine(line);
+        orderlines.add(line);
 
     }
 

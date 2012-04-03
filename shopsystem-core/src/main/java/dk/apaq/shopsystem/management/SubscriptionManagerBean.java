@@ -162,13 +162,12 @@ public class SubscriptionManagerBean {
         
         Order order = new Order();
 
-        //1: Find out how much to collect
-        
         order.setCurrency(subscription.getCurrency());
         order.setStatus(OrderStatus.Accepted);
 
-        //1b: else use price specified on subscription
         order.addOrderLine("Subscription", 1, subscription.getPrice(), TaxTool.getTaxBasedOnCountry(customerCountry));
+        
+        
         return order;
     }
 
@@ -258,7 +257,7 @@ public class SubscriptionManagerBean {
         //4: If missing payment info send user mail
         if (subscription.getSubscriptionPaymentId() == null) {
             if (adminUser != null) {
-                //TODO Unable to authorize payment - send mail to user regarding missing payment information
+                //Unable to authorize payment - send mail to user regarding missing payment information
                 SimpleMailMessage msg = this.templateMessage == null ? new SimpleMailMessage() : new SimpleMailMessage(this.templateMessage);
                 msg.setSubject("New account");
                 msg.setTo(adminUser.getEmail());
