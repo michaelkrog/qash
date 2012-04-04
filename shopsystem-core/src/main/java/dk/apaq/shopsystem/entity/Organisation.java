@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.entity;
 
 import dk.apaq.crud.HasId;
+import dk.apaq.shopsystem.pay.PaymentGatewayType;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,7 +52,10 @@ public class Organisation implements HasId<String>, Company, HasContactInformati
     @Column(length=4096)
     private String notes;
     
+    @Enumerated(EnumType.STRING)
+    private PaymentGatewayType paymentGatewayType = PaymentGatewayType.QuickPay;
     private String merchantId;
+    private String merchantSecret;
     private boolean mainOrganisation = false;
     
     private boolean subscriber = false;
@@ -216,6 +220,22 @@ public class Organisation implements HasId<String>, Company, HasContactInformati
         this.merchantId = merchantId;
     }
 
+    public String getMerchantSecret() {
+        return merchantSecret;
+    }
+
+    public void setMerchantSecret(String merchantSecret) {
+        this.merchantSecret = merchantSecret;
+    }
+
+    public PaymentGatewayType getPaymentGatewayType() {
+        return paymentGatewayType;
+    }
+
+    public void setPaymentGatewayType(PaymentGatewayType paymentGatewayType) {
+        this.paymentGatewayType = paymentGatewayType;
+    }
+    
     public boolean isMainOrganisation() {
         return mainOrganisation;
     }

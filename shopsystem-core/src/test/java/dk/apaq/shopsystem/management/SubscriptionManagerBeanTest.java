@@ -17,6 +17,8 @@ import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Subscription;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.pay.MockPaymentGateway;
+import dk.apaq.shopsystem.pay.PaymentGatewayManager;
+import dk.apaq.shopsystem.pay.PaymentGatewayType;
 import dk.apaq.shopsystem.service.MockMailSender;
 import java.util.List;
 import org.junit.Before;
@@ -42,7 +44,7 @@ public class SubscriptionManagerBeanTest {
     @Autowired
     SubscriptionManagerBean subscriptionManagerBean;
     @Autowired 
-    private MockPaymentGateway paymentGateway;
+    private PaymentGatewayManager paymentGatewayManager;
     private Organisation organisation;
     private OrganisationService organisationService;
     private CustomerRelationship relationship;
@@ -68,6 +70,7 @@ public class SubscriptionManagerBeanTest {
             organisation = new Organisation();
             organisation.setCompanyName("Apaq");
             organisation.setCountryCode("DK");
+            organisation.setPaymentGatewayType(PaymentGatewayType.MockPay);
             String orgId = service.getOrganisationCrud().create(organisation);
             organisation = service.getOrganisationCrud().read(orgId);
 
@@ -152,7 +155,10 @@ public class SubscriptionManagerBeanTest {
     public void testPerformManualCollectionNoPaymentId() {
         System.out.println("performManualCollection");
 
-        subscriptionManagerBean.performCollection(subscriptionNotDue);
+        MockPaymentGateway paymentGateway = (MockPaymentGateway) paymentGatewayManager.createPaymentGateway(organisation.getPaymentGatewayType(), null, null);
+        paymentGateway.setLegalTransactionId("qwerty");
+        
+        subscriptionManagerBean.performCollection(organisation, paymentGateway, subscriptionNotDue);
         SimpleMailMessage msg = mailSender.lastMessageSent();
         assertNotNull(msg);
         assertTrue(msg.getText().contains("Dear Customer"));
@@ -160,10 +166,9 @@ public class SubscriptionManagerBeanTest {
         assertEquals("john@doe.dk", msg.getTo()[0]);
 
         //Test with paymentinformation - unable to withdraw
-        paymentGateway.setLegalTransactionId("qwerty");
         subscriptionNotDue.setSubscriptionPaymentId("123");
         
-        subscriptionManagerBean.performCollection(subscriptionNotDue);
+        subscriptionManagerBean.performCollection(organisation, paymentGateway, subscriptionNotDue);
         msg = mailSender.lastMessageSent();
         assertNotNull(msg);
         assertTrue(msg.getText().contains("Dear Customer"));
@@ -173,7 +178,7 @@ public class SubscriptionManagerBeanTest {
         //Test with paymentinformation - able to withdraw
         subscriptionNotDue.setSubscriptionPaymentId("qwerty");
         
-        Order order = subscriptionManagerBean.performCollection(subscriptionNotDue);
+        Order order = subscriptionManagerBean.performCollection(organisation, paymentGateway, subscriptionNotDue);
         msg = mailSender.lastMessageSent();
         assertNotNull(msg);
         assertTrue(msg.getText().contains("Dear Customer"));

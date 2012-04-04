@@ -80,7 +80,14 @@
     <bean id="wicketApplication" class="dk.apaq.shopsystem.rendering.CmsApplication" scope="prototype"/>
     
     <!-- PAYMENT -->
-    <bean id="paymentGateway" class="dk.apaq.shopsystem.pay.MockPaymentGateway"/>
+    <bean id="paymentGatewayManager" class="dk.apaq.shopsystem.pay.PaymentGatewayManager">
+        <property name="gatewayMap">
+            <map value-type="java.lang.Class"> 
+                <entry key="QuickPay" value="dk.apaq.shopsystem.pay.quickpay.QuickPay"/>
+                <entry key="MockPay" value="dk.apaq.shopsystem.pay.MockPaymentGateway"/>
+            </map>    
+        </property>   
+    </bean>    
     
     <!-- MESSAGING BEANS -->
     <bean id="mailSender" class="dk.apaq.shopsystem.service.MockMailSender"/>

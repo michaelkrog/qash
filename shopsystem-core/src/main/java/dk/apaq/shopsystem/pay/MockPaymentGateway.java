@@ -1,6 +1,9 @@
 package dk.apaq.shopsystem.pay;
 
+import dk.apaq.shopsystem.pay.PaymentException;
 import dk.apaq.shopsystem.pay.PaymentGateway;
+import dk.apaq.shopsystem.pay.PaymentGateway;
+import dk.apaq.shopsystem.pay.PaymentInformation;
 import dk.apaq.shopsystem.pay.PaymentInformation;
 
 /**
@@ -17,6 +20,17 @@ public class MockPaymentGateway implements PaymentGateway{
     private String authCurrency;
     private String authOrderId;
     private String legalTransactionId;
+
+    @Override
+    public void setMerchantId(String merchantId) {
+        
+    }
+
+    @Override
+    public void setMerchantSecret(String merchantSecret) {
+    
+    }
+    
     
     @Override
     public void capture(long amountInCents, String transactionId) {

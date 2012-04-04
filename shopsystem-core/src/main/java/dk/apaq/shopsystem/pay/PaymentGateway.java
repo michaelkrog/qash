@@ -6,6 +6,9 @@ package dk.apaq.shopsystem.pay;
  */
 public interface PaymentGateway {
     
+    public void setMerchantId(String merchantId);
+    public void setMerchantSecret(String merchantSecret);
+    
     /**
      * Captures an already authorized amount.
      * @param amountInCents The amount in cents(smallest denominator in the currency.)

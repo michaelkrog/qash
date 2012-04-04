@@ -37,12 +37,14 @@ public class QuickPayTest {
 
     @Before
     public void setUp() {
+        quickPay.setMerchantId("qwerty");
+        quickPay.setMerchantSecret("12345");
     }
 
     @After
     public void tearDown() {
     }
-    private QuickPay quickPay = new QuickPay("qwerty", "12345");
+    private QuickPay quickPay = new QuickPay();
 
     /**
      * Test of cancel method, of class QuickPay.

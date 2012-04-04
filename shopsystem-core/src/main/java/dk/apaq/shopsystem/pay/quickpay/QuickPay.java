@@ -31,23 +31,22 @@ public class QuickPay implements PaymentGateway {
 
     private String merchantId = null;
     private String secretWord = null;
-    private String url = null;
+    private String apiUrl = "https://secure.quickpay.dk/api";
+    private String formUrl = "https://secure.quickpay.dk/form/";
     private boolean testMode;
     private org.apache.http.client.HttpClient httpClient;
     private final static String protocolVersion = "4";
 
-
-    public QuickPay(String merchantId, String secretWord){
-        this.merchantId = merchantId;
-        this.secretWord = secretWord;
-        this.url = "https://secure.quickpay.dk/api";
+    @Override
+    public void setMerchantId(String merchantId) {
+        this.merchantId =merchantId;
     }
 
-    public QuickPay(String merchantId, String secretWord, String url){
-        this.merchantId = merchantId;
-        this.secretWord = secretWord;
-        this.url = url;
+    @Override
+    public void setMerchantSecret(String merchantSecret) {
+        this.secretWord = merchantSecret;
     }
+
 
     public void setTestMode(boolean testMode) {
         this.testMode = testMode;
@@ -69,7 +68,7 @@ public class QuickPay implements PaymentGateway {
         try {
             LOG.debug("Cancelling transaction [transactionId={}]", transactionId);
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
-            HttpPost post = new HttpPost(url);
+            HttpPost post = new HttpPost(apiUrl);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
             nvps.add(md5.getBasicNameValuePair("msgtype", "cancel"));
@@ -103,7 +102,7 @@ public class QuickPay implements PaymentGateway {
         try {
             LOG.debug("Retrieving information about transaction [transactionId={}]", transactionId);
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
-            HttpPost post = new HttpPost(url);
+            HttpPost post = new HttpPost(apiUrl);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
             nvps.add(md5.getBasicNameValuePair("msgtype", "status"));
@@ -139,7 +138,7 @@ public class QuickPay implements PaymentGateway {
         try {
             LOG.debug("Capturing money for transaction [transactionId={}; amountInCents={}]", new Object[]{transactionId, amountInCents});
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
-            HttpPost post = new HttpPost(url);
+            HttpPost post = new HttpPost(apiUrl);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
             nvps.add(md5.getBasicNameValuePair("msgtype", "capture"));
@@ -172,7 +171,7 @@ public class QuickPay implements PaymentGateway {
                                                                     new Object[]{transactionId, orderNumber, amountInCents, currency, autocapture});
             
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
-            HttpPost post = new HttpPost(url);
+            HttpPost post = new HttpPost(apiUrl);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
             nvps.add(md5.getBasicNameValuePair("msgtype", "capture"));
@@ -206,7 +205,7 @@ public class QuickPay implements PaymentGateway {
         try {
             LOG.debug("Renewing transaction [transaction={}; amountInCents={}]", new Object[]{transactionId, amountInCents});
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
-            HttpPost post = new HttpPost(url);
+            HttpPost post = new HttpPost(apiUrl);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
             nvps.add(md5.getBasicNameValuePair("msgtype", "renew"));
@@ -238,7 +237,7 @@ public class QuickPay implements PaymentGateway {
         try {
             LOG.debug("Refunding transaction [transaction={}; amountInCents={}]", new Object[]{transactionId, amountInCents});
             QuickPayMd5SumPrinter md5 = new QuickPayMd5SumPrinter();
-            HttpPost post = new HttpPost(url);
+            HttpPost post = new HttpPost(apiUrl);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
             nvps.add(md5.getBasicNameValuePair("msgtype", "refund"));

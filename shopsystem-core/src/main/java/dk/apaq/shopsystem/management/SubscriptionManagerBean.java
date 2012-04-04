@@ -28,6 +28,8 @@ import dk.apaq.shopsystem.pay.PaymentGateway;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import dk.apaq.shopsystem.l10n.Country;
+import dk.apaq.shopsystem.pay.PaymentGatewayManager;
+import dk.apaq.shopsystem.pay.PaymentGatewayType;
 import dk.apaq.shopsystem.util.TaxTool;
 
 import org.joda.time.DateTime;
@@ -51,7 +53,7 @@ public class SubscriptionManagerBean {
     
     @PersistenceContext private EntityManager em;
     @Autowired private SystemService service;
-    @Autowired private PaymentGateway paymentGateway;
+    @Autowired private PaymentGatewayManager paymentGatewayManager;
     @Autowired private MailSender mailSender;
     @Autowired private SimpleMailMessage templateMessage;
     private final NumberFormat orderNumberFormatter = NumberFormat.getIntegerInstance();
@@ -217,7 +219,9 @@ public class SubscriptionManagerBean {
                 continue;
             }
 
-            performCollection(subscription);
+            Organisation seller = subscription.getOrganisation();
+            PaymentGateway paymentGateway = paymentGatewayManager.createPaymentGateway(seller.getPaymentGatewayType(), seller.getMerchantId(), seller.getMerchantSecret());
+            performCollection(seller, paymentGateway, subscription);
             
         }
     }
@@ -239,8 +243,10 @@ public class SubscriptionManagerBean {
      * @param subscription 
      */
     @Transactional
-    public Order performCollection(Subscription subscription) {
-        OrganisationService orgService = service.getOrganisationService(subscription.getOrganisation());
+    public Order performCollection(Organisation seller, PaymentGateway paymentGateway, Subscription subscription) {
+        OrganisationService orgService = service.getOrganisationService(seller);
+        
+        
         SystemUser adminUser = getAdminUserForOrganisation(subscription.getCustomer().getCustomer());
 
         //1: generate order
