@@ -37,7 +37,6 @@
                         </c:forEach>    
                             <button class="button-standard">Betal</button>    
                     </form>    
-                    
                     <br/><br/>
                 </div>
 

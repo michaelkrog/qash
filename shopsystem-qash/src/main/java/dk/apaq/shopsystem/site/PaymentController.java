@@ -39,11 +39,12 @@ public class PaymentController {
     public PaymentController() {
         nfQuickPayOrderNumber.setMinimumIntegerDigits(4);
         nfQuickPayOrderNumber.setMaximumIntegerDigits(20);
+        nfQuickPayOrderNumber.setGroupingUsed(false);
     }
     
     
     @RequestMapping("/payment.htm")
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response, @RequestParam(required = true) String id) throws IOException {
+    public ModelAndView handlePaymentForm(HttpServletRequest request, HttpServletResponse response, @RequestParam(required = true) String id) throws IOException {
         
         Organisation seller = service.getMainOrganisation();
         OrganisationService sellerService = service.getOrganisationService(seller);
@@ -58,7 +59,7 @@ public class PaymentController {
                 model.put("formElements", buildFormElementsForQuickPay(seller, order, null, null));
                 return new ModelAndView("payment", model);
             case QuickPay:
-                String urlPrefix = "http://" + request.getServerName() + (request.getServerPort() == 80 ? "" : request.getServerPort()) + request.getContextPath();
+                String urlPrefix = "http://" + request.getServerName() + (request.getServerPort() == 80 ? "" : ":"+request.getServerPort()) + request.getContextPath();
                 String returnUrl = urlPrefix + "/payment_return.htm";
                 String callbackUrl = urlPrefix + "/api/organisations/" + seller.getId() + "/payments?gateway=quickpay";
 
@@ -69,10 +70,21 @@ public class PaymentController {
             default:
                 response.sendError(501);
                 return null;
-                    
-                
         }
 
+    }
+    
+    @RequestMapping("/payment_return.htm")
+    public ModelAndView handlePaymentReturn(HttpServletRequest request, HttpServletResponse response, @RequestParam(required = true) String id) throws IOException {
+        //Find organisation and order
+        //Create paymentgateway instance
+        //Get status for transaction
+        
+        
+        //if not paid redirect to front dashboard
+        
+        //if paid show order and link to pdf
+        return null;
     }
     
     private Map<String, String> buildFormElementsForQuickPay(Organisation seller, Order order, String returnUrl, String callbackUrl) {
@@ -87,16 +99,18 @@ public class PaymentController {
         
         Map<String, String> map = new LinkedHashMap<String, String>();
         map.put("protocol", "4");
-        map.put("msgtype", "recurring"); //or authorize?
+        map.put("msgtype", "subscribe"); //or authorize?
         map.put("merchant", seller.getMerchantId());
         map.put("language", customerLanguage);
         map.put("ordernumber", nfQuickPayOrderNumber.format(order.getNumber()));  //
         map.put("amount", Long.toString(order.getTotalWithTax()));
         map.put("currency", order.getCurrency());
         map.put("continueurl", returnUrl);
+        map.put("cancelurl", returnUrl);
         map.put("callbackurl", callbackUrl);
         map.put("autocapture", "0");
         map.put("cardtypelock", "");
+        map.put("description", "Subscription for order #"+order.getNumber());
         map.put("splitpayment", "1");
         
         //md5
@@ -104,6 +118,7 @@ public class PaymentController {
         for(String value : map.values()) {
             builder.append(value);
         }
+        builder.append(seller.getMerchantSecret());
         map.put("md5check", DigestUtils.md5Hex(builder.toString()));
         
         return map;
