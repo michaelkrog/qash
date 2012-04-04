@@ -10,6 +10,8 @@ import dk.apaq.shopsystem.entity.Subscription;
 import dk.apaq.shopsystem.entity.SubscriptionPricingType;
 import dk.apaq.shopsystem.management.SubscriptionManagerBean;
 import dk.apaq.shopsystem.pay.PaymentGateway;
+import dk.apaq.shopsystem.pay.PaymentGatewayManager;
+import dk.apaq.shopsystem.pay.PaymentGatewayType;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import java.io.IOException;
@@ -39,14 +41,14 @@ public class SubscriptionController {
     private static final Logger LOG = LoggerFactory.getLogger(SubscriptionController.class);
     
     private SystemService service;
-    private PaymentGateway paymentGateway;
     private SubscriptionManagerBean subscriptionManagerBean;
+    private PaymentGatewayManager paymentGatewayManager;
 
     @Autowired
-    public SubscriptionController(SystemService service, PaymentGateway paymentGateway, SubscriptionManagerBean managerBean) {
+    public SubscriptionController(SystemService service, PaymentGatewayManager paymentGatewayManager, SubscriptionManagerBean managerBean) {
         this.service = service;
-        this.paymentGateway = paymentGateway;
         this.subscriptionManagerBean = managerBean;
+        this.paymentGatewayManager = paymentGatewayManager;
     }
     
     
@@ -144,8 +146,11 @@ public class SubscriptionController {
                     //Delete subscription
                     mainOrganisationService.getSubscriptions().delete(subscription.getId());
                     
+                    Organisation seller = subscription.getOrganisation();
+                    PaymentGateway paymentGateway = paymentGatewayManager.createPaymentGateway(seller.getPaymentGatewayType(), seller.getMerchantId(), seller.getMerchantSecret());
+                    
                     //Do charge for orders not charged for
-                    subscriptionManagerBean.performCollection(subscription);
+                    subscriptionManagerBean.performCollection(seller, paymentGateway, subscription);
 
                 }
                 

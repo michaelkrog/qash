@@ -1,11 +1,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>Qash - Contact information</title>
-        <meta name="description" content="Policy for Qash" />
-        <meta name="keywords" content="policy, qash"/>
+        <meta name="description" content="Payment" />
+        <meta name="keywords" content="apyment, qash"/>
         <jsp:include page="inc/htmlhead.jsp" />
     </head>
 
@@ -26,24 +27,17 @@
         <div id="in-benefits-container" >
 
             <div class="in-benefits">
-                <h1><spring:message code="terms.title"/></h1>
+                <h1>Payment</h1>
                 <br/>
                 <br/>
                 <div>
+                    <form method="POST" action="${formUrl}">
+                        <c:forEach var="entry" items="${formElements.entrySet()}">
+                            <input type="hidden" name="${entry.key}" value="${entry.value}"/>
+                        </c:forEach>    
+                            <button class="button-standard">Betal</button>    
+                    </form>    
                     
-                    <h2><spring:message code="policy.header1"/></h2>
-                    <spring:message code="policy.text1"/><br/><br/>
-
-                    <h2><spring:message code="policy.header2"/></h2>
-                    <spring:message code="policy.text2"/><br/><br/>
-
-                    <h2><spring:message code="policy.header3"/></h2>
-                    <spring:message code="policy.text3"/><br/><br/>
-
-                    <h2><spring:message code="policy.header4"/></h2>
-                    <spring:message code="policy.text4"/><br/><br/>
-
-
                     <br/><br/>
                 </div>
 
