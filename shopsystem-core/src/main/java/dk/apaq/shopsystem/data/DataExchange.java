@@ -43,8 +43,15 @@ public class DataExchange {
                 String description = orderLine.getQuantity() + "X" + orderLine.getTitle();
                 String taxCode = orderLine.getTax() == null ? "" : "S" + orderLine.getTax().getRate();
                 double taxRate = orderLine.getTax() == null ? 0 : orderLine.getTax().getRate();
-
-                writer.print(isoDateFormat.format(order.getDateInvoiced()));
+                Long total = orderLine.getTotal(true);
+                Long totalWithTax = orderLine.getTotalWithTax(true);
+                
+                if(order.getDateInvoiced() == null) {
+                    writer.print("-");
+                } else {
+                    writer.print(isoDateFormat.format(order.getDateInvoiced()));
+                }
+                
                 writer.print(";");
 
                 writer.print(order.getInvoiceNumber());
@@ -59,10 +66,11 @@ public class DataExchange {
                 writer.print(order.getCurrency());
                 writer.print(";");
 
-                writer.print(usNumberFormat.format(orderLine.getTotal(true)));
+                
+                writer.print(usNumberFormat.format(total.doubleValue() / 100));
                 writer.print(";");
 
-                writer.print(usNumberFormat.format(orderLine.getTotalWithTax(true)));
+                writer.print(usNumberFormat.format(totalWithTax.doubleValue() / 100));
                 writer.print(";");
 
                 writer.print(taxCode);

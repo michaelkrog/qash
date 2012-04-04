@@ -233,7 +233,7 @@ public class OrderLine implements Serializable, BasicEntity {
         this.title = title;
     }
 
-    public double getTotal() {
+    public long getTotal() {
         return getTotal(true);
     }
 
@@ -257,23 +257,23 @@ public class OrderLine implements Serializable, BasicEntity {
     }
 
     
-    public double getTotalWithTax() {
+    public long getTotalWithTax() {
         return getTotalWithTax(true);
     }
      
-    public double getTotalWithTax(boolean includeDiscount) {
+    public long getTotalWithTax(boolean includeDiscount) {
         return getTotal(includeDiscount) + getTotalTax(includeDiscount);
     }
 
 
-    public double getTotalTax() {
+    public long getTotalTax() {
         return getTotalTax(true);
     }
     /**
      * Calculates the total tax for this orderline by this equation: tax*quantity.
      * @return The total tax for this order.
      */
-    public double getTotalTax(boolean includeDiscount) {
+    public long getTotalTax(boolean includeDiscount) {
         return calculateTaxValue(getTotal(includeDiscount));
     }
 
@@ -286,11 +286,11 @@ public class OrderLine implements Serializable, BasicEntity {
         this.unittype = unittype;
     }*/
 
-    private double calculateTaxValue(double value) {
-        double calculation = 0;
+    private long calculateTaxValue(long value) {
+        long calculation = 0;
 
         if (tax != null) {
-            calculation = value * (tax.getRate() / PERCENTAGEDIVIDE);
+            calculation = (long)(value * (tax.getRate() / PERCENTAGEDIVIDE));
         }
 
         return calculation;

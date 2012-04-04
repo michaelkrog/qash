@@ -39,6 +39,9 @@ public class OrderCrudImpl extends ContentCrud<Order> {
     @Override
     public <E extends Order> String create(E order) {
         order.setNumber(organisationService.getOrderSequence().increment());
+        if(order.getStatus().isConfirmedState()) {
+            doAcceptance(order);
+        }
         return super.create(order);
     }
 
@@ -73,7 +76,16 @@ public class OrderCrudImpl extends ContentCrud<Order> {
                 && (entity.getStatus().ordinal() >= OrderStatus.Accepted.ordinal());
 
         if (changeToAccepted) {
-            for (int i = 0; i < entity.getOrderLineCount(); i++) {
+            doAcceptance(entity);
+        }
+        em.merge(entity);
+        em.flush();
+        fireOnUpdate(entity.getId(), entity);
+        return entity;
+    }
+
+    private void doAcceptance(Order entity) {
+        for (int i = 0; i < entity.getOrderLineCount(); i++) {
                 OrderLine line = entity.getOrderLine(i);
                 String itemid = line.getItemId();
                 if (itemid != null) {
@@ -94,13 +106,8 @@ public class OrderCrudImpl extends ContentCrud<Order> {
                 Date timelyPayment = new Date(invoiceDate.getTime() + (DAYINMILLIS * organisation.getDefaultPaymentPeriodInDays()));
                 entity.setDateTimelyPayment(timelyPayment);
             }
-        }
-        em.merge(entity);
-        em.flush();
-        fireOnUpdate(entity.getId(), entity);
-        return entity;
     }
-
+    
     private void checkStatusChange(Order existingOrder, Order newOrder) {
         OrderStatus currentStatus = existingOrder.getStatus();
         OrderStatus newStatus = newOrder.getStatus();

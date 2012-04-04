@@ -18,6 +18,7 @@ import dk.apaq.shopsystem.entity.Subscription;
 import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.pay.MockPaymentGateway;
 import dk.apaq.shopsystem.service.MockMailSender;
+import java.util.List;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -131,8 +132,15 @@ public class SubscriptionManagerBeanTest {
 
         assertEquals(0, organisationService.getOrders().listIds().size());
         subscriptionManagerBean.maintainSubscriptions();
-        assertEquals(1, organisationService.getOrders().listIds().size());
-
+        
+        List<String> ids = organisationService.getOrders().listIds();
+        assertEquals(1, ids.size());
+        
+        Order order = organisationService.getOrders().read(ids.get(0));
+        assertNotNull("DateInvoiced was null", order.getDateInvoiced());
+        assertNotNull("DateTimelyPayment was null", order.getDateTimelyPayment());
+        assertEquals("Order is not in accepted state", order.getStatus(), OrderStatus.Accepted);
+        
         SimpleMailMessage msg = mailSender.lastMessageSent();
         assertNotNull(msg);
         assertTrue(msg.getText().contains("Dear Customer"));

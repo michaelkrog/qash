@@ -13,6 +13,7 @@ import dk.apaq.filter.limit.Limit;
 import dk.apaq.filter.sort.Sorter;
 import dk.apaq.shopsystem.entity.ContentEntity;
 import dk.apaq.shopsystem.entity.Organisation;
+import java.util.Date;
 import javax.persistence.EntityManager;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +54,15 @@ public class ContentCrud<T extends ContentEntity> extends EntityManagerCrudForSp
         entity.setOrganisation(organisation);
         return super.create(entity);
     }
+
+    @Override
+    @Transactional
+    public T update(T entity) {
+        entity.setDateChanged(new Date());
+        return super.update(entity);
+    }
+    
+    
 
     @Override
     public List<String> listIds(Filter filter, Sorter sorter, Limit limit) {
