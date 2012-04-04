@@ -52,7 +52,7 @@ public class OrderCrudImpl extends ContentCrud<Order> {
 
     @Override
     @Transactional
-    public void update(Order entity) {
+    public Order update(Order entity) {
         fireOnBeforeUpdate(entity.getId(), entity);
         if (entity.getStatus() == OrderStatus.New) {
             entity.setStatus(OrderStatus.Processing);
@@ -98,6 +98,7 @@ public class OrderCrudImpl extends ContentCrud<Order> {
         em.merge(entity);
         em.flush();
         fireOnUpdate(entity.getId(), entity);
+        return entity;
     }
 
     private void checkStatusChange(Order existingOrder, Order newOrder) {

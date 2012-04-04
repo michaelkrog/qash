@@ -23,8 +23,8 @@ public class EntityManagerCrudForSpring<IDTYPE, BEANTYPE> extends EntityManagerC
 
     @Override
     @Transactional
-    public void update(BEANTYPE entity) {
-        super.update(entity);
+    public BEANTYPE update(BEANTYPE entity) {
+        return super.update(entity);
     }
 
     @Override
@@ -45,5 +45,12 @@ public class EntityManagerCrudForSpring<IDTYPE, BEANTYPE> extends EntityManagerC
         return super.create(entity);
     }
 
+    @Override
+    @Transactional
+    public <T extends BEANTYPE> T createAndRead(T entity) {
+        return super.createAndRead(entity);
+    }
+
+    
     
 }

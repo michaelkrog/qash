@@ -51,7 +51,7 @@ public class PaymentCrudImpl extends ContentCrud<Payment> {
     
     @Override
     @Transactional
-    public void update(Payment entity) {
+    public Payment update(Payment entity) {
         LOG.debug("Updating payment [id={}]", entity.getId());
 
         ensurePaymentOk(entity);
@@ -73,6 +73,7 @@ public class PaymentCrudImpl extends ContentCrud<Payment> {
         em.flush();
 
         fireOnUpdate(entity.getId(), entity);
+        return entity;
     }
 
     private double getTotalPayment(String orderId) {
