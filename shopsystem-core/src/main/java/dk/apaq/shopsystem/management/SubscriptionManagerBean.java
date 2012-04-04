@@ -271,7 +271,7 @@ public class SubscriptionManagerBean {
                         "Dear " + getNiceCustomerName(adminUser)
                         + "\n\nWe are about to withdraw a payment for your subscription but we dont have your payment information.\n"
                         + "Please go to the following link in order to fulfill your payment.\n"
-                        + "http://qashapp.com/payment.html?id=" + order.getId() + "\n\n"
+                        + "http://qashapp.com/payment.htm?id=" + order.getId() + "\n\n"
                         + "If we are not able to withdraw the payment within 14 days we will automatically cancel your subscription.\n\n"
                         + "Best Regards\n"
                         + "The Qash team.");
@@ -299,7 +299,7 @@ public class SubscriptionManagerBean {
                         "Dear " + getNiceCustomerName(adminUser)
                         + "\n\nWe were unable withdraw a payment for your subscription using the payment information you gave us earlier.\n"
                         + "Please go to the following link in order to fulfill your payment.\n"
-                        + "http://qashapp.com/payment.html?id=" + order.getId() + "\n\n"
+                        + "http://qashapp.com/payment.htm?id=" + order.getId() + "\n\n"
                         + "If we are not able to withdraw the payment within 14 days we will automatically cancel your subscription.\n\n"
                         + "Best Regards\n"
                         + "The Qash team.");
@@ -333,7 +333,7 @@ public class SubscriptionManagerBean {
                     "Dear " + getNiceCustomerName(adminUser)
                     + "\n\nWe have withdrawn a payment for your subscription with us.\n\n"
                     + "Amount: " + amountFormatter.format(paymentAmount) + "\n\n"
-                    + "Please login to your account to retrieve invoices when needed.\n"
+                    //+ "Please login to your account to retrieve invoices when needed.\n"
                     + "http://qashapp.com\n\n"
                     + "Best Regards\n"
                     + "The Qash team.");
