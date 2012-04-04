@@ -1,12 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dk.apaq.shopsystem.qash.data.util;
 
 import com.vaadin.data.Property;
-import com.vaadin.data.Validator;
-import com.vaadin.data.util.PropertyFormatter;
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
@@ -15,7 +9,7 @@ import java.util.Locale;
  *
  * @author michaelzachariassenkrog
  */
-public class CurrencyAmountFormatter extends AbstractNumberFormatter {
+public class CurrencyAmountFormatter extends AbstractMoneyFormatter {
 
     public CurrencyAmountFormatter(Property property) {
         this(property, null);

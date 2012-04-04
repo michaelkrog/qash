@@ -138,7 +138,13 @@
         <dependency>
             <groupId>dk.apaq.vaadin.addon</groupId>
             <artifactId>crudcontainer-addon</artifactId>
-            <version>1.1.13</version>
+            <version>1.1.14-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>crud-core</artifactId>
+                    <groupId>dk.apaq.crud</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.vaadin.addons</groupId>

@@ -312,8 +312,8 @@ public class ProductEditor extends CustomComponent implements
                 editor.setPropertyDataSource(property);
             }
 
-            Double price = (Double) this.dataSource.getItemProperty("price").getValue();
-            if(price > 0.001) {
+            Long price = (Long) this.dataSource.getItemProperty("price").getValue();
+            if(price > 0) {
                 this.pricePanel.getChkFixedPrice().setValue(true);
             } else {
                 this.pricePanel.getChkFixedPrice().setValue(false);

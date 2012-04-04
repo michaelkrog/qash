@@ -32,15 +32,33 @@ public class CurrencyColumnGenerator implements ColumnGenerator{
 
         if(currencyPropertyId!=null) {
             Property prop = source.getContainerProperty(itemId, currencyPropertyId);
+            
+            if(prop == null) {
+                throw new NullPointerException("'currencyPropertyId' specified, but column was not found.");
+            }
+            
+            if(prop.getType() != String.class) {
+                throw new IllegalArgumentException("Property for currency not of type String.class. [itemId=["+itemId+"]; currencyPropertyId="+currencyPropertyId+"]");
+            }
+            
             nf.setCurrency(Currency.getInstance((String)prop.getValue()));
         } else {
             nf.setCurrency(currency);
         }
 
         Property prop = source.getContainerProperty(itemId, columnId);
-        Double value = (Double) prop.getValue();
-
-        return new Label(nf.format(value));
+        
+        if(prop == null) {
+            throw new NullPointerException("Property not found. [itemId=["+itemId+"]; columnId="+columnId+"]");
+        }
+        
+        if(prop.getType() != Long.class) {
+            throw new IllegalArgumentException("Property not of type Long.class. [itemId=["+itemId+"]; columnId="+columnId+"]");
+        }
+        
+        Long value = (Long) prop.getValue();
+        Double dValue =  value.doubleValue() / 100;
+        return new Label(nf.format(dValue));
     }
 
     public void setCurrency(String currency) {

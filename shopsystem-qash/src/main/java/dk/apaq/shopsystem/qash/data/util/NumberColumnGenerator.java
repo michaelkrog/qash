@@ -33,8 +33,15 @@ public class NumberColumnGenerator implements ColumnGenerator{
 
     public Component generateCell(Table source, Object itemId, Object columnId) {
         Property prop = source.getContainerProperty(itemId, columnId);
+        if(prop == null) {
+            throw new NullPointerException("Property not found. [itemId=["+itemId+"]; columnId="+columnId+"]");
+        }
+        
+        if(prop.getType() != Double.class) {
+            throw new IllegalArgumentException("Property not of type Double.class. [itemId=["+itemId+"]; columnId="+columnId+"]");
+        }
+        
         Double value = (Double) prop.getValue();
-
         return new Label(formatValue(source, value));
     }
     

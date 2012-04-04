@@ -13,8 +13,6 @@ public class NumberValidator extends AbstractNumberValidator {
         super(generateNumberFormat(locale));
     }
 
-
-
     private static NumberFormat generateNumberFormat(Locale locale) {
         NumberFormat nf = NumberFormat.getNumberInstance(locale);
         nf.setMaximumFractionDigits(3);

@@ -18,6 +18,15 @@ public class MoneyColumnGenerator extends NumberColumnGenerator {
     @Override
     public Component generateCell(Table source, Object itemId, Object columnId) {
         Property prop = source.getContainerProperty(itemId, columnId);
+        
+        if(prop == null) {
+            throw new NullPointerException("Property not found. [itemId=["+itemId+"]; columnId="+columnId+"]");
+        }
+        
+        if(prop.getType() != Long.class) {
+            throw new IllegalArgumentException("Property not of type Long.class. [itemId=["+itemId+"]; columnId="+columnId+"]");
+        }
+        
         Long value = (Long) prop.getValue();
         Double dValue =  value.doubleValue() / 100;
         

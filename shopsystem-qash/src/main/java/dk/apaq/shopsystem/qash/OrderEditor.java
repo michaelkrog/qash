@@ -90,7 +90,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.media.jai.PropertyChangeEmitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,7 +110,7 @@ public class OrderEditor extends CustomComponent implements
     private Container productContainer;
     private Container paymentContainer;
     private DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
-    private NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+    //private NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
     private Container taxContainer;
     private Boolean editable = null;
     private boolean hasChanges = false;
@@ -482,7 +481,7 @@ public class OrderEditor extends CustomComponent implements
             return customerAddress;
         }
         
-        public DateField getTimelyPaymetnField() {
+        public DateField getTimelyPaymentField() {
             return date_dateTimelyPayment;
         }
     }
@@ -585,18 +584,15 @@ public class OrderEditor extends CustomComponent implements
         }
 
         public void update() {
-            long total = 0;
-            long tax = 0;
-
             if (dataSource != null) {
-                Property propTotal = dataSource.getItemProperty("total");
+                Property propTotal = dataSource.getItemProperty("totalWithTax");
                 Property propTotalTax = dataSource.getItemProperty("totalTax");
-                tax = (Long) propTotalTax.getValue();
-                total = ((Long) propTotal.getValue()) + tax;
+                lbl_total.setPropertyDataSource(new CurrencyAmountFormatter(propTotal));
+                btn_vat.setCaption("VAT: " + new CurrencyAmountFormatter(propTotalTax).getValue());
+            } else {
+                lbl_total.setPropertyDataSource(null);
+                 btn_vat.setCaption("");
             }
-
-            lbl_total.setCaption(numberFormat.format(total));
-            btn_vat.setCaption("VAT: " + numberFormat.format(tax));
         }
     }
 
@@ -861,14 +857,14 @@ public class OrderEditor extends CustomComponent implements
             ((Item.PropertySetChangeNotifier) this.dataSource).removeListener(orderChangeListener);
         }
         
-        header.getTimelyPaymetnField().removeListener(propertyChangeListener);
+        header.getTimelyPaymentField().removeListener(propertyChangeListener);
 
         this.dataSource = newDataSource;
 
         if (dataSource != null) {
             Order order = getOrderFromDatasource();
             Currency currency = Currency.getInstance(order.getCurrency());
-            numberFormat.setCurrency(currency);
+            //numberFormat.setCurrency(currency);
         }
 
         if (this.dataSource != null && (this.dataSource instanceof Item.PropertySetChangeNotifier)) {
@@ -880,8 +876,8 @@ public class OrderEditor extends CustomComponent implements
         ((FilterableContainer) paymentContainer).setFilter(paymentFilter);
         this.orderlineContainer.setDatasource(newDataSource);
         footer.setItemDataSource(this.dataSource);
-        header.getTimelyPaymetnField().setPropertyDataSource(this.dataSource.getItemProperty("dateTimelyPayment"));
-        header.getTimelyPaymetnField().addListener(propertyChangeListener);
+        header.getTimelyPaymentField().setPropertyDataSource(this.dataSource.getItemProperty("dateTimelyPayment"));
+        header.getTimelyPaymentField().addListener(propertyChangeListener);
 
         this.update();
     }
@@ -930,9 +926,10 @@ public class OrderEditor extends CustomComponent implements
             if (status.isConfirmedState()) {
                 if (due > 0) {
                     highlightInfo = true;
-                    statusString = "Due: " + numberFormat.format(due);
+                    statusString = "Due: " + due/*numberFormat.format(due)*/;
                 } else {
-                    statusString = "Paid: " + numberFormat.format(paidAmount) + " (Change: " + numberFormat.format(change) + ")";
+                    statusString = "Paid: " + paidAmount + " (Change: " + change + ")";
+                    //statusString = "Paid: " + numberFormat.format(paidAmount) + " (Change: " + numberFormat.format(change) + ")";
                 }
             }
             completed = status.isConfirmedState();
@@ -975,11 +972,11 @@ public class OrderEditor extends CustomComponent implements
         if (!initialized) {
             if (getLocale() != null) {
                 System.out.println("Locale: " + getLocale());
-                numberFormat = NumberFormat.getCurrencyInstance(getLocale());
+                //numberFormat = NumberFormat.getCurrencyInstance(getLocale());
                 Order order = getOrderFromDatasource();
                 if (order != null) {
                     Currency currency = Currency.getInstance(order.getCurrency());
-                    numberFormat.setCurrency(currency);
+                    //numberFormat.setCurrency(currency);
                 }
             }
 
@@ -1039,7 +1036,7 @@ public class OrderEditor extends CustomComponent implements
         header.getButtonAddLine().setEnabled(editable);
         header.getButtonPrint().setEnabled(!editable);
         header.getToolbarButtonCustomers().setEnabled(editable);
-        header.getTimelyPaymetnField().setReadOnly(!editable);
+        header.getTimelyPaymentField().setReadOnly(!editable);
         
         table.setEditable(editable);
 
