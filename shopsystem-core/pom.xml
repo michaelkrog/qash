@@ -286,6 +286,11 @@
             <artifactId>opencsv</artifactId>
             <version>2.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.joda</groupId>
+            <artifactId>joda-money</artifactId>
+            <version>0.6</version>
+        </dependency>
     </dependencies>
     
     

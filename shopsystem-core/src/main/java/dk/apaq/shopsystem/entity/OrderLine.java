@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.GenericGenerator;
 
+
 /**
  * A line in an order. This is not the same as an item. A line may or may not reference the item being sold.
  * If no Item is referenced then the orderline is not a sale of something in stock or may not even be a 
@@ -147,7 +148,7 @@ public class OrderLine implements Serializable, BasicEntity {
      * Retrieves the price of the item. This price is tax-excluded.
      * @return The price, tax-excluded.
      */
-    public double getPrice() {
+    public long getPrice() {
         return price;
     }
 
@@ -164,7 +165,7 @@ public class OrderLine implements Serializable, BasicEntity {
      * getPrice() + getTaxValue();
      * @return
      */
-    public double getPriceWithTax() {
+    public long getPriceWithTax() {
         return getPrice() + getTaxValue();
     }
 
@@ -247,10 +248,10 @@ public class OrderLine implements Serializable, BasicEntity {
      *
      * @return The total for this order.
      */
-    public double getTotal(boolean includeDiscount) {
-        double total = getPrice() * getQuantity();
+    public long getTotal(boolean includeDiscount) {
+        long total = (long) (getPrice() * getQuantity());
         if(includeDiscount) {
-            total = total - (total * discountPercentage);
+            total = (long) (total - (total * discountPercentage));
         }
         return total;
     }
