@@ -105,9 +105,10 @@
 
     
     <!-- MESSAGING BEANS -->
-    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <!--bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${mail.smtp}"/>
-    </bean>
+    </bean-->
+    <bean id="mailSender" class="dk.apaq.shopsystem.messaging.LogMailSender"/>
 
     <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
         <property name="from" value="${mail.from}"/>
