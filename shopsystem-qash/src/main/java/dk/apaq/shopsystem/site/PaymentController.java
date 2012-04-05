@@ -4,6 +4,8 @@ import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.i18n.LocaleUtil;
 import dk.apaq.shopsystem.l10n.Country;
+import dk.apaq.shopsystem.pay.PaymentGateway;
+import dk.apaq.shopsystem.pay.PaymentGatewayManager;
 import dk.apaq.shopsystem.pay.PaymentGatewayType;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,6 +39,9 @@ public class PaymentController {
     @Autowired
     private SystemService service;
     
+    @Autowired
+    private PaymentGatewayManager paymentGatewayManager;
+    
     public PaymentController() {
         nfQuickPayOrderNumber.setMinimumIntegerDigits(4);
         nfQuickPayOrderNumber.setMaximumIntegerDigits(20);
@@ -43,12 +49,12 @@ public class PaymentController {
     }
     
     
-    @RequestMapping("/payment.htm")
-    public ModelAndView handlePaymentForm(HttpServletRequest request, HttpServletResponse response, @RequestParam(required = true) String id) throws IOException {
+    @RequestMapping("/payment/{orgId}/{orderId}/form.htm")
+    public ModelAndView handlePaymentForm(HttpServletRequest request, HttpServletResponse response, @PathVariable String orgId, @PathVariable String orderId) throws IOException {
         
-        Organisation seller = service.getMainOrganisation();
+        Organisation seller = service.getOrganisationCrud().read(orgId);
         OrganisationService sellerService = service.getOrganisationService(seller);
-        Order order = sellerService.getOrders().read(id);
+        Order order = sellerService.getOrders().read(orderId);
         
         Map model = new HashMap();
         
@@ -56,15 +62,19 @@ public class PaymentController {
             case MockPay:
                 
                 model.put("formUrl", "https://secure.quickpay.dk/form/");
-                model.put("formElements", buildFormElementsForQuickPay(seller, order, null, null));
+                model.put("formElements", buildFormElementsForQuickPay(seller, order, null, null, null));
                 return new ModelAndView("payment", model);
             case QuickPay:
-                String urlPrefix = "http://" + request.getServerName() + (request.getServerPort() == 80 ? "" : ":"+request.getServerPort()) + request.getContextPath();
-                String returnUrl = urlPrefix + "/payment_return.htm";
-                String callbackUrl = urlPrefix + "/api/organisations/" + seller.getId() + "/payments?gateway=quickpay";
-
+                String idPart = "/" + seller.getId() + "/" + order.getId();
+                String urlPrefix = "http://" + request.getServerName() + (request.getServerPort() == 80 ? "" : ":"+request.getServerPort()) + 
+                                               request.getContextPath() + "/payment" + idPart;
+                
+                String returnUrl = urlPrefix + "/return.htm";
+                String cancelUrl = urlPrefix + "/cancel.htm";
+                String callbackUrl = urlPrefix + "/callback.htm";
+                
                 model.put("formUrl", "https://secure.quickpay.dk/form/");
-                model.put("formElements", buildFormElementsForQuickPay(seller, order, returnUrl, callbackUrl));
+                model.put("formElements", buildFormElementsForQuickPay(seller, order, returnUrl, cancelUrl, callbackUrl));
                 return new ModelAndView("payment", model);        
             
             default:
@@ -74,20 +84,32 @@ public class PaymentController {
 
     }
     
-    @RequestMapping("/payment_return.htm")
-    public ModelAndView handlePaymentReturn(HttpServletRequest request, HttpServletResponse response, @RequestParam(required = true) String id) throws IOException {
+    @RequestMapping("/payment/{orgId}/{orderId}/return.htm")
+    public ModelAndView handlePaymentReturn(HttpServletRequest request, HttpServletResponse response, @PathVariable String orgId, @PathVariable String orderId) throws IOException {
         //Find organisation and order
-        //Create paymentgateway instance
-        //Get status for transaction
+        Organisation seller = service.getOrganisationCrud().read(orgId);
+        OrganisationService sellerService = service.getOrganisationService(seller);
+        Order order = sellerService.getOrders().read(orderId);
         
-        
-        //if not paid redirect to front dashboard
-        
-        //if paid show order and link to pdf
+        //show order and link to pdf
         return null;
     }
     
-    private Map<String, String> buildFormElementsForQuickPay(Organisation seller, Order order, String returnUrl, String callbackUrl) {
+        @RequestMapping("/payment/{orgId}/{orderId}/cancel.htm")
+    public ModelAndView handlePaymentCallback(HttpServletRequest request, HttpServletResponse response, @PathVariable String orgId, @PathVariable String orderId) throws IOException {
+        //redirect to front dashboard
+        
+        return null;
+    }
+    
+    @RequestMapping("/payment/{orgId}/{orderId}/cancel.htm")
+    public ModelAndView handlePaymentCancel(HttpServletRequest request, HttpServletResponse response, @PathVariable String orgId, @PathVariable String orderId) throws IOException {
+        //redirect to front dashboard
+        
+        return null;
+    }
+    
+    private Map<String, String> buildFormElementsForQuickPay(Organisation seller, Order order, String returnUrl, String cancelUrl, String callbackUrl) {
         
         String customerLanguage = "en";
         if(order.getBuyer() != null && order.getBuyer().getCountryCode() != null) {
@@ -106,7 +128,7 @@ public class PaymentController {
         map.put("amount", Long.toString(order.getTotalWithTax()));
         map.put("currency", order.getCurrency());
         map.put("continueurl", returnUrl);
-        map.put("cancelurl", returnUrl);
+        map.put("cancelurl", cancelUrl);
         map.put("callbackurl", callbackUrl);
         map.put("autocapture", "0");
         map.put("cardtypelock", "");

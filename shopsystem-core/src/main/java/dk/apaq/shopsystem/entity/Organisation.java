@@ -56,6 +56,7 @@ public class Organisation implements HasId<String>, Company, HasContactInformati
     private PaymentGatewayType paymentGatewayType = PaymentGatewayType.QuickPay;
     private String merchantId;
     private String merchantSecret;
+    private String merchantApiKey;
     private boolean mainOrganisation = false;
     
     private boolean subscriber = false;
@@ -226,6 +227,14 @@ public class Organisation implements HasId<String>, Company, HasContactInformati
 
     public void setMerchantSecret(String merchantSecret) {
         this.merchantSecret = merchantSecret;
+    }
+
+    public String getMerchantApiKey() {
+        return merchantApiKey;
+    }
+
+    public void setMerchantApiKey(String merchantApiKey) {
+        this.merchantApiKey = merchantApiKey;
     }
 
     public PaymentGatewayType getPaymentGatewayType() {
