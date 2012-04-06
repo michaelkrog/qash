@@ -29,6 +29,14 @@
     </repositories>
 
     <dependencies>
+        
+        <!--dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
+        </dependency-->
+        
         <!--dependency>
             <groupId>dk.apaq.spring</groupId>
             <artifactId>spring-security-rpx</artifactId>
@@ -55,16 +63,23 @@
             <artifactId>maven-runtime</artifactId>
             <version>1.0-alpha-2</version>
         </dependency>
-        <dependency>
+
+         <dependency>
             <groupId>dk.apaq.filter</groupId>
             <artifactId>filter-jpa</artifactId>
-            <version>1.0.10</version>
+            <version>${dk.apaq.filter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>persistence-api</artifactId>
+                    <groupId>javax.persistence</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-jaxrs</artifactId>
             <version>1.9.0</version>
-        </dependency>
+        </dependency-->
         
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -86,11 +101,17 @@
             <version>1.2.2</version>
         </dependency>
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>6.0</version>
-            <scope>provided</scope>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
         </dependency>
+
+
+
+        
+        
+        
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
@@ -112,7 +133,7 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
             <type>jar</type>
-        </dependency><!-- This is also used by gwt-maven-plugin to deduce GWT version number. -->
+        </dependency>
         
         
         <dependency>
@@ -124,10 +145,10 @@
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin</artifactId>
             <version>6.7.6</version>
-        </dependency><!-- Vaadin theme -->
+        </dependency>
         
         
-        
+        <!-- This is also used by gwt-maven-plugin to deduce GWT version number. -->
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
@@ -146,6 +167,8 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
+        <!-- Vaadin theme -->
         <dependency>
             <groupId>org.vaadin.addons</groupId>
             <artifactId>reindeermods</artifactId>

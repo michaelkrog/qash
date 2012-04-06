@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+  <persistence-unit name="ShopSystem" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>dk.apaq.shopsystem.entity.ComponentInformation</class>
+    <class>dk.apaq.shopsystem.entity.ComponentParameter</class>
+    <class>dk.apaq.shopsystem.entity.Domain</class>
+    <class>dk.apaq.shopsystem.entity.Document</class>
+    <class>dk.apaq.shopsystem.entity.DocumentCollection</class>
+    <class>dk.apaq.shopsystem.entity.Order</class>
+    <class>dk.apaq.shopsystem.entity.OrderLine</class>
+    <class>dk.apaq.shopsystem.entity.OrderLineTax</class>
+    <class>dk.apaq.shopsystem.entity.Organisation</class>
+    <class>dk.apaq.shopsystem.entity.OrganisationUserReference</class>
+    <class>dk.apaq.shopsystem.entity.Payment</class>
+    <class>dk.apaq.shopsystem.entity.Product</class>
+    <class>dk.apaq.shopsystem.entity.Sequence</class>
+    <class>dk.apaq.shopsystem.entity.Subscription</class>
+    <class>dk.apaq.shopsystem.entity.Store</class>
+    <class>dk.apaq.shopsystem.entity.SystemUser</class>
+    <class>dk.apaq.shopsystem.entity.Tax</class>
+    <class>dk.apaq.shopsystem.entity.ProductGroup</class>
+    <class>dk.apaq.shopsystem.entity.ProductCategory</class>
+    <class>dk.apaq.shopsystem.entity.CustomerRelationship</class>
+    <class>dk.apaq.shopsystem.entity.Website</class>
+    <class>dk.apaq.shopsystem.entity.WebPage</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+  </persistence-unit>
+</persistence>
