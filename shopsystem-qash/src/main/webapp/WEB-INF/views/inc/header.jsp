@@ -13,7 +13,7 @@ boolean authenticated = auth!=null && !"anonymousUser".equals(auth.getName());
 <div id="ge-header-container">
     <div class="ge-header">
         <!-- logo -->
-        <div class="ge-logo"><a href="/"><img src="images/ge-logo.png" alt="Qash" width="153" height="35" /></a></div>
+        <div class="ge-logo"><a href="/"><img src="<spring:theme code="logo"/>" alt="Qash" width="153" height="35" /></a></div>
         <!-- /logo -->
         <%
         if(authenticated) {

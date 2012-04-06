@@ -154,6 +154,14 @@
 </task:scheduled-tasks>
 
 <task:scheduler id="scheduler" pool-size="2"/>
+
+    <bean id="themeSource" class="org.springframework.ui.context.support.ResourceBundleThemeSource">
+        <property name="basenamePrefix" value="dk.apaq.shopsystem.site.theme." />
+    </bean>
+    
+    <bean id="themeResolver" class="org.springframework.web.servlet.theme.FixedThemeResolver">
+        <property name="defaultThemeName" value="qash"/>
+    </bean>
     
     <!--bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
         <property name="messageConverters">
