@@ -90,7 +90,7 @@
     </bean>    
     
     <!-- MESSAGING BEANS -->
-    <bean id="mailSender" class="dk.apaq.shopsystem.service.MockMailSender"/>
+    <bean id="mailSender" class="dk.apaq.shopsystem.messaging.MockMailSender"/>
 
     <!-- Subscription -->
     <bean id="subscriptionManagerBean" class="dk.apaq.shopsystem.management.SubscriptionManagerBean">

@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.service;
 
+import dk.apaq.shopsystem.messaging.MockMailSender;
 import dk.apaq.crud.Crud.Complete;
 import dk.apaq.crud.Crud.Filterable;
 import dk.apaq.shopsystem.entity.Organisation;

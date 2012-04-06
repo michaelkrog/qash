@@ -34,7 +34,7 @@ public class CustomerRelationship implements ContentEntity/*, HasContactInformat
     private Organisation customer;
     
     private boolean editable;
-
+    
     public CustomerRelationship() {
     }
 

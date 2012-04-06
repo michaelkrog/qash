@@ -51,10 +51,16 @@ public class ContentCrud<T extends ContentEntity> extends EntityManagerCrudForSp
     @Override
     @Transactional
     public <E extends T> String create(E entity) {
-        entity.setOrganisation(organisation);
-        return super.create(entity);
+        return this.createAndRead(entity).getId();
     }
 
+    @Override
+    public <E extends T> E createAndRead(E entity) {
+        entity.setOrganisation(organisation);
+        return super.createAndRead(entity);
+    }
+
+    
     @Override
     @Transactional
     public T update(T entity) {

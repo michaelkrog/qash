@@ -19,7 +19,7 @@ import dk.apaq.shopsystem.entity.SystemUser;
 import dk.apaq.shopsystem.pay.MockPaymentGateway;
 import dk.apaq.shopsystem.pay.PaymentGatewayManager;
 import dk.apaq.shopsystem.pay.PaymentGatewayType;
-import dk.apaq.shopsystem.service.MockMailSender;
+import dk.apaq.shopsystem.messaging.MockMailSender;
 import java.util.List;
 import org.junit.Before;
 import org.junit.BeforeClass;

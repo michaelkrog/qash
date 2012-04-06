@@ -1,4 +1,4 @@
-package dk.apaq.shopsystem.service;
+package dk.apaq.shopsystem.messaging;
 
 import java.util.ArrayList;
 import java.util.Arrays;

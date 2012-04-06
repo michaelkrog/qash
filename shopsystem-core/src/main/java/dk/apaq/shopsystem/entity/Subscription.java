@@ -169,6 +169,8 @@ public class Subscription implements ContentEntity {
         this.price = price;
     }
 
+    
+    
     public String getSubscriptionPaymentId() {
         return subscriptionPaymentId;
     }
