@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -27,11 +28,15 @@ public class CustomerRelationship implements ContentEntity/*, HasContactInformat
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateChanged = new Date();
 
+    @NotNull
     @ManyToOne
     private Organisation organisation;
     
+    @NotNull
     @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private Organisation customer;
+    
+    private String subscriptionPaymentId;
     
     private boolean editable;
     
@@ -85,50 +90,14 @@ public class CustomerRelationship implements ContentEntity/*, HasContactInformat
         this.customer = customer;
     }
 
-   /* @Override
-    public String getCompanyName() {
-        return customer == null ? null : customer.getCompanyName();
+       
+    public String getSubscriptionPaymentId() {
+        return subscriptionPaymentId;
     }
 
-    @Override
-    public String getContactName() {
-        return customer == null ? null : customer.getContactName();
+    public void setSubscriptionPaymentId(String subscriptionPaymentId) {
+        this.subscriptionPaymentId = subscriptionPaymentId;
     }
-
-    @Override
-    public String getEmail() {
-        return customer == null ? null : customer.getEmail();
-    }
-
-    @Override
-    public String getTelephone() {
-        return customer == null ? null : customer.getTelephone();
-    }
-
-    @Override
-    public String getCity() {
-        return customer == null ? null : customer.getCity();
-    }
-
-    @Override
-    public String getCountryCode() {
-        return customer == null ? null : customer.getCountryCode();
-    }
-
-    @Override
-    public String getPostalCode() {
-        return customer == null ? null : customer.getPostalCode();
-    }
-
-    @Override
-    public String getStateOrProvince() {
-        return customer == null ? null : customer.getStateOrProvince();
-    }
-
-    @Override
-    public String getStreet() {
-        return customer == null ? null : customer.getStreet();
-    }*/
 
     /**
      * Wether the customer should be allowed to edit the customer or not.

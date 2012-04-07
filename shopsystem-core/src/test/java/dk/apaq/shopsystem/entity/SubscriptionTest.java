@@ -26,8 +26,7 @@ public class SubscriptionTest extends TestCase {
         subscription.setOrganisation(new Organisation());
         subscription.setPrice(100);
         subscription.setPricingType(SubscriptionPricingType.FixedSubsequent);
-        subscription.setSubscriptionPaymentId("subscriptionPaymentId");
-
+        
         assertTrue(subscription.isAutoRenew());
         assertNotNull(subscription.getCurrency());
         assertNotNull(subscription.getCustomer());
@@ -41,7 +40,6 @@ public class SubscriptionTest extends TestCase {
         assertNotNull(subscription.getOrganisation());
         assertEquals(100, subscription.getPrice());
         assertNotNull(subscription.getPricingType());
-        assertNotNull(subscription.getSubscriptionPaymentId());
         
     }
 }

@@ -46,7 +46,6 @@ public class Subscription implements ContentEntity {
     private boolean enabled;
     private long price;
     private String currency;
-    private String subscriptionPaymentId;
 
     
     @Override
@@ -169,7 +168,7 @@ public class Subscription implements ContentEntity {
         this.price = price;
     }
 
-    
+    /*
     
     public String getSubscriptionPaymentId() {
         return subscriptionPaymentId;
@@ -178,6 +177,6 @@ public class Subscription implements ContentEntity {
     public void setSubscriptionPaymentId(String subscriptionPaymentId) {
         this.subscriptionPaymentId = subscriptionPaymentId;
     }
-
+*/
     
 }

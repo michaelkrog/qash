@@ -261,7 +261,7 @@ public class SubscriptionManagerBean {
         orgService.getSubscriptions().update(subscription);
 
         //4: If missing payment info send user mail
-        if (subscription.getSubscriptionPaymentId() == null) {
+        if (subscription.getCustomer().getSubscriptionPaymentId() == null) {
             if (adminUser != null) {
                 //Unable to authorize payment - send mail to user regarding missing payment information
                 SimpleMailMessage msg = this.templateMessage == null ? new SimpleMailMessage() : new SimpleMailMessage(this.templateMessage);
@@ -288,7 +288,7 @@ public class SubscriptionManagerBean {
 
         //5: If unable to authorize recurring payment send user mail
         try {
-            paymentGateway.recurring(orderNumberFormatter.format(order.getNumber()), paymentAmount, order.getCurrency(), false, subscription.getSubscriptionPaymentId());
+            paymentGateway.recurring(orderNumberFormatter.format(order.getNumber()), paymentAmount, order.getCurrency(), false, subscription.getCustomer().getSubscriptionPaymentId());
         } catch (PaymentException ex) {
             if (adminUser != null) {
                 //Unable to authorize payment - send mail to user regarding missing payment information
@@ -321,7 +321,7 @@ public class SubscriptionManagerBean {
         orgService.getPayments().create(payment);
 
         //7: capture amount
-        paymentGateway.capture(paymentAmount, subscription.getSubscriptionPaymentId());
+        paymentGateway.capture(paymentAmount, subscription.getCustomer().getSubscriptionPaymentId());
 
         //8: Send receipt
         if (adminUser != null) {

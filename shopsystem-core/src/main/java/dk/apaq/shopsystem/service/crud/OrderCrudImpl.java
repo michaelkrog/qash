@@ -38,12 +38,18 @@ public class OrderCrudImpl extends ContentCrud<Order> {
 
     @Override
     public <E extends Order> String create(E order) {
+        return this.createAndRead(order).getId();
+    }
+
+    @Override
+    public <E extends Order> E createAndRead(E order) {
         order.setNumber(organisationService.getOrderSequence().increment());
         if(order.getStatus().isConfirmedState()) {
             doAcceptance(order);
-        }
-        return super.create(order);
+        }return super.createAndRead(order);
     }
+    
+    
 
     
     @Override

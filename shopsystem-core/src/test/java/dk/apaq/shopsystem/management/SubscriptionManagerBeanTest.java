@@ -166,7 +166,9 @@ public class SubscriptionManagerBeanTest {
         assertEquals("john@doe.dk", msg.getTo()[0]);
 
         //Test with paymentinformation - unable to withdraw
-        subscriptionNotDue.setSubscriptionPaymentId("123");
+        relationship.setSubscriptionPaymentId("123");
+        organisationService.getCustomers().update(relationship);
+        subscriptionNotDue = organisationService.getSubscriptions().read(subscriptionNotDue.getId());
         
         subscriptionManagerBean.performCollection(organisation, paymentGateway, subscriptionNotDue);
         msg = mailSender.lastMessageSent();
@@ -176,7 +178,9 @@ public class SubscriptionManagerBeanTest {
         assertEquals("john@doe.dk", msg.getTo()[0]);
         
         //Test with paymentinformation - able to withdraw
-        subscriptionNotDue.setSubscriptionPaymentId("qwerty");
+        relationship.setSubscriptionPaymentId("qwerty");
+        organisationService.getCustomers().update(relationship);
+        subscriptionNotDue = organisationService.getSubscriptions().read(subscriptionNotDue.getId());
         
         Order order = subscriptionManagerBean.performCollection(organisation, paymentGateway, subscriptionNotDue);
         msg = mailSender.lastMessageSent();
