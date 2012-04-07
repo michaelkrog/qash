@@ -153,7 +153,7 @@ public class PaymentController {
         //Woohoo. :) User is really gonna pay - accept order if it isnt already accepted
         if(!order.getStatus().isConfirmedState()) {
             order.setStatus(OrderStatus.Accepted);
-            sellerService.getOrders().update(order);
+            order = sellerService.getOrders().update(order);
         }
         
         Payment payment = new Payment();
@@ -163,8 +163,15 @@ public class PaymentController {
         payment.setPaymentDetails(cardtype + ": " + cardnumber);
         sellerService.getPayments().create(payment);
         
+        //Payments may have changed order properties - reload it
+        order = sellerService.getOrders().read(orderId);
+        
+        if(!order.isPaid()) {
+            LOG.warn("A payment went down on an order but was not marked as fully paid. [orderId={}; order total={}; payment amount={}]", 
+                    new Object[]{order.getId(), order.getTotalWithTax(), lAmount});
+        }
+        
         //if all paid then Enable subscription and Save transaction
-        //order = organisationService.getOrders().read(orderId);
         //if(order.isPaid()) {
             //TODO Which organisation?
             //org.setSubscriber(true);
