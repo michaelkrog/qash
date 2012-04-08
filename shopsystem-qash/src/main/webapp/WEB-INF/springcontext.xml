@@ -29,7 +29,8 @@
        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd"
         >
 
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+
+    <!--bean id="qashConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="ignoreResourceNotFound" value="true"/>  
         <property name="locations">  
             <list>  
@@ -37,7 +38,7 @@
                 <value>file:${user.home}/qash.properties</value>  
             </list>  
         </property>  
-    </bean> 
+    </bean--> 
     
 
     <bean id="crud" class="dk.apaq.shopsystem.service.crud.EntityManagerCrudForSpring" scope="prototype">
@@ -89,7 +90,6 @@
         <property name="gatewayMap">
             <map value-type="java.lang.Class"> 
                 <entry key="QuickPay" value="dk.apaq.shopsystem.pay.quickpay.QuickPay"/>
-                <entry key="MockPay" value="dk.apaq.shopsystem.pay.MockPaymentGateway"/>
             </map>    
         </property>   
     </bean>    
@@ -177,10 +177,9 @@
         <!-property name="supportedMediaTypes" value="application/json" /->
     </bean-->
 
-
     <tx:annotation-driven />
     <context:annotation-config />
-    
+    <context:property-placeholder ignore-resource-not-found="true" location="classpath:qash_default.properties,file:${user.home}/qash.properties" />
     <!-- Scans within the base package of the application for @Components to configure as beans -->
     <!-- @Controller, @Service, @Configuration, etc. -->
     <!--context:component-scan base-package="dk.apaq.shopsystem.api" /-->

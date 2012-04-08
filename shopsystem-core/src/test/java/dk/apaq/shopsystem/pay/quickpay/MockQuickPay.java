@@ -1,20 +1,19 @@
-package dk.apaq.shopsystem.pay;
+package dk.apaq.shopsystem.pay.quickpay;
 
 import dk.apaq.shopsystem.pay.PaymentException;
 import dk.apaq.shopsystem.pay.PaymentGateway;
-import dk.apaq.shopsystem.pay.PaymentGateway;
-import dk.apaq.shopsystem.pay.PaymentInformation;
 import dk.apaq.shopsystem.pay.PaymentInformation;
 
 /**
  *
  * @author krog
  */
-public class MockPaymentGateway implements PaymentGateway{
+public class MockQuickPay implements PaymentGateway{
 
+    
     private boolean authorized;
     private boolean captured;
-    private long authAmount;
+    private long authAmount=Long.MAX_VALUE;
     private long captureAmount;
     private String transactionId;
     private String authCurrency;
@@ -81,6 +80,7 @@ public class MockPaymentGateway implements PaymentGateway{
     public long getAuthAmount() {
         return authAmount;
     }
+    
 
     public String getAuthCurrency() {
         return authCurrency;

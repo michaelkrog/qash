@@ -22,7 +22,7 @@ public class LocaleFilter implements Filter {
     private static final String DEFAULT_LANGUAGE = "en";
     private static final List<String> SUPPORTED_LANGUAGES = Arrays.asList(new String[]{"en", "da"});
     private static final List<String> IGNORED_PATHS = Arrays.asList(new String[]{
-                "/login.jsp", "/admin", "/VAADIN", "/register"});
+                "/login.jsp", "/admin", "/VAADIN", "/register", "/api"});
 
     private class LocaleWrappingRequest extends HttpServletRequestWrapper {
 

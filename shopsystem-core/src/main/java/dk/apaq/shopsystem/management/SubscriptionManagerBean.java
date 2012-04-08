@@ -160,10 +160,10 @@ public class SubscriptionManagerBean {
         }
 
         Country customerCountry = Country.getCountry(customerCountryCode, Locale.getDefault());
-        String paymentCurrency = getPaymentCurrencyForOrganisation(customerRelationship.getCustomer());
         
         Order order = new Order();
-
+        order.setBuyer(customerRelationship.getCustomer());
+        order.setBuyerId(customerRelationship.getId());
         order.setCurrency(subscription.getCurrency());
         order.setStatus(OrderStatus.Accepted);
 
@@ -271,7 +271,7 @@ public class SubscriptionManagerBean {
                         "Dear " + getNiceCustomerName(adminUser)
                         + "\n\nWe are about to withdraw a payment for your subscription but we dont have your payment information.\n"
                         + "Please go to the following link in order to fulfill your payment.\n"
-                        + "http://qashapp.com/payment/form.htm/" + seller.getId() + "/" + order.getId() + "\n\n"
+                        + "http://qashapp.com/payment/" + seller.getId() + "/" + order.getId() + "/form.htm\n\n"
                         + "If we are not able to withdraw the payment within 14 days we will automatically cancel your subscription.\n\n"
                         + "Best Regards\n"
                         + "The Qash team.");
@@ -288,7 +288,7 @@ public class SubscriptionManagerBean {
 
         //5: If unable to authorize recurring payment send user mail
         try {
-            paymentGateway.recurring(orderNumberFormatter.format(order.getNumber()), paymentAmount, order.getCurrency(), false, subscription.getCustomer().getSubscriptionPaymentId());
+            paymentGateway.recurring(orderNumberFormatter.format(order.getNumber()), paymentAmount, order.getCurrency(), true, subscription.getCustomer().getSubscriptionPaymentId());
         } catch (PaymentException ex) {
             if (adminUser != null) {
                 //Unable to authorize payment - send mail to user regarding missing payment information
@@ -299,7 +299,7 @@ public class SubscriptionManagerBean {
                         "Dear " + getNiceCustomerName(adminUser)
                         + "\n\nWe were unable withdraw a payment for your subscription using the payment information you gave us earlier.\n"
                         + "Please go to the following link in order to fulfill your payment.\n"
-                        + "http://qashapp.com/payment/form.htm/" + seller.getId() + "/" + order.getId() + "\n\n"
+                        + "http://qashapp.com/payment/" + seller.getId() + "/" + order.getId() + "/form.htm\n\n"
                         + "If we are not able to withdraw the payment within 14 days we will automatically cancel your subscription.\n\n"
                         + "Best Regards\n"
                         + "The Qash team.");
@@ -321,7 +321,7 @@ public class SubscriptionManagerBean {
         orgService.getPayments().create(payment);
 
         //7: capture amount
-        paymentGateway.capture(paymentAmount, subscription.getCustomer().getSubscriptionPaymentId());
+        //paymentGateway.capture(paymentAmount, subscription.getCustomer().getSubscriptionPaymentId());
 
         //8: Send receipt
         if (adminUser != null) {

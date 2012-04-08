@@ -174,7 +174,7 @@ public class QuickPay implements PaymentGateway {
             HttpPost post = new HttpPost(apiUrl);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(md5.getBasicNameValuePair("protocol", protocolVersion));
-            nvps.add(md5.getBasicNameValuePair("msgtype", "capture"));
+            nvps.add(md5.getBasicNameValuePair("msgtype", "recurring"));
             nvps.add(md5.getBasicNameValuePair("merchant", merchantId));
             nvps.add(md5.getBasicNameValuePair("ordernumber", orderNumber));
             nvps.add(md5.getBasicNameValuePair("amount", "" + amountInCents));

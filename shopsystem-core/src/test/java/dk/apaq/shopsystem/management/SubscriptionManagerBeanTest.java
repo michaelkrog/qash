@@ -1,6 +1,5 @@
 package dk.apaq.shopsystem.management;
 
-import java.util.Map;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.apaq.shopsystem.entity.CustomerRelationship;
@@ -16,13 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.Subscription;
 import dk.apaq.shopsystem.entity.SystemUser;
-import dk.apaq.shopsystem.pay.MockPaymentGateway;
+import dk.apaq.shopsystem.pay.quickpay.MockQuickPay;
 import dk.apaq.shopsystem.pay.PaymentGatewayManager;
 import dk.apaq.shopsystem.pay.PaymentGatewayType;
 import dk.apaq.shopsystem.messaging.MockMailSender;
 import java.util.List;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +68,7 @@ public class SubscriptionManagerBeanTest {
             organisation = new Organisation();
             organisation.setCompanyName("Apaq");
             organisation.setCountryCode("DK");
-            organisation.setPaymentGatewayType(PaymentGatewayType.MockPay);
+            organisation.setPaymentGatewayType(PaymentGatewayType.QuickPay);
             String orgId = service.getOrganisationCrud().create(organisation);
             organisation = service.getOrganisationCrud().read(orgId);
 
@@ -155,7 +153,7 @@ public class SubscriptionManagerBeanTest {
     public void testPerformManualCollectionNoPaymentId() {
         System.out.println("performManualCollection");
 
-        MockPaymentGateway paymentGateway = (MockPaymentGateway) paymentGatewayManager.createPaymentGateway(organisation.getPaymentGatewayType(), null, null);
+        MockQuickPay paymentGateway = (MockQuickPay) paymentGatewayManager.createPaymentGateway(organisation.getPaymentGatewayType(), null, null);
         paymentGateway.setLegalTransactionId("qwerty");
         
         subscriptionManagerBean.performCollection(organisation, paymentGateway, subscriptionNotDue);

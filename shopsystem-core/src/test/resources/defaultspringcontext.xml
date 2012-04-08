@@ -83,8 +83,7 @@
     <bean id="paymentGatewayManager" class="dk.apaq.shopsystem.pay.PaymentGatewayManager">
         <property name="gatewayMap">
             <map value-type="java.lang.Class"> 
-                <entry key="QuickPay" value="dk.apaq.shopsystem.pay.quickpay.QuickPay"/>
-                <entry key="MockPay" value="dk.apaq.shopsystem.pay.MockPaymentGateway"/>
+                <entry key="QuickPay" value="dk.apaq.shopsystem.pay.quickpay.MockQuickPay"/>
             </map>    
         </property>   
     </bean>    

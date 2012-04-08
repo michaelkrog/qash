@@ -2,13 +2,16 @@ package dk.apaq.shopsystem.site;
 
 import dk.apaq.filter.core.CompareFilter;
 import dk.apaq.shopsystem.api.ResourceNotFoundException;
+import dk.apaq.shopsystem.entity.CustomerRelationship;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.PaymentType;
 import dk.apaq.shopsystem.i18n.LocaleUtil;
+import dk.apaq.shopsystem.pay.PaymentGateway;
 import dk.apaq.shopsystem.pay.PaymentGatewayManager;
+import dk.apaq.shopsystem.pay.PaymentGatewayType;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import java.io.IOException;
@@ -18,11 +21,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +49,10 @@ public class PaymentController {
     
     private SystemService service;
     private PaymentGatewayManager paymentGatewayManager;
-    private String baseUrl = "http://localhost:8080";
+    
+    @Autowired
+    @Qualifier(value="publicUrl")
+    private String baseUrl;
     
 
     @Autowired
@@ -55,7 +64,18 @@ public class PaymentController {
         nfQuickPayOrderNumber.setGroupingUsed(false);
     }
 
+    @PostConstruct
+    protected void init(){
+        if(baseUrl == null || "".equals(baseUrl)) {
+             baseUrl = "http://localhost:8080";
+        }
+        
+        LOG.info("Baseurl for PaymentController is initialized as '{}'.", baseUrl);
+        
+    }
+    
     public void setBaseUrl(String baseUrl) {
+        LOG.info("Baseurl for PaymentController is changed to '{}'.", baseUrl);
         this.baseUrl = baseUrl;
     }
     
@@ -70,18 +90,13 @@ public class PaymentController {
         Map model = new HashMap();
         
         switch(seller.getPaymentGatewayType()) {
-            case MockPay:
-                
-                model.put("formUrl", "https://secure.quickpay.dk/form/");
-                model.put("formElements", buildFormElementsForQuickPay(seller, order, null, null, null));
-                return new ModelAndView("payment", model);
             case QuickPay:
                 String idPart = "/" + seller.getId() + "/" + order.getId();
                 String urlPrefix = baseUrl + "/payment" + idPart;
                 
                 String returnUrl = urlPrefix + "/return.htm";
                 String cancelUrl = urlPrefix + "/cancel.htm";
-                String callbackUrl = urlPrefix + "/callback.htm";
+                String callbackUrl = baseUrl + "/api/organisations/" + seller.getId() + "/payments?gateway=quickpay";
                 
                 model.put("formUrl", "https://secure.quickpay.dk/form/");
                 model.put("formElements", buildFormElementsForQuickPay(seller, order, returnUrl, cancelUrl, callbackUrl));
@@ -101,10 +116,10 @@ public class PaymentController {
         Order order = sellerService.getOrders().read(orderId);
         
         //show order and link to pdf
-        return null;
+        return new ModelAndView("payment_return"); 
     }
     
-    @RequestMapping(value="/payment/{orgId}/{orderId}/callback.htm", method = RequestMethod.POST, params="gateway=quickpay")
+    @RequestMapping(value="/payment/{orgId}/{orderId}/quickpay_callback.htm", method = RequestMethod.POST)
     @Transactional
     public void handleQuickpayCallback(@PathVariable String orgId, @PathVariable String orderId, 
                                         @RequestParam String msgtype, @RequestParam String ordernumber, @RequestParam String amount, 
@@ -115,7 +130,8 @@ public class PaymentController {
                                         @RequestParam String cardexpire, @RequestParam String splitpayment, @RequestParam String fraudprobability, 
                                         @RequestParam String fraudremarks, @RequestParam String fraudreport, @RequestParam String fee,
                                         @RequestParam String md5check) throws IOException, ServletException {
-
+//Gør noget med MultipartHttpServletRequest
+    
         //TODO Check md5
         
         if (!"000".equals(qpstat)) {
@@ -145,9 +161,19 @@ public class PaymentController {
         
         OrganisationService sellerService = service.getOrganisationService(seller);
         Order order = sellerService.getOrders().read(orderId);
+        CustomerRelationship customerRelationship = null;
+        
+        if(order.getBuyerId() != null) {
+            customerRelationship = sellerService.getCustomers().read(order.getBuyerId());
+        }
         
         if(order.getNumber() != Long.parseLong(ordernumber)) {
             LOG.warn("Ignored callback because the given ordernumber did not match. [orderid={}; ordernumber={}; given ordernumber={}]", new Object[]{orderId, order.getNumber(), ordernumber});
+        }
+        
+        if("subscribe".equals(msgtype) && customerRelationship != null) {
+            customerRelationship.setSubscriptionPaymentId(transaction);
+            customerRelationship = sellerService.getCustomers().update(customerRelationship);
         }
         
         //Woohoo. :) User is really gonna pay - accept order if it isnt already accepted
@@ -156,6 +182,11 @@ public class PaymentController {
             order = sellerService.getOrders().update(order);
         }
         
+        //take money
+        PaymentGateway gateway = paymentGatewayManager.createPaymentGateway(PaymentGatewayType.QuickPay, merchant, seller.getMerchantSecret());
+        gateway.capture(lAmount, transaction);
+        
+        //persist payment information
         Payment payment = new Payment();
         payment.setAmount(lAmount);
         payment.setOrderId(orderId);
@@ -170,14 +201,7 @@ public class PaymentController {
             LOG.warn("A payment went down on an order but was not marked as fully paid. [orderId={}; order total={}; payment amount={}]", 
                     new Object[]{order.getId(), order.getTotalWithTax(), lAmount});
         }
-        
-        //if all paid then Enable subscription and Save transaction
-        //if(order.isPaid()) {
-            //TODO Which organisation?
-            //org.setSubscriber(true);
-            //org.setSubscriptionPaymentTransactionId(transaction);
-            //organisationService.updateOrganisation(org);
-        //}
+
     }
     
     

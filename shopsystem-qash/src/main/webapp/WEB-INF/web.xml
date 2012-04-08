@@ -70,6 +70,17 @@
         <url-pattern>/wicket/*</url-pattern>
     </servlet-mapping>
     
+    <!-- API DISPATCHER -->
+    <servlet>
+        <servlet-name>api</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>api</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+    
     <!-- SITE DISPATCHER -->
     <servlet>
         <servlet-name>site</servlet-name>
@@ -80,6 +91,8 @@
         <servlet-name>site</servlet-name>
         <url-pattern>*.htm</url-pattern>
     </servlet-mapping>
+    
+    <!-- These are for backwards compatability -->
     <servlet-mapping>
         <servlet-name>site</servlet-name>
         <url-pattern>/index.htm</url-pattern>
