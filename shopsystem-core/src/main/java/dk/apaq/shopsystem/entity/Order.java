@@ -305,6 +305,10 @@ public class Order implements Serializable, ContentEntity {
         addOrderLine(item.getName(), quantity, price.getAmount(), item.getId(), item.getItemNo(), item.getTax(), CommodityType.Product);
     }
 
+    public void addOrderLine(String title, double quantity, double price, Tax tax) {
+        addOrderLine(title, quantity, new BigDecimal(price), tax);
+    }
+    
     public void addOrderLine(String title, double quantity, BigDecimal price, Tax tax) {
         addOrderLine(title, quantity, price, null, null, tax, CommodityType.Unknown);
     }

@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,8 +53,8 @@ public class SubscriptionController {
     }
     
     
-    @RequestMapping(value = "/subscribe.htm")
-    public ModelAndView handleSubscriptionRequest(@RequestParam(required = true) String organisationId, HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping(value = "/subscribe/{orgId}/{planId}/plan.htm")
+    public ModelAndView handleSubscriptionRequest(@PathVariable String organisationId,@PathVariable String planId, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         Organisation org = service.getOrganisationCrud().read(organisationId);
@@ -69,7 +70,7 @@ public class SubscriptionController {
         return new ModelAndView("subscribe", model);
     }
 
-    @RequestMapping(value="/subscribe_do.htm")
+    @RequestMapping(value="/subscribe/{orgId}/{planId}/commit.htm")
     @Transactional
     public ModelAndView onSubscribe(@RequestParam(required = true) String organisationId) {
 
@@ -87,8 +88,10 @@ public class SubscriptionController {
                     
             Subscription subscription = new Subscription();
             subscription.setAutoRenew(true);
-            subscription.setCurrency(currency);
-            subscription.setPrice(subscriptionManagerBean.getSubscriptionFee(currency));
+            
+            //TODO Get price som SubscriptionPlan
+            //subscription.setPrice(subscriptionManagerBean.getSubscriptionFee(currency));
+            
             subscription.setInterval(1);
             subscription.setIntervalUnit(IntervalUnit.Month);
             subscription.setPricingType(SubscriptionPricingType.FixedSubsequent);

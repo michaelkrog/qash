@@ -24,6 +24,7 @@
     <class>dk.apaq.shopsystem.entity.CustomerRelationship</class>
     <class>dk.apaq.shopsystem.entity.Website</class>
     <class>dk.apaq.shopsystem.entity.WebPage</class>
+    <class>dk.apaq.shopsystem.entity.PriceTag</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

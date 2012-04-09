@@ -767,7 +767,7 @@ public class OrderEditor extends CustomComponent implements
                     header.getSearchField().setValue(null);
                     hasChanges = true;
 
-                    TextField f = bi.getBean().getPrice() > 0 ? fieldFactory.lastCreatedQuantityField : fieldFactory.getLastCreatedPriceWithTaxField();
+                    TextField f = bi.getBean().getPriceTags().size() > 0 ? fieldFactory.lastCreatedQuantityField : fieldFactory.getLastCreatedPriceWithTaxField();
                     if (f != null) {
                         f.focus();
                         f.selectAll();
