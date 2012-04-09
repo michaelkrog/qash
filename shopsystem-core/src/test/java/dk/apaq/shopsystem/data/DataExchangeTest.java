@@ -3,6 +3,8 @@ package dk.apaq.shopsystem.data;
 import dk.apaq.shopsystem.entity.Order;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -46,7 +48,7 @@ public class DataExchangeTest {
         
         List<Order> orderlist = new ArrayList<Order>();
         Order order = new Order();
-        order.addOrderLine("Test", 1, 129995, null);
+        order.addOrderLine("Test", 1, new BigDecimal(129995), null);
         orderlist.add(order);
         
         

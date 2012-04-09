@@ -1,6 +1,8 @@
 package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.GenericGenerator;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 
 /**
  *
@@ -36,13 +40,19 @@ public class Payment implements Serializable, ContentEntity {
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
     
-    private long amount;
+    private Money amount = Money.zero(CurrencyUnit.USD);
 
     private String orderId;
     private String paymentDetails;
 
+    public Payment(String currencyCode, double value) {
+        this.amount = Money.of(CurrencyUnit.of(currencyCode),value);
+    }
+
     public Payment() {
     }
+    
+    
 
     public String getId() {
         return id;
@@ -77,11 +87,14 @@ public class Payment implements Serializable, ContentEntity {
         this.organisation = organisation;
     }
 
-    public long getAmount() {
+    public Money getAmount() {
         return amount;
     }
 
-    public void setAmount(long amount) {
+    public void setAmount(Money amount) {
+        if(amount==null) {
+            amount = Money.zero(CurrencyUnit.USD);
+        }
         this.amount = amount;
     }
 

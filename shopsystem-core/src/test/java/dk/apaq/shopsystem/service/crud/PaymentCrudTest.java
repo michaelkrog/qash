@@ -13,8 +13,11 @@ import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.PaymentType;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -111,7 +114,7 @@ public class PaymentCrudTest {
         Crud.Complete<String, Order> orderCrud = service.getOrganisationService(org).getOrders();
         Order order = orderCrud.read(orderCrud.create());
         order.setCurrency("DKK");
-        order.addOrderLine("Test", 1, 19495, null);
+        order.addOrderLine("Test", 1, new BigDecimal(19495), null);
         orderCrud.update(order);
 
         Crud.Complete<String, Payment> crud = service.getOrganisationService(org).getPayments();
@@ -123,7 +126,7 @@ public class PaymentCrudTest {
         String id = result.getId();
 
         Date now = new Date();
-        result.setAmount(20000);
+        result.setAmount(Money.of(CurrencyUnit.of("DKK"), 200));
         result.setPaymentType(PaymentType.Cash);
         
         try {
@@ -144,14 +147,14 @@ public class PaymentCrudTest {
         crud.update(result);
 
         result = crud.read(id);
-        assertEquals(20000, result.getAmount());
+        assertEquals(20000, result.getAmount().getAmountMinorLong());
         assertEquals(PaymentType.Cash, result.getPaymentType());
 
-        Payment change = crud.read(crud.create());
+        /*Payment change = crud.read(crud.create());
         change.setOrderId(order.getId());
-        change.setAmount(-595);
+        change.setAmount(Money.of(CurrencyUnit.of("DKK"), -5.95));
         change.setPaymentType(PaymentType.Change);
-        crud.update(change);
+        crud.update(change);*/
     }
 
     @Test
@@ -185,23 +188,23 @@ public class PaymentCrudTest {
         Crud.Complete<String, Order> orderCrud = service.getOrganisationService(org1).getOrders();
         Order order = orderCrud.read(orderCrud.create());
         order.setCurrency("DKK");
-        order.addOrderLine("Test", 1, 19495, null);
+        order.addOrderLine("Test", 1, new BigDecimal(19495), null);
         order.setStatus(OrderStatus.Accepted);
         orderCrud.update(order);
 
         Crud.Complete<String, Order> orderCrud2 = service.getOrganisationService(org2).getOrders();
         Order order2 = orderCrud2.read(orderCrud2.create());
         order2.setCurrency("DKK");
-        order2.addOrderLine("Test", 1, 19495, null);
+        order2.addOrderLine("Test", 1, new BigDecimal(19495), null);
         order2.setStatus(OrderStatus.Accepted);
         orderCrud2.update(order2);
 
         Crud.Complete<String, Payment> crud1 = service.getOrganisationService(org1).getPayments();
-        Payment result1 = crud1.read(crud1.create());
+        Payment result1 = crud1.createAndRead(new Payment("DKK", 0));
         result1.setOrderId(order.getId());
 
         Crud.Complete<String, Payment> crud2 = service.getOrganisationService(org2).getPayments();
-        Payment result2 = crud2.read(crud2.create());
+        Payment result2 = crud2.createAndRead(new Payment("DKK", 0));
         result2.setOrderId(order2.getId());
 
 

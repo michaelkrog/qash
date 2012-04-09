@@ -3,6 +3,8 @@ package dk.apaq.shopsystem.entity;
 import java.util.Date;
 import org.junit.Test;
 import junit.framework.TestCase;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 
 /**
  *
@@ -14,7 +16,6 @@ public class SubscriptionTest extends TestCase {
     public void testBeanPattern() {
         Subscription subscription = new Subscription();
         subscription.setAutoRenew(true);
-        subscription.setCurrency("currency");
         subscription.setCustomer(new CustomerRelationship(new Organisation()));
         subscription.setDateChanged(new Date());
         subscription.setDateCharged(new Date());
@@ -24,11 +25,10 @@ public class SubscriptionTest extends TestCase {
         subscription.setInterval(1);
         subscription.setIntervalUnit(IntervalUnit.Year);
         subscription.setOrganisation(new Organisation());
-        subscription.setPrice(100);
+        subscription.getPriceTags().add(new PriceTag("DKK",100));
         subscription.setPricingType(SubscriptionPricingType.FixedSubsequent);
         
         assertTrue(subscription.isAutoRenew());
-        assertNotNull(subscription.getCurrency());
         assertNotNull(subscription.getCustomer());
         assertNotNull(subscription.getDateChanged());
         assertNotNull(subscription.getDateCharged());
@@ -38,7 +38,7 @@ public class SubscriptionTest extends TestCase {
         assertEquals(1, subscription.getInterval());
         assertNotNull(subscription.getIntervalUnit());
         assertNotNull(subscription.getOrganisation());
-        assertEquals(100, subscription.getPrice());
+        assertEquals(100, subscription.getPriceTags().get(0).getMoney().getAmountMajorLong());
         assertNotNull(subscription.getPricingType());
         
     }

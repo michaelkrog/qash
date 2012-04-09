@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -54,7 +55,7 @@ public class DaybookControllerTest {
         OrganisationService organisationService = service.getOrganisationService(org);
         String orderId = organisationService.getOrders().create();
         Order order = organisationService.getOrders().read(orderId);
-        order.addOrderLine("Test", 1, 123, null);
+        order.addOrderLine("Test", 1, new BigDecimal(123), null);
         order.setStatus(OrderStatus.Processing);
         organisationService.getOrders().update(order);
         

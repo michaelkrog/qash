@@ -32,6 +32,7 @@ import dk.apaq.shopsystem.pay.PaymentGatewayManager;
 import dk.apaq.shopsystem.pay.PaymentGatewayType;
 import dk.apaq.shopsystem.util.TaxTool;
 
+import org.joda.money.Money;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,7 +150,8 @@ public class SubscriptionManagerBean {
             throw new NullPointerException("CustomerRelationsShip is not set for Subsciption");
         }
 
-        String customerCountryCode = customerRelationship.getCustomer().getCountryCode();
+        Organisation customer = customerRelationship.getCustomer();
+        String customerCountryCode = customer.getCountryCode();
         if (customerCountryCode == null) {
             //if customer has no countrycode set we will default to the organisations countrycode.
             customerCountryCode = subscription.getOrganisation().getCountryCode();
@@ -158,16 +160,23 @@ public class SubscriptionManagerBean {
         if (customerCountryCode == null) {
             throw new NullPointerException("No countrycode for customer could be resolved.");
         }
-
+        
+        String currency = getPaymentCurrencyForOrganisation(customer);
         Country customerCountry = Country.getCountry(customerCountryCode, Locale.getDefault());
         
+        if(!subscription.hasPriceInCurrency(currency)) {
+            String msg = "Unable to generate order because subscription does not have a price in the currency matched by customer.[subscription="+subscription.getId()+"; customer="+customer.getId()+"; currency="+currency+"]";
+            LOG.warn(msg);
+            throw new RuntimeException(msg);
+        }
+        
         Order order = new Order();
-        order.setBuyer(customerRelationship.getCustomer());
+        order.setBuyer(customer);
         order.setBuyerId(customerRelationship.getId());
-        order.setCurrency(subscription.getCurrency());
+        order.setCurrency(currency);
         order.setStatus(OrderStatus.Accepted);
 
-        order.addOrderLine("Subscription", 1, subscription.getPrice(), TaxTool.getTaxBasedOnCountry(customerCountry));
+        order.addOrderLine(subscription);
         
         
         return order;
@@ -245,22 +254,12 @@ public class SubscriptionManagerBean {
     @Transactional
     public Order performCollection(Organisation seller, PaymentGateway paymentGateway, Subscription subscription) {
         OrganisationService orgService = service.getOrganisationService(seller);
-        
-        
         SystemUser adminUser = getAdminUserForOrganisation(subscription.getCustomer().getCustomer());
 
         //1: generate order
         Order order = generateOrderFromSubscription(subscription);
 
-        //2: Create order
-        String id = orgService.getOrders().create(order);
-        order = orgService.getOrders().read(id);
-
-        //3:Update charge date on subscription
-        subscription.setDateCharged(new Date());
-        orgService.getSubscriptions().update(subscription);
-
-        //4: If missing payment info send user mail
+        //2: If missing payment info send user mail
         if (subscription.getCustomer().getSubscriptionPaymentId() == null) {
             if (adminUser != null) {
                 //Unable to authorize payment - send mail to user regarding missing payment information
@@ -271,7 +270,7 @@ public class SubscriptionManagerBean {
                         "Dear " + getNiceCustomerName(adminUser)
                         + "\n\nWe are about to withdraw a payment for your subscription but we dont have your payment information.\n"
                         + "Please go to the following link in order to fulfill your payment.\n"
-                        + "http://qashapp.com/payment/" + seller.getId() + "/" + order.getId() + "/form.htm\n\n"
+                        + "http://qashapp.com/subscribe/" + seller.getId() + "/" + subscription.getId() + "/form.htm\n\n"
                         + "If we are not able to withdraw the payment within 14 days we will automatically cancel your subscription.\n\n"
                         + "Best Regards\n"
                         + "The Qash team.");
@@ -284,11 +283,11 @@ public class SubscriptionManagerBean {
             }
             return order;
         }
-        long paymentAmount = order.getTotalWithTax();
+        Money paymentAmount = order.getTotalWithTax();
 
-        //5: If unable to authorize recurring payment send user mail
+        //3: If unable to authorize recurring payment send user mail
         try {
-            paymentGateway.recurring(orderNumberFormatter.format(order.getNumber()), paymentAmount, order.getCurrency(), true, subscription.getCustomer().getSubscriptionPaymentId());
+            paymentGateway.recurring(orderNumberFormatter.format(order.getNumber()), paymentAmount.getAmountMinorLong(), order.getCurrency(), false, subscription.getCustomer().getSubscriptionPaymentId());
         } catch (PaymentException ex) {
             if (adminUser != null) {
                 //Unable to authorize payment - send mail to user regarding missing payment information
@@ -299,7 +298,7 @@ public class SubscriptionManagerBean {
                         "Dear " + getNiceCustomerName(adminUser)
                         + "\n\nWe were unable withdraw a payment for your subscription using the payment information you gave us earlier.\n"
                         + "Please go to the following link in order to fulfill your payment.\n"
-                        + "http://qashapp.com/payment/" + seller.getId() + "/" + order.getId() + "/form.htm\n\n"
+                        + "http://qashapp.com/subscribe/" + seller.getId() + "/" + subscription.getId() + "/form.htm\n\n"
                         + "If we are not able to withdraw the payment within 14 days we will automatically cancel your subscription.\n\n"
                         + "Best Regards\n"
                         + "The Qash team.");
@@ -313,6 +312,15 @@ public class SubscriptionManagerBean {
             return order;
         }
 
+        //4: Create order
+        String id = orgService.getOrders().create(order);
+        order = orgService.getOrders().read(id);
+
+        //5:Update charge date on subscription
+        subscription.setDateCharged(new Date());
+        orgService.getSubscriptions().update(subscription);
+        
+        
         //6: register payments for order
         Payment payment = new Payment();
         payment.setAmount(paymentAmount);
@@ -321,7 +329,7 @@ public class SubscriptionManagerBean {
         orgService.getPayments().create(payment);
 
         //7: capture amount
-        //paymentGateway.capture(paymentAmount, subscription.getCustomer().getSubscriptionPaymentId());
+        paymentGateway.capture(paymentAmount.getAmountMinorLong(), subscription.getCustomer().getSubscriptionPaymentId());
 
         //8: Send receipt
         if (adminUser != null) {
@@ -332,7 +340,7 @@ public class SubscriptionManagerBean {
             msg.setText(
                     "Dear " + getNiceCustomerName(adminUser)
                     + "\n\nWe have withdrawn a payment for your subscription with us.\n\n"
-                    + "Amount: " + amountFormatter.format(paymentAmount) + "\n\n"
+                    + "Amount: " + amountFormatter.format(paymentAmount.getAmount().doubleValue()) + "\n\n"
                     //+ "Please login to your account to retrieve invoices when needed.\n"
                     + "http://qashapp.com\n\n"
                     + "Best Regards\n"

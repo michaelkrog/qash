@@ -23,7 +23,7 @@ public class ProductCrudInventoryManager implements InventoryManager {
 
     public boolean isStockItem(String itemId) {
         Product item = crud.read(itemId);
-        return item.isStockProduct();
+        return item == null ? false : item.isStockProduct();
     }
 
 

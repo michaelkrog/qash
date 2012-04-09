@@ -18,6 +18,7 @@ import dk.apaq.shopsystem.entity.WebPage;
 import dk.apaq.shopsystem.entity.ProductCategory;
 import dk.apaq.shopsystem.entity.CustomerRelationship;
 import dk.apaq.shopsystem.entity.Subscription;
+import dk.apaq.shopsystem.entity.SubscriptionPlan;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.vfs.FileSystem;
 import java.io.Serializable;
@@ -41,6 +42,7 @@ public interface OrganisationService extends Serializable {
     Crud.Complete<String, Document> getDocuments();
     Crud.Complete<String, DocumentCollection> getDocumentCollections();
     Crud.Complete<String, Subscription> getSubscriptions();
+    Crud.Complete<String, SubscriptionPlan> getSubscriptionPlans();
     Crud.Complete<String, Website> getWebsites();
     Crud<String,Theme> getThemes();
     Crud.Complete<String,WebPage> getPages(Website website);

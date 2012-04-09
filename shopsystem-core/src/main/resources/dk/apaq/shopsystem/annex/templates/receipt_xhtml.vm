@@ -115,8 +115,8 @@
 
         #end
             <tr>
-                <td class="totalline_title with-top-padding with-bottom-padding">$tool.html($resource.getString("total")) ($tool.html($resource.getString("including_tax")) $cf2.format($order.getTotalTax()))</td>
-                <td class="totalline_value with-top-padding with-bottom-padding">$cf2.format($order.getTotalWithTax())</td>
+                <td class="totalline_title with-top-padding with-bottom-padding">$tool.html($resource.getString("total")) ($tool.html($resource.getString("including_tax")) $cf2.format($order.getTotalTax().getAmount().doubleValue()))</td>
+                <td class="totalline_value with-top-padding with-bottom-padding">$cf2.format($order.getTotalWithTax().getAmount().doubleValue())</td>
             </tr>
 
         #foreach($payment in $payments)

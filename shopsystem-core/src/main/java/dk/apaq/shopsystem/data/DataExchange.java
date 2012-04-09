@@ -5,6 +5,7 @@ import dk.apaq.shopsystem.entity.OrderLine;
 import dk.apaq.shopsystem.entity.Tax;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -35,7 +36,7 @@ public class DataExchange {
 
         for (Order order : orderlist) {
             for (OrderLine orderLine : order.getOrderLines()) {
-                if (orderLine.getPrice() == 0) {
+                if (orderLine.getPrice().equals(BigDecimal.ZERO)) {
                     continue;
                 }
 
@@ -43,8 +44,8 @@ public class DataExchange {
                 String description = orderLine.getQuantity() + "X" + orderLine.getTitle();
                 String taxCode = orderLine.getTax() == null ? "" : "S" + orderLine.getTax().getRate();
                 double taxRate = orderLine.getTax() == null ? 0 : orderLine.getTax().getRate();
-                Long total = orderLine.getTotal(true);
-                Long totalWithTax = orderLine.getTotalWithTax(true);
+                BigDecimal total = orderLine.getTotal(true);
+                BigDecimal totalWithTax = orderLine.getTotalWithTax(true);
                 
                 if(order.getDateInvoiced() == null) {
                     writer.print("-");

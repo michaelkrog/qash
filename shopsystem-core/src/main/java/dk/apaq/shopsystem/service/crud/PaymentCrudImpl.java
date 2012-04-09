@@ -8,8 +8,11 @@ import dk.apaq.shopsystem.entity.OrderStatus;
 import dk.apaq.shopsystem.entity.Organisation;
 import dk.apaq.shopsystem.entity.Payment;
 import dk.apaq.shopsystem.entity.PaymentType;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,15 +79,15 @@ public class PaymentCrudImpl extends ContentCrud<Payment> {
         return entity;
     }
 
-    private double getTotalPayment(String orderId) {
+    private Money getTotalPayment(String currency, String orderId) {
         Filter filter = new CompareFilter<String>("orderId", orderId, CompareFilter.CompareType.Equals);
         List<String> idlist = listIds(filter, null, null);
 
-        double value = 0;
+        Money value = Money.zero(CurrencyUnit.of(currency));
         for(String id : idlist) {
             Payment p = read(id);
             if(p!=null) {
-                value+=p.getAmount();
+                value = value.plus(p.getAmount());
             }
         }
         return value;
@@ -117,13 +120,13 @@ public class PaymentCrudImpl extends ContentCrud<Payment> {
     private void updateOrderAccordingToPayment(Payment entity, Order order) {
         if(order==null) return;
         //Get total from a fresh order
-        double total = order.getTotalWithTax();
+        Money total = order.getTotalWithTax();
 
         //Calculate due
-        double payments = getTotalPayment(order.getId());
-        double due = total - payments;
+        Money payments = getTotalPayment(order.getCurrency(), order.getId());
+        Money due = total.minus(payments);
 
-        if(due - entity.getAmount() <=0 && order.getStatus()!=OrderStatus.Completed) {
+        if(due.minus(entity.getAmount()).getAmountMinorLong() <=0 && order.getStatus()!=OrderStatus.Completed) {
             order.setStatus(OrderStatus.Completed);
             order.setPaid(true);
             orderCrud.update(order);

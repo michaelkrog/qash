@@ -113,11 +113,11 @@
             </tr>
             <tr>
                 <td class="left">$tool.html($resource.getString("total"))</td>
-                <td class="right">$cf2.format($salesSum)</td>
+                <td class="right">$cf2.format($salesSum.getAmount().doubleValue())</td>
             </tr>
             <tr>
                 <td class="left">$tool.html($resource.getString("including_tax"))</td>
-                <td class="right">$cf2.format($salesVat)</td>
+                <td class="right">$cf2.format($salesVat.getAmount().doubleValue())</td>
             </tr>
 
             <!-- PAYMENTS -->
@@ -126,25 +126,25 @@
             </tr>
             <tr>
                 <td class="left">$tool.html($resource.getString("Cash"))</td>
-                <td class="right">$cf2.format($paymentsCash)</td>
+                <td class="right">$cf2.format($paymentsCash.getAmount().doubleValue())</td>
             </tr>
             <tr>
                 <td class="left">$tool.html($resource.getString("Card"))</td>
-                <td class="right">$cf2.format($paymentsCard)</td>
+                <td class="right">$cf2.format($paymentsCard.getAmount().doubleValue())</td>
             </tr>
             <tr>
                 <td class="left">$tool.html($resource.getString("Transfer"))</td>
-                <td class="right">$cf2.format($paymentsBank)</td>
+                <td class="right">$cf2.format($paymentsBank.getAmount().doubleValue())</td>
             </tr>
             <tr>
                 <td class="left">$tool.html($resource.getString("Change"))</td>
-                <td class="right">$cf2.format($paymentsChange)</td>
+                <td class="right">$cf2.format($paymentsChange.getAmount().doubleValue())</td>
             </tr>
 
             <!-- DIFFERENCE -->
             <tr>
                 <td class="title left with-top-padding with-bottom-padding" >$tool.html($resource.getString("difference"))</td>
-                <td class="title right with-top-padding with-bottom-padding">$cf2.format($paymentsDifference)</td>
+                <td class="title right with-top-padding with-bottom-padding">$cf2.format($paymentsDifference.getAmount().doubleValue())</td>
             </tr>
 
         </table>

@@ -1,6 +1,7 @@
 package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -24,6 +25,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 
 /**
  * Specifies an order.
@@ -243,6 +246,10 @@ public class Order implements Serializable, ContentEntity {
     }
 
     public void setCurrency(String currency) {
+        if(!orderlines.isEmpty()) {
+            throw new IllegalStateException("Cannot change currency of an order with existing orderlines.");
+        }
+        
         if (currency == null) {
             currency = "USD";
 
@@ -263,14 +270,30 @@ public class Order implements Serializable, ContentEntity {
     }
 
     public void addOrderLine(Subscription subscription) {
+        if (subscription == null) {
+            throw new IllegalArgumentException("subscription was null.");
+
+        }
         
+        if(!subscription.hasPriceInCurrency(currency)) {
+            throw new IllegalArgumentException("Unable to add subscription because it does not have a price in the orders currency.");
+        }
+        
+        Money price = subscription.getPriceForCurrency(currency);
+
+        addOrderLine(subscription.getName(), 1, price.getAmount(), subscription.getId(), subscription.getItemNo(), subscription.getTax(), CommodityType.Subscription);
     }
 
     public void addOrderLine(Product item, double quantity) {
         if (item == null) {
             throw new IllegalArgumentException("item was null.");
-
         }
+        
+        if(!item.hasPriceInCurrency(currency)) {
+            throw new IllegalArgumentException("Unable to add product because it does not have a price in the orders currency.");
+        }
+        
+        Money price = item.getPriceForCurrency(currency);
 
         //If an item like this is already in the order then just increment the quantity
         OrderLine match = getOrderLine(item);
@@ -279,14 +302,14 @@ public class Order implements Serializable, ContentEntity {
             return;
         }
 
-        addOrderLine(item.getName(), quantity, item.getPrice(), item.getId(), item.getItemNo(), item.getTax());
+        addOrderLine(item.getName(), quantity, price.getAmount(), item.getId(), item.getItemNo(), item.getTax(), CommodityType.Product);
     }
 
-    public void addOrderLine(String title, double quantity, long price, Tax tax) {
-        addOrderLine(title, quantity, price, null, null, tax);
+    public void addOrderLine(String title, double quantity, BigDecimal price, Tax tax) {
+        addOrderLine(title, quantity, price, null, null, tax, CommodityType.Unknown);
     }
 
-    private void addOrderLine(String title, double quantity, long price, String itemid, String itemno, Tax tax) {
+    private void addOrderLine(String title, double quantity, BigDecimal price, String itemid, String itemno, Tax tax, CommodityType commodityType) {
 
         OrderLineTax lineTax;
 
@@ -303,6 +326,7 @@ public class Order implements Serializable, ContentEntity {
         line.setItemId(itemid);
         line.setTax(lineTax);
         line.setItemNo(itemno);
+        line.setCommodityType(commodityType);
 
         orderlines.add(line);
 
@@ -377,7 +401,7 @@ public class Order implements Serializable, ContentEntity {
 
         for (OrderLine line : orderlines) {
             if (item.getId().equals(line.getItemId())
-                    && item.getPrice() == line.getPrice()
+                    && isSame(item.getPriceForCurrency(currency).getAmount(), line.getPrice())
                     && isSame(lineTax, line.getTax())) {
                 return line;
             }
@@ -400,21 +424,21 @@ public class Order implements Serializable, ContentEntity {
         //payments.clear();
     }
 
-    public long getTotal() {
-        long total = 0;
+    public Money getTotal() {
+        BigDecimal total = BigDecimal.ZERO;
         for (int i = 0; i < getOrderLineCount(); i++) {
             OrderLine line = getOrderLine(i);
-            total += line.getTotal();
+            total = total.add(line.getTotal());
         }
-        return total;
+        return Money.of(CurrencyUnit.of(currency), total);
     }
 
-    public long getTotalTax() {
+    public Money getTotalTax() {
         return getTotalTax(null);
     }
 
-    public long getTotalWithTax() {
-        return getTotal() + getTotalTax();
+    public Money getTotalWithTax() {
+        return getTotal().plus(getTotalTax().getAmount());
     }
 
     public List<OrderLineTax> getTaxList() {
@@ -431,14 +455,14 @@ public class Order implements Serializable, ContentEntity {
         return taxes;
     }
 
-    public long getTotalTax(OrderLineTax tax) {
-        long value = 0;
+    public Money getTotalTax(OrderLineTax tax) {
+        BigDecimal value = BigDecimal.ZERO;
         for (OrderLine line : orderlines) {
             if (tax == null || hasSameTaxReferenced(tax, line.getTax())) {
-                value += line.getTotalTax();
+                value = value.add(line.getTotalTax());
             }
         }
-        return value;
+        return Money.of(CurrencyUnit.of(currency), value);
     }
 
     private boolean isSame(Object obj1, Object obj2) {

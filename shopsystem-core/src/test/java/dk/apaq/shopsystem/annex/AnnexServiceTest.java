@@ -23,12 +23,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.imageio.ImageIO;
 import junit.framework.TestCase;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 
 public class AnnexServiceTest extends TestCase {
 
@@ -53,6 +56,7 @@ public class AnnexServiceTest extends TestCase {
         org.setPostalCode("9530");
         org.setCity("Stovring");
         org.setCountryCode("DK");
+        org.setCurrency("DKK");
         org.setAnnexNote("Dette er en note\nPas på den");
         return org;
     }
@@ -71,7 +75,7 @@ public class AnnexServiceTest extends TestCase {
         order.setBuyer(getContactInformation());
 
         for(int i=0;i<orderlinecount;i++){
-            order.addOrderLine("Coffee & cup and much much more #"+i, 1, 1023*(i+1), i%2==0?tax:tax2);
+            order.addOrderLine("Coffee & cup and much much more #"+i, 1, new BigDecimal(1023*(i+1)), i%2==0?tax:tax2);
         }
         return order;
     }
@@ -86,7 +90,7 @@ public class AnnexServiceTest extends TestCase {
             order.setCurrency("DKK");
             order.setNumber(i + 1);
             order.setStatus(OrderStatus.Completed);
-            order.addOrderLine("Coffee Cup", i + 1, 10, tax);
+            order.addOrderLine("Coffee Cup", i + 1, BigDecimal.TEN, tax);
             orderlist.add(order);
 
         }
@@ -99,10 +103,10 @@ public class AnnexServiceTest extends TestCase {
         for(int i=0;i<count;i++) {
             Payment p = new Payment();
             if(i % 4 == 0) {
-                p.setAmount(100);
+                p.setAmount(Money.of(CurrencyUnit.of("DKK"), 100D));
                 p.setPaymentType(PaymentType.Cash);
             } else {
-                p.setAmount(-10);
+                p.setAmount(Money.of(CurrencyUnit.of("DKK"), 10D));
                 p.setPaymentType(PaymentType.Change); 
             }
             payments.add(p);

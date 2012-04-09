@@ -23,6 +23,7 @@ import dk.apaq.shopsystem.entity.Tax;
 import dk.apaq.shopsystem.entity.Website;
 import dk.apaq.shopsystem.entity.OrganisationUserReference;
 import dk.apaq.shopsystem.entity.ProductCategory;
+import dk.apaq.shopsystem.entity.SubscriptionPlan;
 import dk.apaq.shopsystem.entity.Theme;
 import dk.apaq.shopsystem.service.crud.InventoryManager;
 import dk.apaq.shopsystem.service.crud.SecurityHandler;
@@ -187,6 +188,12 @@ public class OrganisationServiceImpl implements OrganisationService, Application
     public Complete<String, Subscription> getSubscriptions() {
         return getGenericContentCrud(Subscription.class);
     }
+    
+    @Override
+    public Complete<String, SubscriptionPlan> getSubscriptionPlans() {
+        return getGenericContentCrud(SubscriptionPlan.class);
+    }
+
 
     private <T> Complete<String, T> getGenericContentCrud(Class<T> clazz, CrudListener ... listeners) {
         Organisation organisation = readOrganisation();

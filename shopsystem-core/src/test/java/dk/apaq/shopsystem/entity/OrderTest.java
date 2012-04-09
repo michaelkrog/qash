@@ -1,8 +1,11 @@
 package dk.apaq.shopsystem.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import junit.framework.TestCase;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.junit.Test;
 
 /**
@@ -27,6 +30,7 @@ public class OrderTest extends TestCase {
 
     public void testAddSameItemTwice(){
         Order order = new Order();
+        order.setCurrency("DKK");
         Tax tax = new Tax();
         tax.setId("tax");
         tax.setName("Moms");
@@ -34,7 +38,8 @@ public class OrderTest extends TestCase {
 
         Product item = new Product();
         item.setName("Dims");
-        item.setPrice(2000);
+        item.getPriceTags().add(new PriceTag("DKK", 100));
+        item.getPriceTags().add(new PriceTag("USD", 20));
         item.setId("ID");
         item.setItemNo("DIMS");
         item.setTax(tax);
@@ -43,7 +48,8 @@ public class OrderTest extends TestCase {
         order.addOrderLine(item);
         
         assertEquals(1, order.getOrderLineCount());
-        assertEquals(4000, order.getTotal());
+        assertEquals(20000, order.getTotal().getAmountMinorLong());
+        assertEquals(25000, order.getTotalWithTax().getAmountMinorLong());
         
     }
 
@@ -53,11 +59,11 @@ public class OrderTest extends TestCase {
         tax.setId("tax");
         tax.setName("Moms");
         tax.setRate(25.0);
-        order.addOrderLine("Dims", 1, 10000, tax);
+        order.addOrderLine("Dims", 1, new BigDecimal(10000), tax);
 
         List<OrderLineTax> taxlist = order.getTaxList();
         assertEquals(1, taxlist.size());
-        assertEquals(2500, order.getTotalTax(taxlist.get(0)));
+        assertEquals(250000, order.getTotalTax(taxlist.get(0)).getAmountMinorLong());
     }
 
 

@@ -15,10 +15,13 @@ import dk.apaq.shopsystem.pay.PaymentGatewayType;
 import dk.apaq.shopsystem.service.OrganisationService;
 import dk.apaq.shopsystem.service.SystemService;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +109,8 @@ public class PaymentController extends AbstractController {
         }
         
         long orderNumber;
-        long amount;
+        Money amount;
+        String currency = request.getParameter("currency");
         String transaction = request.getParameter("transaction");
         
         LOG.debug("Payment event type is " + eventType);
@@ -119,44 +123,40 @@ public class PaymentController extends AbstractController {
         }
         
         try {
-            amount = Long.parseLong(request.getParameter("amount"));
+            amount = Money.zero(CurrencyUnit.of(currency));
+            amount = amount.plusMinor(Long.parseLong(request.getParameter("amount")));
         } catch(NumberFormatException ex) {
             LOG.warn("Payment data was valid, but amount is not a valid number!!! [amount={}; remoteIp={}]", request.getParameter("amount"), request.getRemoteAddr());
             throw new InvalidRequestException("amount not a valid number [value="+request.getParameter("amount") +"]");
         }
         
         
-
-        String orderId = getOrderIdFromOrderNumber(sellerService, orderNumber);
-        LOG.debug("Orderid found from orderNumber. [orderId={}; orderNumber={}]", orderId, orderNumber);
-        Order order = sellerService.getOrders().read(orderId);
-        CustomerRelationship customerRelationship = null;
         PaymentGateway gateway = paymentGatewayManager.createPaymentGateway(PaymentGatewayType.QuickPay, seller.getMerchantId(), seller.getMerchantSecret());
-            
-        
-        if(order.getBuyerId() != null) {
-            LOG.debug("Order carried a customer. Loading customerRelationsShip");
-            customerRelationship = sellerService.getCustomers().read(order.getBuyerId());
-        }
+
         
         if("subscribe".equals(eventType)) {
+            CustomerRelationship customerRelationship = sellerService.getCustomers().read(request.getParameter("relation"));
             if(customerRelationship != null) {
-                LOG.debug("Payment is a subscription and we have loaded a customerrelation. Transaction id will appended to the customer relationship. [tranaction={}; customerRelationsship={}]", 
-                        transaction, customerRelationship.getId());
-                customerRelationship.setSubscriptionPaymentId(transaction);
-                customerRelationship = sellerService.getCustomers().update(customerRelationship);
+                LOG.warn("Payment is a subscription be were unable to load a customerrelation. [tranaction={}; relation={}]", 
+                        transaction, request.getParameter("relation"));
+                
             }
             
-            LOG.debug("Charging money from subscription.");
-            try {
-                gateway.recurring(request.getParameter("ordernumber"), order.getTotalWithTax(), order.getCurrency(), true, transaction);
-                LOG.debug("Money was charged from subscription.");
-            } catch(PaymentException ex) {
-                LOG.warn("Unable to charge money from subscription.", ex);
-                throw ex;
-            }
+            customerRelationship.setSubscriptionPaymentId(transaction);
+            customerRelationship = sellerService.getCustomers().update(customerRelationship);
             
         } else {
+        
+            String orderId = getOrderIdFromOrderNumber(sellerService, orderNumber);
+            LOG.debug("Orderid found from orderNumber. [orderId={}; orderNumber={}]", orderId, orderNumber);
+            Order order = sellerService.getOrders().read(orderId);
+            CustomerRelationship customerRelationship = null;
+            
+
+            if(order.getBuyerId() != null) {
+                LOG.debug("Order carried a customer. Loading customerRelationsShip");
+                customerRelationship = sellerService.getCustomers().read(order.getBuyerId());
+            }
         
             //Woohoo. :) User is really gonna pay - accept order if it isnt already accepted
             if(!order.getStatus().isConfirmedState()) {
@@ -168,7 +168,7 @@ public class PaymentController extends AbstractController {
             //take money
             LOG.debug("Charging money from customers card.");
             try {
-                gateway.capture(amount, request.getParameter("transaction"));
+                gateway.capture(amount.getAmountMinorLong(), request.getParameter("transaction"));
                 LOG.debug("Money was charged from card.");
             } catch(PaymentException ex) {
                 LOG.warn("Unable to charge money from card.", ex);

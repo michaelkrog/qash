@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 import javax.persistence.EntityManager;
@@ -60,12 +61,12 @@ public class PaymentControllerTest {
         OrganisationService organisationService = service.getOrganisationService(org);
         String orderId = organisationService.getOrders().create();
         Order order = organisationService.getOrders().read(orderId);
-        order.addOrderLine("Test", 1, 123, null);
+        order.addOrderLine("Test", 1, new BigDecimal(123), null);
         order.setStatus(OrderStatus.Processing);
         order = organisationService.getOrders().update(order);
         
         String orderNumber = "000" + order.getNumber();
-        String amount = Long.toString(order.getTotalWithTax());
+        String amount = Long.toString(order.getTotalWithTax().getAmountMinorLong());
         
         String[] keys = PaymentController.QUICKPAY_KEYS;
         String[] values = {"authorize", orderNumber, amount, order.getCurrency(), "120202134442", "9", "000", "OK", 

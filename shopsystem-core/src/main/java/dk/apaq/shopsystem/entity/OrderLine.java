@@ -1,6 +1,8 @@
 package dk.apaq.shopsystem.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -39,7 +41,8 @@ public class OrderLine implements Serializable, BasicEntity {
     private String itemId;
     private String itemNo;
     private double quantity;
-    private long price;
+    private BigDecimal price = BigDecimal.ZERO;
+    private CommodityType commodityType = CommodityType.Unknown;
 
     /*@Column(name="UNITTYPE")
     @Enumerated(EnumType.STRING)
@@ -56,14 +59,14 @@ public class OrderLine implements Serializable, BasicEntity {
      * the taxes added to the orderline..
      * @return The tax value.
      */
-    public long getTaxValue() {
-        long calculation = 0;
-
+    public BigDecimal getTaxValue() {
+        
         if (tax != null) {
-            calculation = (long) (price * (tax.getRate() / PERCENTAGEDIVIDE));
+            return calculateTaxValue(price);
+        } else {
+            return BigDecimal.ZERO;
         }
 
-        return calculation;
     }
 
     public String getId() {
@@ -148,7 +151,7 @@ public class OrderLine implements Serializable, BasicEntity {
      * Retrieves the price of the item. This price is tax-excluded.
      * @return The price, tax-excluded.
      */
-    public long getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -156,7 +159,7 @@ public class OrderLine implements Serializable, BasicEntity {
      * Sets the price of item, tax-excluded, and in the smallest denomination of a currency.
      * @param price Price of the item, tax-excluded.
      */
-    public void setPrice(long price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -165,24 +168,8 @@ public class OrderLine implements Serializable, BasicEntity {
      * getPrice() + getTaxValue();
      * @return
      */
-    public long getPriceWithTax() {
-        return getPrice() + getTaxValue();
-    }
-
-    /**
-     * Sets the price of item including tax. This will use taxes to calculate how much
-     * of the price is tax and then call setPrice() to adjust the price. This means that
-     * changing the tax after calling this method with also change the retrieved value with
-     * getPriceWithTax. 
-     * 
-     * The price must be in the smallest denomination of a currency.
-     */
-    public void setPriceWithTax(long price) {
-        if(tax!=null) {
-            price = (long)((price / (tax.getRate() + 100.0)) * 100.0);
-        }
-
-        setPrice(price);
+    public BigDecimal getPriceWithTax() {
+        return getPrice().add(getTaxValue());
     }
 
     /*
@@ -233,7 +220,16 @@ public class OrderLine implements Serializable, BasicEntity {
         this.title = title;
     }
 
-    public long getTotal() {
+    public CommodityType getCommodityType() {
+        return commodityType;
+    }
+
+    public void setCommodityType(CommodityType commodityType) {
+        this.commodityType = commodityType;
+    }
+    
+    
+    public BigDecimal getTotal() {
         return getTotal(true);
     }
 
@@ -248,33 +244,34 @@ public class OrderLine implements Serializable, BasicEntity {
      *
      * @return The total for this order.
      */
-    public long getTotal(boolean includeDiscount) {
-        long total = (long) (getPrice() * getQuantity());
+    public BigDecimal getTotal(boolean includeDiscount) {
+        BigDecimal total = getPrice().multiply(BigDecimal.valueOf(getQuantity()));
         if(includeDiscount) {
-            total = (long) (total - (total * discountPercentage));
+            BigDecimal discount = total.multiply(BigDecimal.valueOf(discountPercentage));
+            total = total.add(discount.negate());
         }
-        return total;
+        return total.setScale(2);
     }
 
     
-    public long getTotalWithTax() {
+    public BigDecimal getTotalWithTax() {
         return getTotalWithTax(true);
     }
      
-    public long getTotalWithTax(boolean includeDiscount) {
-        return getTotal(includeDiscount) + getTotalTax(includeDiscount);
+    public BigDecimal getTotalWithTax(boolean includeDiscount) {
+        return getTotal(includeDiscount).add(getTotalTax(includeDiscount)).setScale(2);
     }
 
 
-    public long getTotalTax() {
+    public BigDecimal getTotalTax() {
         return getTotalTax(true);
     }
     /**
      * Calculates the total tax for this orderline by this equation: tax*quantity.
      * @return The total tax for this order.
      */
-    public long getTotalTax(boolean includeDiscount) {
-        return calculateTaxValue(getTotal(includeDiscount));
+    public BigDecimal getTotalTax(boolean includeDiscount) {
+        return calculateTaxValue(getTotal(includeDiscount)).setScale(2);
     }
 
     /*
@@ -286,14 +283,14 @@ public class OrderLine implements Serializable, BasicEntity {
         this.unittype = unittype;
     }*/
 
-    private long calculateTaxValue(long value) {
-        long calculation = 0;
-
+    private BigDecimal calculateTaxValue(BigDecimal value) {
+        
         if (tax != null) {
-            calculation = (long)(value * (tax.getRate() / PERCENTAGEDIVIDE));
+            return value.multiply(BigDecimal.valueOf(tax.getRate() / PERCENTAGEDIVIDE)).setScale(2);
+        } else {
+            return BigDecimal.ZERO;
         }
 
-        return calculation;
     }
     
 }

@@ -29,11 +29,14 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Currency;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -288,35 +291,39 @@ public class AnnexServiceImpl implements AnnexService {
         Page page = annexcontext.getPage();
         Locale locale = annexcontext.getLocale();
 
-        double salesSum = 0;
-        double salesVat = 0;
-        double paymentsCash = 0;
-        double paymentsCard = 0;
-        double paymentsBank = 0;
-        double paymentsChange = 0;
+        Money salesSum = Money.zero(CurrencyUnit.of(organisation.getCurrency()));
+        Money salesVat = Money.zero(CurrencyUnit.of(organisation.getCurrency()));
+        Money paymentsCash = Money.zero(CurrencyUnit.of(organisation.getCurrency()));
+        Money paymentsCard = Money.zero(CurrencyUnit.of(organisation.getCurrency()));
+        Money paymentsBank = Money.zero(CurrencyUnit.of(organisation.getCurrency()));
+        Money paymentsChange = Money.zero(CurrencyUnit.of(organisation.getCurrency()));
 
 
         /*  create a context and add data */
         VelocityContext context = new VelocityContext();
 
         for (Order order : orders) {
-            salesSum += order.getTotal();
-            salesVat += order.getTotalTax();
+            if(order.getCurrency().equals(organisation.getCurrency())) {
+                salesSum = salesSum.plus(order.getTotal());
+                salesVat = salesVat.plus(order.getTotalTax());
+            } else {
+                //TODO
+            }
         }
 
         for (Payment payment : payments) {
             switch (payment.getPaymentType()) {
                 case Card:
-                    paymentsCard += payment.getAmount();
+                    paymentsCard = paymentsCard.plus(payment.getAmount());
                     break;
                 case Cash:
-                    paymentsCash += payment.getAmount();
+                    paymentsCash = paymentsCard.plus(payment.getAmount());
                     break;
                 case Change:
-                    paymentsChange += payment.getAmount();
+                    paymentsChange = paymentsCard.plus(payment.getAmount());
                     break;
                 case Transfer:
-                    paymentsBank += payment.getAmount();
+                    paymentsBank = paymentsCard.plus(payment.getAmount());
                     break;
             }
         }
@@ -332,7 +339,7 @@ public class AnnexServiceImpl implements AnnexService {
         context.put("paymentsCard", paymentsCard);
         context.put("paymentsBank", paymentsBank);
         context.put("paymentsChange", paymentsChange);
-        context.put("paymentsDifference", paymentsBank + paymentsCard + paymentsCash + paymentsChange);
+        context.put("paymentsDifference", paymentsBank.plus(paymentsCard).plus(paymentsCash).plus(paymentsChange));
 
         context.put("organisation", organisation);
 

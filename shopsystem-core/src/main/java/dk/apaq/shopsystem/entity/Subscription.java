@@ -5,31 +5,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
  * @author krog
  */
 @Entity
-public class Subscription implements ContentEntity {
+public class Subscription extends AbstractCommodity {
     
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    protected String id;
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dateCreated = new Date();
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dateChanged = new Date();
-
-    @ManyToOne
-    private Organisation organisation;
-
     @Column(name="subscriptioninterval")
     private int interval;
     
@@ -43,50 +28,8 @@ public class Subscription implements ContentEntity {
     private CustomerRelationship customer;
     private SubscriptionPricingType pricingType;
     private boolean autoRenew;
-    private boolean enabled;
-    private long price;
-    private String currency;
-
     
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    @Override
-    public void setDateCreated(Date date) {
-        this.dateCreated = date;
-    }
-
-    @Override
-    public Date getDateChanged() {
-        return dateChanged;
-    }
-
-    @Override
-    public void setDateChanged(Date dateChanged) {
-        this.dateChanged = dateChanged;
-    }
-
-    @Override
-    public Organisation getOrganisation() {
-        return organisation;
-    }
-
-    @Override
-    public void setOrganisation(Organisation organisation) {
-        this.organisation = organisation;
-    }
+    
 
     public boolean isAutoRenew() {
         return autoRenew;
@@ -136,47 +79,10 @@ public class Subscription implements ContentEntity {
         this.pricingType = pricingType;
     }
 
-    public String getCurrency() {
-        return currency;
+
+    @Override
+    public CommodityType getCommodityType() {
+        return CommodityType.Subscription;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    /**
-     * The price collected every time the subscription is renewed. The price is in the smallest
-     * denomination of the currency, fx. cents.
-     */
-    public long getPrice() {
-        return price;
-    }
-
-    /**
-     * Price fo the subscription given in the smaller denomination of the currency fx. cents for dollars.
-     * @param price 
-     */
-    public void setPrice(long price) {
-        this.price = price;
-    }
-
-    /*
-    
-    public String getSubscriptionPaymentId() {
-        return subscriptionPaymentId;
-    }
-
-    public void setSubscriptionPaymentId(String subscriptionPaymentId) {
-        this.subscriptionPaymentId = subscriptionPaymentId;
-    }
-*/
-    
 }

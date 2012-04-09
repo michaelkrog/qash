@@ -1,5 +1,6 @@
 package dk.apaq.shopsystem.service.crud;
 
+import dk.apaq.shopsystem.entity.CommodityType;
 import dk.apaq.shopsystem.entity.Order;
 import dk.apaq.shopsystem.entity.OrderLine;
 import dk.apaq.shopsystem.entity.OrderStatus;
@@ -94,7 +95,7 @@ public class OrderCrudImpl extends ContentCrud<Order> {
         for (int i = 0; i < entity.getOrderLineCount(); i++) {
                 OrderLine line = entity.getOrderLine(i);
                 String itemid = line.getItemId();
-                if (itemid != null) {
+                if (line.getCommodityType() == CommodityType.Product && itemid != null) {
                     if (inventoryManager.isStockItem(itemid)) {
                         inventoryManager.pullFromStock(itemid, line.getQuantity());
                     }

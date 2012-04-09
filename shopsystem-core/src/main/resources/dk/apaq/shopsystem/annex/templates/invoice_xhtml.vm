@@ -218,18 +218,18 @@
                 <tr>
                         <td colspan="4" class="noborders"></td>
                         <td class="left orderlinetableline">$tool.html($resource.getString("net")):</td>
-                        <td class="right orderlinetableline">$cf.format($order.getTotal())</td>
+                        <td class="right orderlinetableline">$cf.format($order.getTotal().getAmount().doubleValue())</td>
                     </tr>
                     #foreach($tax in $order.taxList)
 
                                 <tr>
                         <td colspan="4" class="noborders"></td>
                         <td class="left orderlinetableline">$tool.html($tax.name):</td>
-                        <td class="right orderlinetableline">$cf.format($order.getTotalTax($tax))</td>
+                        <td class="right orderlinetableline">$cf.format($order.getTotalTax($tax).getAmount().doubleValue())</td>
                     </tr>
                     #end
 
-                    #set( $totalIncTax = $order.getTotal() + $order.getTotalTax())
+                    #set( $totalIncTax = $order.getTotal().plus($order.getTotalTax()).getAmount().doubleValue())
                     <tr>
                         <td colspan="4" class="noborders"></td>
                         <td class="left orderlinetableline">$tool.html($resource.getString("total")):</td>

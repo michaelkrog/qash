@@ -21,6 +21,8 @@ import dk.apaq.shopsystem.entity.Store;
 import dk.apaq.shopsystem.service.OrganisationService;
 import java.util.Date;
 import java.util.List;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -120,7 +122,7 @@ public class OrderCrudTest {
         String id = result.getId();
 
         Payment payment = new Payment();
-        payment.setAmount(100);
+        payment.setAmount(Money.of(CurrencyUnit.of("DKK"),100));
         payment.setPaymentType(PaymentType.Cash);
         result.setCurrency("DKK");
         crud.update(result);
