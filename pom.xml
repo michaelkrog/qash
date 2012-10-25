@@ -6,12 +6,7 @@
     <packaging>pom</packaging>
     <version>2.0.1-SNAPSHOT</version>
     <name>ShopSystem</name>
-        
-    <scm>
-        <connection>scm:svn:https://subversion.assembla.com/svn/qash/trunk</connection>
-        <url>https://subversion.assembla.com/svn/qash/trunk</url>
-    </scm>
-
+    
     <build>
         <plugins>
             <plugin>
